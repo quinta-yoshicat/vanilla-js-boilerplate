@@ -19,7 +19,7 @@ const path = require('path');
 const vm = require('vm');
 
 const RAIZ = path.join(__dirname, '..');
-const FICHEIROS_DE_DADOS = ['visitas.js', 'niveis.js', 'historias.js', 'capitulos.js', 'objetivos.js', 'enciclopedia.js'];
+const FICHEIROS_DE_DADOS = ['visitas.js', 'niveis.js', 'historias.js', 'capitulos.js', 'objetivos.js', 'enciclopedia.js', 'palavras.js'];
 
 function abrirJogo(opcoes) {
   const o = opcoes || {};
@@ -74,6 +74,8 @@ function abrirJogo(opcoes) {
   // js/explorar.js (a Enciclopédia: ENCYCLOPEDIA_ENTRIES) só com explorar: true, porque redefine entradasBloqueadas()
   // (que aqui é um falso) e os outros testes contam com o falso. Vem antes do dados.js, como no index.html.
   if (o.explorar) carregar(path.join(jsDir, 'explorar.js'), 'js/explorar.js');
+  // js/palavras.js (a lista do glossário) vem antes do dados.js, como no index.html; uma pasta de js/ antiga (cópia) pode não o ter.
+  if (fs.existsSync(path.join(jsDir, 'palavras.js'))) carregar(path.join(jsDir, 'palavras.js'), 'js/palavras.js');
   // js/dados.js e os ficheiros de dados/ vêm depois das listas (como no index.html); uma pasta de js/
   // antiga (cópia) pode não ter o dados.js.
   if (fs.existsSync(path.join(jsDir, 'dados.js'))) {

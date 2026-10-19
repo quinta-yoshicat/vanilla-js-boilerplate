@@ -3,16 +3,16 @@
 // como dados (ver dados/LEIAME.md). Os ficheiros de dados/ chamam
 // dadosAcrescentar(tipo, entrada); a entrada é conferida e, se estiver
 // bem, entra no fim da lista certa (VISITAS, NIVEIS_CONFIG,
-// HISTORIA_NIVEIS, CAPITULOS_CONFIG, ENCYCLOPEDIA_ENTRIES).
+// HISTORIA_NIVEIS, CAPITULOS_CONFIG, ENCYCLOPEDIA_ENTRIES, PALAVRAS_DA_QUINTA).
 //
 // Regras:
 //   - Nunca lança erro nem parte o arranque: uma entrada má é IGNORADA e
 //     avisa na consola (console.warn) com o motivo.
 //   - Nunca substitui nem muda uma entrada que já existe: só acrescenta.
 //   - Carrega DEPOIS dos ficheiros que definem as listas (niveis.js,
-//     historia.js, capitulos.js, visitas.js, explorar.js) e ANTES de js/main.js.
+//     historia.js, capitulos.js, visitas.js, explorar.js, palavras.js) e ANTES de js/main.js.
 //
-// Tipos: 'visitas', 'niveis', 'historias', 'capitulos' e 'enciclopedia'. 'objetivos' ainda
+// Tipos: 'visitas', 'niveis', 'historias', 'capitulos', 'enciclopedia' e 'palavras'. 'objetivos' ainda
 // NÃO é suportado: cada objetivo precisa de uma regra no código
 // (elegivel() em js/objetivos.js) e o objetivos.js gera os do dia ao
 // carregar, antes de este ficheiro correr.
@@ -27,9 +27,12 @@
 //                   meses (lista de 1 a 12, opcional), estacao (opcional), manual (true, opcional) }
 //                 entra nas 3 línguas de ENCYCLOPEDIA_ENTRIES (js/explorar.js); só existe para o jogador
 //                 a partir do nível "nivelMinimo" (ver encyclopediaEntries em js/explorar.js).
+//   palavras:  { id, palavra, explicacao: { pt, en, es }, nivel (inteiro >= 1, opcional) }
+//                 entra em PALAVRAS_DA_QUINTA (js/palavras.js, o glossário «Palavras da Quinta»); a palavra é o termo em português,
+//                 igual nas 3 línguas, e não pode repetir outra (sem contar acentos nem maiúsculas). Só leitura: não guarda nada.
 // ---------------------------------------------------------------------
 
-const DADOS_TIPOS = ['visitas', 'niveis', 'historias', 'capitulos', 'enciclopedia', 'objetivos'];
+const DADOS_TIPOS = ['visitas', 'niveis', 'historias', 'capitulos', 'enciclopedia', 'palavras', 'objetivos'];
 const DADOS_LINGUAS = ['pt', 'en', 'es'];
 const DADOS_FORMATO_ID = /^[a-z0-9_]+$/;
 const DADOS_CONDICOES_VISITA = ['estacao', 'fase', 'festa', 'garrafa', 'cave'];
@@ -42,7 +45,7 @@ const DADOS_FORMATO_ID_CRITERIO = /^[A-Za-z0-9_]+$/;
 
 // O que já entrou por aqui: { id } por tipo (e { id, nivel } nas histórias). Serve para os
 // testes e para o validador (scripts/verificar-dados.js) saberem o que veio de dados/.
-const DADOS_ACRESCENTADOS = { visitas: [], niveis: [], historias: [], capitulos: [], enciclopedia: [], objetivos: [] };
+const DADOS_ACRESCENTADOS = { visitas: [], niveis: [], historias: [], capitulos: [], enciclopedia: [], palavras: [], objetivos: [] };
 
 function dadosAvisar(tipo, entrada, motivo) {
   let nome = '?';
@@ -179,6 +182,23 @@ function dadosMotivoEnciclopedia(e) {
   return null;
 }
 
+// A palavra do glossário sem acentos nem maiúsculas (para não deixar entrar duas iguais, como «mildio» e «míldio»).
+function dadosChavePalavra(palavra) {
+  return String(palavra).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim();
+}
+
+function dadosMotivoPalavra(e) {
+  if (typeof PALAVRAS_DA_QUINTA === 'undefined') return 'o jogo ainda não tem a lista PALAVRAS_DA_QUINTA (ordem dos scripts)';
+  if (dadosJaTemId(PALAVRAS_DA_QUINTA, e.id)) return 'já existe uma palavra com este id';
+  if (!dadosTemTexto(e.palavra)) return 'falta a palavra';
+  const chave = dadosChavePalavra(e.palavra);
+  if (PALAVRAS_DA_QUINTA.some(function (x) { return dadosChavePalavra(x.palavra) === chave; })) return 'já existe esta palavra («' + e.palavra + '»)';
+  const m = dadosMotivoTexto3(e.explicacao, 'a explicacao');
+  if (m) return m;
+  if (e.nivel !== undefined && (!Number.isInteger(e.nivel) || e.nivel < 1)) return 'o nivel, se existir, devia ser um inteiro a partir do 1';
+  return null;
+}
+
 // --- Cada tipo copia só os campos que conhece (o resto da entrada fica de fora). ---
 
 function dadosInserirVisita(e) {
@@ -223,8 +243,15 @@ function dadosInserirEnciclopedia(e) {
   });
 }
 
-const DADOS_CONFERIDORES = { visitas: dadosMotivoVisita, niveis: dadosMotivoNivel, historias: dadosMotivoHistoria, capitulos: dadosMotivoCapitulo, enciclopedia: dadosMotivoEnciclopedia };
-const DADOS_INSERTORES = { visitas: dadosInserirVisita, niveis: dadosInserirNivel, historias: dadosInserirHistoria, capitulos: dadosInserirCapitulo, enciclopedia: dadosInserirEnciclopedia };
+// A palavra entra uma vez, com as 3 explicações (a palavra é igual nas 3 línguas) e o nivel só se vier.
+function dadosInserirPalavra(e) {
+  const p = { id: e.id, palavra: e.palavra, explicacao: { pt: e.explicacao.pt, en: e.explicacao.en, es: e.explicacao.es } };
+  if (e.nivel !== undefined) p.nivel = e.nivel;
+  PALAVRAS_DA_QUINTA.push(p);
+}
+
+const DADOS_CONFERIDORES = { visitas: dadosMotivoVisita, niveis: dadosMotivoNivel, historias: dadosMotivoHistoria, capitulos: dadosMotivoCapitulo, enciclopedia: dadosMotivoEnciclopedia, palavras: dadosMotivoPalavra };
+const DADOS_INSERTORES = { visitas: dadosInserirVisita, niveis: dadosInserirNivel, historias: dadosInserirHistoria, capitulos: dadosInserirCapitulo, enciclopedia: dadosInserirEnciclopedia, palavras: dadosInserirPalavra };
 
 // Acrescenta UMA entrada. Devolve true se entrou, false se foi ignorada (com um console.warn
 // a dizer porquê). Nunca lança erro.

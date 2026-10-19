@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-// As PALAVRAS DA QUINTA (o glossário) em dados/palavras.js. Só LÊ o ficheiro e corre-o num ambiente simulado (módulo vm), com um
-// dadosAcrescentar() falso que só guarda o que recebe: nunca toca em browser, jogo, estado nem conta real.
+// As PALAVRAS DA QUINTA (o glossário) em dados/palavras.js e a lista PALAVRAS_DA_QUINTA de js/palavras.js. Só LÊ os ficheiros e corre-os num
+// ambiente simulado (módulo vm): o ficheiro de dados, com um dadosAcrescentar() falso que só guarda o que recebe, e o jogo real
+// (scripts/_jogo-vm.js). Nunca toca em browser, estado nem conta real.
 //
 // Prova:
 //  (a) as 20 palavras combinadas existem, por esta ordem (alfabética) e com estes ids; nem uma a mais nem uma a menos;
@@ -11,15 +12,21 @@
 //  (d) a ordem é alfabética (sem contar acentos nem maiúsculas);
 //  (e) o campo opcional «nivel», se existir, é um inteiro >= 1 (por agora nenhuma palavra o traz, e nenhuma entrada tem campos a mais);
 //  (f) nenhum texto tem < > & (os ecrãs montam HTML), links, emails nem fala de bots ou de IA;
-//  (g) o ficheiro só tem comentários e chamadas dadosAcrescentar('palavras', ...), e AINDA NÃO está no jogo: o index.html não o
-//      carrega e nenhum ficheiro de js/ o menciona (esta PR não mostra nada; a PR seguinte muda a prova (g)).
+//  (g) o ficheiro só tem comentários e chamadas dadosAcrescentar('palavras', ...);
+//  (h) no jogo real as 20 entram em PALAVRAS_DA_QUINTA, sem nenhum aviso, tal e qual estão no ficheiro; palavrasTotal() é 20, palavrasResumo()
+//      é «20» e palavrasOrdenadas() dá a ordem alfabética sem mexer na lista; o index.html carrega js/palavras.js antes de js/dados.js e
+//      dados/palavras.js a seguir a dados/enciclopedia.js;
+//  (i) AINDA NÃO SE VÊ: só js/palavras.js e js/dados.js falam da lista; nada no Perfil, nos ecrãs, no estado nem na nuvem, e o index.html não
+//      tem nenhum ecrã das palavras. js/palavras.js não toca em estado, ecrã, rede nem armazenamento (a PR do ecrã muda a prova (i)).
 //
 // Uso: node scripts/verificar-palavras.js
-// PALAVRAS_JS=ficheiro  corre sobre outra versão do ficheiro (para provar que o teste apanha o que se estraga).
+// PALAVRAS_JS=ficheiro  corre sobre outra versão de dados/palavras.js (para provar que o teste apanha o que se estraga); com ele as provas (h)
+//   do jogo real não correm.
 // Sai com código 0 se estiver tudo OK e 1 se alguma verificação falhar.
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
+const { abrirJogo } = require('./_jogo-vm');
 
 const RAIZ = path.join(__dirname, '..');
 const FICHEIRO = process.env.PALAVRAS_JS || path.join(RAIZ, 'dados', 'palavras.js');
@@ -96,17 +103,45 @@ for (let i = 1; i < entradas.length; i++) {
   ok(a < b, 'fora de ordem alfabética: «' + entradas[i - 1].palavra + '» antes de «' + entradas[i].palavra + '»');
 }
 
-// (g) só chamadas dadosAcrescentar('palavras', ...) e ainda fora do jogo
+// (g) só chamadas dadosAcrescentar('palavras', ...)
 {
   const codigo = codigoFonte.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').trim();
   ok(/^dadosAcrescentar\('palavras', \{/.test(codigo), 'o ficheiro devia começar numa chamada dadosAcrescentar(\'palavras\', ...)');
   ok(codigo.split('dadosAcrescentar(').length - 1 === 20, 'o ficheiro devia ter 20 chamadas dadosAcrescentar');
   ok(!/\b(localStorage|saveState|state\b|Math\.random|Date\.now|fetch|XMLHttpRequest|document|window)\b/.test(codigo), 'o ficheiro não devia tocar em estado, rede nem ecrã');
-  const html = fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8');
-  ok(html.indexOf('palavras.js') === -1, 'esta PR não devia carregar dados/palavras.js no index.html (nada fica visível)');
+}
+
+const html = fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8');
+
+// (h) o jogo real: as 20 entram, sem avisos, e o index.html carrega tudo pela ordem certa
+if (!process.env.PALAVRAS_JS) {
+  const avisos = [];
+  const jogo = abrirJogo({ aoAvisar: function (m) { avisos.push(m); } });
+  ok(avisos.filter(function (m) { return /palavras/.test(m); }).length === 0, 'nenhuma palavra devia gerar aviso ao entrar: ' + avisos.filter(function (m) { return /palavras/.test(m); }).join(' | '));
+  const naLista = JSON.parse(jogo.ev('JSON.stringify(PALAVRAS_DA_QUINTA)'));
+  ok(naLista.length === 20, 'PALAVRAS_DA_QUINTA devia ter as 20 palavras, tem ' + naLista.length);
+  ok(JSON.stringify(naLista) === JSON.stringify(entradas), 'as palavras da lista deviam ser exatamente as do ficheiro (mesmos campos, mesma ordem)');
+  ok(jogo.ev('palavrasTotal()') === 20 && jogo.ev('palavrasResumo()') === '20' && jogo.ev('DADOS_ACRESCENTADOS.palavras.length') === 20, 'palavrasTotal() devia ser 20 e palavrasResumo() «20»');
+  const antes = jogo.ev('JSON.stringify(PALAVRAS_DA_QUINTA)');
+  ok(jogo.ev("palavrasOrdenadas().map(function (p) { return p.id; }).join()") === ESPERADAS.map(function (x) { return x[0]; }).join(), 'palavrasOrdenadas() devia dar a ordem alfabética combinada');
+  ok(jogo.ev('JSON.stringify(PALAVRAS_DA_QUINTA)') === antes, 'palavrasOrdenadas() não devia mexer na lista');
+  // Mesmo com a lista ao contrário, a ordem sai alfabética (sem contar acentos nem maiúsculas).
+  jogo.ev('PALAVRAS_DA_QUINTA.reverse()');
+  ok(jogo.ev("palavrasOrdenadas().map(function (p) { return p.id; }).join()") === ESPERADAS.map(function (x) { return x[0]; }).join(), 'palavrasOrdenadas() devia ordenar mesmo com a lista ao contrário');
+  const pos = function (f) { return html.indexOf('<script src="' + f + '?v='); };
+  ok(pos('js/palavras.js') !== -1 && pos('js/palavras.js') < pos('js/dados.js') && pos('js/dados.js') < pos('js/main.js'), 'o index.html devia carregar js/palavras.js ANTES de js/dados.js (e este antes de js/main.js)');
+  ok(pos('dados/palavras.js') > pos('dados/enciclopedia.js') && pos('dados/enciclopedia.js') !== -1 && pos('dados/palavras.js') < pos('js/main.js'), 'o index.html devia carregar dados/palavras.js a seguir a dados/enciclopedia.js e antes de js/main.js');
+}
+
+// (i) ainda não se vê: só js/palavras.js e js/dados.js falam da lista; nada de ecrã, estado ou nuvem
+{
   const jsDir = path.join(RAIZ, 'js');
-  const mencionam = fs.readdirSync(jsDir).filter(function (f) { return /\.js$/.test(f) && /dados\/palavras|PALAVRAS_DA_QUINTA|'palavras'/.test(fs.readFileSync(path.join(jsDir, f), 'utf8')); });
-  ok(mencionam.length === 0, 'nenhum ficheiro de js/ devia mencionar as palavras ainda: ' + mencionam.join(', '));
+  const mencionam = fs.readdirSync(jsDir).filter(function (f) { return /\.js$/.test(f) && /PALAVRAS_DA_QUINTA|palavrasOrdenadas|palavrasTotal|palavrasResumo|dados\/palavras/.test(fs.readFileSync(path.join(jsDir, f), 'utf8')); }).sort();
+  ok(mencionam.join() === 'dados.js,palavras.js', 'só js/palavras.js e js/dados.js deviam falar das palavras (nada no Perfil, nos ecrãs, no estado nem na nuvem): ' + mencionam.join(', '));
+  ok(html.indexOf('screen-palavras') === -1 && html.indexOf('palavras-container') === -1, 'o index.html ainda não devia ter nenhum ecrã das palavras');
+  const lista = fs.readFileSync(path.join(jsDir, 'palavras.js'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+  ok(!/\b(state|saveState|localStorage|sessionStorage|document|window|innerHTML|fetch|XMLHttpRequest|Math\.random|Date\.now|tg\.)\b/.test(lista), 'js/palavras.js não devia tocar em estado, ecrã, rede nem armazenamento');
+  ok(/^const PALAVRAS_DA_QUINTA = \[\];$/m.test(lista), 'a lista PALAVRAS_DA_QUINTA devia começar vazia (const PALAVRAS_DA_QUINTA = [];)');
 }
 
 if (falhas) { console.log(falhas + ' falha(s)'); process.exit(1); }
