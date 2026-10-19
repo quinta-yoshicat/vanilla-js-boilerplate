@@ -4,9 +4,9 @@
 // Dados lidos por js/estrada.js (o ecrã A Estrada, onde se trocam os bens) e por js/despensa.js (regras
 // das trocas e das ofertas), como js/visitas.js é lido pela Quinta.
 //
-// Onze vizinhos (a Dona Amélia, o Sr. Joaquim, o Tomás e o Sr. Armindo, de nível 7, a Dona Rosa, de nível 11, o Sr. Álvaro, de nível 12, a Dona
-// Lurdes, de nível 13, a Dona Natália, de nível 14, o Sr. Albano, de nível 17, a Dona Fernanda, de nível 18, e o Sr. Anselmo, de nível 19), cada um
-// com 3 falas e 1 fala de troca; e onze bens, um por vizinho. Os textos são pt/en/es.
+// Treze vizinhos (a Dona Amélia, o Sr. Joaquim, o Tomás e o Sr. Armindo, de nível 7, a Dona Rosa, de nível 11, o Sr. Álvaro, de nível 12, a Dona
+// Lurdes, de nível 13, a Dona Natália, de nível 14, o Sr. Zeferino, de nível 15, a Dona Maria, de nível 16, o Sr. Albano, de nível 17, a Dona
+// Fernanda, de nível 18, e o Sr. Anselmo, de nível 19), cada um com 3 falas e 1 fala de troca; e treze bens, um por vizinho. Os textos são pt/en/es.
 //
 // "nivelMinimo": o nível do jogador (js/niveis.js) a partir do qual o vizinho existe: abaixo dele não aparece na Estrada,
 // não pede, não troca e não conta para nenhum cálculo (ver despensaVizinhoDisponivel em js/despensa.js). Sem o campo vale
@@ -189,6 +189,38 @@ const ESTRADA_FONTES = {
   wipo_palmela: {
     titulo: 'WIPO Lex — Portaria 783/2009 (Palmela)',
     url: 'https://www.wipo.int/wipolex/zh/legislation/details/8107'
+  },
+  sesimbra_artes_pesca: {
+    titulo: 'Câmara Municipal de Sesimbra — Artes de Pesca (folheto)',
+    url: 'https://www.sesimbra.pt/cmsesimbra/uploads/writer_file/document/2919/FolhetoArtesPesca.pdf'
+  },
+  sesimbra_vidas_de_mar: {
+    titulo: 'Câmara Municipal de Sesimbra — Vidas de Mar (Agenda do Município, n.º 60)',
+    url: 'https://www.sesimbra.pt/cmsesimbra/uploads/document/file/834/SA60.pdf'
+  },
+  ipma_artes_pesca: {
+    titulo: 'IPMA — Artes de pesca artesanais',
+    url: 'https://www.ipma.pt/pt/media/noticias/documentos/2021/Artes_Pesca_artesanais.pdf'
+  },
+  etnografica_sesimbra: {
+    titulo: 'Etnográfica — Os caminhos do peixe fresco na pesca artesanal em Sesimbra',
+    url: 'https://revistas.rcaap.pt/etnografica/article/download/33685/23530/147341'
+  },
+  rr_sesimbra: {
+    titulo: 'Renascença — Entre os pescadores de Sesimbra não faltam queixas sobre Bruxelas',
+    url: 'https://rr.pt/noticia/politica/2024/05/21/entre-os-pescadores-de-sesimbra-nao-faltam-queixas-sobre-bruxelas/379227/'
+  },
+  cp_setubal: {
+    titulo: 'CP — Setúbal: onde o comboio cruza com cultura e tradição',
+    url: 'https://cp.pt/info/w/setubal-onde-o-comboio-cruza-com-cultura-e-tradicao'
+  },
+  livramento_comum: {
+    titulo: 'Mercado do Livramento de Setúbal (estudo)',
+    url: 'https://comum.rcaap.pt/bitstreams/138941e8-d413-4381-ad88-e069e1970f98/download'
+  },
+  dicadeportugal_setubal: {
+    titulo: 'Dica de Portugal — Roteiro de 1 dia em Setúbal',
+    url: 'https://dicadeportugal.com/setubal/roteiro-de-1-dia-em-setubal'
   }
 };
 
@@ -699,6 +731,98 @@ const ESTRADA_VIZINHOS = [
       },
       semFacto: true
     }
+  },
+  {
+    id: 'sr_zeferino',
+    nivelMinimo: 15,
+    nome: { pt: 'Sr. Zeferino', en: 'Mr. Zeferino', es: 'Sr. Zeferino' },
+    papel: { pt: 'pescador de Sesimbra', en: 'Sesimbra fisherman', es: 'pescador de Sesimbra' },
+    cara: 'assets/personagens/vizinho_zeferino.jpg',
+    caraPendente: false,
+    bem: 'peixe_espada_sesimbra',
+    falas: [
+      {
+        id: 'sr_zeferino_1',
+        texto: {
+          pt: 'A história de Sesimbra está ligada à pesca, e hoje continua a ser um dos portos de pesca mais importantes do país.',
+          en: 'The history of Sesimbra is tied to fishing, and today it is still one of the most important fishing ports in the country.',
+          es: 'La historia de Sesimbra está ligada a la pesca, y hoy sigue siendo uno de los puertos pesqueros más importantes del país.'
+        },
+        fonte: ['sesimbra_artes_pesca', 'sesimbra_vidas_de_mar']
+      },
+      {
+        id: 'sr_zeferino_2',
+        texto: {
+          pt: 'O peixe-espada preto pesca-se ao anzol, em águas muito fundas.',
+          en: 'Black scabbardfish is caught on a hook, in very deep waters.',
+          es: 'El pez sable negro se pesca con anzuelo, en aguas muy profundas.'
+        },
+        fonte: ['sesimbra_artes_pesca', 'ipma_artes_pesca']
+      },
+      {
+        id: 'sr_zeferino_3',
+        texto: {
+          pt: 'Em Sesimbra pescam-se o carapau, a cavala, o polvo e o peixe-espada.',
+          en: 'In Sesimbra they catch horse mackerel, mackerel, octopus and scabbardfish.',
+          es: 'En Sesimbra se pescan el jurel, la caballa, el pulpo y el pez sable.'
+        },
+        fonte: ['etnografica_sesimbra', 'rr_sesimbra']
+      }
+    ],
+    troca: {
+      texto: {
+        pt: 'Leva lá um peixe-espada, vizinho! Saiu esta manhã.',
+        en: 'Take a scabbardfish, neighbour! It came out this morning.',
+        es: '¡Llévate un pez sable, vecino! Salió esta mañana.'
+      },
+      semFacto: true
+    }
+  },
+  {
+    id: 'dona_maria',
+    nivelMinimo: 16,
+    nome: { pt: 'Dona Maria', en: 'Dona Maria', es: 'Dona Maria' },
+    papel: { pt: 'peixeira do Mercado do Livramento', en: 'fishmonger at the Livramento Market', es: 'pescadera del Mercado do Livramento' },
+    cara: 'assets/personagens/vizinha_maria.jpg',
+    caraPendente: false,
+    bem: 'peixe_livramento',
+    falas: [
+      {
+        id: 'dona_maria_1',
+        texto: {
+          pt: 'O Mercado do Livramento nasceu em 1876, e o edifício de hoje é de 1930.',
+          en: "The Livramento Market was born in 1876, and today's building dates from 1930.",
+          es: 'El Mercado do Livramento nació en 1876, y el edificio de hoy es de 1930.'
+        },
+        fonte: ['cp_setubal', 'livramento_comum']
+      },
+      {
+        id: 'dona_maria_2',
+        texto: {
+          pt: 'As paredes do mercado estão cobertas de azulejos com cenas de pesca e da vida do Sado.',
+          en: 'The walls of the market are covered in tiles with scenes of fishing and life on the Sado.',
+          es: 'Las paredes del mercado están cubiertas de azulejos con escenas de pesca y de la vida del Sado.'
+        },
+        fonte: ['cp_setubal', 'dicadeportugal_setubal']
+      },
+      {
+        id: 'dona_maria_3',
+        texto: {
+          pt: 'O peixe fresco do Sado é a grande estrela do mercado.',
+          en: 'The fresh fish from the Sado is the star of the market.',
+          es: 'El pescado fresco del Sado es la gran estrella del mercado.'
+        },
+        fonte: ['cp_setubal', 'dicadeportugal_setubal']
+      }
+    ],
+    troca: {
+      texto: {
+        pt: 'Leva lá um peixe fresco, vizinho! Saiu hoje do Sado.',
+        en: 'Take a fresh fish, neighbour! It came out of the Sado today.',
+        es: '¡Llévate un pescado fresco, vecino! Salió hoy del Sado.'
+      },
+      semFacto: true
+    }
   }
 ];
 
@@ -812,6 +936,26 @@ const ESTRADA_BENS = [
       es: 'Una botella de tinto de Castelão, la casta de Palmela.'
     },
     fonte: ['turismolisboa_palmela', 'diario_republica_palmela']
+  },
+  {
+    id: 'peixe_espada_sesimbra',
+    nome: { pt: 'Peixe-espada preto de Sesimbra', en: 'Sesimbra black scabbardfish', es: 'Pez sable negro de Sesimbra' },
+    descricao: {
+      pt: 'Peixe-espada preto, pescado ao anzol em águas fundas.',
+      en: 'Black scabbardfish, caught on a hook in deep waters.',
+      es: 'Pez sable negro, pescado con anzuelo en aguas profundas.'
+    },
+    fonte: ['sesimbra_artes_pesca', 'ipma_artes_pesca']
+  },
+  {
+    id: 'peixe_livramento',
+    nome: { pt: 'Peixe do Livramento', en: 'Livramento fish', es: 'Pescado del Livramento' },
+    descricao: {
+      pt: 'Peixe fresco do Sado, comprado no Mercado do Livramento.',
+      en: 'Fresh fish from the Sado, from the Livramento Market.',
+      es: 'Pescado fresco del Sado, del Mercado do Livramento.'
+    },
+    fonte: ['cp_setubal', 'dicadeportugal_setubal']
   }
 ];
 
@@ -848,7 +992,7 @@ const ESTRADA_TROCA = {
 //   'sal_sado' paga com 1 sal da Despensa; se o jogador não tiver sal, paga as uvas
 //   'bagaceira' paga com 1 Bagaceira (state.adega.bagaceira, ver js/alambique.js); se o jogador não tiver nenhuma, paga as uvas
 // A Dona Amélia pede uvas ou sal; o Sr. Armindo pede uvas, sal ou bagaceira; o Sr. Joaquim, o Tomás, a Dona Rosa, o Sr. Álvaro, a Dona
-// Lurdes, a Dona Natália, o Sr. Albano, a Dona Fernanda e o Sr. Anselmo pedem sempre uvas (sem entrada aqui, um vizinho pede uvas).
+// Lurdes, a Dona Natália, o Sr. Zeferino, a Dona Maria, o Sr. Albano, a Dona Fernanda e o Sr. Anselmo pedem sempre uvas (sem entrada aqui, um vizinho pede uvas).
 // (O pedido do dia sai do mesmo hash de sempre, por isso mudar o nº de pedidos do Sr. Armindo muda os dias em que pede cada um.)
 const ESTRADA_PEDIDOS = {
   dona_amelia: ['uvas', 'sal_sado'],
@@ -874,7 +1018,7 @@ const ESTRADA_PEDIDO_FALAS = {
 //   reputacao   +1 de Reputação por oferta
 //   porDia      no máximo 1 oferta por dia (dia de Lisboa; a marca é state.despensa.ofertaDia)
 //   ordemEmpate o bem oferecido é o de que há mais; em caso de empate, por esta ordem (um bem fora da lista, como as ervas da Arrábida, as ostras do Sado, o Castelão de
-//               Palmela, a torta de Azeitão, o pinhão de Alcácer, o arroz do Sado e a cortiça do Montado, vem a seguir aos da lista, pela ordem de ESTRADA_BENS: ver despensaBemParaOferecer em js/despensa.js)
+//               Palmela, a torta de Azeitão, o peixe-espada de Sesimbra, o peixe do Livramento, o pinhão de Alcácer, o arroz do Sado e a cortiça do Montado, vem a seguir aos da lista, pela ordem de ESTRADA_BENS: ver despensaBemParaOferecer em js/despensa.js)
 const ESTRADA_OFERTA_REPUTACAO = 1;
 const ESTRADA_OFERTA_POR_DIA = 1;
 const ESTRADA_OFERTA = {
