@@ -100,10 +100,12 @@ function renderPerfil() {
       '<p class="info-text nuvem-estado" id="perfil-nuvem-estado"></p>' +
       '<p class="info-text nuvem-estado" id="perfil-diagnostico" style="white-space: pre-line" hidden></p>' +
       '<p class="info-text" id="perfil-apagar-aviso" data-i18n="perfil.apagarAviso" hidden></p>' +
+      '<p class="info-text nuvem-estado" id="perfil-versao"></p>' +
     '</div>' +
     '<div class="action-panel">' +
       convidarHtml +
       '<button type="button" class="btn-pill pill-main pill-grande" onclick="goTo(\'enciclopedia\')" data-i18n="perfil.btnEnciclopedia"></button>' +
+      '<button type="button" class="btn-ghost" id="perfil-atualizar" onclick="perfilAtualizarJogo()" data-i18n="perfil.btnAtualizar"></button>' +
       '<button type="button" class="btn-ghost" onclick="perfilPedirApagar()" data-i18n="perfil.btnApagar"></button>' +
       '<button type="button" class="btn-ghost" onclick="goTo(\'home\')" data-i18n="perfil.btnSairInicio"></button>' +
     '</div>';
@@ -117,6 +119,7 @@ function renderPerfil() {
   applyTranslations();
   if (typeof nuvemAtualizarLinhaPerfil === 'function') nuvemAtualizarLinhaPerfil();
   perfilAtualizarDiagnostico();
+  perfilMostrarVersao();
   perfilLigarIndicadorScroll();
 }
 
@@ -289,6 +292,47 @@ function perfilApagarTudo() {
     // "apagando" fica ligado: nada volta a gravar antes do reload.
     setTimeout(function () { location.reload(); }, 600);
   });
+}
+
+// ---------------------------------------------------------------------
+// VERSÃO VISÍVEL E BOTÃO «ATUALIZAR O JOGO» — a versão (o ?v= do state.js no
+// index.html, o mesmo método do diagnóstico) mostra-se SEMPRE, em letra pequena.
+// O botão só recarrega a página; não grava nem apaga nada. O Telegram passa os
+// dados de arranque na parte do endereço a seguir ao # (tgWebAppData): essa parte
+// mantém-se tal e qual; só muda o ?r=<hora> (um endereço novo, por isso o
+// index.html é pedido outra vez em vez de vir da cache; os ?v= dos scripts já
+// trazem as versões novas). Antes de recarregar, o que estiver por enviar à
+// nuvem é enviado já (nuvemGravarJa() em js/nuvem.js) e espera-se que acabe.
+// ---------------------------------------------------------------------
+const PERFIL_ATUALIZAR_ESPERA_MS = 3000; // tempo máximo à espera de uma gravação em curso
+const PERFIL_ATUALIZAR_PASSO_MS = 150;
+let _perfilAtualizando = false;
+
+function perfilMostrarVersao() {
+  const el = document.getElementById('perfil-versao');
+  if (el) el.textContent = t('perfil.versao').replace('{v}', perfilDiagVersaoStateJs());
+}
+
+// Endereço para recarregar: o mesmo caminho e o mesmo # (sem lhe tocar), os outros
+// parâmetros do ? como estavam e r=<hora> posto ou mudado.
+function perfilEnderecoAtualizado(loc, agora) {
+  const params = new URLSearchParams(loc.search || '');
+  params.set('r', String(agora));
+  return loc.pathname + '?' + params.toString() + (loc.hash || '');
+}
+
+function perfilAtualizarJogo() {
+  if (_perfilAtualizando) return;
+  _perfilAtualizando = true;
+  const botao = document.getElementById('perfil-atualizar');
+  if (botao) { botao.disabled = true; botao.textContent = t('perfil.atualizando'); }
+  if (typeof nuvemGravarJa === 'function') nuvemGravarJa();
+  const inicio = Date.now();
+  (function esperar() {
+    const aGravar = typeof nuvemGravacaoEmCurso === 'function' && nuvemGravacaoEmCurso();
+    if (aGravar && Date.now() - inicio < PERFIL_ATUALIZAR_ESPERA_MS) { setTimeout(esperar, PERFIL_ATUALIZAR_PASSO_MS); return; }
+    location.replace(perfilEnderecoAtualizado(location, Date.now()));
+  })();
 }
 
 // Abre a partilha do Telegram com o link do jogo. Não lê contactos, não guarda
