@@ -220,6 +220,18 @@ function main() {
   if (main.indexOf('renderCaderno()') === -1) falta('Ecrã do Caderno', 'renderCaderno() em goTo (js/main.js)');
   if (fs.readFileSync(path.join(RAIZ, 'js', 'nuvem.js'), 'utf8').indexOf('screen-caderno') === -1) falta('Ecrã do Caderno', 'o refresco em nuvemAtualizarEcraAposSync (js/nuvem.js)');
 
+  // l) Ecrã das Palavras (o glossário): textos de UI em pt/en/es e registo nos sítios do costume (o conteúdo prova-o verificar-palavras-ecra.js)
+  ['perfil.palavras', 'palavras.title', 'palavras.subtitulo'].forEach(function (k) { chave('Ecrã das Palavras', k); });
+  if (J.NIVEL_NECESSARIO_POR_ECRA.palavras !== 4) falta('Ecrã das Palavras', 'a tranca palavras: 4 em NIVEL_NECESSARIO_POR_ECRA');
+  if (html.indexOf('id="screen-palavras"') === -1) falta('Ecrã das Palavras', 'a div #screen-palavras no index.html');
+  if (html.indexOf('id="palavras-container"') === -1) falta('Ecrã das Palavras', 'o #palavras-container no index.html');
+  if (html.indexOf('body.jogo-cheio #screen-palavras.content') === -1) falta('Ecrã das Palavras', '#screen-palavras na lista body.jogo-cheio do index.html');
+  if (!/NAV_ATIVO_POR_ECRA = \{[^}]*\bpalavras:/.test(main)) falta('Ecrã das Palavras', 'palavras em NAV_ATIVO_POR_ECRA (js/main.js)');
+  const fundoPalavras = /FUNDO_DOS_ECRAS = \{[\s\S]*?\n\};/.exec(main) && /\bpalavras: \{ src: '([^']+)'/.exec(/FUNDO_DOS_ECRAS = \{[\s\S]*?\n\};/.exec(main)[0]);
+  if (!fundoPalavras) falta('Ecrã das Palavras', 'palavras em FUNDO_DOS_ECRAS (js/main.js)');
+  else if (!fs.existsSync(path.join(RAIZ, fundoPalavras[1]))) falta('Ecrã das Palavras', 'o ficheiro de fundo "' + fundoPalavras[1] + '"');
+  if (main.indexOf('renderPalavras()') === -1) falta('Ecrã das Palavras', 'renderPalavras() em goTo (js/main.js)');
+
   if (avisos.length > 0) {
     console.log('Avisos (não falham):');
     avisos.forEach(function (a) { console.log(' - ' + a); });

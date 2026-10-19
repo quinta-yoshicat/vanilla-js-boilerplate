@@ -147,7 +147,8 @@ const NIVEL_NECESSARIO_POR_ECRA = {
   loja: 7,
   lagar: 8,
   camara: 9,
-  roxo: 10
+  roxo: 10,
+  palavras: 4 // o glossário «Palavras da Quinta» (js/palavras.js), aberto a partir do Perfil; no fim para não mexer na ordem das outras
 };
 
 function ecraDesbloqueado(screen) {

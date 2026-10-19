@@ -101,6 +101,7 @@ const FUNDO_DOS_ECRAS = {
   explorar: { src: 'assets/ecras/explorar_trator.jpg' },
   enciclopedia: { src: 'assets/ecras/enciclopedia_yoshi_cat_2.jpg' },
   caderno: { src: 'assets/ecras/fygmos_fazem_das_suas.jpg' },
+  palavras: { src: 'assets/ecras/enciclopedia_yoshi_cat_2.jpg' },
   perfil: { src: 'assets/ecras/yoshi_cat_varanda.jpg' },
   lagar: { src: 'assets/ecras/festa_vindima_todos_juntos.jpg' },
   camara: { src: 'assets/vinha/barril_dourado.jpg' },
@@ -129,6 +130,7 @@ const NAV_ATIVO_POR_ECRA = {
   explorar: 'explorar',
   enciclopedia: 'explorar',
   caderno: 'quinta',
+  palavras: 'explorar',
   colecao: 'garrafa',
   garrafas: 'garrafa',
   festa: 'quinta',
@@ -802,6 +804,7 @@ function goTo(screen, opcoes) {
   if (screen === 'perfil') renderPerfil();
   if (screen === 'conquistas') renderConquistas();
   if (screen === 'caderno') renderCaderno();
+  if (screen === 'palavras') renderPalavras();
   if (screen === 'colecao') renderColecao();
   if (screen === 'estrada') renderEstrada();
   if (screen === 'lagar') renderLagar();

@@ -16,8 +16,8 @@
 //  (h) no jogo real as 20 entram em PALAVRAS_DA_QUINTA, sem nenhum aviso, tal e qual estão no ficheiro; palavrasTotal() é 20, palavrasResumo()
 //      é «20» e palavrasOrdenadas() dá a ordem alfabética sem mexer na lista; o index.html carrega js/palavras.js antes de js/dados.js e
 //      dados/palavras.js a seguir a dados/enciclopedia.js;
-//  (i) AINDA NÃO SE VÊ: só js/palavras.js e js/dados.js falam da lista; nada no Perfil, nos ecrãs, no estado nem na nuvem, e o index.html não
-//      tem nenhum ecrã das palavras. js/palavras.js não toca em estado, ecrã, rede nem armazenamento (a PR do ecrã muda a prova (i)).
+//  (i) SÓ LÊ: só js/palavras.js, js/dados.js, js/perfil.js (o cartão) e js/main.js (abre o ecrã) falam das palavras; nada no estado, na nuvem nem em
+//      js/state.js; js/palavras.js não toca em estado, armazenamento, nuvem nem rede (o ecrã e o cartão provam-se em scripts/verificar-palavras-ecra.js).
 //
 // Uso: node scripts/verificar-palavras.js
 // PALAVRAS_JS=ficheiro  corre sobre outra versão de dados/palavras.js (para provar que o teste apanha o que se estraga); com ele as provas (h)
@@ -133,14 +133,14 @@ if (!process.env.PALAVRAS_JS) {
   ok(pos('dados/palavras.js') > pos('dados/enciclopedia.js') && pos('dados/enciclopedia.js') !== -1 && pos('dados/palavras.js') < pos('js/main.js'), 'o index.html devia carregar dados/palavras.js a seguir a dados/enciclopedia.js e antes de js/main.js');
 }
 
-// (i) ainda não se vê: só js/palavras.js e js/dados.js falam da lista; nada de ecrã, estado ou nuvem
+// (i) só lê: só estes ficheiros falam da lista; nada no estado, na nuvem, nem em armazenamento
 {
   const jsDir = path.join(RAIZ, 'js');
-  const mencionam = fs.readdirSync(jsDir).filter(function (f) { return /\.js$/.test(f) && /PALAVRAS_DA_QUINTA|palavrasOrdenadas|palavrasTotal|palavrasResumo|dados\/palavras/.test(fs.readFileSync(path.join(jsDir, f), 'utf8')); }).sort();
-  ok(mencionam.join() === 'dados.js,palavras.js', 'só js/palavras.js e js/dados.js deviam falar das palavras (nada no Perfil, nos ecrãs, no estado nem na nuvem): ' + mencionam.join(', '));
-  ok(html.indexOf('screen-palavras') === -1 && html.indexOf('palavras-container') === -1, 'o index.html ainda não devia ter nenhum ecrã das palavras');
+  const mencionam = fs.readdirSync(jsDir).filter(function (f) { return /\.js$/.test(f) && /PALAVRAS_DA_QUINTA|palavrasOrdenadas|palavrasTotal|palavrasResumo|renderPalavras|dados\/palavras/.test(fs.readFileSync(path.join(jsDir, f), 'utf8')); }).sort();
+  ok(mencionam.join() === 'dados.js,main.js,palavras.js,perfil.js', 'só js/palavras.js, js/dados.js, js/perfil.js (o cartão) e js/main.js (abre o ecrã) deviam falar das palavras (nada no estado nem na nuvem): ' + mencionam.join(', '));
+  ok(html.indexOf('id="screen-palavras"') !== -1 && html.indexOf('id="palavras-container"') !== -1, 'o index.html devia ter o ecrã das palavras');
   const lista = fs.readFileSync(path.join(jsDir, 'palavras.js'), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-  ok(!/\b(state|saveState|localStorage|sessionStorage|document|window|innerHTML|fetch|XMLHttpRequest|Math\.random|Date\.now|tg\.)\b/.test(lista), 'js/palavras.js não devia tocar em estado, ecrã, rede nem armazenamento');
+  ok(!/\b(state|saveState|localStorage|sessionStorage|fetch|XMLHttpRequest|Math\.random|Date\.now|tg\.|nuvem[A-Za-z]*)\b/.test(lista), 'js/palavras.js não devia tocar em estado, armazenamento, nuvem nem rede');
   ok(/^const PALAVRAS_DA_QUINTA = \[\];$/m.test(lista), 'a lista PALAVRAS_DA_QUINTA devia começar vazia (const PALAVRAS_DA_QUINTA = [];)');
 }
 
