@@ -82,7 +82,7 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/estrada_sr_anselmo.jpg` | A Estrada (cena do Sr. Anselmo; recorte do topo da imagem original, 640x513) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
 | `assets/ecras/estrada_dona_rosa.jpg` | A Estrada (cena da Dona Rosa; recorte da imagem original, 640x702) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
 | `assets/ecras/estrada_sr_alvaro.jpg` | A Estrada (cena do Sr. Álvaro; recorte do topo da imagem original, 640x566) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
-| `assets/ecras/estrada_dona_lurdes.jpg` | A Estrada (cena da Dona Lurdes; recorte da imagem original, 640x763) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
+| `assets/ecras/estrada_dona_lurdes.jpg` | A Estrada (cena da Dona Lurdes; recorte da imagem original, 640x777) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
 | `assets/ecras/explorar_trator.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/festa_vindima_todos_juntos.jpg` | fundo de um ecrã, história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/festa_vindima_pessoas.jpg` | O Lagar (fundo depois de pôr a mesa da vindima; versão comprimida a ≤ 250 KB do original em imagens_JOGO_TELEGRAM) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |

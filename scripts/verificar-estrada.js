@@ -93,7 +93,7 @@ const URLS_APROVADOS = [
   'https://24noticias.sapo.pt/atualidade/artigos/roubos-de-cortica-no-alentejo-ribatejo-e-centro-ja-sao-mais-de-260-so-em-2024-o-que-podem-fazer-os-proprietarios',
   'https://www.amorim.com/xms/files/Documentacao/Manual_Rolhas_PT.pdf',
   'https://lifecooler.com/artigo/atividades/serra-da-arrbida/349413',
-  'https://www-lonelyplanet-com-6c06.imagizer.com/portugal/parque-natural-da-arrabida',
+  'https://www.lonelyplanet.com/destinations/portugal/parque-natural-da-arrabida',
   'https://www.visitportugal.com/pt-pt/content/parque-natural-da-arrabida',
   'https://postal.pt/nacional/paraiso-gastronomico-para-comer-ostras-espanhois-apontam-baia-portuguesa-como-das-mais-belas-do-mundo/',
   'https://www.idealista.pt/news/node/70503',

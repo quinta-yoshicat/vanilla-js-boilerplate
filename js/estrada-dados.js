@@ -156,7 +156,7 @@ const ESTRADA_FONTES = {
   },
   lonelyplanet_arrabida: {
     titulo: 'Lonely Planet — Parque Natural da Arrábida',
-    url: 'https://www-lonelyplanet-com-6c06.imagizer.com/portugal/parque-natural-da-arrabida'
+    url: 'https://www.lonelyplanet.com/destinations/portugal/parque-natural-da-arrabida'
   },
   visitportugal_arrabida: {
     titulo: 'Visit Portugal — Parque Natural da Arrábida',
