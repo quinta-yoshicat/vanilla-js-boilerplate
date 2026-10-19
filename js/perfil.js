@@ -71,7 +71,7 @@ function renderPerfil() {
     : '';
 
   container.innerHTML =
-    '<div class="topcard"><p class="mini-title" data-i18n="perfil.title"></p></div>' +
+    '<div class="topcard"><p class="mini-title" id="perfil-titulo" data-i18n="perfil.title" onclick="perfilToqueTitulo()"></p></div>' +
     '<div class="scroll-panel">' +
       '<div class="profile-grid">' +
         perfilCard(PERFIL_ICONES.uvas, state.uvas, 'stat.uvas') +
@@ -98,6 +98,7 @@ function renderPerfil() {
         '<span data-i18n="perfil.som"></span></label>' +
       '</p>' +
       '<p class="info-text nuvem-estado" id="perfil-nuvem-estado"></p>' +
+      '<p class="info-text nuvem-estado" id="perfil-diagnostico" style="white-space: pre-line" hidden></p>' +
       '<p class="info-text" id="perfil-apagar-aviso" data-i18n="perfil.apagarAviso" hidden></p>' +
     '</div>' +
     '<div class="action-panel">' +
@@ -115,7 +116,80 @@ function renderPerfil() {
   atualizarDialogo('', '');
   applyTranslations();
   if (typeof nuvemAtualizarLinhaPerfil === 'function') nuvemAtualizarLinhaPerfil();
+  perfilAtualizarDiagnostico();
   perfilLigarIndicadorScroll();
+}
+
+// ---------------------------------------------------------------------
+// DIAGNÓSTICO ESCONDIDO (só para o Nuno ver): aparece com 5 toques seguidos, em
+// menos de 3 segundos, no título «Perfil» (e esconde-se com outros 5). Só LÊ e mostra:
+//   - o id do utilizador do Telegram (tg.initDataUnsafe.user.id) é pessoal: fica só no
+//     texto do ecrã, em memória. Nunca vai para o state, localStorage, nuvem nem logs;
+//   - o resto vem de nuvemDiag, nuvemEstado e arranque (js/nuvem.js, js/state.js), tudo
+//     em memória, sem leituras extra da nuvem (por isso as chaves yc_state_* são as que o
+//     meta diz: 1 + partes; partes órfãs, se as houver, não se veem aqui);
+//   - a versão do state.js é o ?v= do index.html.
+// O bloco só tem texto quando está visível (escondido, é um <p> vazio).
+// ---------------------------------------------------------------------
+const PERFIL_DIAG_TOQUES = 5;
+const PERFIL_DIAG_JANELA_MS = 3000;
+let _perfilDiagToques = [];
+let _perfilDiagVisivel = false;
+
+function perfilToqueTitulo() {
+  const agora = Date.now();
+  _perfilDiagToques.push(agora);
+  if (_perfilDiagToques.length > PERFIL_DIAG_TOQUES) _perfilDiagToques.shift();
+  if (_perfilDiagToques.length < PERFIL_DIAG_TOQUES) return;
+  if (agora - _perfilDiagToques[0] >= PERFIL_DIAG_JANELA_MS) return;
+  _perfilDiagToques = [];
+  _perfilDiagVisivel = !_perfilDiagVisivel;
+  perfilAtualizarDiagnostico();
+}
+
+function perfilDiagHora(ms) {
+  if (!ms) return t('perfil.diag.nada');
+  const d = new Date(ms);
+  function dois(n) { return ('0' + n).slice(-2); }
+  return dois(d.getDate()) + '/' + dois(d.getMonth() + 1) + ' ' + dois(d.getHours()) + ':' + dois(d.getMinutes()) + ':' + dois(d.getSeconds());
+}
+
+function perfilDiagVersaoStateJs() {
+  try {
+    const el = document.querySelector('script[src*="js/state.js"]');
+    const m = el && /[?&]v=([^&#]+)/.exec(el.getAttribute('src') || '');
+    return m ? 'v' + m[1] : t('perfil.diag.nada');
+  } catch (e) { return t('perfil.diag.nada'); }
+}
+
+function perfilDiagnosticoTexto() {
+  const utilizador = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
+  const id = utilizador && Number.isSafeInteger(utilizador.id) && utilizador.id > 0 ? String(utilizador.id) : t('perfil.diag.semId');
+  const d = (typeof nuvemDiag === 'object' && nuvemDiag) || { origem: null, estatus: null, lidaEm: 0, metaEm: null, partesMeta: null };
+  const origens = { 'nuvem': 'perfil.diag.o.nuvem', 'local': 'perfil.diag.o.local', 'novo': 'perfil.diag.o.novo', 'sem nuvem': 'perfil.diag.o.semNuvem', 'erro': 'perfil.diag.o.erro' };
+  let origem = t(origens[d.origem] || 'perfil.diag.o.aLer');
+  if (d.estatus) origem += ' (' + t('perfil.diag.estatuto') + ': ' + d.estatus + ')';
+  const gravou = (typeof nuvemEstado === 'object' && nuvemEstado && nuvemEstado.ok === true) ? perfilDiagHora(nuvemEstado.em) : t('perfil.diag.nada');
+  // Nuvem vazia: 0 chaves. Com save: o meta + as partes que ele diz ter.
+  const chaves = d.partesMeta === null ? t('perfil.diag.nada') : String(d.partesMeta === 0 ? 0 : 1 + d.partesMeta);
+  return [
+    t('perfil.diag.titulo'),
+    t('perfil.diag.id') + ': ' + id,
+    t('perfil.diag.origem') + ': ' + origem,
+    t('perfil.diag.gravou') + ': ' + gravou,
+    t('perfil.diag.leu') + ': ' + perfilDiagHora(d.lidaEm),
+    t('perfil.diag.meta') + ': ' + (d.metaEm === null ? t('perfil.diag.nada') : perfilDiagHora(d.metaEm)),
+    t('perfil.diag.chaves') + ': ' + chaves,
+    t('perfil.diag.versao') + ': ' + perfilDiagVersaoStateJs()
+  ].join('\n');
+}
+
+function perfilAtualizarDiagnostico() {
+  const el = document.getElementById('perfil-diagnostico');
+  if (!el) return;
+  if (!_perfilDiagVisivel) { el.hidden = true; el.textContent = ''; return; }
+  el.textContent = perfilDiagnosticoTexto();
+  el.hidden = false;
 }
 
 // ---------------------------------------------------------------------

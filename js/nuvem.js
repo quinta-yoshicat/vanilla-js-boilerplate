@@ -134,6 +134,28 @@ function nuvemPartirEmPedacos(texto) {
 const nuvemEstado = { ok: null, em: 0, erro: null };
 let _nuvemSeqGravacao = 0; // só a gravação mais recente atualiza nuvemEstado
 
+// DIAGNÓSTICO DO ARRANQUE — só em memória, só para o bloco escondido do Perfil
+// (perfilAtualizarDiagnostico() em js/perfil.js). Nunca decide nada, nunca vai para o
+// state, localStorage nem nuvem, e não pede leituras extra: aproveita as que já se fazem.
+//   origem    de onde veio o save ao abrir: 'nuvem', 'local', 'novo', 'sem nuvem' ou 'erro' (null: ainda a ler)
+//   estatus   estatuto da última leitura ('ok', 'vazio' ou 'erro')
+//   lidaEm    hora (ms) da última leitura da nuvem tratada em nuvemTratarLeitura()
+//   metaEm    'atualizadoEm' do meta da nuvem na 1.ª resposta (0 se vazia): quando alguém gravou lá pela última vez
+//   partesMeta  partes que o meta da nuvem diz ter na 1.ª resposta (0 se vazia); as chaves yc_state_* são 1 + isto
+const nuvemDiag = { origem: null, estatus: null, lidaEm: 0, metaEm: null, partesMeta: null };
+function nuvemDiagRegistar(origem, estatus, metaEm) {
+  nuvemDiag.origem = origem;
+  nuvemDiag.estatus = estatus;
+  nuvemDiag.lidaEm = Date.now();
+  if (metaEm !== undefined && nuvemDiag.metaEm === null) nuvemDiag.metaEm = metaEm;
+  if (typeof perfilAtualizarDiagnostico === 'function') perfilAtualizarDiagnostico();
+}
+// Nuvem vazia: «local» se o aparelho tem progresso a sério (vai copiar-se para a nuvem), «novo» se não
+// (o estado por omissão também leva um carimbo ao abrir, mas isso não é progresso).
+function nuvemDiagOrigemDeVazio() {
+  return (typeof temProgressoExistente === 'function' && temProgressoExistente()) ? 'local' : 'novo';
+}
+
 function nuvemTextoEstado() {
   if (!nuvemStorage()) return t('perfil.nuvemIndisponivel');
   if (nuvemEstado.ok === true) {
@@ -148,6 +170,7 @@ function nuvemTextoEstado() {
 function nuvemAtualizarLinhaPerfil() {
   const el = document.getElementById('perfil-nuvem-estado');
   if (el) el.textContent = nuvemTextoEstado();
+  if (typeof perfilAtualizarDiagnostico === 'function') perfilAtualizarDiagnostico();
 }
 
 // Lê de volta o meta e as partes UMA vez e compara o carimbo, o número de
@@ -270,12 +293,13 @@ function nuvemLerEstado(callback) {
 
   storage.getItem(NUVEM_CHAVE_META, function (erro, metaTexto) {
     if (erro) { callback(null, 'erro'); return; }
-    if (metaTexto === '' || metaTexto === null || metaTexto === undefined) { callback(null, 'vazio'); return; }
+    if (metaTexto === '' || metaTexto === null || metaTexto === undefined) { if (nuvemDiag.partesMeta === null) nuvemDiag.partesMeta = 0; callback(null, 'vazio'); return; }
     if (typeof metaTexto !== 'string') { callback(null, 'erro'); return; }
 
     let meta;
     try { meta = JSON.parse(metaTexto); } catch (e) { callback(null, 'erro'); return; }
     if (!meta || !Number.isInteger(meta.partes) || meta.partes < 1 || meta.partes > NUVEM_MAX_PARTES) { callback(null, 'erro'); return; }
+    if (nuvemDiag.partesMeta === null) nuvemDiag.partesMeta = meta.partes;
 
     const chaves = [];
     for (let i = 0; i < meta.partes; i++) chaves.push(NUVEM_CHAVE_PREFIXO_PARTE + i);
@@ -588,6 +612,7 @@ function nuvemTratarLeitura(estadoNuvem, estatus, confirmandoVazio) {
     // o envio. O jogo segue com o local (já gravado no aparelho) e tenta ler outra vez.
     arranque.nuvemErro = true;
     arranque.ganhou = 'erro (fica o local)';
+    nuvemDiagRegistar('erro', estatus);
     nuvemAgendarReleitura();
     return;
   }
@@ -597,6 +622,7 @@ function nuvemTratarLeitura(estadoNuvem, estatus, confirmandoVazio) {
   if (estatus === 'vazio') {
     const temProgresso = !!state.ultimaGravacaoEm || (typeof temProgressoExistente === 'function' && temProgressoExistente());
     if (!temProgresso) { // conta nova: nada a copiar, sem esperas
+      nuvemDiagRegistar('novo', estatus, 0);
       arranque.respondeu = true;
       arranque.ganhou = 'sem nuvem';
       arranque.adiada = false;
@@ -607,9 +633,11 @@ function nuvemTratarLeitura(estadoNuvem, estatus, confirmandoVazio) {
       // 2.ª leitura, uns 10 s depois, a confirmar que continua vazio.
       arranque.nuvemEstatus = 'vazio (a confirmar)';
       arranque.ganhou = 'a confirmar vazio';
+      nuvemDiagRegistar(nuvemDiagOrigemDeVazio(), estatus, 0);
       setTimeout(function () { nuvemLerParaSincronizar(true); }, NUVEM_CONFIRMAR_VAZIO_MS);
       return;
     }
+    nuvemDiagRegistar(nuvemDiagOrigemDeVazio(), estatus, 0);
     arranque.respondeu = true;
     arranque.ganhou = 'sem nuvem';
     arranque.adiada = false;
@@ -635,6 +663,7 @@ function nuvemTratarLeitura(estadoNuvem, estatus, confirmandoVazio) {
 
   if (localEm >= nuvemEm && !nuvemTemMaisReputacao) {
     arranque.ganhou = 'local';
+    nuvemDiagRegistar('local', estatus, nuvemEm);
     // Capítulos: o que a nuvem tiver a mais (outro aparelho) entra por união.
     const juntos = nuvemJuntarCapitulos(state.capitulos, estadoNuvem.capitulos);
     const juntoCaderno = nuvemJuntarCaderno(state.caderno, estadoNuvem.caderno);
@@ -662,6 +691,7 @@ function nuvemTratarLeitura(estadoNuvem, estatus, confirmandoVazio) {
   // aparelho, e refresca o ecrã atual com os novos valores. O que ficou retido
   // (estado antigo de arranque) nunca é enviado.
   arranque.ganhou = (localEm >= nuvemEm) ? 'nuvem (mais reputação)' : 'nuvem';
+  nuvemDiagRegistar('nuvem', estatus, nuvemEm);
   arranque.adiada = false;
   const capitulosLocais = state.capitulos;
   const cadernoLocal = state.caderno;
@@ -691,6 +721,7 @@ function nuvemTratarLeitura(estadoNuvem, estatus, confirmandoVazio) {
 
 function nuvemSincronizarAoAbrir() {
   if (!nuvemStorage()) { // fora do Telegram (e sem ?nuvem=teste): só localStorage, como já era
+    nuvemDiagRegistar('sem nuvem', null);
     arranque.respondeu = true;
     arranque.ganhou = 'sem nuvem';
     return;
