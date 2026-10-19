@@ -1,13 +1,12 @@
 #!/usr/bin/env node
 // A "caixa de correio" dadosAcrescentar(tipo, entrada) de js/dados.js e a pasta dados/:
-// 1) uma entrada boa é acrescentada à lista certa (visitas, níveis, histórias, capítulos) e o jogo usa-a;
+// 1) uma entrada boa é acrescentada à lista certa (visitas, níveis, histórias, capítulos, palavras) e o jogo usa-a;
 // 2) entradas más (id repetido, id mal formado, tipo desconhecido, não-objeto, campos em falta, tipo
 //    "objetivos" ainda não suportado) são IGNORADAS com um console.warn, sem lançar erro e sem mudar nada;
 // 3) uma entrada que já existe nunca é substituída;
-// 4) o index.html carrega o dados.js e os 6 ficheiros de dados/ depois das listas e antes do main.js (a pasta tem mais um, dados/palavras.js,
-//    o glossário, que AINDA NÃO é carregado: ver scripts/verificar-palavras.js), e
+// 4) o index.html carrega js/palavras.js (a lista do glossário), o dados.js e os 7 ficheiros de dados/ depois das listas e antes do main.js, e
 //    os ficheiros de dados/ só trazem o que está combinado: a visita marisa_5 e os pacotes dos níveis 11 a 20 (nível,
-//    história, 3 histórias da Enciclopédia e capítulo cada); objetivos.js só tem comentários; as listas de origem ficam iguais.
+//    história, 3 histórias da Enciclopédia e capítulo cada) e as 20 palavras do glossário (tipo 'palavras'); objetivos.js só tem comentários; as listas de origem ficam iguais.
 // As entradas de teste vivem só no ambiente simulado (módulo vm); nada fica no jogo.
 //
 // Uso: node scripts/verificar-dados-carregar.js
@@ -33,7 +32,7 @@ function js(obj) { return JSON.stringify(obj); }
 function acrescentar(tipo, entrada) { return ev('dadosAcrescentar(' + js(tipo) + ', ' + js(entrada) + ')'); }
 function estado() {
   return js([ev('VISITAS.length'), ev('NIVEIS_CONFIG.length'), Object.keys(ev('HISTORIA_NIVEIS')).join(), ev('CAPITULOS_CONFIG.length'),
-    ev('OBJETIVOS_GRUPO_C.length'), ev('DADOS_ACRESCENTADOS')]);
+    ev('OBJETIVOS_GRUPO_C.length'), ev('DADOS_ACRESCENTADOS'), ev('JSON.stringify(PALAVRAS_DA_QUINTA)')]);
 }
 // Esta entrada deve ser ignorada: devolve false, avisa na consola e não muda nada.
 function ignorada(tipo, entrada, porque) {
@@ -54,6 +53,7 @@ const TEXTO = function (pt) { return { pt: pt, en: pt + ' (en)', es: pt + ' (es)
   ok(ev('DADOS_ACRESCENTADOS.visitas.length + DADOS_ACRESCENTADOS.niveis.length + DADOS_ACRESCENTADOS.historias.length + DADOS_ACRESCENTADOS.capitulos.length + DADOS_ACRESCENTADOS.objetivos.length') === 0, 'dados/ devia estar vazio');
   ok(ev('VISITAS.length') === 12 && ev('NIVEIS_CONFIG.length') === 10 && ev('CAPITULOS_CONFIG.length') === 10 && ev('OBJETIVOS_GRUPO_C.length') === 5, 'o jogo devia ter as listas de sempre (12 visitas, 10 níveis, 10 capítulos, 5 do Grupo C)');
   ok(Object.keys(ev('HISTORIA_NIVEIS')).join() === '2,3,4,5,6,7,8,9,10', 'o jogo devia ter as histórias dos níveis 2 a 10');
+  ok(ev('PALAVRAS_DA_QUINTA.length') === 0 && ev('palavrasTotal()') === 0 && ev('palavrasResumo()') === '0' && ev('palavrasOrdenadas().length') === 0 && ev('DADOS_ACRESCENTADOS.palavras.length') === 0, 'sem a pasta dados/ o glossário devia estar vazio (a lista começa vazia)');
 }
 
 // O que dados/ traz de verdade, ficheiro a ficheiro (os ids pela ordem em que aparecem): a visita marisa_5 e os pacotes dos
@@ -70,10 +70,13 @@ const IDS_ALCACER = ['sal_alcacer', 'sal_setubal', 'sal_redura'];
 const IDS_COMPORTA = ['arroz_arrozais', 'arroz_carolino', 'arroz_consumo'];
 const IDS_MONTADO = ['sobreiro_cortica', 'sobreiro_assobiador', 'sobreiro_rolha'];
 const IDS_BOCAGE = ['bocage_poeta', 'bocage_casa', 'bocage_dia'];
+// As 20 palavras do glossário (dados/palavras.js), por ordem alfabética; o conteúdo prova-o scripts/verificar-palavras.js.
+const IDS_PALAVRAS = ['aguardente_vinica', 'alambique', 'bacelo', 'bagaceira', 'bagaco', 'casta', 'curtimenta', 'dop', 'estuario', 'fortificar', 'jeropiga', 'lagar', 'mildio', 'montado', 'mosto', 'oidio', 'pousio', 'redura', 'torna_viagem', 'vinho_generoso'];
 const ESPERADO_EM_DADOS = {
   'visitas.js': ['marisa_5'], 'niveis.js': ['nivel_11', 'nivel_12', 'nivel_13', 'nivel_14', 'nivel_15', 'nivel_16', 'nivel_17', 'nivel_18', 'nivel_19', 'nivel_20'],
   'historias.js': ['historia_11', 'historia_12', 'historia_13', 'historia_14', 'historia_15', 'historia_16', 'historia_17', 'historia_18', 'historia_19', 'historia_20'], 'capitulos.js': ['cap11', 'cap12', 'cap13', 'cap14', 'cap15', 'cap16', 'cap17', 'cap18', 'cap19', 'cap20'],
-  'objetivos.js': [], 'enciclopedia.js': IDS_ARRABIDA.concat(IDS_SADO, IDS_PALMELA, IDS_AZEITAO, IDS_SESIMBRA, IDS_SETUBAL, IDS_ALCACER, IDS_COMPORTA, IDS_MONTADO, IDS_BOCAGE)
+  'objetivos.js': [], 'enciclopedia.js': IDS_ARRABIDA.concat(IDS_SADO, IDS_PALMELA, IDS_AZEITAO, IDS_SESIMBRA, IDS_SETUBAL, IDS_ALCACER, IDS_COMPORTA, IDS_MONTADO, IDS_BOCAGE),
+  'palavras.js': IDS_PALAVRAS
 };
 
 // ----- 0b. Com a pasta dados/ real: só a visita marisa_5 e o pacote do nível 11 vêm de lá; o jogo de origem fica igual -----
@@ -86,6 +89,8 @@ const ESPERADO_EM_DADOS = {
   ok(idsDe('niveis') === 'nivel_11,nivel_12,nivel_13,nivel_14,nivel_15,nivel_16,nivel_17,nivel_18,nivel_19,nivel_20' && idsDe('historias') === 'historia_11,historia_12,historia_13,historia_14,historia_15,historia_16,historia_17,historia_18,historia_19,historia_20' && idsDe('capitulos') === 'cap11,cap12,cap13,cap14,cap15,cap16,cap17,cap18,cap19,cap20', 'de dados/ só deviam vir os pacotes dos níveis 11 a 20 (nivel_N, historia_N, capN)');
   ok(idsDe('enciclopedia') === IDS_ARRABIDA.concat(IDS_SADO, IDS_PALMELA, IDS_AZEITAO, IDS_SESIMBRA, IDS_SETUBAL, IDS_ALCACER, IDS_COMPORTA, IDS_MONTADO, IDS_BOCAGE).join(), 'de dados/ só deviam vir as 3 histórias da Arrábida, as 3 do Sado, as 3 de Palmela, as 3 de Azeitão, as 3 de Sesimbra, as 3 de Setúbal, as 3 de Alcácer (o sal do Sado), as 3 da Comporta (o arroz do Sado), as 3 do Montado (o sobreiro e a cortiça) e as 3 de Bocage (o poeta de Setúbal), por esta ordem: ' + idsDe('enciclopedia'));
   ok(idsDe('objetivos') === '', 'dados/ não devia trazer objetivos');
+  ok(idsDe('palavras') === IDS_PALAVRAS.join(), 'de dados/ só deviam vir as 20 palavras do glossário: ' + idsDe('palavras'));
+  ok(real.ev('PALAVRAS_DA_QUINTA.map(function (p) { return p.id; }).join()') === IDS_PALAVRAS.join() && real.ev('palavrasTotal()') === 20, 'com dados/ as 20 palavras deviam ficar em PALAVRAS_DA_QUINTA (por ordem de entrada) e palavrasTotal() devia ser 20');
   ok(real.ev('VISITAS.length') === 13 && real.ev('NIVEIS_CONFIG.length') === 20 && real.ev('CAPITULOS_CONFIG.length') === 20 && real.ev('OBJETIVOS_GRUPO_C.length') === 5, 'com dados/ devia haver 13 visitas, 20 níveis, 20 capítulos e os 5 do Grupo C');
   ok(Object.keys(real.ev('HISTORIA_NIVEIS')).join() === '2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20' && real.ev('ENCYCLOPEDIA_ENTRIES.pt.length') === 62, 'com dados/ devia haver histórias dos níveis 2 a 20 e 62 entradas da Enciclopédia');
   ok(real.ev('JSON.stringify(VISITAS.slice(0, 12))') === ev('JSON.stringify(VISITAS)'), 'as 12 visitas de origem (e a sua ordem) deviam ficar iguais com dados/');
@@ -178,6 +183,48 @@ const ESPERADO_EM_DADOS = {
   ok(acrescentar('capitulos', { id: 'cap_falante_ok', nivel: 11, falante: 'Chizo', criterio: [{ tipo: 'temChaves', caminho: 'despensa.recebidos', chaves: ['a'] }], titulo: TEXTO('x'), objetivo: TEXTO('x'), conclusao: TEXTO('x') }) === true, 'capítulo com falante que existe e temChaves: devia entrar');
 }
 
+// ----- 4b. Palavras do glossário (PALAVRAS_DA_QUINTA, js/palavras.js) -----
+{
+  const listasAntes = ev('[VISITAS.length, NIVEIS_CONFIG.length, CAPITULOS_CONFIG.length, typeof ENCYCLOPEDIA_ENTRIES === "undefined" ? 0 : 1].join()');
+  const boa = { id: 'palavra_teste', palavra: 'Zebrão', explicacao: TEXTO('um bicho de teste.') };
+  ok(acrescentar('palavras', boa) === true, 'palavra boa: devia entrar');
+  ok(ev('PALAVRAS_DA_QUINTA.length') === 1 && ev('palavrasTotal()') === 1 && ev('palavrasResumo()') === '1', 'palavra boa: devia ficar em PALAVRAS_DA_QUINTA (total e resumo 1)');
+  ok(ev("PALAVRAS_DA_QUINTA[0].palavra") === 'Zebrão' && ev("PALAVRAS_DA_QUINTA[0].explicacao.en") === 'um bicho de teste. (en)' && ev("'nivel' in PALAVRAS_DA_QUINTA[0]") === false, 'palavra boa: palavra e as 3 explicações copiadas, sem nivel quando não vem');
+  ignorada('palavras', boa, 'palavra: id repetido (já acrescentado)');
+  const original = ev('JSON.stringify(PALAVRAS_DA_QUINTA[0])');
+  ignorada('palavras', { id: 'outra_t', palavra: 'zebrao', explicacao: TEXTO('x') }, 'palavra: a mesma palavra sem acento nem maiúscula');
+  ignorada('palavras', { id: 'outra_t', palavra: ' ZEBRÃO ', explicacao: TEXTO('x') }, 'palavra: a mesma palavra com maiúsculas e espaços');
+  ignorada('palavras', { id: 'palavra_teste', palavra: 'Outra', explicacao: TEXTO('x') }, 'palavra: id de uma que já existe (não a substitui)');
+  ok(ev('JSON.stringify(PALAVRAS_DA_QUINTA[0])') === original, 'palavra: a que já existia não devia mudar');
+  ignorada('palavras', { id: 'Palavra-9', palavra: 'a', explicacao: TEXTO('x') }, 'palavra: id mal formado (maiúscula e hífen)');
+  ignorada('palavras', { id: 'com espaco', palavra: 'a', explicacao: TEXTO('x') }, 'palavra: id com espaço');
+  ignorada('palavras', { id: 'acentuado_é', palavra: 'a', explicacao: TEXTO('x') }, 'palavra: id com acento');
+  ignorada('palavras', { id: '', palavra: 'a', explicacao: TEXTO('x') }, 'palavra: id vazio');
+  ignorada('palavras', { palavra: 'a', explicacao: TEXTO('x') }, 'palavra: sem id');
+  ignorada('palavras', { id: 'sem_palavra_t', explicacao: TEXTO('x') }, 'palavra: sem a palavra');
+  ignorada('palavras', { id: 'palavra_vazia_t', palavra: '   ', explicacao: TEXTO('x') }, 'palavra: palavra só com espaços');
+  ignorada('palavras', { id: 'palavra_num_t', palavra: 5, explicacao: TEXTO('x') }, 'palavra: palavra que não é texto');
+  ignorada('palavras', { id: 'sem_expl_t', palavra: 'b' }, 'palavra: sem explicacao');
+  ignorada('palavras', { id: 'sem_es_t', palavra: 'c', explicacao: { pt: 'a', en: 'b' } }, 'palavra: falta o es');
+  ignorada('palavras', { id: 'en_vazio_t', palavra: 'd', explicacao: { pt: 'a', en: '  ', es: 'c' } }, 'palavra: explicação en só com espaços');
+  ignorada('palavras', { id: 'expl_texto_t', palavra: 'e', explicacao: 'só texto' }, 'palavra: explicacao que não é { pt, en, es }');
+  [0, -1, 1.5, '3', null, NaN, true].forEach(function (n, i) {
+    ignorada('palavras', { id: 'nivel_mau_' + i, palavra: 'f' + i, explicacao: TEXTO('x'), nivel: n }, 'palavra: nivel ' + String(n) + ' (devia ser um inteiro >= 1)');
+  });
+  ok(ev('PALAVRAS_DA_QUINTA.length') === 1, 'palavras: as ignoradas não deviam entrar na lista');
+  // O nivel, quando vem bom, copia-se; os campos que o tipo não conhece ficam de fora; a ordem de entrada não conta para o alfabeto.
+  ok(acrescentar('palavras', { id: 'palavra_nivel', palavra: 'Ábaco', explicacao: TEXTO('outro bicho.'), nivel: 4, intruso: 'x', explicacao_extra: 'y' }) === true, 'palavra com nivel: devia entrar');
+  ok(ev('PALAVRAS_DA_QUINTA[1].nivel') === 4 && ev('Object.keys(PALAVRAS_DA_QUINTA[1]).sort().join()') === 'explicacao,id,nivel,palavra', 'palavra com nivel: só copia os campos que conhece (id, palavra, explicacao, nivel)');
+  ok(ev("palavrasOrdenadas().map(function (p) { return p.id; }).join()") === 'palavra_nivel,palavra_teste', 'palavrasOrdenadas devia pôr «Ábaco» antes de «Zebrão» (sem contar acentos nem maiúsculas)');
+  ok(ev("PALAVRAS_DA_QUINTA.map(function (p) { return p.id; }).join()") === 'palavra_teste,palavra_nivel', 'palavrasOrdenadas não devia mexer na lista (fica pela ordem de entrada)');
+  ok(ev('palavrasTotal()') === 2 && ev('palavrasResumo()') === '2', 'o resumo é só o total («2»)');
+  // O texto entra tal e qual (não se escapa ao guardar): quem o desenhar tem de passar por escaparHtml (a PR do ecrã prova-o com «<b>x</b>&»).
+  ok(acrescentar('palavras', { id: 'palavra_html', palavra: 'Html', explicacao: TEXTO('<b>x</b>&') }) === true && ev("PALAVRAS_DA_QUINTA[2].explicacao.pt") === '<b>x</b>&', 'o texto entra tal e qual; escapar é com quem desenha');
+  ok(ev("escaparHtml(PALAVRAS_DA_QUINTA[2].explicacao.pt)") === '&lt;b&gt;x&lt;/b&gt;&amp;', 'escaparHtml (js/i18n.js) devia escapar <b>x</b>&');
+  // Só lê: nenhum tipo novo mexe no resto do jogo.
+  ok(ev('[VISITAS.length, NIVEIS_CONFIG.length, CAPITULOS_CONFIG.length, typeof ENCYCLOPEDIA_ENTRIES === "undefined" ? 0 : 1].join()') === listasAntes, 'as palavras não mexem nas outras listas');
+}
+
 // ----- 5. Tipos desconhecidos, objetivos e entradas que não são objetos -----
 {
   ignorada('objetivos', { id: 'objetivo_teste', texto: TEXTO('x') }, 'objetivos: ainda não suportado');
@@ -206,6 +253,8 @@ const ESPERADO_EM_DADOS = {
   const listas = ['js/niveis.js', 'js/historia.js', 'js/objetivos.js', 'js/capitulos.js', 'js/visitas.js'];
   listas.forEach(function (f) { ok(pos(f) !== -1 && pos(f) < pos('js/dados.js'), f + ' devia carregar ANTES de js/dados.js'); });
   ok(pos('js/dados.js') < pos('js/main.js') && pos('js/main.js') !== -1, 'js/dados.js devia carregar ANTES de js/main.js');
+  ok(pos('js/palavras.js') !== -1 && pos('js/palavras.js') < pos('js/dados.js'), 'js/palavras.js (a lista do glossário) devia carregar ANTES de js/dados.js');
+  ok(pos('dados/palavras.js') > pos('dados/enciclopedia.js') && pos('dados/enciclopedia.js') !== -1, 'dados/palavras.js devia carregar a seguir a dados/enciclopedia.js');
   let anterior = pos('js/dados.js');
   FICHEIROS_DE_DADOS.forEach(function (f) {
     const p = pos('dados/' + f);
@@ -215,11 +264,7 @@ const ESPERADO_EM_DADOS = {
     anterior = p;
   });
   const naPasta = fs.readdirSync(path.join(RAIZ, 'dados')).filter(function (f) { return /\.js$/.test(f); }).sort().join();
-  // A pasta tem os 6 ficheiros que o jogo carrega e mais um, combinado à parte: dados/palavras.js (o glossário «Palavras da Quinta»), que
-  // ainda não está no jogo (o index.html não o carrega; ver scripts/verificar-palavras.js). Qualquer outro ficheiro é uma falha.
-  const FICHEIROS_FORA_DO_JOGO = ['palavras.js'];
-  ok(naPasta === FICHEIROS_DE_DADOS.concat(FICHEIROS_FORA_DO_JOGO).sort().join(), 'a pasta dados/ devia ter só os 6 ficheiros de dados (.js) e dados/palavras.js: ' + naPasta);
-  FICHEIROS_FORA_DO_JOGO.forEach(function (f) { ok(html.indexOf('dados/' + f) === -1, 'o index.html ainda não devia carregar dados/' + f + ' (esta PR não mostra nada)'); });
+  ok(naPasta === FICHEIROS_DE_DADOS.slice().sort().join(), 'a pasta dados/ devia ter só os 7 ficheiros de dados (.js): ' + naPasta);
   FICHEIROS_DE_DADOS.forEach(function (f) {
     const codigo = fs.readFileSync(path.join(RAIZ, 'dados', f), 'utf8').replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '').trim();
     const esperados = ESPERADO_EM_DADOS[f];

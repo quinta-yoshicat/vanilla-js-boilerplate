@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Validador genérico do CONTEÚDO do jogo (visitas, níveis, histórias, capítulos e objetivos), para
+// Validador genérico do CONTEÚDO do jogo (visitas, níveis, histórias, capítulos, objetivos e palavras do glossário), para
 // as entradas de hoje e para as que um dia vierem da pasta dados/ (ver dados/LEIAME.md). Corre o
 // state.js, o i18n.js, o niveis.js, o personagens.js, o historia.js, o capitulos.js, o objetivos.js e
 // o visitas.js REAIS, mais o js/dados.js e os ficheiros de dados/ (como no index.html), num ambiente
@@ -48,6 +48,7 @@ function carregarJogo() {
     ' NIVEIS_CONFIG: NIVEIS_CONFIG, NIVEL_NECESSARIO_POR_ECRA: NIVEL_NECESSARIO_POR_ECRA,' +
     ' HISTORIA_INTRO: HISTORIA_INTRO, HISTORIA_NIVEIS: HISTORIA_NIVEIS,' +
     ' ENCICLOPEDIA: ENCYCLOPEDIA_ENTRIES,' +
+    ' PALAVRAS: typeof PALAVRAS_DA_QUINTA === "undefined" ? [] : PALAVRAS_DA_QUINTA,' +
     ' CAPITULOS_CONFIG: CAPITULOS_CONFIG, CAPITULOS_STRINGS: CAPITULOS_STRINGS, PERSONAGENS_CARAS: PERSONAGENS_CARAS,' +
     ' OBJETIVOS: { A: OBJETIVOS_POOL_A.map(function (o) { return { id: o.id, texto: o.texto }; }),' +
     ' B: OBJETIVOS_POOL_B.map(function (o) { return { id: o.id, texto: o.texto }; }),' +
@@ -322,8 +323,33 @@ function main() {
     resumo.push(todos.length + ' objetivos');
   }
 
+  // ----- Palavras da Quinta (o glossário: PALAVRAS_DA_QUINTA, as que vierem de dados/palavras.js) -----
+  {
+    const P = J.PALAVRAS || [];
+    const ids = {}, chaves = {};
+    const semAcentos = function (x) { return String(x).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().trim(); };
+    P.forEach(function (p) {
+      const onde = 'Palavra ' + (p && p.id ? p.id : '?');
+      entradaNova = ehNova('palavras', p && p.id); // vindas de dados/: o estilo é sempre uma falha
+      if (!p || !temTexto(p.id)) falta(onde, 'falta o id');
+      else if (ids[p.id]) falta(onde, 'o id está repetido');
+      else if (!FORMATO_ID.test(p.id)) falta(onde, 'o id devia ter só a-z, 0-9 e _');
+      if (p && p.id) ids[p.id] = true;
+      if (!p || !temTexto(p.palavra)) falta(onde, 'falta a palavra');
+      else {
+        verTexto(onde, 'palavra', p.palavra);
+        if (chaves[semAcentos(p.palavra)]) falta(onde, 'a palavra «' + p.palavra + '» está repetida');
+        chaves[semAcentos(p.palavra)] = true;
+      }
+      texto3(onde, 'a explicação', p && p.explicacao);
+      if (p && p.nivel !== undefined && (!Number.isInteger(p.nivel) || p.nivel < 1)) falta(onde, 'o nivel, se existir, devia ser um inteiro >= 1');
+    });
+    entradaNova = false;
+    resumo.push(P.length + ' palavras do glossário');
+  }
+
   const deDados = Object.keys(J.NOVAS || {}).reduce(function (t, k) { return t + J.NOVAS[k].length; }, 0);
-  const NOMES_TIPO = { visitas: ['visita', 'visitas'], niveis: ['nível', 'níveis'], historias: ['história', 'histórias'], capitulos: ['capítulo', 'capítulos'], enciclopedia: ['entrada de enciclopédia', 'entradas de enciclopédia'], objetivos: ['objetivo', 'objetivos'] };
+  const NOMES_TIPO = { visitas: ['visita', 'visitas'], niveis: ['nível', 'níveis'], historias: ['história', 'histórias'], capitulos: ['capítulo', 'capítulos'], enciclopedia: ['entrada de enciclopédia', 'entradas de enciclopédia'], palavras: ['palavra', 'palavras'], objetivos: ['objetivo', 'objetivos'] };
   const porTipo = Object.keys(J.NOVAS || {}).filter(function (k) { return J.NOVAS[k].length > 0; }).map(function (k) {
     const n = J.NOVAS[k].length;
     return n + ' ' + (NOMES_TIPO[k] ? NOMES_TIPO[k][n === 1 ? 0 : 1] : k);
