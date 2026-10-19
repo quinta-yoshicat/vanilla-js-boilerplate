@@ -204,7 +204,9 @@ function perfilApagarTudo() {
       showMessage(t('perfil.apagarFalha'));
       return;
     }
-    // Nuvem apagada (ou inexistente): só as duas chaves conhecidas.
+    // Nuvem apagada (ou inexistente): só as duas chaves conhecidas. STORAGE_KEY é a desta conta
+    // (com id do Telegram, a por utilizador; sem id, a de sempre; ver js/state.js): nunca a de outra conta.
+    // A cache do tempo (TEMPO_CACHE_KEY) é a única partilhada: não tem nada de pessoal e volta a pedir-se.
     try {
       localStorage.removeItem(STORAGE_KEY);
       localStorage.removeItem(TEMPO_CACHE_KEY);

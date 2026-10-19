@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------
-// ESTADO DO JOGO (persistido em localStorage)
+// ESTADO DO JOGO (persistido em localStorage; uma chave por utilizador do Telegram, ver STORAGE_KEY)
 //
 // NOTA / FUTURO: neste momento todo o progresso (Uvas, Gotas, Reputação,
 // Garrafas, Conhecimento, estado da Vinha, Enciclopédia, etc.) é
@@ -17,7 +17,22 @@
 // a ser chamados em js/main.js, como antes.
 const tg = window.Telegram.WebApp;
 
-const STORAGE_KEY = 'yoshicat_quinta_state_v2';
+// Chave do save local. No Telegram, o localStorage é do telemóvel e não da conta:
+// duas contas no mesmo aparelho partilhavam o mesmo save (e a conta nova copiava-o
+// para a nuvem dela). Por isso, quando há o id do utilizador do Telegram (inteiro
+// maior que 0), cada conta tem a sua chave: 'yoshicat_quinta_state_v2_u<ID>'.
+// Sem id (fora do Telegram, ou sem "user") fica a chave de sempre. O save da chave
+// de sempre nunca é apagado, reescrito nem copiado para a chave de uma conta: uma
+// conta com chave própria vazia arranca do estado por omissão e quem decide o resto é
+// a sincronização com a nuvem dessa conta (nuvemSincronizarAoAbrir() em js/nuvem.js).
+// Escolhe-se aqui, antes de loadState(); o script do Telegram carrega antes deste.
+const STORAGE_KEY_BASE = 'yoshicat_quinta_state_v2';
+function chaveDoSaveLocal() {
+  const utilizador = tg && tg.initDataUnsafe && tg.initDataUnsafe.user;
+  const id = utilizador && utilizador.id;
+  return (typeof id === 'number' && Number.isSafeInteger(id) && id > 0) ? STORAGE_KEY_BASE + '_u' + id : STORAGE_KEY_BASE;
+}
+const STORAGE_KEY = chaveDoSaveLocal();
 
 // Ligada enquanto o Perfil está a apagar o progresso (ver perfilApagarTudo()
 // em js/perfil.js): com isto a true, saveState() e a nuvem não gravam nada.

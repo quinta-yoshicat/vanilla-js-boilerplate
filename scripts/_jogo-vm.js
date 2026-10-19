@@ -8,6 +8,9 @@
 //   aoAvisar  função chamada com cada console.warn do jogo
 //   estadoGuardado  texto JSON de um estado já guardado (como o localStorage do jogador), para o jogo o carregar ao abrir
 //   explorar  true = carrega também o js/explorar.js real (a Enciclopédia: ENCYCLOPEDIA_ENTRIES, entradasBloqueadas, ...)
+//   utilizadorId  id do utilizador do Telegram simulado (Telegram.WebApp.initDataUnsafe.user.id); sem ele o jogo corre como fora do
+//                 Telegram (chave do save sem id). Com ele, estadoGuardado vai para a chave desse utilizador.
+//   guardadoComum  objeto { chave: texto } a usar como localStorage (para duas contas partilharem o mesmo telemóvel)
 //   ecraReal  true = mantém o ecraDesbloqueado() verdadeiro de js/niveis.js (por omissão é substituído por um falso)
 // Devolve { cx, ev(expressão), el(id), guardado } (el: o elemento simulado com esse id, ex.: o innerHTML de um cartão;
 // guardado: o localStorage simulado, { chave: texto }).
@@ -22,8 +25,8 @@ function abrirJogo(opcoes) {
   const o = opcoes || {};
   const jsDir = o.jsDir || path.join(RAIZ, 'js');
   const dadosDir = o.dadosDir === undefined ? path.join(RAIZ, 'dados') : o.dadosDir;
-  const guardado = {};
-  if (o.estadoGuardado) guardado.yoshicat_quinta_state_v2 = o.estadoGuardado;
+  const guardado = o.guardadoComum || {};
+  if (o.estadoGuardado) guardado['yoshicat_quinta_state_v2' + (o.utilizadorId ? '_u' + o.utilizadorId : '')] = o.estadoGuardado;
   const elementos = {};
   function el(id) { return elementos[id] || (elementos[id] = { hidden: true, textContent: '', innerHTML: '', id: id }); }
   const sb = {
@@ -46,7 +49,7 @@ function abrirJogo(opcoes) {
   };
   sb.window = sb;
   sb.window.addEventListener = function () {};
-  sb.Telegram = { WebApp: {} };
+  sb.Telegram = { WebApp: o.utilizadorId ? { initDataUnsafe: { user: { id: o.utilizadorId } } } : {} };
   const cx = vm.createContext(sb);
   require('./_regras-tempo').injetarRegrasTempo(cx);
   function carregar(ficheiro, nome) { vm.runInContext(fs.readFileSync(ficheiro, 'utf8'), cx, { filename: nome }); }
@@ -85,4 +88,21 @@ function abrirJogo(opcoes) {
   return { cx: cx, ev: function (c) { return vm.runInContext(c, cx); }, el: el, guardado: guardado };
 }
 
-module.exports = { abrirJogo, FICHEIROS_DE_DADOS };
+// CloudStorage "de mentira" em memória (a nuvem de UMA conta do Telegram), com a mesma forma do verdadeiro:
+// getItem/getItems/setItem/getKeys/removeItems, todos com callback(erro, resultado), a responder logo.
+function criarNuvemFalsa(inicial) {
+  const dados = Object.assign({}, inicial);
+  const f = { dados: dados, escritas: 0 };
+  f.getItem = function (k, cb) { cb(null, Object.prototype.hasOwnProperty.call(dados, k) ? dados[k] : ''); };
+  f.getItems = function (ks, cb) {
+    const r = {};
+    ks.forEach(function (k) { r[k] = Object.prototype.hasOwnProperty.call(dados, k) ? dados[k] : ''; });
+    cb(null, r);
+  };
+  f.setItem = function (k, v, cb) { f.escritas++; dados[k] = v; if (cb) cb(null, true); };
+  f.getKeys = function (cb) { cb(null, Object.keys(dados)); };
+  f.removeItems = function (ks, cb) { ks.forEach(function (k) { delete dados[k]; }); if (cb) cb(null, true); };
+  return f;
+}
+
+module.exports = { abrirJogo, FICHEIROS_DE_DADOS, criarNuvemFalsa };
