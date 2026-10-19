@@ -19,7 +19,8 @@ const PERFIL_ICONES = {
   garrafas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><path d="M10 2h4v3.8l1.8 2.7c.4.6.7 1.4.7 2.2V20a2 2 0 0 1-2 2h-5a2 2 0 0 1-2-2V10.7c0-.8.2-1.6.7-2.2L10 5.8V2z"></path><path d="M10 11.5h4"></path></svg>',
   conquistas: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><circle cx="12" cy="9" r="5"></circle><path d="M9 13l-1.5 8L12 18l4.5 3-1.5-8"></path></svg>',
   caderno: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><path d="M6 3h11a1 1 0 0 1 1 1v16a1 1 0 0 1-1 1H6z"></path><path d="M6 3v18"></path><path d="M9.5 8h5"></path><path d="M9.5 12h5"></path></svg>',
-  conhecimento: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><path d="M4 5.5c2.2-1.2 5.3-1.2 8 0v13c-2.7-1.2-5.8-1.2-8 0v-13z"></path><path d="M20 5.5c-2.2-1.2-5.3-1.2-8 0v13c2.7-1.2 5.8-1.2 8 0v-13z"></path></svg>'
+  conhecimento: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><path d="M4 5.5c2.2-1.2 5.3-1.2 8 0v13c-2.7-1.2-5.8-1.2-8 0v-13z"></path><path d="M20 5.5c-2.2-1.2-5.3-1.2-8 0v13c2.7-1.2 5.8-1.2 8 0v-13z"></path></svg>',
+  palavras: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><path d="M5 4h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-6.5L8 20.5V17H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"></path><path d="M6.3 14l2.4-6.2 2.4 6.2"></path><path d="M7.2 12h3"></path><circle cx="15.2" cy="12.2" r="1.7"></circle><path d="M16.9 10.5v3.7"></path></svg>'
 };
 
 const PERFIL_MEDALHA_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="12" cy="9" r="5"></circle><path d="M9 13l-1.5 8L12 18l4.5 3-1.5-8"></path></svg>';
@@ -44,6 +45,14 @@ function cadernoCartaoPerfil() {
   if (typeof cadernoResumo !== 'function' || typeof ecraDesbloqueado !== 'function' || !ecraDesbloqueado('caderno')) return '';
   return perfilCard(PERFIL_ICONES.caderno, cadernoResumo(), 'perfil.caderno',
     ' role="button" tabindex="0" onclick="goTo(\'caderno\')" onkeydown="if (event.key === \'Enter\') goTo(\'caderno\')"');
+}
+
+// Cartão "Palavras n": o glossário «Palavras da Quinta» (js/palavras.js). Só a partir do nível 4 (ou jogador antigo — ver ecraDesbloqueado
+// em js/niveis.js); abaixo disso nem se vê. O número é só o total das palavras: não há palavras "descobertas" nem nada que se guarde.
+function palavrasCartaoPerfil() {
+  if (typeof palavrasResumo !== 'function' || typeof ecraDesbloqueado !== 'function' || !ecraDesbloqueado('palavras')) return '';
+  return perfilCard(PERFIL_ICONES.palavras, palavrasResumo(), 'perfil.palavras',
+    ' role="button" tabindex="0" onclick="goTo(\'palavras\')" onkeydown="if (event.key === \'Enter\') goTo(\'palavras\')"');
 }
 
 function renderGaleriaGarrafas() {
@@ -82,6 +91,7 @@ function renderPerfil() {
         perfilCard(PERFIL_ICONES.conquistas, conquistasResumo(), 'perfil.conquistas',
           ' role="button" tabindex="0" onclick="goTo(\'conquistas\')" onkeydown="if (event.key === \'Enter\') goTo(\'conquistas\')"') +
         cadernoCartaoPerfil() +
+        palavrasCartaoPerfil() +
         colecaoCartaoPerfil() +
       '</div>' +
       '<p class="info-text" data-i18n="perfil.conhecimentoNota"></p>' +
