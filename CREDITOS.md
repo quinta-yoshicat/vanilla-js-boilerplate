@@ -80,6 +80,9 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/estrada_sr_albano.jpg` | A Estrada (cena do Sr. Albano; a imagem toda, sem recorte, reduzida a 640x953) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
 | `assets/ecras/estrada_dona_fernanda.jpg` | A Estrada (cena da Dona Fernanda; recorte do topo da imagem original, 640x751) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
 | `assets/ecras/estrada_sr_anselmo.jpg` | A Estrada (cena do Sr. Anselmo; recorte do topo da imagem original, 640x513) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
+| `assets/ecras/estrada_dona_rosa.jpg` | A Estrada (cena da Dona Rosa; recorte da imagem original, 640x702) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
+| `assets/ecras/estrada_sr_alvaro.jpg` | A Estrada (cena do Sr. Álvaro; recorte do topo da imagem original, 640x566) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
+| `assets/ecras/estrada_dona_lurdes.jpg` | A Estrada (cena da Dona Lurdes; recorte da imagem original, 640x777) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
 | `assets/ecras/explorar_trator.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/festa_vindima_todos_juntos.jpg` | fundo de um ecrã, história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/festa_vindima_pessoas.jpg` | O Lagar (fundo depois de pôr a mesa da vindima; versão comprimida a ≤ 250 KB do original em imagens_JOGO_TELEGRAM) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
@@ -206,6 +209,9 @@ Versões pequenas (JPEG 640x340, até 60 KB cada) feitas só para os cartões do
 | `assets/personagens/vizinho_albano.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
 | `assets/personagens/vizinha_fernanda.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
 | `assets/personagens/vizinho_anselmo.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
+| `assets/personagens/vizinha_rosa.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
+| `assets/personagens/vizinho_alvaro.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
+| `assets/personagens/vizinha_lurdes.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
 | `assets/personagens/yoshicat.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 
 ### Sons usados (`assets/sons/`)

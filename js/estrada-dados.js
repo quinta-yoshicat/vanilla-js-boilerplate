@@ -4,8 +4,9 @@
 // Dados lidos por js/estrada.js (o ecrã A Estrada, onde se trocam os bens) e por js/despensa.js (regras
 // das trocas e das ofertas), como js/visitas.js é lido pela Quinta.
 //
-// Oito vizinhos (a Dona Amélia, o Sr. Joaquim, o Tomás e o Sr. Armindo, de nível 7, a Dona Natália, de nível 14, o Sr. Albano, de
-// nível 17, a Dona Fernanda, de nível 18, e o Sr. Anselmo, de nível 19), cada um com 3 falas e 1 fala de troca; e oito bens, um por vizinho. Os textos são pt/en/es.
+// Onze vizinhos (a Dona Amélia, o Sr. Joaquim, o Tomás e o Sr. Armindo, de nível 7, a Dona Rosa, de nível 11, o Sr. Álvaro, de nível 12, a Dona
+// Lurdes, de nível 13, a Dona Natália, de nível 14, o Sr. Albano, de nível 17, a Dona Fernanda, de nível 18, e o Sr. Anselmo, de nível 19), cada um
+// com 3 falas e 1 fala de troca; e onze bens, um por vizinho. Os textos são pt/en/es.
 //
 // "nivelMinimo": o nível do jogador (js/niveis.js) a partir do qual o vizinho existe: abaixo dele não aparece na Estrada,
 // não pede, não troca e não conta para nenhum cálculo (ver despensaVizinhoDisponivel em js/despensa.js). Sem o campo vale
@@ -148,6 +149,46 @@ const ESTRADA_FONTES = {
   amorim_manual_rolhas: {
     titulo: 'Amorim — Manual de rolhas',
     url: 'https://www.amorim.com/xms/files/Documentacao/Manual_Rolhas_PT.pdf'
+  },
+  lifecooler_arrabida: {
+    titulo: 'Lifecooler — Serra da Arrábida',
+    url: 'https://lifecooler.com/artigo/atividades/serra-da-arrbida/349413'
+  },
+  lonelyplanet_arrabida: {
+    titulo: 'Lonely Planet — Parque Natural da Arrábida',
+    url: 'https://www.lonelyplanet.com/destinations/portugal/parque-natural-da-arrabida'
+  },
+  visitportugal_arrabida: {
+    titulo: 'Visit Portugal — Parque Natural da Arrábida',
+    url: 'https://www.visitportugal.com/pt-pt/content/parque-natural-da-arrabida'
+  },
+  postal_ostras: {
+    titulo: 'Postal — Espanhóis apontam esta baía portuguesa como das «mais belas do mundo»',
+    url: 'https://postal.pt/nacional/paraiso-gastronomico-para-comer-ostras-espanhois-apontam-baia-portuguesa-como-das-mais-belas-do-mundo/'
+  },
+  idealista_ostras: {
+    titulo: 'Idealista — Pratos típicos de Setúbal',
+    url: 'https://www.idealista.pt/news/node/70503'
+  },
+  uc_ostras_setubal: {
+    titulo: 'Universidade de Coimbra — Ostras, um fruto de Setúbal',
+    url: 'https://estudogeral.uc.pt/bitstream/10316/93365/1/JoseAlmeida_versaofinal.pdf'
+  },
+  dn_setubal: {
+    titulo: 'Diário de Notícias — Em toada marítima por Setúbal',
+    url: 'https://www.dn.pt/sociedade/em-toada-maritima-por-setubal'
+  },
+  turismolisboa_palmela: {
+    titulo: 'Turismo de Lisboa — Palmela',
+    url: 'https://www.visitlisboa.com/pt-pt/p/lisbon-flavours/vinho/palmela'
+  },
+  diario_republica_palmela: {
+    titulo: 'Diário da República — Portaria 783/2009 (Palmela)',
+    url: 'https://diariodarepublica.pt/dr/detalhe/portaria/783-2009-492995'
+  },
+  wipo_palmela: {
+    titulo: 'WIPO Lex — Portaria 783/2009 (Palmela)',
+    url: 'https://www.wipo.int/wipolex/zh/legislation/details/8107'
   }
 };
 
@@ -520,6 +561,144 @@ const ESTRADA_VIZINHOS = [
       },
       semFacto: true
     }
+  },
+  {
+    id: 'dona_rosa',
+    nivelMinimo: 11,
+    nome: { pt: 'Dona Rosa', en: 'Dona Rosa', es: 'Dona Rosa' },
+    papel: { pt: 'apanhadora de ervas da Arrábida', en: 'Arrábida herb gatherer', es: 'recolectora de hierbas de la Arrábida' },
+    cara: 'assets/personagens/vizinha_rosa.jpg',
+    caraPendente: false,
+    bem: 'ervas_arrabida',
+    falas: [
+      {
+        id: 'dona_rosa_1',
+        texto: {
+          pt: 'Na Arrábida crescem o alecrim, o tomilho e a lavanda, entre muitas outras plantas do Mediterrâneo.',
+          en: 'In the Arrábida grow rosemary, thyme and lavender, among many other Mediterranean plants.',
+          es: 'En la Arrábida crecen el romero, el tomillo y la lavanda, entre muchas otras plantas del Mediterráneo.'
+        },
+        fonte: ['lifecooler_arrabida', 'lonelyplanet_arrabida']
+      },
+      {
+        id: 'dona_rosa_2',
+        texto: {
+          pt: 'O Parque Natural da Arrábida estende-se entre Setúbal e Sesimbra.',
+          en: 'The Arrábida Natural Park stretches between Setúbal and Sesimbra.',
+          es: 'El Parque Natural de la Arrábida se extiende entre Setúbal y Sesimbra.'
+        },
+        fonte: ['visitportugal_arrabida', 'lifecooler_arrabida']
+      },
+      {
+        id: 'dona_rosa_3',
+        texto: {
+          pt: 'O Convento da Arrábida é do século XVI, e os frades franciscanos viveram lá até ao século XIX.',
+          en: 'The Arrábida Convent dates from the 16th century, and Franciscan friars lived there until the 19th century.',
+          es: 'El Convento de la Arrábida es del siglo XVI, y los frailes franciscanos vivieron allí hasta el siglo XIX.'
+        },
+        fonte: ['visitportugal_arrabida', 'lifecooler_arrabida']
+      }
+    ],
+    troca: {
+      texto: {
+        pt: 'Leva lá um molhinho de ervas, vizinho! Ainda cheira à serra.',
+        en: 'Take a little bunch of herbs, neighbour! It still smells of the hills.',
+        es: '¡Llévate un manojito de hierbas, vecino! Todavía huele a sierra.'
+      },
+      semFacto: true
+    }
+  },
+  {
+    id: 'sr_alvaro',
+    nivelMinimo: 12,
+    nome: { pt: 'Sr. Álvaro', en: 'Mr. Álvaro', es: 'Sr. Álvaro' },
+    papel: { pt: 'criador de ostras do Sado', en: 'Sado oyster farmer', es: 'criador de ostras del Sado' },
+    cara: 'assets/personagens/vizinho_alvaro.jpg',
+    caraPendente: false,
+    bem: 'ostras_sado',
+    falas: [
+      {
+        id: 'sr_alvaro_1',
+        texto: {
+          pt: 'A ostra portuguesa cria-se nas águas calmas do estuário do Sado.',
+          en: 'The Portuguese oyster is raised in the calm waters of the Sado estuary.',
+          es: 'La ostra portuguesa se cría en las aguas tranquilas del estuario del Sado.'
+        },
+        fonte: ['postal_ostras', 'idealista_ostras']
+      },
+      {
+        id: 'sr_alvaro_2',
+        texto: {
+          pt: 'No século XX, o Sado e o Tejo foram referências na produção de ostras em Portugal.',
+          en: 'In the 20th century, the Sado and the Tagus were leading oyster producers in Portugal.',
+          es: 'En el siglo XX, el Sado y el Tajo fueron referencias en la producción de ostras en Portugal.'
+        },
+        fonte: ['postal_ostras', 'uc_ostras_setubal']
+      },
+      {
+        id: 'sr_alvaro_3',
+        texto: {
+          pt: 'As ostras são uma das iguarias de Setúbal e comem-se sobretudo ao natural, com um toque de limão.',
+          en: "Oysters are one of Setúbal's delicacies and are mostly eaten raw, with a squeeze of lemon.",
+          es: 'Las ostras son una de las delicias de Setúbal y se comen sobre todo al natural, con un toque de limón.'
+        },
+        fonte: ['idealista_ostras', 'dn_setubal']
+      }
+    ],
+    troca: {
+      texto: {
+        pt: 'Leva lá umas ostras, vizinho! Fresquinhas do Sado.',
+        en: 'Take some oysters, neighbour! Fresh from the Sado.',
+        es: '¡Llévate unas ostras, vecino! Frescas del Sado.'
+      },
+      semFacto: true
+    }
+  },
+  {
+    id: 'dona_lurdes',
+    nivelMinimo: 13,
+    nome: { pt: 'Dona Lurdes', en: 'Dona Lurdes', es: 'Dona Lurdes' },
+    papel: { pt: 'vindimadora de Palmela', en: 'Palmela grape picker', es: 'vendimiadora de Palmela' },
+    cara: 'assets/personagens/vizinha_lurdes.jpg',
+    caraPendente: false,
+    bem: 'castelao_palmela',
+    falas: [
+      {
+        id: 'dona_lurdes_1',
+        texto: {
+          pt: 'A casta tinta tradicional de Palmela é o Castelão.',
+          en: 'The traditional red grape of Palmela is Castelão.',
+          es: 'La casta tinta tradicional de Palmela es el Castelão.'
+        },
+        fonte: ['turismolisboa_palmela', 'diario_republica_palmela']
+      },
+      {
+        id: 'dona_lurdes_2',
+        texto: {
+          pt: 'Para um tinto ser de Palmela, o Castelão tem de ser pelo menos dois terços do mosto (o sumo das uvas, antes de virar vinho).',
+          en: 'For a red wine to be from Palmela, Castelão must be at least two thirds of the must (the grape juice, before it becomes wine).',
+          es: 'Para que un tinto sea de Palmela, el Castelão tiene que ser al menos dos tercios del mosto (el zumo de las uvas, antes de ser vino).'
+        },
+        fonte: ['diario_republica_palmela', 'wipo_palmela']
+      },
+      {
+        id: 'dona_lurdes_3',
+        texto: {
+          pt: 'Um copo de Castelão ao fim de um dia de vindima sabe sempre bem.',
+          en: 'A glass of Castelão at the end of a harvest day always tastes good.',
+          es: 'Una copa de Castelão al final de un día de vendimia siempre sabe bien.'
+        },
+        semFacto: true
+      }
+    ],
+    troca: {
+      texto: {
+        pt: 'Leva lá uma garrafa, vizinho! É da nossa adega.',
+        en: 'Take a bottle, neighbour! It is from our winery.',
+        es: '¡Llévate una botella, vecino! Es de nuestra bodega.'
+      },
+      semFacto: true
+    }
   }
 ];
 
@@ -603,6 +782,36 @@ const ESTRADA_BENS = [
       es: 'La corteza del alcornoque, que se saca cada nueve años sin matar al árbol.'
     },
     fonte: ['amorim_tiradia', 'fsc_cortica']
+  },
+  {
+    id: 'ervas_arrabida',
+    nome: { pt: 'Ervas da Arrábida', en: 'Arrábida herbs', es: 'Hierbas de la Arrábida' },
+    descricao: {
+      pt: 'Alecrim, tomilho e lavanda apanhados na serra.',
+      en: 'Rosemary, thyme and lavender picked in the hills.',
+      es: 'Romero, tomillo y lavanda recogidos en la sierra.'
+    },
+    fonte: ['lifecooler_arrabida', 'lonelyplanet_arrabida']
+  },
+  {
+    id: 'ostras_sado',
+    nome: { pt: 'Ostras do Sado', en: 'Sado oysters', es: 'Ostras del Sado' },
+    descricao: {
+      pt: 'Ostras criadas nas águas calmas do estuário do Sado.',
+      en: 'Oysters raised in the calm waters of the Sado estuary.',
+      es: 'Ostras criadas en las aguas tranquilas del estuario del Sado.'
+    },
+    fonte: ['postal_ostras', 'idealista_ostras']
+  },
+  {
+    id: 'castelao_palmela',
+    nome: { pt: 'Castelão de Palmela', en: 'Palmela Castelão', es: 'Castelão de Palmela' },
+    descricao: {
+      pt: 'Uma garrafa de tinto de Castelão, a casta de Palmela.',
+      en: 'A bottle of Castelão red, the grape of Palmela.',
+      es: 'Una botella de tinto de Castelão, la casta de Palmela.'
+    },
+    fonte: ['turismolisboa_palmela', 'diario_republica_palmela']
   }
 ];
 
@@ -638,8 +847,8 @@ const ESTRADA_TROCA = {
 //   'uvas'     paga as uvas do costume (custoUvas)
 //   'sal_sado' paga com 1 sal da Despensa; se o jogador não tiver sal, paga as uvas
 //   'bagaceira' paga com 1 Bagaceira (state.adega.bagaceira, ver js/alambique.js); se o jogador não tiver nenhuma, paga as uvas
-// A Dona Amélia pede uvas ou sal; o Sr. Armindo pede uvas, sal ou bagaceira; o Sr. Joaquim, o Tomás, a Dona Natália, o Sr. Albano, a Dona
-// Fernanda e o Sr. Anselmo pedem sempre uvas (sem entrada aqui, um vizinho pede uvas).
+// A Dona Amélia pede uvas ou sal; o Sr. Armindo pede uvas, sal ou bagaceira; o Sr. Joaquim, o Tomás, a Dona Rosa, o Sr. Álvaro, a Dona
+// Lurdes, a Dona Natália, o Sr. Albano, a Dona Fernanda e o Sr. Anselmo pedem sempre uvas (sem entrada aqui, um vizinho pede uvas).
 // (O pedido do dia sai do mesmo hash de sempre, por isso mudar o nº de pedidos do Sr. Armindo muda os dias em que pede cada um.)
 const ESTRADA_PEDIDOS = {
   dona_amelia: ['uvas', 'sal_sado'],
@@ -664,8 +873,8 @@ const ESTRADA_PEDIDO_FALAS = {
 // OFERTAS A UMA VISITA (PR 5C): oferecer 1 bem da Despensa a uma visita da Quinta (js/visitas.js).
 //   reputacao   +1 de Reputação por oferta
 //   porDia      no máximo 1 oferta por dia (dia de Lisboa; a marca é state.despensa.ofertaDia)
-//   ordemEmpate o bem oferecido é o de que há mais; em caso de empate, por esta ordem (um bem fora da lista, como a torta de
-//               Azeitão, o pinhão de Alcácer, o arroz do Sado e a cortiça do Montado, vem a seguir aos da lista, pela ordem de ESTRADA_BENS: ver despensaBemParaOferecer em js/despensa.js)
+//   ordemEmpate o bem oferecido é o de que há mais; em caso de empate, por esta ordem (um bem fora da lista, como as ervas da Arrábida, as ostras do Sado, o Castelão de
+//               Palmela, a torta de Azeitão, o pinhão de Alcácer, o arroz do Sado e a cortiça do Montado, vem a seguir aos da lista, pela ordem de ESTRADA_BENS: ver despensaBemParaOferecer em js/despensa.js)
 const ESTRADA_OFERTA_REPUTACAO = 1;
 const ESTRADA_OFERTA_POR_DIA = 1;
 const ESTRADA_OFERTA = {

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 // O NÍVEL MÍNIMO DOS VIZINHOS DA ESTRADA ("nivelMinimo" em js/estrada-dados.js). Um vizinho só existe para o jogador quando o nível
-// dele chega a esse mínimo; sem o campo vale 7 (o nível em que a Estrada abre). Os 4 primeiros vizinhos têm 7, a Dona Natália (pasteleira
-// de Azeitão) 14, o Sr. Albano 17, a Dona Fernanda 18 e o Sr. Anselmo (tirador de cortiça do montado) 19.
+// dele chega a esse mínimo; sem o campo vale 7 (o nível em que a Estrada abre). Os 4 primeiros vizinhos têm 7, a Dona Rosa (apanhadora de ervas
+// da Arrábida) 11, o Sr. Álvaro (criador de ostras do Sado) 12, a Dona Lurdes (vindimadora de Palmela) 13, a Dona Natália (pasteleira de Azeitão)
+// 14, o Sr. Albano 17, a Dona Fernanda 18 e o Sr. Anselmo (tirador de cortiça do montado) 19.
 //
 // Parte 1, com um vizinho de TESTE de nivelMinimo 20 que vive só dentro do ambiente simulado (nunca no jogo), a um jogador de nível 19 e
 // a outro de nível 20:
@@ -10,13 +11,14 @@
 //       receitas, e o estado que os critérios dos capítulos leem fica igual);
 //   (b) ao nível dele aparece, pede, troca e conta;
 //   (c) o jogo fica exatamente igual abaixo do nível de cada vizinho real: o ecrã (pt, en e es) e uma sequência de trocas e ofertas, comparados
-//       com o jogo SEM os vizinhos de nível mais alto (4 vizinhos abaixo do nível 14, 5 do 14 ao 16, 6 no 17, 7 no 18, 8 a partir do 19), e a partir do 19 os
+//       com o jogo SEM os vizinhos de nível mais alto (4 vizinhos abaixo do nível 11, 5 no 11, 6 no 12, 7 no 13, 8 do 14 ao 16, 9 no 17, 10 no 18, 11 a partir do 19), e a partir do 19 os
 //       cartões dos que já existiam não mudam;
 //   (d) o campo: ausente ou null = 7; um valor que não seja um inteiro >= 1 deixa o vizinho fechado;
 //   (e) o pedido do dia de cada vizinho só depende do dia e do id dele (acrescentar vizinhos não muda os dos que já existem).
-// Partes 2 a 5, a Dona Natália (nível 14, a torta de Azeitão), o Sr. Albano (nível 17, o pinhão de Alcácer), a Dona Fernanda (nível 18, o arroz
+// Partes 2 a 8, a Dona Rosa (nível 11, as ervas da Arrábida), o Sr. Álvaro (nível 12, as ostras do Sado), a Dona Lurdes (nível 13, o Castelão de
+// Palmela), a Dona Natália (nível 14, a torta de Azeitão), o Sr. Albano (nível 17, o pinhão de Alcácer), a Dona Fernanda (nível 18, o arroz
 // do Sado) e o Sr. Anselmo (nível 19, a cortiça do Montado), todos reais, em pt, en e es:
-//   (a) a um jogador do nível anterior (13, 16, 17 e 18) não aparece, não pede, não troca e o bem dele não conta;
+//   (a) a um jogador do nível anterior (10, 11, 12, 13, 16, 17 e 18) não aparece, não pede, não troca e o bem dele não conta;
 //   (b) ao nível dele aparece (nome, papel, cara, cena por defeito, bem), troca (1.ª troca +2 de Reputação, paga como as outras) e o bem
 //       conta para a oferta às visitas;
 //   (c) a cena (estrada_<id>.jpg, 640 de largura) e a cara (128x128) existem como JPG, sem nenhum PNG, cópias na raiz, nem nomes com acento ou vírgula;
@@ -99,17 +101,21 @@ function injetarVizinhoTeste(g, nivelMinimo) {
 }
 const NOME_TESTE = { pt: 'Vizinho de Teste', en: 'Test Neighbour', es: 'Vecino de Prueba' };
 const REAIS = ['dona_amelia', 'sr_joaquim', 'tomas', 'sr_armindo']; // os 4 vizinhos de nível 7
+const ROSA = 'dona_rosa'; // a Dona Rosa, nível 11
+const ALVARO = 'sr_alvaro'; // o Sr. Álvaro, nível 12
+const LURDES = 'dona_lurdes'; // a Dona Lurdes, nível 13
 const NATALIA = 'dona_natalia'; // a Dona Natália, nível 14
 const ALBANO = 'sr_albano'; // o Sr. Albano, nível 17
 const FERNANDA = 'dona_fernanda'; // a Dona Fernanda, nível 18
 const ANSELMO = 'sr_anselmo'; // o Sr. Anselmo, nível 19
+const ALTOS = [ROSA, ALVARO, LURDES, NATALIA, ALBANO, FERNANDA, ANSELMO]; // os 7 vizinhos reais de nível mais alto que 7
 
 // ---------------------------------------------------------------------
-// (0) O jogo de hoje: 4 vizinhos de nível 7, a Dona Natália (nível 14), o Sr. Albano (nível 17), a Dona Fernanda (nível 18), o Sr. Anselmo (nível 19), e o vizinho de teste não está no jogo.
+// (0) O jogo de hoje: 4 vizinhos de nível 7, a Dona Rosa (11), o Sr. Álvaro (12), a Dona Lurdes (13), a Dona Natália (14), o Sr. Albano (17), a Dona Fernanda (18), o Sr. Anselmo (19), e o vizinho de teste não está no jogo.
 // ---------------------------------------------------------------------
 {
   const g = abrir();
-  ok(JSON.stringify(g.json('ESTRADA_VIZINHOS.map(function (v) { return [v.id, v.nivelMinimo]; })')) === JSON.stringify(REAIS.map(function (id) { return [id, 7]; }).concat([[NATALIA, 14], [ALBANO, 17], [FERNANDA, 18], [ANSELMO, 19]])), 'os 4 primeiros vizinhos devem ter nivelMinimo 7, a Dona Natália 14, o Sr. Albano 17, a Dona Fernanda 18 e o Sr. Anselmo 19');
+  ok(JSON.stringify(g.json('ESTRADA_VIZINHOS.map(function (v) { return [v.id, v.nivelMinimo]; })')) === JSON.stringify(REAIS.map(function (id) { return [id, 7]; }).concat([[NATALIA, 14], [ALBANO, 17], [FERNANDA, 18], [ANSELMO, 19], [ROSA, 11], [ALVARO, 12], [LURDES, 13]])), 'os 4 primeiros vizinhos devem ter nivelMinimo 7, a Dona Natália 14, o Sr. Albano 17, a Dona Fernanda 18, o Sr. Anselmo 19, a Dona Rosa 11, o Sr. Álvaro 12 e a Dona Lurdes 13');
   ok(g.ev('ESTRADA_NIVEL_MINIMO_PADRAO') === 7, 'o nível mínimo por defeito devia ser 7');
   ok(g.ev("ESTRADA_VIZINHOS.some(function (v) { return v.id === 'vizinho_teste'; })") === false && g.ev("ESTRADA_BENS.some(function (b) { return b.id === 'bem_teste'; })") === false, 'o vizinho de teste não devia estar no jogo');
   ok(g.ev('NIVEIS_CONFIG.length') >= 14, 'o teste precisa dos níveis 11 a 14 (dados/niveis.js)');
@@ -131,7 +137,7 @@ const ANSELMO = 'sr_anselmo'; // o Sr. Anselmo, nível 19
   // Não aparece.
   LINGUAS.forEach(function (l) {
     const h = g.desenhar(l, D1);
-    ok((h.match(/estrada-botao"/g) || []).length === 8, 'nível 19 (' + l + '): o ecrã devia ter só os 8 botões de trocar (os 4 de nível 7, a Dona Natália, o Sr. Albano, a Dona Fernanda e o Sr. Anselmo)');
+    ok((h.match(/estrada-botao"/g) || []).length === 11, 'nível 19 (' + l + '): o ecrã devia ter só os 11 botões de trocar (os 4 de nível 7, a Dona Rosa, o Sr. Álvaro, a Dona Lurdes, a Dona Natália, o Sr. Albano, a Dona Fernanda e o Sr. Anselmo)');
     ok(h.indexOf(esc(NOME_TESTE[l])) === -1 && h.indexOf('vizinho_armindo.jpg') !== -1 && h.indexOf('data-vizinho="vizinho_teste"') === -1, 'nível 19 (' + l + '): o vizinho de teste de nível 20 não devia aparecer no ecrã');
     ok(h.indexOf('Bem de Teste') === -1 && h.indexOf('Test Good') === -1 && h.indexOf('Bien de Prueba') === -1, 'nível 19 (' + l + '): o bem do vizinho de teste de nível 20 não devia aparecer no ecrã');
   });
@@ -194,7 +200,7 @@ const ANSELMO = 'sr_anselmo'; // o Sr. Anselmo, nível 19
   ok(g.ev('despensaVizinhoDisponivel(state, despensaVizinhoPorId("vizinho_teste"))') === true, 'nível 20: o vizinho de nível 20 devia estar disponível');
   LINGUAS.forEach(function (l) {
     const h = g.desenhar(l, D1);
-    ok((h.match(/estrada-botao"/g) || []).length === 9, 'nível 20 (' + l + '): o ecrã devia ter 9 botões de trocar (os 8 vizinhos reais e o de teste)');
+    ok((h.match(/estrada-botao"/g) || []).length === 12, 'nível 20 (' + l + '): o ecrã devia ter 12 botões de trocar (os 11 vizinhos reais e o de teste)');
     ok(h.indexOf(esc(NOME_TESTE[l])) !== -1 && h.indexOf('data-vizinho="vizinho_teste"') !== -1, 'nível 20 (' + l + '): o vizinho de nível 20 devia aparecer no ecrã');
   });
   const pedidos = DIAS.map(function (d) { return g.ev('despensaPedidoDoDia("vizinho_teste", "' + d + '", state)'); });
@@ -244,16 +250,22 @@ const ANSELMO = 'sr_anselmo'; // o Sr. Anselmo, nível 19
   };
   // Cada grupo: os jogadores, os vizinhos que ainda não existem para eles, e quantos cartões o ecrã deve ter.
   const grupos = [
-    { nome: 'abaixo do nível 14', fechados: [NATALIA, ALBANO, FERNANDA, ANSELMO], cartoes: 4, jogadores: [
-      { nome: 'jogador novo no nível 7', nivel: 7 }, { nome: 'jogador novo no nível 10', nivel: 10 }, { nome: 'jogador novo no nível 13', nivel: 13 },
+    { nome: 'abaixo do nível 11', fechados: ALTOS, cartoes: 4, jogadores: [
+      { nome: 'jogador novo no nível 7', nivel: 7 }, { nome: 'jogador novo no nível 10', nivel: 10 },
       { nome: 'jogador antigo com 0 de Reputação', antigo: true, reputacao: 0 }, { nome: 'jogador antigo com 300 de Reputação', antigo: true, reputacao: 300 },
-      { nome: 'jogador antigo no nível 7', antigo: true, nivel: 7 }, { nome: 'jogador antigo no nível 13', antigo: true, nivel: 13 } ] },
-    { nome: 'do nível 14 ao 16', fechados: [ALBANO, FERNANDA, ANSELMO], cartoes: 5, jogadores: [
+      { nome: 'jogador antigo no nível 7', antigo: true, nivel: 7 }, { nome: 'jogador antigo no nível 10', antigo: true, nivel: 10 } ] },
+    { nome: 'no nível 11', fechados: [ALVARO, LURDES, NATALIA, ALBANO, FERNANDA, ANSELMO], cartoes: 5, jogadores: [
+      { nome: 'jogador novo no nível 11', nivel: 11 }, { nome: 'jogador antigo no nível 11', antigo: true, nivel: 11 } ] },
+    { nome: 'no nível 12', fechados: [LURDES, NATALIA, ALBANO, FERNANDA, ANSELMO], cartoes: 6, jogadores: [
+      { nome: 'jogador novo no nível 12', nivel: 12 }, { nome: 'jogador antigo no nível 12', antigo: true, nivel: 12 } ] },
+    { nome: 'no nível 13', fechados: [NATALIA, ALBANO, FERNANDA, ANSELMO], cartoes: 7, jogadores: [
+      { nome: 'jogador novo no nível 13', nivel: 13 }, { nome: 'jogador antigo no nível 13', antigo: true, nivel: 13 } ] },
+    { nome: 'do nível 14 ao 16', fechados: [ALBANO, FERNANDA, ANSELMO], cartoes: 8, jogadores: [
       { nome: 'jogador novo no nível 14', nivel: 14 }, { nome: 'jogador novo no nível 16', nivel: 16 }, { nome: 'jogador antigo no nível 14', antigo: true, nivel: 14 },
       { nome: 'jogador antigo no nível 16', antigo: true, nivel: 16 } ] },
-    { nome: 'no nível 17', fechados: [FERNANDA, ANSELMO], cartoes: 6, jogadores: [
+    { nome: 'no nível 17', fechados: [FERNANDA, ANSELMO], cartoes: 9, jogadores: [
       { nome: 'jogador novo no nível 17', nivel: 17 }, { nome: 'jogador antigo no nível 17', antigo: true, nivel: 17 } ] },
-    { nome: 'no nível 18', fechados: [ANSELMO], cartoes: 7, jogadores: [
+    { nome: 'no nível 18', fechados: [ANSELMO], cartoes: 10, jogadores: [
       { nome: 'jogador novo no nível 18', nivel: 18 }, { nome: 'jogador antigo no nível 18', antigo: true, nivel: 18 } ] }
   ];
   grupos.forEach(function (grupo) {
@@ -270,23 +282,23 @@ const ANSELMO = 'sr_anselmo'; // o Sr. Anselmo, nível 19
       grupo.fechados.forEach(function (id) { ok(real.ev('despensaVizinhoDisponivel(state, despensaVizinhoPorId("' + id + '"))') === false, v.nome + ': ' + id + ' não devia estar disponível'); });
     });
   });
-  // Do nível 19 em diante há 8 cartões, e os que já existiam ficam como eram (os cartões da Dona Natália, do Sr. Albano, da Dona Fernanda e do Sr. Anselmo são os únicos a mais).
+  // Do nível 19 em diante há 11 cartões, e os que já existiam ficam como eram (os cartões dos 7 vizinhos de nível mais alto são os únicos a mais).
   [19, 20].forEach(function (nivel) {
     const real = abrir(), antes = abrir();
-    sem(antes, [NATALIA, ALBANO, FERNANDA, ANSELMO]);
+    sem(antes, ALTOS);
     jogador(real, { nivel: nivel }); jogador(antes, { nivel: nivel });
     LINGUAS.forEach(function (l) {
       const a = real.desenhar(l, D1), b = antes.desenhar(l, D1);
       let html = a;
-      [NATALIA, ALBANO, FERNANDA, ANSELMO].forEach(function (id) {
+      ALTOS.forEach(function (id) {
         const i = html.indexOf('data-vizinho="' + id + '"');
         const ini = html.lastIndexOf('<div class="estrada-cartao">', i);
         let fim = html.indexOf('<div class="estrada-cartao">', i); if (fim === -1) fim = html.indexOf('<p class="estrada-aviso">', i);
         ok(i !== -1, 'nível ' + nivel + ' (' + l + '): ' + id + ' devia aparecer');
         if (i !== -1) html = html.slice(0, ini) + html.slice(fim);
       });
-      ok((a.match(/estrada-botao"/g) || []).length === 8, 'nível ' + nivel + ' (' + l + '): o ecrã devia ter 8 cartões');
-      ok(html === b, 'nível ' + nivel + ' (' + l + '): sem os cartões da Dona Natália, do Sr. Albano, da Dona Fernanda e do Sr. Anselmo o ecrã devia ser exatamente o de sempre');
+      ok((a.match(/estrada-botao"/g) || []).length === 11, 'nível ' + nivel + ' (' + l + '): o ecrã devia ter 11 cartões');
+      ok(html === b, 'nível ' + nivel + ' (' + l + '): sem os cartões dos 7 vizinhos de nível mais alto o ecrã devia ser exatamente o de sempre');
     });
   });
   // Um jogador novo abaixo do nível 7 não tem a Estrada (e por isso também não tem os vizinhos).
@@ -300,7 +312,13 @@ const ANSELMO = 'sr_anselmo'; // o Sr. Anselmo, nível 19
   injetarVizinhoTeste(h2, 20);
   const disp = function (id) { return h2.ev('despensaVizinhoDisponivel(state, despensaVizinhoPorId("' + id + '"))'); };
   jogador(h2, { antigo: true, nivel: 8 });
-  ok(disp('vizinho_teste') === false && disp(NATALIA) === false && disp(ALBANO) === false && disp(FERNANDA) === false && disp(ANSELMO) === false && disp('dona_amelia') === true, 'um jogador antigo de nível 8 não devia ver os vizinhos de nível 14, 17, 18, 19 e 20, mas continua a ver os de nível 7');
+  ok(disp('vizinho_teste') === false && ALTOS.every(function (id) { return disp(id) === false; }) && disp('dona_amelia') === true, 'um jogador antigo de nível 8 não devia ver os vizinhos de nível 11, 12, 13, 14, 17, 18, 19 e 20, mas continua a ver os de nível 7');
+  jogador(h2, { antigo: true, nivel: 11 });
+  ok(disp(ROSA) === true && disp(ALVARO) === false, 'um jogador antigo de nível 11 devia ver a Dona Rosa, mas não o Sr. Álvaro');
+  jogador(h2, { antigo: true, nivel: 12 });
+  ok(disp(ALVARO) === true && disp(LURDES) === false, 'um jogador antigo de nível 12 devia ver o Sr. Álvaro, mas não a Dona Lurdes');
+  jogador(h2, { antigo: true, nivel: 13 });
+  ok(disp(LURDES) === true && disp(NATALIA) === false, 'um jogador antigo de nível 13 devia ver a Dona Lurdes, mas não a Dona Natália');
   jogador(h2, { antigo: true, nivel: 14 });
   ok(disp(NATALIA) === true && disp(ALBANO) === false, 'um jogador antigo de nível 14 devia ver a Dona Natália, mas não o Sr. Albano');
   jogador(h2, { antigo: true, nivel: 17 });
@@ -350,9 +368,9 @@ const ANSELMO = 'sr_anselmo'; // o Sr. Anselmo, nível 19
   g.ev('ESTRADA_VIZINHOS.reverse();');
   ok(pedidosDe(REAIS) === antes, 'a ordem da lista de vizinhos não devia mudar os pedidos');
   g.ev('ESTRADA_VIZINHOS.reverse();');
-  // A Dona Natália, o Sr. Albano, a Dona Fernanda e o Sr. Anselmo (sem entrada em ESTRADA_PEDIDOS) pedem sempre uvas, com ou sem o estado.
+  // Os 7 vizinhos de nível mais alto (sem entrada em ESTRADA_PEDIDOS) pedem sempre uvas, com ou sem o estado.
   jogador(g, { nivel: 20 });
-  [NATALIA, ALBANO, FERNANDA, ANSELMO].forEach(function (id) {
+  ALTOS.forEach(function (id) {
     ok(DIAS.every(function (d) { return g.ev('despensaPedidoDoDia("' + id + '", "' + d + '")') === 'uvas' && g.ev('despensaPedidoDoDia("' + id + '", "' + d + '", state)') === 'uvas'; }) && g.ev('ESTRADA_PEDIDOS.' + id) === undefined, id + ' (sem pedidos) devia pedir sempre uvas');
   });
   // A conta: o hash de (dia + ":" + id) escolhe da lista de pedidos desse vizinho (js/despensa.js), sem usar mais nada.
@@ -365,7 +383,7 @@ const ANSELMO = 'sr_anselmo'; // o Sr. Anselmo, nível 19
 }
 
 // ---------------------------------------------------------------------
-// Partes 2 a 5. Os vizinhos reais de nível mais alto: a Dona Natália (nível 14, a torta de Azeitão), o Sr. Albano (nível 17, o pinhão de Alcácer), a Dona Fernanda (nível 18, o arroz do Sado) e o Sr. Anselmo (nível 19, a cortiça do Montado).
+// Partes 2 a 8. Os vizinhos reais de nível mais alto: a Dona Rosa (nível 11, as ervas da Arrábida), o Sr. Álvaro (nível 12, as ostras do Sado), a Dona Lurdes (nível 13, o Castelão de Palmela), a Dona Natália (nível 14, a torta de Azeitão), o Sr. Albano (nível 17, o pinhão de Alcácer), a Dona Fernanda (nível 18, o arroz do Sado) e o Sr. Anselmo (nível 19, a cortiça do Montado).
 // ---------------------------------------------------------------------
 function provasDoVizinho(c) {
   const SEM = function (h, l) { return h.indexOf(c.nome[l]) === -1 && h.indexOf(path.basename(c.cara)) === -1 && h.indexOf('data-vizinho="' + c.id + '"') === -1 && h.indexOf(esc(c.papel[l])) === -1; };
@@ -486,21 +504,48 @@ function provasDoVizinho(c) {
 }
 
 provasDoVizinho({
-  etiqueta: 'Natália', id: NATALIA, nivel: 14, botoesAbaixo: 4, botoesNoNivel: 5, bemId: 'torta_azeitao',
+  etiqueta: 'Rosa', id: ROSA, nivel: 11, botoesAbaixo: 4, botoesNoNivel: 5, bemId: 'ervas_arrabida',
+  nome: { pt: 'Dona Rosa', en: 'Dona Rosa', es: 'Dona Rosa' },
+  papel: { pt: 'apanhadora de ervas da Arrábida', en: 'Arrábida herb gatherer', es: 'recolectora de hierbas de la Arrábida' },
+  bemNome: { pt: 'Ervas da Arrábida', en: 'Arrábida herbs', es: 'Hierbas de la Arrábida' },
+  cara: 'assets/personagens/vizinha_rosa.jpg', cena: 'assets/ecras/estrada_dona_rosa.jpg',
+  // Só os ficheiros dela e do bem (não apanha nenhuma imagem existente com «rosa» no nome).
+  ficheirosRegex: /dona_rosa|vizinha_rosa|ervas_arrabida/i
+});
+provasDoVizinho({
+  etiqueta: 'Álvaro', id: ALVARO, nivel: 12, botoesAbaixo: 5, botoesNoNivel: 6, bemId: 'ostras_sado',
+  nome: { pt: 'Sr. Álvaro', en: 'Mr. Álvaro', es: 'Sr. Álvaro' },
+  papel: { pt: 'criador de ostras do Sado', en: 'Sado oyster farmer', es: 'criador de ostras del Sado' },
+  bemNome: { pt: 'Ostras do Sado', en: 'Sado oysters', es: 'Ostras del Sado' },
+  cara: 'assets/personagens/vizinho_alvaro.jpg', cena: 'assets/ecras/estrada_sr_alvaro.jpg',
+  // Só os ficheiros dele e do bem (não apanha nenhuma imagem existente com «ostras» no nome).
+  ficheirosRegex: /sr_alvaro|vizinho_alvaro|ostras_sado/i
+});
+provasDoVizinho({
+  etiqueta: 'Lurdes', id: LURDES, nivel: 13, botoesAbaixo: 6, botoesNoNivel: 7, bemId: 'castelao_palmela',
+  nome: { pt: 'Dona Lurdes', en: 'Dona Lurdes', es: 'Dona Lurdes' },
+  papel: { pt: 'vindimadora de Palmela', en: 'Palmela grape picker', es: 'vendimiadora de Palmela' },
+  bemNome: { pt: 'Castelão de Palmela', en: 'Palmela Castelão', es: 'Castelão de Palmela' },
+  cara: 'assets/personagens/vizinha_lurdes.jpg', cena: 'assets/ecras/estrada_dona_lurdes.jpg',
+  // Só os ficheiros dela e do bem (não apanha nenhuma imagem existente com «palmela» no nome).
+  ficheirosRegex: /dona_lurdes|vizinha_lurdes|castelao_palmela/i
+});
+provasDoVizinho({
+  etiqueta: 'Natália', id: NATALIA, nivel: 14, botoesAbaixo: 7, botoesNoNivel: 8, bemId: 'torta_azeitao',
   nome: { pt: 'Dona Natália', en: 'Dona Natália', es: 'Dona Natália' },
   papel: { pt: 'pasteleira de Azeitão', en: 'Azeitão pastry cook', es: 'pastelera de Azeitão' },
   bemNome: { pt: 'Torta de Azeitão', en: 'Azeitão roll cake', es: 'Torta de Azeitão' },
   cara: 'assets/personagens/vizinha_natalia.jpg', cena: 'assets/ecras/estrada_dona_natalia.jpg', ficheirosRegex: /natalia|natália|torta|balcao_torta/i
 });
 provasDoVizinho({
-  etiqueta: 'Albano', id: ALBANO, nivel: 17, botoesAbaixo: 5, botoesNoNivel: 6, bemId: 'pinhao_alcacer',
+  etiqueta: 'Albano', id: ALBANO, nivel: 17, botoesAbaixo: 8, botoesNoNivel: 9, bemId: 'pinhao_alcacer',
   nome: { pt: 'Sr. Albano', en: 'Mr. Albano', es: 'Sr. Albano' },
   papel: { pt: 'apanhador de pinha de Alcácer', en: 'Alcácer pine cone picker', es: 'recolector de piñas de Alcácer' },
   bemNome: { pt: 'Pinhão de Alcácer', en: 'Alcácer pine nuts', es: 'Piñones de Alcácer' },
   cara: 'assets/personagens/vizinho_albano.jpg', cena: 'assets/ecras/estrada_sr_albano.jpg', ficheirosRegex: /albano|pinhal|pinhao|pinhão|pinha/i
 });
 provasDoVizinho({
-  etiqueta: 'Fernanda', id: FERNANDA, nivel: 18, botoesAbaixo: 6, botoesNoNivel: 7, bemId: 'arroz_sado',
+  etiqueta: 'Fernanda', id: FERNANDA, nivel: 18, botoesAbaixo: 9, botoesNoNivel: 10, bemId: 'arroz_sado',
   nome: { pt: 'Dona Fernanda', en: 'Dona Fernanda', es: 'Dona Fernanda' },
   papel: { pt: 'arrozeira da Comporta', en: 'Comporta rice farmer', es: 'arrocera de la Comporta' },
   bemNome: { pt: 'Arroz Carolino do Sado', en: 'Sado carolino rice', es: 'Arroz carolino del Sado' },
@@ -509,7 +554,7 @@ provasDoVizinho({
   ficheirosRegex: /fernanda|arrozal_da_comporta|arroz_sado/i
 });
 provasDoVizinho({
-  etiqueta: 'Anselmo', id: ANSELMO, nivel: 19, botoesAbaixo: 7, botoesNoNivel: 8, bemId: 'cortica_montado',
+  etiqueta: 'Anselmo', id: ANSELMO, nivel: 19, botoesAbaixo: 10, botoesNoNivel: 11, bemId: 'cortica_montado',
   nome: { pt: 'Sr. Anselmo', en: 'Mr. Anselmo', es: 'Sr. Anselmo' },
   papel: { pt: 'tirador de cortiça do montado', en: 'cork stripper of the montado', es: 'sacador de corcho del montado' },
   bemNome: { pt: 'Cortiça do Montado', en: 'Montado cork', es: 'Corcho del Montado' },
