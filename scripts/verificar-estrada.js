@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Verifica os dados da Estrada (js/estrada-dados.js): 11 vizinhos (4 de nível 7, a Dona Rosa, de nível 11, o Sr. Álvaro, de nível 12, a Dona Lurdes, de nível 13, a Dona Natália, de nível 14, o Sr. Albano, de nível 17, a Dona Fernanda, de nível 18, e o Sr. Anselmo, de nível 19), falas, bens, fontes e a
+// Verifica os dados da Estrada (js/estrada-dados.js): 13 vizinhos (4 de nível 7, a Dona Rosa, de nível 11, o Sr. Álvaro, de nível 12, a Dona Lurdes, de nível 13, a Dona Natália, de nível 14, o Sr. Zeferino, de nível 15, a Dona Maria, de nível 16, o Sr. Albano, de nível 17, a Dona Fernanda, de nível 18, e o Sr. Anselmo, de nível 19), falas, bens, fontes e a
 // regras das trocas (PR 5A) e pedidos. Só LÊ o ficheiro e corre-o num ambiente simulado (vm), onde
 // Math.random e Date.now ficam proibidos. Só exige que a cara exista em disco quando
 // caraPendente é false (se for true, o ficheiro pode faltar) e confirma que o ecrã (js/estrada.js) é só de leitura: carregado no index.html, sem gravar, sem cobrar uvas, sem Reputação e sem registar trocas.
@@ -47,7 +47,9 @@ const ESPERADO = {
   sr_anselmo: { bem: 'cortica_montado', cara: 'assets/personagens/vizinho_anselmo.jpg', nivelMinimo: 19 },
   dona_rosa: { bem: 'ervas_arrabida', cara: 'assets/personagens/vizinha_rosa.jpg', nivelMinimo: 11 },
   sr_alvaro: { bem: 'ostras_sado', cara: 'assets/personagens/vizinho_alvaro.jpg', nivelMinimo: 12 },
-  dona_lurdes: { bem: 'castelao_palmela', cara: 'assets/personagens/vizinha_lurdes.jpg', nivelMinimo: 13 }
+  dona_lurdes: { bem: 'castelao_palmela', cara: 'assets/personagens/vizinha_lurdes.jpg', nivelMinimo: 13 },
+  sr_zeferino: { bem: 'peixe_espada_sesimbra', cara: 'assets/personagens/vizinho_zeferino.jpg', nivelMinimo: 15 },
+  dona_maria: { bem: 'peixe_livramento', cara: 'assets/personagens/vizinha_maria.jpg', nivelMinimo: 16 }
 };
 const NOMES_BENS = {
   queijo_azeitao: { en: 'Azeitão cheese', es: 'Queso de Azeitão' },
@@ -60,7 +62,9 @@ const NOMES_BENS = {
   cortica_montado: { en: 'Montado cork', es: 'Corcho del Montado' },
   ervas_arrabida: { en: 'Arrábida herbs', es: 'Hierbas de la Arrábida' },
   ostras_sado: { en: 'Sado oysters', es: 'Ostras del Sado' },
-  castelao_palmela: { en: 'Palmela Castelão', es: 'Castelão de Palmela' }
+  castelao_palmela: { en: 'Palmela Castelão', es: 'Castelão de Palmela' },
+  peixe_espada_sesimbra: { en: 'Sesimbra black scabbardfish', es: 'Pez sable negro de Sesimbra' },
+  peixe_livramento: { en: 'Livramento fish', es: 'Pescado del Livramento' }
 };
 // Só estes endereços foram aprovados como fontes.
 const URLS_APROVADOS = [
@@ -101,7 +105,15 @@ const URLS_APROVADOS = [
   'https://www.dn.pt/sociedade/em-toada-maritima-por-setubal',
   'https://www.visitlisboa.com/pt-pt/p/lisbon-flavours/vinho/palmela',
   'https://diariodarepublica.pt/dr/detalhe/portaria/783-2009-492995',
-  'https://www.wipo.int/wipolex/zh/legislation/details/8107'
+  'https://www.wipo.int/wipolex/zh/legislation/details/8107',
+  'https://www.sesimbra.pt/cmsesimbra/uploads/writer_file/document/2919/FolhetoArtesPesca.pdf',
+  'https://www.sesimbra.pt/cmsesimbra/uploads/document/file/834/SA60.pdf',
+  'https://www.ipma.pt/pt/media/noticias/documentos/2021/Artes_Pesca_artesanais.pdf',
+  'https://revistas.rcaap.pt/etnografica/article/download/33685/23530/147341',
+  'https://rr.pt/noticia/politica/2024/05/21/entre-os-pescadores-de-sesimbra-nao-faltam-queixas-sobre-bruxelas/379227/',
+  'https://cp.pt/info/w/setubal-onde-o-comboio-cruza-com-cultura-e-tradicao',
+  'https://comum.rcaap.pt/bitstreams/138941e8-d413-4381-ad88-e069e1970f98/download',
+  'https://dicadeportugal.com/setubal/roteiro-de-1-dia-em-setubal'
 ];
 
 const textos = []; // { onde, texto } para contar os "[por escrever]"
@@ -149,7 +161,7 @@ function verificarFonte(item, onde, obrigatoria) {
 
 // ----- Vizinhos -----
 {
-  ok(VIZINHOS.length === 11 && VIZINHOS.map(function (v) { return v.id; }).join() === 'dona_amelia,sr_joaquim,tomas,sr_armindo,dona_natalia,sr_albano,dona_fernanda,sr_anselmo,dona_rosa,sr_alvaro,dona_lurdes', 'devia haver 11 vizinhos: dona_amelia, sr_joaquim, tomas, sr_armindo, dona_natalia, sr_albano, dona_fernanda, sr_anselmo, dona_rosa, sr_alvaro, dona_lurdes (por esta ordem)');
+  ok(VIZINHOS.length === 13 && VIZINHOS.map(function (v) { return v.id; }).join() === 'dona_amelia,sr_joaquim,tomas,sr_armindo,dona_natalia,sr_albano,dona_fernanda,sr_anselmo,dona_rosa,sr_alvaro,dona_lurdes,sr_zeferino,dona_maria', 'devia haver 13 vizinhos: dona_amelia, sr_joaquim, tomas, sr_armindo, dona_natalia, sr_albano, dona_fernanda, sr_anselmo, dona_rosa, sr_alvaro, dona_lurdes, sr_zeferino, dona_maria (por esta ordem)');
   const falasIds = [];
   VIZINHOS.forEach(function (v) {
     const esp = ESPERADO[v.id] || {};
@@ -182,7 +194,7 @@ function verificarFonte(item, onde, obrigatoria) {
 
 // ----- Bens -----
 {
-  ok(BENS.length === 11 && BENS.map(function (b) { return b.id; }).join() === 'queijo_azeitao,sal_sado,mel_sesimbra,choco_sado,torta_azeitao,pinhao_alcacer,arroz_sado,cortica_montado,ervas_arrabida,ostras_sado,castelao_palmela', 'devia haver 11 bens: queijo_azeitao, sal_sado, mel_sesimbra, choco_sado, torta_azeitao, pinhao_alcacer, arroz_sado, cortica_montado, ervas_arrabida, ostras_sado, castelao_palmela');
+  ok(BENS.length === 13 && BENS.map(function (b) { return b.id; }).join() === 'queijo_azeitao,sal_sado,mel_sesimbra,choco_sado,torta_azeitao,pinhao_alcacer,arroz_sado,cortica_montado,ervas_arrabida,ostras_sado,castelao_palmela,peixe_espada_sesimbra,peixe_livramento', 'devia haver 13 bens: queijo_azeitao, sal_sado, mel_sesimbra, choco_sado, torta_azeitao, pinhao_alcacer, arroz_sado, cortica_montado, ervas_arrabida, ostras_sado, castelao_palmela, peixe_espada_sesimbra, peixe_livramento');
   BENS.forEach(function (b) {
     textosEmTresLinguas(b.nome, b.id + ': nome');
     textosEmTresLinguas(b.descricao, b.id + ': descrição');
@@ -302,7 +314,7 @@ if (!process.env.ESTRADA_JS) {
   ['state.js', 'i18n.js', 'niveis.js', 'dados.js', 'caderno.js', 'estrada-dados.js', 'despensa.js'].forEach(function (f) {
     vm.runInContext(fs.readFileSync(path.join(RAIZ, 'js', f), 'utf8'), cx, { filename: 'js/' + f });
   });
-  // Os níveis 11 em diante vêm de dados/niveis.js (a Dona Rosa só existe a partir do nível 11, o Sr. Álvaro a partir do 12, a Dona Lurdes a partir do 13 e a Dona Natália a partir do 14).
+  // Os níveis 11 em diante vêm de dados/niveis.js (a Dona Rosa só existe a partir do nível 11, o Sr. Álvaro a partir do 12, a Dona Lurdes a partir do 13, a Dona Natália a partir do 14, o Sr. Zeferino a partir do 15 e a Dona Maria a partir do 16).
   vm.runInContext(fs.readFileSync(path.join(RAIZ, 'dados', 'niveis.js'), 'utf8'), cx, { filename: 'dados/niveis.js' });
   vm.runInContext(srcEcra, cx, { filename: 'js/estrada.js' });
   vm.runInContext('this.diaLisboaDeHoje = function () { return __dia; }; this.atualizarDialogo = function () {}; this.__dia = "2026-10-07";', cx);
@@ -310,14 +322,14 @@ if (!process.env.ESTRADA_JS) {
     vm.runInContext('currentLang = ' + JSON.stringify(lingua) + '; __dia = ' + JSON.stringify(dia) + '; renderEstrada();', cx);
     return el('estrada-container').innerHTML;
   };
-  // Um jogador novo de nível 19: tem a Estrada e os 11 vizinhos (a Dona Rosa abre no nível 11, o Sr. Álvaro no 12, a Dona Lurdes no 13, a Dona Natália no 14, o Sr. Albano no 17, a Dona Fernanda no 18 e o Sr. Anselmo no 19).
+  // Um jogador novo de nível 19: tem a Estrada e os 13 vizinhos (a Dona Rosa abre no nível 11, o Sr. Álvaro no 12, a Dona Lurdes no 13, a Dona Natália no 14, o Sr. Zeferino no 15, a Dona Maria no 16, o Sr. Albano no 17, a Dona Fernanda no 18 e o Sr. Anselmo no 19).
   vm.runInContext('state.acesso.jogadorAntigo = false; state.reputacao = NIVEIS_CONFIG[18].min; state.despensa.recebidos = { queijo_azeitao: 3 }; state.despensa.entregues = { queijo_azeitao: 1 };', cx);
   ok(vm.runInContext('nivelPelaReputacao(state.reputacao)', cx) === 19, 'o jogador do desenho devia ser do nível 19');
   const com = vm.runInContext('JSON.stringify(state)', cx);
   const falasVistas = {};
   LINGUAS.forEach(function (l) {
     const h = desenhar(l, '2026-10-07');
-    ok((h.match(/class="btn-pill pill-main estrada-botao"/g) || []).length === 11, 'o ecrã (' + l + ') devia ter 11 botões de trocar (nível 19)');
+    ok((h.match(/class="btn-pill pill-main estrada-botao"/g) || []).length === 13, 'o ecrã (' + l + ') devia ter 13 botões de trocar (nível 19)');
     VIZINHOS.forEach(function (v) {
       ok(h.indexOf(v.nome[l]) !== -1, 'o ecrã (' + l + ') devia mostrar o nome de ' + v.id);
       ok(h.indexOf(v.papel[l]) !== -1, 'o ecrã (' + l + ') devia mostrar o papel de ' + v.id);
@@ -333,7 +345,7 @@ if (!process.env.ESTRADA_JS) {
   });
   // "Na Despensa: n" lê recebidos - entregues (queijo 2) e 0 nos outros.
   const hpt = desenhar('pt', '2026-10-07');
-  ok((hpt.match(/Na Despensa: 2/g) || []).length === 1 && (hpt.match(/Na Despensa: 0/g) || []).length === 10, 'Na Despensa devia ser 2 num vizinho e 0 nos outros 10');
+  ok((hpt.match(/Na Despensa: 2/g) || []).length === 1 && (hpt.match(/Na Despensa: 0/g) || []).length === 12, 'Na Despensa devia ser 2 num vizinho e 0 nos outros 12');
   // Fala do dia: estável no mesmo dia e a rodar de um dia para o outro.
   ok(desenhar('pt', '2026-10-07') === desenhar('pt', '2026-10-07'), 'a fala do dia devia ser a mesma o dia todo');
   for (let d = 1; d <= 28; d++) {
@@ -459,10 +471,10 @@ if (!process.env.ESTRADA_JS) {
   verificarEcra(ECRA_REAL).forEach(function (m) { ok(false, m); });
 
   // Cada vizinho tem a sua cena e o ficheiro existe em disco. Os 4 de nível 7 têm entrada em js/estrada.js (ESTRADA_CENAS: ficheiro e
-  // posição vertical); a Dona Rosa, o Sr. Álvaro, a Dona Lurdes, a Dona Natália, o Sr. Albano, a Dona Fernanda e o Sr. Anselmo NÃO têm: usam o que a Estrada procura por defeito (assets/ecras/estrada_<id>.jpg, com y 28%).
+  // posição vertical); a Dona Rosa, o Sr. Álvaro, a Dona Lurdes, a Dona Natália, o Sr. Zeferino, a Dona Maria, o Sr. Albano, a Dona Fernanda e o Sr. Anselmo NÃO têm: usam o que a Estrada procura por defeito (assets/ecras/estrada_<id>.jpg, com y 28%).
   VIZINHOS.forEach(function (v) {
     const m = new RegExp(v.id + ": \\{ ficheiro: '([a-z_]+)', y: '(\\d+)%' \\}").exec(ECRA_REAL);
-    if (['dona_rosa', 'sr_alvaro', 'dona_lurdes', 'dona_natalia', 'sr_albano', 'dona_fernanda', 'sr_anselmo'].indexOf(v.id) !== -1) {
+    if (['dona_rosa', 'sr_alvaro', 'dona_lurdes', 'dona_natalia', 'sr_zeferino', 'dona_maria', 'sr_albano', 'dona_fernanda', 'sr_anselmo'].indexOf(v.id) !== -1) {
       ok(!m, v.id + ': devia usar a cena por defeito (sem entrada em ESTRADA_CENAS)');
       ok(fs.existsSync(path.join(RAIZ, 'assets', 'ecras', 'estrada_' + v.id + '.jpg')), v.id + ': falta o ficheiro assets/ecras/estrada_' + v.id + '.jpg');
       return;
