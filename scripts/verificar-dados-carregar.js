@@ -4,7 +4,8 @@
 // 2) entradas más (id repetido, id mal formado, tipo desconhecido, não-objeto, campos em falta, tipo
 //    "objetivos" ainda não suportado) são IGNORADAS com um console.warn, sem lançar erro e sem mudar nada;
 // 3) uma entrada que já existe nunca é substituída;
-// 4) o index.html carrega o dados.js e os 6 ficheiros de dados/ depois das listas e antes do main.js, e
+// 4) o index.html carrega o dados.js e os 6 ficheiros de dados/ depois das listas e antes do main.js (a pasta tem mais um, dados/palavras.js,
+//    o glossário, que AINDA NÃO é carregado: ver scripts/verificar-palavras.js), e
 //    os ficheiros de dados/ só trazem o que está combinado: a visita marisa_5 e os pacotes dos níveis 11 a 20 (nível,
 //    história, 3 histórias da Enciclopédia e capítulo cada); objetivos.js só tem comentários; as listas de origem ficam iguais.
 // As entradas de teste vivem só no ambiente simulado (módulo vm); nada fica no jogo.
@@ -214,7 +215,11 @@ const ESPERADO_EM_DADOS = {
     anterior = p;
   });
   const naPasta = fs.readdirSync(path.join(RAIZ, 'dados')).filter(function (f) { return /\.js$/.test(f); }).sort().join();
-  ok(naPasta === FICHEIROS_DE_DADOS.slice().sort().join(), 'a pasta dados/ devia ter só os 6 ficheiros de dados (.js): ' + naPasta);
+  // A pasta tem os 6 ficheiros que o jogo carrega e mais um, combinado à parte: dados/palavras.js (o glossário «Palavras da Quinta»), que
+  // ainda não está no jogo (o index.html não o carrega; ver scripts/verificar-palavras.js). Qualquer outro ficheiro é uma falha.
+  const FICHEIROS_FORA_DO_JOGO = ['palavras.js'];
+  ok(naPasta === FICHEIROS_DE_DADOS.concat(FICHEIROS_FORA_DO_JOGO).sort().join(), 'a pasta dados/ devia ter só os 6 ficheiros de dados (.js) e dados/palavras.js: ' + naPasta);
+  FICHEIROS_FORA_DO_JOGO.forEach(function (f) { ok(html.indexOf('dados/' + f) === -1, 'o index.html ainda não devia carregar dados/' + f + ' (esta PR não mostra nada)'); });
   FICHEIROS_DE_DADOS.forEach(function (f) {
     const codigo = fs.readFileSync(path.join(RAIZ, 'dados', f), 'utf8').replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '').trim();
     const esperados = ESPERADO_EM_DADOS[f];
