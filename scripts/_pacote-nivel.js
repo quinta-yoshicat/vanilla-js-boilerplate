@@ -12,7 +12,7 @@
 //   fotosExtra     (opcional) { numeroDaFala: 'assets/ecras/yyy.jpg' } fotos noutras falas (a raiz também não pode ter cópia); sem isto só a fala 1 leva foto
 //   falas          4 textos { pt, en, es }
 //   ids, enc, cap  os 3 ids das entradas, os textos { titulo, texto } de cada uma e o capítulo { titulo, objetivo, conclusao }
-//   grupos         os ids das entradas dos pacotes anteriores (nivelMinimo 11, 12, ..., N - 1): [[...], [...], ...]
+//   grupos         os ids das entradas dos pacotes anteriores (nivelMinimo 11, 12, ..., N - 1): [[...], [...], ...]; as 6 dos níveis 5 e 6 juntam-se aqui sozinhas (GRUPOS_NIVEIS_5_6)
 // }
 //
 // Prova (como em verificar-nivel-11/12/13.js):
@@ -39,6 +39,11 @@ const JS_DIR = process.env.JS_DIR || path.join(RAIZ, 'js');
 const DADOS_DIR = process.env.DADOS_DIR || path.join(RAIZ, 'dados');
 const LINGUAS = ['pt', 'en', 'es'];
 const ENTRADAS_ORIGEM = 32; // as histórias da Enciclopédia de origem
+// As 6 histórias dos níveis 5 e 6 (dados/enciclopedia.js, a seguir às 32 de origem e antes das do nível 11): 3 de nivelMinimo 5 e 3 de nivelMinimo 6.
+const GRUPOS_NIVEIS_5_6 = [
+  ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa'],
+  ['colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos']
+];
 
 function correr(spec) {
   const N = spec.nivel, M = N - 1;
@@ -48,7 +53,7 @@ function correr(spec) {
   const IDS = spec.ids, ENC = spec.enc, CAP = spec.cap, FALAS = spec.falas, NOME = spec.nome, NOME_ANT = spec.nomeAnt, FOTO = spec.foto;
   const FOTOS_EXTRA = spec.fotosExtra || {}; // fala (1 a 4) -> foto, além da fala 1
   const FOTOS_TODAS = [FOTO].concat(Object.keys(FOTOS_EXTRA).map(function (k) { return FOTOS_EXTRA[k]; }));
-  const GRUPOS = spec.grupos; // grupos anteriores de nivelMinimo
+  const GRUPOS = GRUPOS_NIVEIS_5_6.concat(spec.grupos); // grupos anteriores de nivelMinimo (5, 6, 11, 12, ..., N - 1)
   const TODOS_ANT = GRUPOS.reduce(function (t, g) { return t.concat(g); }, []);
   const ATE_M = ENTRADAS_ORIGEM + 3 * GRUPOS.length; // entradas visíveis no nível M
   const ATE_N = ATE_M + 3;
@@ -58,8 +63,8 @@ function correr(spec) {
   function js(o) { return JSON.stringify(o); }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
   function nivelEsperado(rep) { let n = 1; LIMIARES.forEach(function (m, i) { if (rep >= m) n = i + 1; }); return n; }
-  // Quantas entradas da Enciclopédia vê um jogador do nível n (cada pacote de nível 11, 12, ... junta 3).
-  function entradasNoNivel(n) { return ENTRADAS_ORIGEM + 3 * Math.max(0, Math.min(n, M) - 10); }
+  // Quantas entradas da Enciclopédia vê um jogador do nível n (os níveis 5 e 6 juntam 3 cada e cada pacote de nível 11, 12, ... junta 3).
+  function entradasNoNivel(n) { return ENTRADAS_ORIGEM + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + 3 * Math.max(0, Math.min(n, M) - 10); }
 
   // Abre o jogo REAL com a pasta dados/ (ou outra) e os ganchos de teste.
   function abrir(opcoes) {

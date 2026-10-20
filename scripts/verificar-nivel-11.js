@@ -57,6 +57,10 @@ const FALAS = [
   }
 ];
 const IDS = ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'];
+// As 6 histórias dos níveis 5 e 6 (a seguir às 32 de origem e antes destas 3): também têm nivelMinimo, por isso entram na prioridade do Explorar.
+const IDS_5_6 = ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa', 'colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos'];
+const ATE_10 = 32 + IDS_5_6.length; // entradas visíveis no nível 10
+const ATE_11 = ATE_10 + IDS.length;
 const ENC = {
   arrabida_biosfera: {
     titulo: { pt: 'A Arrábida, Reserva da Biosfera', en: 'The Arrábida, a Biosphere Reserve', es: 'La Arrábida, Reserva de la Biosfera' },
@@ -143,10 +147,11 @@ function idsAbertos(g) { return g.ev('state.encyclopedia.unlocked.slice()'); }
   ok(g.ev('JSON.stringify(NIVEIS_CONFIG.slice(0, 10))') === base.ev('JSON.stringify(NIVEIS_CONFIG)'), '(i) os níveis 1 a 10 ficam iguais');
   ok(g.ev('JSON.stringify(CAPITULOS_CONFIG.slice(0, 10))') === base.ev('JSON.stringify(CAPITULOS_CONFIG)'), '(i) os capítulos 1 a 10 ficam iguais');
   ok(g.ev('JSON.stringify([2,3,4,5,6,7,8,9,10].map(function (n) { return HISTORIA_NIVEIS[n]; }))') === base.ev('JSON.stringify([2,3,4,5,6,7,8,9,10].map(function (n) { return HISTORIA_NIVEIS[n]; }))'), '(i) as histórias dos níveis 2 a 10 ficam iguais');
-  ok(g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES.pt.slice(0, 32))') === base.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES.pt)') && g.ev('ENCYCLOPEDIA_ENTRIES.pt.length') >= 35, '(i) as 32 entradas de hoje ficam iguais e as 3 da Arrábida vêm a seguir');
+  ok(g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES.pt.slice(0, 32))') === base.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES.pt)') && g.ev('ENCYCLOPEDIA_ENTRIES.pt.length') >= ATE_11, '(i) as 32 entradas de hoje ficam iguais, depois as 6 dos níveis 5 e 6 e as 3 da Arrábida a seguir');
   ok(g.ev('NIVEL_NECESSARIO_POR_ECRA.roxo') === 10 && g.ev('Math.max.apply(null, Object.keys(NIVEL_NECESSARIO_POR_ECRA).map(function (k) { return NIVEL_NECESSARIO_POR_ECRA[k]; }))') === 10, '(i) nenhum ecrã novo: o mais alto continua a abrir no nível 10');
   ok(g.ev('NIVEIS_CONFIG[10].id') === 'nivel_11' && g.ev('NIVEIS_CONFIG[10].min') === 3650 && g.ev('CAPITULOS_CONFIG[10].id') === 'cap11' && g.ev('CAPITULOS_CONFIG[10].nivel') === 11, '(i) nivel_11 (3650) e cap11 (nível 11)');
-  ok(JSON.stringify(g.ev('DADOS_ACRESCENTADOS.enciclopedia.slice(0, 3).map(function (e) { return e.id; })')) === JSON.stringify(IDS) && JSON.stringify(g.ev('ENCYCLOPEDIA_ENTRIES.pt.slice(32, 35).map(function (e) { return e.id; })')) === JSON.stringify(IDS), '(i) as 3 entradas, por esta ordem, logo a seguir às 32 de hoje: ' + IDS);
+  ok(JSON.stringify(g.ev('DADOS_ACRESCENTADOS.enciclopedia.slice(' + IDS_5_6.length + ', ' + (IDS_5_6.length + 3) + ').map(function (e) { return e.id; })')) === JSON.stringify(IDS) && JSON.stringify(g.ev('ENCYCLOPEDIA_ENTRIES.pt.slice(' + ATE_10 + ', ' + ATE_11 + ').map(function (e) { return e.id; })')) === JSON.stringify(IDS), '(i) as 3 entradas, por esta ordem, logo a seguir às 32 de hoje e às 6 dos níveis 5 e 6: ' + IDS);
+  ok(JSON.stringify(g.ev('ENCYCLOPEDIA_ENTRIES.pt.slice(32, ' + ATE_10 + ').map(function (e) { return e.id; })')) === JSON.stringify(IDS_5_6), '(i) as 6 dos níveis 5 e 6, por esta ordem, logo a seguir às 32 de hoje: ' + IDS_5_6);
   ok(g.ev('JSON.stringify(CAPITULOS_CONFIG[10].criterio)') === js([{ tipo: 'temIds', caminho: 'encyclopedia.unlocked', ids: IDS }]), '(i) o critério do cap11 é temIds nos 3 ids: ' + g.ev('JSON.stringify(CAPITULOS_CONFIG[10].criterio)'));
   ok(fs.existsSync(path.join(RAIZ, FOTO)), '(i) a foto da fala 1 existe em ' + FOTO);
   ok(!fs.existsSync(path.join(RAIZ, 'arrabida_colina.jpg')), '(i) não devia haver cópia da foto na raiz do repositório');
@@ -201,10 +206,10 @@ LINGUAS.forEach(function (l) {
   {
     const g = abrir(); lingua(g, l);
     preparar(g, REP_10, 10);
-    ok(g.ev('encyclopediaEntries().length') === 32 && IDS.every(function (id) { return g.ev('encyclopediaEntries().some(function (e) { return e.id === ' + js(id) + '; })') === false; }), '(d) no nível 10 só há as 32 entradas de hoje' + L);
+    ok(g.ev('encyclopediaEntries().length') === ATE_10 && IDS.every(function (id) { return g.ev('encyclopediaEntries().some(function (e) { return e.id === ' + js(id) + '; })') === false; }), '(d) no nível 10 só há as 32 entradas de hoje e as 6 dos níveis 5 e 6 (' + ATE_10 + ')' + L);
     g.ev('renderEnciclopedia();');
     let h = html(g, 'enciclopedia-container');
-    ok((h.match(/encyclopedia-card/g) || []).length === 32 && h.indexOf('0 / 32') !== -1, '(d) nível 10: a Enciclopédia tem 32 cartões, nenhum da Arrábida' + L);
+    ok((h.match(/encyclopedia-card/g) || []).length === ATE_10 && h.indexOf('0 / ' + ATE_10) !== -1, '(d) nível 10: a Enciclopédia tem ' + ATE_10 + ' cartões, nenhum da Arrábida' + L);
     ok(IDS.every(function (id) { return h.indexOf(esc(ENC[id].titulo[l])) === -1; }), '(d) nível 10: nenhum título da Arrábida' + L);
     ok(IDS.every(function (id) { return g.ev('desbloquearEntradaEnciclopedia(' + js(id) + ')') === null; }) && idsAbertos(g).length === 0, '(d) nível 10: não se desbloqueiam, por ação nenhuma' + L);
     semente(g, 11);
@@ -213,30 +218,31 @@ LINGUAS.forEach(function (l) {
 
     // nível 11: existem, com os textos exatos
     preparar(g, REP_11, 11);
-    ok(g.ev('encyclopediaEntries().length') === 35, '(d) nível 11: 35 entradas' + L);
+    ok(g.ev('encyclopediaEntries().length') === ATE_11, '(d) nível 11: ' + ATE_11 + ' entradas' + L);
     IDS.forEach(function (id) {
       const e = g.ev('encyclopediaEntries().filter(function (e) { return e.id === ' + js(id) + '; })[0]');
       ok(e && e.titulo === ENC[id].titulo[l] && e.texto === ENC[id].texto[l] && e.nivelMinimo === 11 && e.imagem === undefined, '(d) ' + id + ': título e texto exatos, nível mínimo 11, sem imagem' + L);
     });
     g.ev('renderEnciclopedia();');
     h = html(g, 'enciclopedia-container');
-    ok((h.match(/encyclopedia-card/g) || []).length === 35 && h.indexOf('0 / 35') !== -1, '(d) nível 11: a Enciclopédia tem 35 cartões (as 3 novas bloqueadas) e 0 / 35' + L);
+    ok((h.match(/encyclopedia-card/g) || []).length === ATE_11 && h.indexOf('0 / ' + ATE_11) !== -1, '(d) nível 11: a Enciclopédia tem ' + ATE_11 + ' cartões (as 3 novas bloqueadas) e 0 / ' + ATE_11 + L);
     preparar(g, REP_11, 11, IDS);
     g.ev('renderEnciclopedia();');
     h = html(g, 'enciclopedia-container');
     ok(IDS.every(function (id) { return h.indexOf('<h3>' + esc(ENC[id].titulo[l]) + '</h3>') !== -1 && h.indexOf('<p>' + esc(ENC[id].texto[l]) + '</p>') !== -1; }), '(d) nível 11: abertas, mostram o título e o texto (escapados)' + L);
-    ok(h.indexOf('3 / 35') !== -1 && h.indexOf('<img') === -1, '(d) nível 11: 3 / 35 e sem imagens' + L);
+    ok(h.indexOf('3 / ' + ATE_11) !== -1 && h.indexOf('<img') === -1, '(d) nível 11: 3 / ' + ATE_11 + ' e sem imagens' + L);
     limpo(h, '(d) Enciclopédia' + L);
   }
   {
-    // O Explorar entrega as 3 antes de qualquer outra (várias sementes), mesmo com quase tudo o resto por abrir.
+    // O Explorar entrega as 3 (e as 6 dos níveis 5 e 6, que também têm nivelMinimo) antes de qualquer outra (várias sementes), mesmo com quase tudo o resto por abrir.
     for (let s = 1; s <= 25; s++) {
       const g = abrir(); lingua(g, l);
       preparar(g, REP_11, 11); semente(g, s * 7 + (l === 'pt' ? 0 : l === 'en' ? 1 : 2));
       const saidas = [];
-      for (let i = 0; i < 6; i++) { g.ev('enterExplorar();'); const a = idsAbertos(g); saidas.push(a[a.length - 1]); }
-      ok(saidas.slice(0, 3).slice().sort().join() === IDS.slice().sort().join(), '(d) semente ' + s + L + ': as 3 primeiras entregas são as 3 da Arrábida: ' + saidas.slice(0, 3));
-      ok(saidas.slice(3).every(function (id) { return IDS.indexOf(id) === -1; }) && new Set(saidas).size === 6, '(d) semente ' + s + L + ': depois só as outras, sem repetir');
+      const COM_NIVEL = IDS_5_6.concat(IDS);
+      for (let i = 0; i < COM_NIVEL.length + 3; i++) { g.ev('enterExplorar();'); const a = idsAbertos(g); saidas.push(a[a.length - 1]); }
+      ok(saidas.slice(0, COM_NIVEL.length).slice().sort().join() === COM_NIVEL.slice().sort().join(), '(d) semente ' + s + L + ': as ' + COM_NIVEL.length + ' primeiras entregas são as 6 dos níveis 5 e 6 e as 3 da Arrábida: ' + saidas.slice(0, COM_NIVEL.length));
+      ok(saidas.slice(COM_NIVEL.length).every(function (id) { return COM_NIVEL.indexOf(id) === -1; }) && new Set(saidas).size === saidas.length, '(d) semente ' + s + L + ': depois só as outras, sem repetir');
     }
   }
 
@@ -282,7 +288,7 @@ LINGUAS.forEach(function (l) {
     ok(seguinte === undefined ? cartaoFim.indexOf(ui.todos) !== -1 : cartaoFim.indexOf(ui.proximo.replace('{n}', seguinte)) !== -1, '(e) cumprido o cap11, o cartão diz ' + (seguinte === undefined ? 'que estão todos cumpridos' : 'o próximo capítulo no nível ' + seguinte) + L + ': ' + cartaoFim);
     // Pelo Explorar de ponta a ponta: as 3 saem e o capítulo cumpre-se
     const g2 = abrir(); lingua(g2, l);
-    preparar(g2, REP_11, 11); semente(g2, 99);
+    preparar(g2, REP_11, 11, IDS_5_6); semente(g2, 99); // as 6 dos níveis 5 e 6 já abertas: só faltam as 3
     for (let i = 0; i < 3; i++) g2.ev('enterExplorar();');
     ok(g2.ev('capitulosAvaliarCelebracao()') === true, '(e) 3 cliques no Explorar chegam para cumprir o capítulo 11' + L);
   }
@@ -329,7 +335,7 @@ LINGUAS.forEach(function (l) {
       g.ev('state.acesso.jogadorAntigo = true;');
       ecras.forEach(function (e) { ok(g.ev("ecraDesbloqueado('" + e + "')") === true, '(g) jogador antigo: o ecrã ' + e + ' aberto com ' + onde); });
       // O jogador antigo não salta o nível mínimo das histórias novas.
-      if (n < 11) ok(g.ev('encyclopediaEntries().length') === 32, '(g) jogador antigo abaixo do 11: continua sem as 3 da Arrábida com ' + onde);
+      if (n < 11) ok(g.ev('encyclopediaEntries().length') === 32 + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0), '(g) jogador antigo abaixo do 11: continua sem as 3 da Arrábida (nem as dos níveis 5 e 6 antes do 5 e do 6) com ' + onde);
       g.ev('state.acesso.jogadorAntigo = false;');
     });
     // Mensagem de ecrã trancado no nível 10: o nome do nível 11 não aparece (nenhum ecrã o pede).
@@ -352,7 +358,7 @@ LINGUAS.forEach(function (l) {
 // =====================================================================
 {
   const a = abrir(); lingua(a, 'pt');
-  preparar(a, REP_11, 10);
+  preparar(a, REP_11, 10, IDS_5_6); // as 6 dos níveis 5 e 6 já abertas: só faltam as 3
   a.ev('verificarSubidaNivel();');
   semente(a, 5);
   for (let i = 0; i < 3; i++) a.ev('enterExplorar();');
