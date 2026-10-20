@@ -40,7 +40,7 @@ Forma de cada tipo (os textos são sempre `{ pt, en, es }`):
    ```
 
 2. **Conferir**: `node scripts/verificar-dados.js --estrito` tem de dar `OK`.
-3. **Subir o `?v=`** desse ficheiro no `index.html` (ex.: `dados/visitas.js?v=2` passa a `?v=3`), para os aparelhos não ficarem com a versão antiga em cache.
+3. **Subir o `?v=` de CADA ficheiro de `dados/` que a PR mudou** (uma linha `<script src="dados/xxx.js?v=N">` do `index.html`, que passa a `?v=N+1`; ex.: `dados/visitas.js?v=2` passa a `?v=3`), para os aparelhos não ficarem com a versão antiga em cache e verem a entrada nova. Só essas linhas: não se mexe nas dos ficheiros que não mudaram, nem nas dos `js/`. Confere com `git diff index.html`: tem de haver uma linha mudada por cada ficheiro de `dados/` mudado. Nenhum teste fixa estes números (`verificar-dados-carregar.js` só exige que o `index.html` carregue os ficheiros, com `?v=`, pela ordem certa), por isso um esquecimento não dá erro: é preciso lembrar-se.
 4. **Abrir a PR.**
 
 ## O que já está testado
