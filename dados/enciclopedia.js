@@ -74,9 +74,9 @@ dadosAcrescentar('enciclopedia', {
   nivelMinimo: 6,
   titulo: { pt: 'Garrafas com mais de cem anos', en: 'Bottles over a hundred years old', es: 'Botellas de más de cien años' },
   texto: {
-    pt: 'Há Moscatéis de Setúbal de colheitas muito antigas, como as de 1911 e de 1924. Uma casa de Azeitão foi lançando estas edições especiais: a de 1955 em 2011, a de 1911 em 2014 e a de 1924 em 2024.',
-    en: 'There are Moscatel de Setúbal wines from very old vintages, such as 1911 and 1924. A house in Azeitão has been releasing these special editions: 1955 in 2011, 1911 in 2014 and 1924 in 2024.',
-    es: 'Hay Moscateles de Setúbal de cosechas muy antiguas, como las de 1911 y 1924. Una casa de Azeitão fue lanzando estas ediciones especiales: la de 1955 en 2011, la de 1911 en 2014 y la de 1924 en 2024.'
+    pt: 'Há Moscatéis de Setúbal de colheitas muito antigas, como as de 1911 e de 1924. Uma casa de Azeitão foi lançando estas edições especiais: a de 1911 em 2014 e a de 1924 em 2024.',
+    en: 'There are Moscatel de Setúbal wines from very old vintages, such as 1911 and 1924. A house in Azeitão has been releasing these special editions: 1911 in 2014 and 1924 in 2024.',
+    es: 'Hay Moscateles de Setúbal de cosechas muy antiguas, como las de 1911 y 1924. Una casa de Azeitão fue lanzando estas ediciones especiales: la de 1911 en 2014 y la de 1924 en 2024.'
   }
 });
 
