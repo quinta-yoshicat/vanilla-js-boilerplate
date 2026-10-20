@@ -3,6 +3,83 @@
 // imagem (opcional, caminho que exista em assets/), meses (opcional), estacao (opcional), manual (opcional, true) }.
 // A entrada só existe para o jogador a partir do nível "nivelMinimo" e, depois, sai primeiro no Explorar (prioridade). O id não pode repetir nenhum id da Enciclopédia.
 
+// Níveis 5 e 6 («Cave de Reserva» e «A Coleção»), sobre a idade e o envelhecimento do Moscatel de Setúbal: 3 histórias de cada nível. Sem imagem.
+// Vêm primeiro (por ordem de nível). As fontes de cada uma vão no comentário que a antecede.
+
+// Nível 5.
+// Fontes: Diário da República, Portaria 118/2014 alterada em 2015 (https://informador.pt/?p=80327); Bacalhôa, Moscatel de Setúbal 5 anos (https://media.bacalhoa.pt/1/documentos/993/bacalhoa-moscatel-de-setubal-5-anosptpdf.pdf).
+dadosAcrescentar('enciclopedia', {
+  id: 'cave_idade_rotulo',
+  nivelMinimo: 5,
+  titulo: { pt: 'Quantos anos tem o Moscatel?', en: 'How old is the Moscatel?', es: '¿Cuántos años tiene el Moscatel?' },
+  texto: {
+    pt: 'Num Moscatel de Setúbal, o rótulo pode dizer «5 anos», «10 anos», «20 anos», de 5 em 5 anos até «40 anos». Só se pode escrever esse número se os vinhos da garrafa tiverem, no mínimo, essa idade.',
+    en: 'On a Moscatel de Setúbal, the label may say "5 years", "10 years", "20 years", in steps of 5 up to "40 years". The number can only be written if the wines in the bottle are at least that old.',
+    es: 'En un Moscatel de Setúbal, la etiqueta puede decir «5 años», «10 años», «20 años», de 5 en 5 hasta «40 años». Solo se puede escribir ese número si los vinos de la botella tienen, como mínimo, esa edad.'
+  }
+});
+
+// Fontes: Bacalhôa (o mesmo pdf de 5 anos: lote de várias colheitas); Cavelusa, Moscatel Alambre 20 Anos (https://www.cavelusa.pt/en/product-category/fortified/moscatel/page/3/); José Maria da Fonseca, Moscatel 10 anos (https://jmf.pt/pdf/pt/ABD_10P.pdf).
+dadosAcrescentar('enciclopedia', {
+  id: 'cave_varias_colheitas',
+  nivelMinimo: 5,
+  titulo: { pt: 'Muitas colheitas na mesma garrafa', en: 'Many harvests in the same bottle', es: 'Muchas cosechas en la misma botella' },
+  texto: {
+    pt: 'Um Moscatel «de 20 anos» pode juntar vinhos de muitas colheitas. Um lote conhecido reúne 19, e a mais nova tem pelo menos 20 anos.',
+    en: 'A "20-year-old" Moscatel can blend wines from many harvests. One well-known blend brings together 19, and the youngest is at least 20 years old.',
+    es: 'Un Moscatel «de 20 años» puede juntar vinos de muchas cosechas. Un lote conocido reúne 19, y la más joven tiene al menos 20 años.'
+  }
+});
+
+// Fontes: Bacalhôa, Moscatel de Setúbal Superior 10 anos (https://media.bacalhoa.pt/1/documentos/1304/moscatel-de-setubal-sup-10-y-2010enpdf.pdf); Universidade de Lisboa, estudo sobre as condições de envelhecimento do Moscatel de Setúbal (https://repositorio.ulisboa.pt/entities/publication/1f44521f-c6c8-4c7f-b835-19c03b6ce20a).
+dadosAcrescentar('enciclopedia', {
+  id: 'cave_estufa',
+  nivelMinimo: 5,
+  titulo: { pt: 'A «estufa» dos Moscatéis', en: 'The Moscatel "greenhouse"', es: 'La «estufa» de los Moscateles' },
+  texto: {
+    pt: 'Alguns produtores guardam o Moscatel em armazéns a que chamam «estufas», onde a temperatura varia muito ao longo do ano. Um estudo concluiu que essas variações fazem o vinho envelhecer mais depressa.',
+    en: 'Some producers keep the Moscatel in warehouses they call "greenhouses", where the temperature varies a lot through the year. A study concluded that these variations make the wine age faster.',
+    es: 'Algunos productores guardan el Moscatel en almacenes a los que llaman «estufas», donde la temperatura varía mucho a lo largo del año. Un estudio concluyó que esas variaciones hacen que el vino envejezca más deprisa.'
+  }
+});
+
+// Nível 6.
+// Fontes: José Maria da Fonseca, Moscatel de Setúbal 10 anos (https://jmf.pt/pdf/pt/ABD_10P.pdf); Cavelusa, Moscatel Bacalhôa Superior 10 anos e Alambre 40 anos (https://www.cavelusa.pt/en/product-category/fortified/moscatel/page/3/).
+dadosAcrescentar('enciclopedia', {
+  id: 'colecao_cores_do_tempo',
+  nivelMinimo: 6,
+  titulo: { pt: 'As cores do tempo', en: 'The colours of time', es: 'Los colores del tiempo' },
+  texto: {
+    pt: 'Com os anos, o Moscatel muda de cor: um de 10 anos é dourado carregado ou cor de topázio, e um de 40 anos já é âmbar, com laivos avermelhados.',
+    en: 'With the years, Moscatel changes colour: a 10-year-old is deep gold or topaz, and a 40-year-old is already amber, with reddish tinges.',
+    es: 'Con los años, el Moscatel cambia de color: uno de 10 años es dorado intenso o color topacio, y uno de 40 años ya es ámbar, con matices rojizos.'
+  }
+});
+
+// Fontes: Agroportal, leilão de Moscatel de Setúbal (https://bo.agroportal.pt/?p=1125811); José Maria da Fonseca, Moscatel 10 anos (https://jmf.pt/pdf/pt/ABD_10P.pdf).
+dadosAcrescentar('enciclopedia', {
+  id: 'colecao_colheitas_antigas',
+  nivelMinimo: 6,
+  titulo: { pt: 'A coleção de colheitas', en: 'The collection of vintages', es: 'La colección de cosechas' },
+  texto: {
+    pt: 'Uma casa de Azeitão guarda uma coleção de colheitas antigas de Moscatel de Setúbal, que envelhecem numa adega chamada «dos Teares Velhos».',
+    en: 'A house in Azeitão keeps a collection of old Moscatel de Setúbal vintages, which age in a cellar called "dos Teares Velhos".',
+    es: 'Una casa de Azeitão guarda una colección de cosechas antiguas de Moscatel de Setúbal, que envejecen en una bodega llamada «dos Teares Velhos».'
+  }
+});
+
+// Fontes: Agroportal (o mesmo endereço); Garrafeira Nacional, 1900 Moscatel de Setúbal José Maria da Fonseca (https://www.garrafeiranacional.com/en/1900-moscatel-de-setubal-jose-maria-da-fonseca.html).
+dadosAcrescentar('enciclopedia', {
+  id: 'colecao_cem_anos',
+  nivelMinimo: 6,
+  titulo: { pt: 'Garrafas com mais de cem anos', en: 'Bottles over a hundred years old', es: 'Botellas de más de cien años' },
+  texto: {
+    pt: 'Há Moscatéis de Setúbal de colheitas muito antigas, como as de 1911 e de 1924. Uma casa de Azeitão foi lançando estas edições especiais: a de 1955 em 2011, a de 1911 em 2014 e a de 1924 em 2024.',
+    en: 'There are Moscatel de Setúbal wines from very old vintages, such as 1911 and 1924. A house in Azeitão has been releasing these special editions: 1955 in 2011, 1911 in 2014 and 1924 in 2024.',
+    es: 'Hay Moscateles de Setúbal de cosechas muy antiguas, como las de 1911 y 1924. Una casa de Azeitão fue lanzando estas ediciones especiales: la de 1955 en 2011, la de 1911 en 2014 y la de 1924 en 2024.'
+  }
+});
+
 // Nível 11, "Moscatel da Arrábida": as 3 histórias que o capítulo 11 (dados/capitulos.js) pede. Sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'arrabida_biosfera',

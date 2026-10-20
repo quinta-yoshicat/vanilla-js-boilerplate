@@ -10,7 +10,7 @@ Esta pasta é para juntar conteúdo novo ao jogo (visitas, níveis, histórias, 
 | `dados/niveis.js` | níveis novos | suportado (já tem `nivel_11`, 3650, `nivel_12`, 4550, `nivel_13`, 5500, `nivel_14`, 6500, `nivel_15`, 7550, `nivel_16`, 8650, `nivel_17`, 9850, `nivel_18`, 11050, `nivel_19`, 12350, e `nivel_20`, 13750) |
 | `dados/historias.js` | histórias de nível novas | suportado (já tem `historia_11`, `historia_12`, `historia_13`, `historia_14`, `historia_15`, `historia_16`, `historia_17`, `historia_18`, `historia_19` e `historia_20`) |
 | `dados/capitulos.js` | capítulos novos | suportado (já tem `cap11`, `cap12`, `cap13`, `cap14`, `cap15`, `cap16`, `cap17`, `cap18`, `cap19` e `cap20`) |
-| `dados/enciclopedia.js` | histórias novas da Enciclopédia, com nível mínimo | suportado (já tem `arrabida_biosfera`, `arrabida_plantas`, `arrabida_mar`, `sado_reserva`, `sado_golfinhos`, `sado_troia`, `palmela_castelo`, `palmela_capelo`, `palmela_castelao`, `azeitao_queijo`, `azeitao_adega`, `azeitao_palacio`, `sesimbra_castelo`, `sesimbra_vila`, `sesimbra_espichel`, `setubal_forte`, `setubal_roxo`, `setubal_familias`, `sal_alcacer`, `sal_setubal`, `sal_redura`, `arroz_arrozais`, `arroz_carolino`, `arroz_consumo`, `sobreiro_cortica`, `sobreiro_assobiador`, `sobreiro_rolha`, `bocage_poeta`, `bocage_casa` e `bocage_dia`) |
+| `dados/enciclopedia.js` | histórias novas da Enciclopédia, com nível mínimo | suportado (já tem `cave_idade_rotulo`, `cave_varias_colheitas`, `cave_estufa`, `colecao_cores_do_tempo`, `colecao_colheitas_antigas`, `colecao_cem_anos`, `arrabida_biosfera`, `arrabida_plantas`, `arrabida_mar`, `sado_reserva`, `sado_golfinhos`, `sado_troia`, `palmela_castelo`, `palmela_capelo`, `palmela_castelao`, `azeitao_queijo`, `azeitao_adega`, `azeitao_palacio`, `sesimbra_castelo`, `sesimbra_vila`, `sesimbra_espichel`, `setubal_forte`, `setubal_roxo`, `setubal_familias`, `sal_alcacer`, `sal_setubal`, `sal_redura`, `arroz_arrozais`, `arroz_carolino`, `arroz_consumo`, `sobreiro_cortica`, `sobreiro_assobiador`, `sobreiro_rolha`, `bocage_poeta`, `bocage_casa` e `bocage_dia`) |
 | `dados/objetivos.js` | objetivos diários | **ainda NÃO suportado** (cada objetivo precisa de uma regra no código); o ficheiro só tem comentários |
 | `dados/palavras.js` | as «Palavras da Quinta» (glossário): palavras difíceis com uma explicação simples, `dadosAcrescentar('palavras', { id, palavra, explicacao: { pt, en, es }, nivel? })`, por ordem alfabética | suportado (já tem as 20 primeiras: `aguardente_vinica` a `vinho_generoso`), em `PALAVRAS_DA_QUINTA` (`js/palavras.js`); **vê-se no Perfil**, a partir do nível 4, num cartão «Palavras» que abre o ecrã «Palavras da Quinta» (todas as palavras sempre visíveis, por ordem alfabética; o campo `nivel` ainda não é usado); só lê, não guarda nada. O EN e o ES não foram revistos por um nativo |
 
@@ -120,6 +120,16 @@ Mesmo molde dos níveis 11 a 14:
 - `dados/capitulos.js`: `cap15` «Entre o Castelo e o Mar», critério `temIds` nessas 3 entradas. A conclusão deixa a porta aberta (não é uma despedida).
 - **Cinco grupos de `nivelMinimo` (11 a 15).** Continua a ser um só grupo de prioridade: no nível 15, os grupos anteriores ainda por abrir e o de Sesimbra saem **todos** antes de qualquer entrada de hoje; quem já tem os anteriores abertos recebe só os que faltam. Abaixo do nível 15 o jogador não vê as de Sesimbra.
 - O teste deste nível é `scripts/verificar-nivel-15.js` (só os textos e números; a prova está em `scripts/_pacote-nivel.js`).
+
+## Histórias dos níveis 5 e 6 (só dados, sem nível nem capítulo novos)
+
+Seis histórias da Enciclopédia sobre a idade e o envelhecimento do Moscatel de Setúbal, só em `dados/enciclopedia.js` (sem imagem, meses, estação nem `manual`; as fontes de cada uma estão no comentário que a antecede). Ficam logo a seguir às 32 de origem e antes das da Arrábida:
+
+- Nível mínimo **5**: `cave_idade_rotulo` («Quantos anos tem o Moscatel?»), `cave_varias_colheitas` («Muitas colheitas na mesma garrafa») e `cave_estufa` (a «estufa» dos Moscatéis).
+- Nível mínimo **6**: `colecao_cores_do_tempo` («As cores do tempo»), `colecao_colheitas_antigas` («A coleção de colheitas») e `colecao_cem_anos` («Garrafas com mais de cem anos»).
+- **Prioridade no Explorar.** Como têm `nivelMinimo`, entram no grupo prioritário (ver «Prioridade no Explorar» abaixo): quem chega ao nível 5 (ou 6) tem estas entradas a sair antes de todas as de hoje, misturadas ao acaso com as de outros níveis que ainda estejam por abrir. Quem já passou por estes níveis tem-nas por abrir assim que o jogo as traz, e o total da Enciclopédia (o «x / y» e o «Sábio») sobe 6.
+- Não há capítulo nem nível novo: o `temIds` dos capítulos 11 a 20 não as pede.
+- Testes: `scripts/verificar-enciclopedia-dados.js` (textos exatos nas 3 línguas, só os campos combinados), `scripts/verificar-dados-carregar.js` (os ids por ordem, 68 entradas) e os `verificar-nivel-11/12/13.js` e `_pacote-nivel.js` (14 a 20), que contam estas 6 como entradas anteriores.
 
 ## Histórias da Enciclopédia (`dados/enciclopedia.js`)
 

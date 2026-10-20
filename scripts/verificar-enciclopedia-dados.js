@@ -10,7 +10,7 @@
 //      os campos conhecidos; entra nas 3 línguas;
 //  (d) título e texto com <b>, &, aspas e <script> saem escapados (uma só vez) na Enciclopédia e no Explorar;
 //  (e) o estado guardado só tem ids e carrega bem se a entrada deixar de existir (o id solto não conta);
-//  (f) as entradas de hoje ficam idênticas às da master (impressão digital) e dados/ só traz as histórias da Arrábida (nível 11), do Sado (12), de Palmela (13), de Azeitão (14), de Sesimbra (15), de Setúbal (16), de Alcácer (17, o sal do Sado), da Comporta (18, o arroz do Sado), do Montado (19, o sobreiro e a cortiça) e de Bocage (20, o poeta de Setúbal).
+//  (f) as entradas de hoje ficam idênticas às da master (impressão digital) e dados/ só traz as histórias da Cave de Reserva (nível 5) e da Coleção (6), da Arrábida (nível 11), do Sado (12), de Palmela (13), de Azeitão (14), de Sesimbra (15), de Setúbal (16), de Alcácer (17, o sal do Sado), da Comporta (18, o arroz do Sado), do Montado (19, o sobreiro e a cortiça) e de Bocage (20, o poeta de Setúbal).
 //
 // Uso: node scripts/verificar-enciclopedia-dados.js
 // JS_DIR=pasta  corre sobre outra versão dos js/ (para provar que o teste apanha o que se estraga).
@@ -26,6 +26,15 @@ const JS_DIR = process.env.JS_DIR || path.join(RAIZ, 'js');
 const LINGUAS = ['pt', 'en', 'es'];
 // sha256 do JSON de ENCYCLOPEDIA_ENTRIES de hoje (32 histórias nas 3 línguas), já com a frase de Ricardo II na forma cautelosa («Diz-se que ...»).
 const IMPRESSAO_DIGITAL_DE_HOJE = 'cf4831cbf32b4679b811bd92d7b25784c5985dc94a77245b1c7a83c7e113e883';
+// Os textos pedidos das 6 histórias dos níveis 5 e 6, palavra por palavra (escritos aqui, à parte; não lidos de dados/).
+const TEXTOS_5_6 = {
+  cave_idade_rotulo: {"nivelMinimo":5,"titulo":{"pt":"Quantos anos tem o Moscatel?","en":"How old is the Moscatel?","es":"¿Cuántos años tiene el Moscatel?"},"texto":{"pt":"Num Moscatel de Setúbal, o rótulo pode dizer «5 anos», «10 anos», «20 anos», de 5 em 5 anos até «40 anos». Só se pode escrever esse número se os vinhos da garrafa tiverem, no mínimo, essa idade.","en":"On a Moscatel de Setúbal, the label may say \"5 years\", \"10 years\", \"20 years\", in steps of 5 up to \"40 years\". The number can only be written if the wines in the bottle are at least that old.","es":"En un Moscatel de Setúbal, la etiqueta puede decir «5 años», «10 años», «20 años», de 5 en 5 hasta «40 años». Solo se puede escribir ese número si los vinos de la botella tienen, como mínimo, esa edad."}},
+  cave_varias_colheitas: {"nivelMinimo":5,"titulo":{"pt":"Muitas colheitas na mesma garrafa","en":"Many harvests in the same bottle","es":"Muchas cosechas en la misma botella"},"texto":{"pt":"Um Moscatel «de 20 anos» pode juntar vinhos de muitas colheitas. Um lote conhecido reúne 19, e a mais nova tem pelo menos 20 anos.","en":"A \"20-year-old\" Moscatel can blend wines from many harvests. One well-known blend brings together 19, and the youngest is at least 20 years old.","es":"Un Moscatel «de 20 años» puede juntar vinos de muchas cosechas. Un lote conocido reúne 19, y la más joven tiene al menos 20 años."}},
+  cave_estufa: {"nivelMinimo":5,"titulo":{"pt":"A «estufa» dos Moscatéis","en":"The Moscatel \"greenhouse\"","es":"La «estufa» de los Moscateles"},"texto":{"pt":"Alguns produtores guardam o Moscatel em armazéns a que chamam «estufas», onde a temperatura varia muito ao longo do ano. Um estudo concluiu que essas variações fazem o vinho envelhecer mais depressa.","en":"Some producers keep the Moscatel in warehouses they call \"greenhouses\", where the temperature varies a lot through the year. A study concluded that these variations make the wine age faster.","es":"Algunos productores guardan el Moscatel en almacenes a los que llaman «estufas», donde la temperatura varía mucho a lo largo del año. Un estudio concluyó que esas variaciones hacen que el vino envejezca más deprisa."}},
+  colecao_cores_do_tempo: {"nivelMinimo":6,"titulo":{"pt":"As cores do tempo","en":"The colours of time","es":"Los colores del tiempo"},"texto":{"pt":"Com os anos, o Moscatel muda de cor: um de 10 anos é dourado carregado ou cor de topázio, e um de 40 anos já é âmbar, com laivos avermelhados.","en":"With the years, Moscatel changes colour: a 10-year-old is deep gold or topaz, and a 40-year-old is already amber, with reddish tinges.","es":"Con los años, el Moscatel cambia de color: uno de 10 años es dorado intenso o color topacio, y uno de 40 años ya es ámbar, con matices rojizos."}},
+  colecao_colheitas_antigas: {"nivelMinimo":6,"titulo":{"pt":"A coleção de colheitas","en":"The collection of vintages","es":"La colección de cosechas"},"texto":{"pt":"Uma casa de Azeitão guarda uma coleção de colheitas antigas de Moscatel de Setúbal, que envelhecem numa adega chamada «dos Teares Velhos».","en":"A house in Azeitão keeps a collection of old Moscatel de Setúbal vintages, which age in a cellar called \"dos Teares Velhos\".","es":"Una casa de Azeitão guarda una colección de cosechas antiguas de Moscatel de Setúbal, que envejecen en una bodega llamada «dos Teares Velhos»."}},
+  colecao_cem_anos: {"nivelMinimo":6,"titulo":{"pt":"Garrafas com mais de cem anos","en":"Bottles over a hundred years old","es":"Botellas de más de cien años"},"texto":{"pt":"Há Moscatéis de Setúbal de colheitas muito antigas, como as de 1911 e de 1924. Uma casa de Azeitão foi lançando estas edições especiais: a de 1955 em 2011, a de 1911 em 2014 e a de 1924 em 2024.","en":"There are Moscatel de Setúbal wines from very old vintages, such as 1911 and 1924. A house in Azeitão has been releasing these special editions: 1955 in 2011, 1911 in 2014 and 1924 in 2024.","es":"Hay Moscateles de Setúbal de cosechas muy antiguas, como las de 1911 y 1924. Una casa de Azeitão fue lanzando estas ediciones especiales: la de 1955 en 2011, la de 1911 en 2014 y la de 1924 en 2024."}}
+};
 const REP_NIVEL_4 = 120;
 const REP_NIVEL_11 = 3600;
 
@@ -89,10 +98,12 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     lingua(g, l);
     ok(g.ev('encyclopediaEntries() === ENCYCLOPEDIA_ENTRIES.' + l) === true, '(f) sem nivelMinimo, a lista do jogo é exatamente a de hoje (' + l + ')');
   });
-  // Com a pasta dados/ real: as 32 de hoje (nas 3 línguas) ficam idênticas e só entram as 3 da Arrábida (nível mínimo 11), as 3 do
+  // Com a pasta dados/ real: as 32 de hoje (nas 3 línguas) ficam idênticas e só entram as 3 da Cave de Reserva (nível mínimo 5), as 3 da Coleção (6), as 3 da Arrábida (nível mínimo 11), as 3 do
   // Sado (12), as 3 de Palmela (13), as 3 de Azeitão (14), as 3 de Sesimbra (15), as 3 de Setúbal (16), as 3 de Alcácer (17), as 3 da Comporta (18), as 3 do Montado (19) e as 3 de Bocage (20), por esta ordem, sem imagem (cada nível novo acrescenta aqui o seu grupo).
   const real = abrir({ dadosDir: path.join(RAIZ, 'dados'), nivel11: false });
   const GRUPOS = [
+    { nome: 'Cave de Reserva', nivel: 5, ids: ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa'] },
+    { nome: 'Coleção', nivel: 6, ids: ['colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos'] },
     { nome: 'Arrábida', nivel: 11, ids: ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'] },
     { nome: 'Sado', nivel: 12, ids: ['sado_reserva', 'sado_golfinhos', 'sado_troia'] },
     { nome: 'Palmela', nivel: 13, ids: ['palmela_castelo', 'palmela_capelo', 'palmela_castelao'] },
@@ -106,7 +117,7 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
   ];
   const TODOS = GRUPOS.reduce(function (t, g) { return t.concat(g.ids); }, []);
   ok(real.avisos.length === 0, '(f) carregar o jogo com dados/ não devia avisar nada: ' + real.avisos);
-  ok(real.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; }).join()') === TODOS.join(), '(f) de dados/ só deviam vir as histórias da Arrábida, do Sado, de Palmela, de Azeitão, de Sesimbra, de Setúbal, de Alcácer, da Comporta, do Montado e de Bocage, por ordem: ' + real.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; }).join()'));
+  ok(real.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; }).join()') === TODOS.join(), '(f) de dados/ só deviam vir as histórias da Cave de Reserva, da Coleção, da Arrábida, do Sado, de Palmela, de Azeitão, de Sesimbra, de Setúbal, de Alcácer, da Comporta, do Montado e de Bocage, por ordem: ' + real.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; }).join()'));
   const dasTresLinguas = real.ev('JSON.stringify({ pt: ENCYCLOPEDIA_ENTRIES.pt.slice(0, 32), en: ENCYCLOPEDIA_ENTRIES.en.slice(0, 32), es: ENCYCLOPEDIA_ENTRIES.es.slice(0, 32) })');
   ok(crypto.createHash('sha256').update(dasTresLinguas).digest('hex') === IMPRESSAO_DIGITAL_DE_HOJE, '(f) com dados/ as 32 entradas de hoje ficam idênticas às da master, nas 3 línguas');
   LINGUAS.forEach(function (l) {
@@ -115,6 +126,16 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     GRUPOS.forEach(function (gr, i) {
       const grupo = fim.slice(i * 3, i * 3 + 3);
       ok(grupo.length === 3 && grupo.every(function (e) { return e.nivelMinimo === gr.nivel && e.imagem === undefined && !e.manual && e.estacao === undefined && e.meses === undefined && typeof e.titulo === 'string' && typeof e.texto === 'string'; }), '(f) ' + l + ': as 3 do ' + gr.nome + ' são de nível ' + gr.nivel + ', sem imagem, manual, estação nem meses');
+    });
+  });
+  // As 6 dos níveis 5 e 6: título e texto exatos nas 3 línguas, nível mínimo certo, só os campos pedidos, nada de < > & nem de bots ou IA.
+  Object.keys(TEXTOS_5_6).forEach(function (id) {
+    LINGUAS.forEach(function (l) {
+      const e = real.ev('ENCYCLOPEDIA_ENTRIES.' + l + '.filter(function (e) { return e.id === ' + js(id) + '; })[0]');
+      const t = TEXTOS_5_6[id];
+      ok(!!e && e.titulo === t.titulo[l] && e.texto === t.texto[l] && e.nivelMinimo === t.nivelMinimo, '(f) ' + id + ' (' + l + '): título, texto e nível mínimo exatos');
+      ok(!!e && Object.keys(e).sort().join() === 'id,nivelMinimo,texto,titulo', '(f) ' + id + ' (' + l + '): só id, nivelMinimo, titulo e texto: ' + (e && Object.keys(e)));
+      ok(!!e && !/[<>&]|https?:|bot\b|bots\b|\bIA\b|inteligência artificial|artificial intelligence|inteligencia artificial/i.test(e.titulo + ' ' + e.texto), '(f) ' + id + ' (' + l + '): sem < > &, links, bots nem IA');
     });
   });
   const codigo = fs.readFileSync(path.join(RAIZ, 'dados', 'enciclopedia.js'), 'utf8').replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '').trim();
