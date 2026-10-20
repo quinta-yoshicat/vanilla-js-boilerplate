@@ -5,7 +5,7 @@
 //    "objetivos" ainda não suportado) são IGNORADAS com um console.warn, sem lançar erro e sem mudar nada;
 // 3) uma entrada que já existe nunca é substituída;
 // 4) o index.html carrega js/palavras.js (a lista do glossário), o dados.js e os 7 ficheiros de dados/ depois das listas e antes do main.js, e
-//    os ficheiros de dados/ só trazem o que está combinado: a visita marisa_5 e os pacotes dos níveis 11 a 20 (nível,
+//    os ficheiros de dados/ só trazem o que está combinado: as visitas marisa_5 e henrique_5 e os pacotes dos níveis 11 a 20 (nível,
 //    história, 3 histórias da Enciclopédia e capítulo cada) e as 20 palavras do glossário (tipo 'palavras'); objetivos.js só tem comentários; as listas de origem ficam iguais.
 // As entradas de teste vivem só no ambiente simulado (módulo vm); nada fica no jogo.
 //
@@ -75,31 +75,31 @@ const IDS_BOCAGE = ['bocage_poeta', 'bocage_casa', 'bocage_dia'];
 // As 20 palavras do glossário (dados/palavras.js), por ordem alfabética; o conteúdo prova-o scripts/verificar-palavras.js.
 const IDS_PALAVRAS = ['aguardente_vinica', 'alambique', 'bacelo', 'bagaceira', 'bagaco', 'casta', 'curtimenta', 'dop', 'estuario', 'fortificar', 'jeropiga', 'lagar', 'mildio', 'montado', 'mosto', 'oidio', 'pousio', 'redura', 'torna_viagem', 'vinho_generoso'];
 const ESPERADO_EM_DADOS = {
-  'visitas.js': ['marisa_5'], 'niveis.js': ['nivel_11', 'nivel_12', 'nivel_13', 'nivel_14', 'nivel_15', 'nivel_16', 'nivel_17', 'nivel_18', 'nivel_19', 'nivel_20'],
+  'visitas.js': ['marisa_5', 'henrique_5'], 'niveis.js': ['nivel_11', 'nivel_12', 'nivel_13', 'nivel_14', 'nivel_15', 'nivel_16', 'nivel_17', 'nivel_18', 'nivel_19', 'nivel_20'],
   'historias.js': ['historia_11', 'historia_12', 'historia_13', 'historia_14', 'historia_15', 'historia_16', 'historia_17', 'historia_18', 'historia_19', 'historia_20'], 'capitulos.js': ['cap11', 'cap12', 'cap13', 'cap14', 'cap15', 'cap16', 'cap17', 'cap18', 'cap19', 'cap20'],
   'objetivos.js': [], 'enciclopedia.js': IDS_CAVE.concat(IDS_COLECAO, IDS_ARRABIDA, IDS_SADO, IDS_PALMELA, IDS_AZEITAO, IDS_SESIMBRA, IDS_SETUBAL, IDS_ALCACER, IDS_COMPORTA, IDS_MONTADO, IDS_BOCAGE),
   'palavras.js': IDS_PALAVRAS
 };
 
-// ----- 0b. Com a pasta dados/ real: só a visita marisa_5 e o pacote do nível 11 vêm de lá; o jogo de origem fica igual -----
+// ----- 0b. Com a pasta dados/ real: só as visitas marisa_5 e henrique_5 e o pacote do nível 11 vêm de lá; o jogo de origem fica igual -----
 {
   const avisos2 = [];
   const real = abrirJogo({ jsDir: JS_DIR, explorar: true, aoAvisar: function (m) { avisos2.push(m); } });
   ok(avisos2.length === 0, 'carregar o jogo com a pasta dados/ não devia avisar nada: ' + avisos2);
   const idsDe = function (tipo) { return real.ev('DADOS_ACRESCENTADOS.' + tipo + '.map(function (v) { return v.id; }).join()'); };
-  ok(idsDe('visitas') === 'marisa_5', 'de dados/ só devia vir a visita marisa_5: ' + idsDe('visitas'));
+  ok(idsDe('visitas') === 'marisa_5,henrique_5', 'de dados/ só deviam vir as visitas marisa_5 e henrique_5, por esta ordem: ' + idsDe('visitas'));
   ok(idsDe('niveis') === 'nivel_11,nivel_12,nivel_13,nivel_14,nivel_15,nivel_16,nivel_17,nivel_18,nivel_19,nivel_20' && idsDe('historias') === 'historia_11,historia_12,historia_13,historia_14,historia_15,historia_16,historia_17,historia_18,historia_19,historia_20' && idsDe('capitulos') === 'cap11,cap12,cap13,cap14,cap15,cap16,cap17,cap18,cap19,cap20', 'de dados/ só deviam vir os pacotes dos níveis 11 a 20 (nivel_N, historia_N, capN)');
   ok(idsDe('enciclopedia') === IDS_CAVE.concat(IDS_COLECAO, IDS_ARRABIDA, IDS_SADO, IDS_PALMELA, IDS_AZEITAO, IDS_SESIMBRA, IDS_SETUBAL, IDS_ALCACER, IDS_COMPORTA, IDS_MONTADO, IDS_BOCAGE).join(), 'de dados/ só deviam vir as 3 histórias da Cave de Reserva (nível 5), as 3 da Coleção (nível 6), as 3 da Arrábida, as 3 do Sado, as 3 de Palmela, as 3 de Azeitão, as 3 de Sesimbra, as 3 de Setúbal, as 3 de Alcácer (o sal do Sado), as 3 da Comporta (o arroz do Sado), as 3 do Montado (o sobreiro e a cortiça) e as 3 de Bocage (o poeta de Setúbal), por esta ordem: ' + idsDe('enciclopedia'));
   ok(idsDe('objetivos') === '', 'dados/ não devia trazer objetivos');
   ok(idsDe('palavras') === IDS_PALAVRAS.join(), 'de dados/ só deviam vir as 20 palavras do glossário: ' + idsDe('palavras'));
   ok(real.ev('PALAVRAS_DA_QUINTA.map(function (p) { return p.id; }).join()') === IDS_PALAVRAS.join() && real.ev('palavrasTotal()') === 20, 'com dados/ as 20 palavras deviam ficar em PALAVRAS_DA_QUINTA (por ordem de entrada) e palavrasTotal() devia ser 20');
-  ok(real.ev('VISITAS.length') === 13 && real.ev('NIVEIS_CONFIG.length') === 20 && real.ev('CAPITULOS_CONFIG.length') === 20 && real.ev('OBJETIVOS_GRUPO_C.length') === 5, 'com dados/ devia haver 13 visitas, 20 níveis, 20 capítulos e os 5 do Grupo C');
+  ok(real.ev('VISITAS.length') === 14 && real.ev('NIVEIS_CONFIG.length') === 20 && real.ev('CAPITULOS_CONFIG.length') === 20 && real.ev('OBJETIVOS_GRUPO_C.length') === 5, 'com dados/ devia haver 14 visitas, 20 níveis, 20 capítulos e os 5 do Grupo C');
   ok(Object.keys(real.ev('HISTORIA_NIVEIS')).join() === '2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20' && real.ev('ENCYCLOPEDIA_ENTRIES.pt.length') === 68, 'com dados/ devia haver histórias dos níveis 2 a 20 e 68 entradas da Enciclopédia');
   ok(real.ev('JSON.stringify(VISITAS.slice(0, 12))') === ev('JSON.stringify(VISITAS)'), 'as 12 visitas de origem (e a sua ordem) deviam ficar iguais com dados/');
   ok(real.ev('JSON.stringify(NIVEIS_CONFIG.slice(0, 10))') === ev('JSON.stringify(NIVEIS_CONFIG)'), 'os 10 níveis de origem deviam ficar iguais com dados/');
   ok(real.ev('JSON.stringify(CAPITULOS_CONFIG.slice(0, 10))') === ev('JSON.stringify(CAPITULOS_CONFIG)'), 'os 10 capítulos de origem deviam ficar iguais com dados/');
   ok(real.ev('JSON.stringify([2,3,4,5,6,7,8,9,10].map(function (n) { return HISTORIA_NIVEIS[n]; }))') === ev('JSON.stringify([2,3,4,5,6,7,8,9,10].map(function (n) { return HISTORIA_NIVEIS[n]; }))'), 'as histórias dos níveis 2 a 10 deviam ficar iguais com dados/');
-  ok(real.ev('VISITAS[12].id') === 'marisa_5' && real.ev('NIVEIS_CONFIG[10].id') === 'nivel_11' && real.ev('NIVEIS_CONFIG[11].id') === 'nivel_12' && real.ev('NIVEIS_CONFIG[12].id') === 'nivel_13' && real.ev('NIVEIS_CONFIG[13].id') === 'nivel_14' && real.ev('CAPITULOS_CONFIG[10].id') === 'cap11' && real.ev('CAPITULOS_CONFIG[11].id') === 'cap12' && real.ev('CAPITULOS_CONFIG[12].id') === 'cap13' && real.ev('NIVEIS_CONFIG[14].id') === 'nivel_15' && real.ev('CAPITULOS_CONFIG[13].id') === 'cap14' && real.ev('NIVEIS_CONFIG[15].id') === 'nivel_16' && real.ev('CAPITULOS_CONFIG[14].id') === 'cap15' && real.ev('NIVEIS_CONFIG[16].id') === 'nivel_17' && real.ev('CAPITULOS_CONFIG[15].id') === 'cap16' && real.ev('CAPITULOS_CONFIG[16].id') === 'cap17' && real.ev('NIVEIS_CONFIG[17].id') === 'nivel_18' && real.ev('CAPITULOS_CONFIG[17].id') === 'cap18' && real.ev('NIVEIS_CONFIG[18].id') === 'nivel_19' && real.ev('CAPITULOS_CONFIG[18].id') === 'cap19' && real.ev('NIVEIS_CONFIG[19].id') === 'nivel_20' && real.ev('CAPITULOS_CONFIG[19].id') === 'cap20', 'as entradas de dados/ ficam no fim das listas, por ordem');
+  ok(real.ev('VISITAS[12].id') === 'marisa_5' && real.ev('VISITAS[13].id') === 'henrique_5' && real.ev('NIVEIS_CONFIG[10].id') === 'nivel_11' && real.ev('NIVEIS_CONFIG[11].id') === 'nivel_12' && real.ev('NIVEIS_CONFIG[12].id') === 'nivel_13' && real.ev('NIVEIS_CONFIG[13].id') === 'nivel_14' && real.ev('CAPITULOS_CONFIG[10].id') === 'cap11' && real.ev('CAPITULOS_CONFIG[11].id') === 'cap12' && real.ev('CAPITULOS_CONFIG[12].id') === 'cap13' && real.ev('NIVEIS_CONFIG[14].id') === 'nivel_15' && real.ev('CAPITULOS_CONFIG[13].id') === 'cap14' && real.ev('NIVEIS_CONFIG[15].id') === 'nivel_16' && real.ev('CAPITULOS_CONFIG[14].id') === 'cap15' && real.ev('NIVEIS_CONFIG[16].id') === 'nivel_17' && real.ev('CAPITULOS_CONFIG[15].id') === 'cap16' && real.ev('CAPITULOS_CONFIG[16].id') === 'cap17' && real.ev('NIVEIS_CONFIG[17].id') === 'nivel_18' && real.ev('CAPITULOS_CONFIG[17].id') === 'cap18' && real.ev('NIVEIS_CONFIG[18].id') === 'nivel_19' && real.ev('CAPITULOS_CONFIG[18].id') === 'cap19' && real.ev('NIVEIS_CONFIG[19].id') === 'nivel_20' && real.ev('CAPITULOS_CONFIG[19].id') === 'cap20', 'as entradas de dados/ ficam no fim das listas, por ordem');
 }
 
 // ----- 1. Visitas -----

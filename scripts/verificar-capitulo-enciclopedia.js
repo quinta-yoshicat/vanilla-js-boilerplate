@@ -364,7 +364,8 @@ function semente(g, s) {
   }
   const C3 = "{ tipo: 'temIds', caminho: 'encyclopedia.unlocked', ids: ['arr_a', 'arr_b', 'arr_c'] }";
   const pBom = correr(JS_DIR, pacote('bom', C3, ['arr_a', 'arr_b', 'arr_c']));
-  ok(pBom.codigo === 0 && pBom.saida.indexOf('7 entradas vindas de dados/') !== -1, '(d) o pacote completo (nível, história, capítulo temIds e 3 entradas) devia passar: ' + pBom.saida.slice(-300));
+  // 28 = 2 visitas (marisa_5, henrique_5) + o pacote de teste (nível, história, capítulo, 3 entradas) + 20 palavras do glossário.
+  ok(pBom.codigo === 0 && pBom.saida.indexOf(' 28 entradas vindas de dados/') !== -1, '(d) o pacote completo (nível, história, capítulo temIds e 3 entradas) devia passar: ' + pBom.saida.slice(-300));
   const pBomEstrito = cp.spawnSync(process.execPath, [path.join(__dirname, 'verificar-dados.js'), '--estrito'], { env: Object.assign({}, process.env, { JS_DIR: JS_DIR, DADOS_DIR: path.join(tmp, 'dados-bom') }), encoding: 'utf8' });
   ok(pBomEstrito.status === 0, '(d) e em modo estrito também');
   const pFalta = correr(JS_DIR, pacote('falta', C3, ['arr_a', 'arr_b']));
