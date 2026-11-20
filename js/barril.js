@@ -22,7 +22,7 @@ const BARRIL_CONFIG = {
   posicoes: 3,
   trocasMin: 3,
   trocasMax: 4,
-  marcaMs: 1500,   // quanto tempo o barril do aguardente aparece marcado
+  marcaMs: 3000,   // quanto tempo o barril do aguardente aparece marcado
   trocaMs: 500,    // duração de cada troca (a transição CSS)
   pausaMs: 150     // pausa entre trocas
 };

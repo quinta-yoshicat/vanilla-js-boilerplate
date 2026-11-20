@@ -409,12 +409,12 @@ const FESTAS_STRINGS = {
       castanhasSubtitulo: 'O Chizo ajuda-te a defender o assador',
       castanhasCenas: [
         { situacao: 'O assador está ao rubro e a primeira dúzia já abriu a casca. Do outro lado do muro, o Fygmo finge que vem só aquecer as mãos, mas não tira os olhos do tabuleiro.', opcoes: ['Tapar o assador com a tampa antes que chegue', 'Oferecer-lhe um copo de água-pé e puxar conversa', 'Fingir que não o vês e continuar a descascar'], correta: 0 },
-        { situacao: 'O Fygmo2 rasteja por baixo do banco, de olho nas castanhas mais douradas, com o ar de quem só procura uma moeda caída.', opcoes: ['Ir buscar lenha, que a fogueira está a baixar', 'Chamar o Chizo com um assobio curto e seco', 'Pousar o tabuleiro no muro, fora do alcance'], correta: 1 },
+        { situacao: 'O Fygmo II rasteja por baixo do banco, de olho nas castanhas mais douradas, com o ar de quem só procura uma moeda caída.', opcoes: ['Ir buscar lenha, que a fogueira está a baixar', 'Chamar o Chizo com um assobio curto e seco', 'Pousar o tabuleiro no muro, fora do alcance'], correta: 1 },
         { situacao: 'Os dois porcos cochicham à parte: um distrai, o outro rouba. Já ensaiaram, vê-se.', opcoes: ['Virar as costas um instante para buscar castanhas', 'Pôr o Chizo mesmo ao pé do assador, a vigiar', 'Vigiar só o que distrai; o outro que desista'], correta: 1 },
         { situacao: 'O cheiro das castanhas atrai um bando de pardais, e os porcos aproveitam a confusão.', opcoes: ['Espantar só os pardais, que fazem mais barulho', 'Pôr uma rede grande à volta de todo o assador', 'Assobiar alto para acordar o Chizo da soneca'], correta: 2 }
       ],
-      castanhasVitoria: 'O Chizo ladra uma vez e o Fygmo e o Fygmo2 recuam de mãos a abanar: as castanhas ficam todas no tabuleiro.',
-      castanhasDerrota: 'Tarde demais: o Fygmo e o Fygmo2 fogem com um cartucho de castanhas ainda a fumegar, a soprar nos dedos. Há castanhas que valem a queimadura.',
+      castanhasVitoria: 'O Chizo ladra uma vez e o Fygmo e o Fygmo II recuam de mãos a abanar: as castanhas ficam todas no tabuleiro.',
+      castanhasDerrota: 'Tarde demais: o Fygmo e o Fygmo II fogem com um cartucho de castanhas ainda a fumegar, a soprar nos dedos. Há castanhas que valem a queimadura.',
       castanhasBonusVerao: ' Com este sol de São Martinho, o assador rendeu ainda mais castanhas!',
 
       jeropigaTitulo: 'A Jeropiga de São Martinho',
@@ -443,12 +443,12 @@ const FESTAS_STRINGS = {
       castanhasSubtitulo: 'Chizo helps you defend the roaster',
       castanhasCenas: [
         { situacao: 'The roaster is red-hot and the first dozen have already split their shells. On the other side of the wall, Fygmo pretends he only came to warm his hands, but his eyes never leave the tray.', opcoes: ['Put the lid on the roaster before he gets close', 'Offer him a glass of água-pé and strike up a chat', 'Pretend you don\'t see him and keep peeling'], correta: 0 },
-        { situacao: 'Fygmo2 crawls under the bench, eyeing the most golden chestnuts, with the air of someone merely looking for a dropped coin.', opcoes: ['Fetch more firewood, the fire is getting low', 'Call Chizo over with a short, dry whistle', 'Set the tray on the wall, out of his reach'], correta: 1 },
+        { situacao: 'Fygmo II crawls under the bench, eyeing the most golden chestnuts, with the air of someone merely looking for a dropped coin.', opcoes: ['Fetch more firewood, the fire is getting low', 'Call Chizo over with a short, dry whistle', 'Set the tray on the wall, out of his reach'], correta: 1 },
         { situacao: 'The two pigs whisper off to one side: one distracts, the other steals. They\'ve rehearsed it, you can tell.', opcoes: ['Turn your back a moment to fetch more chestnuts', 'Put Chizo right next to the roaster, on watch', 'Watch only the distracter; the other will give up'], correta: 1 },
         { situacao: 'The smell of the chestnuts draws a flock of sparrows, and the pigs take advantage of the confusion.', opcoes: ['Shoo only the sparrows, they make the most noise', 'Put a big net all the way around the roaster', 'Whistle loudly to wake Chizo from his nap'], correta: 2 }
       ],
-      castanhasVitoria: 'Chizo barks once and Fygmo and Fygmo2 back off empty-handed: every chestnut stays on the tray.',
-      castanhasDerrota: 'Too late: Fygmo and Fygmo2 flee with a paper cone of chestnuts still steaming, blowing on their fingers. Some chestnuts are worth the burn.',
+      castanhasVitoria: 'Chizo barks once and Fygmo and Fygmo II back off empty-handed: every chestnut stays on the tray.',
+      castanhasDerrota: 'Too late: Fygmo and Fygmo II flee with a paper cone of chestnuts still steaming, blowing on their fingers. Some chestnuts are worth the burn.',
       castanhasBonusVerao: " With this St. Martin's summer sun, the roaster yielded even more chestnuts!",
 
       jeropigaTitulo: "St. Martin's Jeropiga",
@@ -477,12 +477,12 @@ const FESTAS_STRINGS = {
       castanhasSubtitulo: 'El Chizo te ayuda a defender el asador',
       castanhasCenas: [
         { situacao: 'El asador está al rojo y la primera docena ya ha abierto la cáscara. Al otro lado del muro, el Fygmo finge que solo viene a calentarse las manos, pero no le quita los ojos a la bandeja.', opcoes: ['Tapar el asador con la tapa antes de que llegue', 'Ofrecerle un vaso de aguapié y darle conversación', 'Hacer como que no lo ves y seguir pelando'], correta: 0 },
-        { situacao: 'El Fygmo2 se arrastra bajo el banco, con la mirada puesta en las castañas más doradas y el aire de quien solo busca una moneda caída.', opcoes: ['Ir a por leña, que el fuego está bajando', 'Llamar al Chizo con un silbido corto y seco', 'Dejar la bandeja en el muro, fuera de su alcance'], correta: 1 },
+        { situacao: 'El Fygmo II se arrastra bajo el banco, con la mirada puesta en las castañas más doradas y el aire de quien solo busca una moneda caída.', opcoes: ['Ir a por leña, que el fuego está bajando', 'Llamar al Chizo con un silbido corto y seco', 'Dejar la bandeja en el muro, fuera de su alcance'], correta: 1 },
         { situacao: 'Los dos cerdos cuchichean aparte: uno distrae, el otro roba. Lo han ensayado, se nota.', opcoes: ['Darles la espalda un momento para ir a por castañas', 'Poner al Chizo junto al asador, de vigilancia', 'Vigilar solo al que distrae; el otro desistirá'], correta: 1 },
         { situacao: 'El olor de las castañas atrae a una bandada de gorriones, y los cerdos aprovechan la confusión.', opcoes: ['Espantar solo a los gorriones, que hacen más ruido', 'Poner una red grande alrededor de todo el asador', 'Silbar fuerte para despertar al Chizo dormido'], correta: 2 }
       ],
-      castanhasVitoria: 'El Chizo ladra una vez y el Fygmo y el Fygmo2 retroceden con las manos vacías: todas las castañas se quedan en la bandeja.',
-      castanhasDerrota: 'Demasiado tarde: el Fygmo y el Fygmo2 huyen con un cucurucho de castañas aún humeantes, soplándose los dedos. Hay castañas que valen la quemadura.',
+      castanhasVitoria: 'El Chizo ladra una vez y el Fygmo y el Fygmo II retroceden con las manos vacías: todas las castañas se quedan en la bandeja.',
+      castanhasDerrota: 'Demasiado tarde: el Fygmo y el Fygmo II huyen con un cucurucho de castañas aún humeantes, soplándose los dedos. Hay castañas que valen la quemadura.',
       castanhasBonusVerao: ' ¡Con este sol del veranillo de San Martín, el asador rindió todavía más castañas!',
 
       jeropigaTitulo: 'La Jeropiga de San Martín',
@@ -515,18 +515,18 @@ const FESTAS_STRINGS = {
       docesTitulo: 'Os Doces da Quinta',
       docesJaFeitaHoje: 'Já fizeste doces hoje. Os de amanhã ficam para amanhã.',
       docesFalta: 'Ainda faltam Gotas para os doces. Junta mais e volta cá.',
-      docesSucesso: 'A cozinha da Quinta cheira a Natal: rabanadas a dourar, filhós a levantar. O Fygmo e o Fygmo2 juram que só passaram por ali para "provar a qualidade".',
+      docesSucesso: 'A cozinha da Quinta cheira a Natal: rabanadas a dourar, filhós a levantar. O Fygmo e o Fygmo II juram que só passaram por ali para "provar a qualidade".',
 
       boloReiTitulo: 'O Bolo-Rei',
-      boloReiSubtitulo: 'O Fygmo e o Fygmo2 andam a rondar o bolo',
+      boloReiSubtitulo: 'O Fygmo e o Fygmo II andam a rondar o bolo',
       boloReiJaFeitaHoje: 'Hoje o bolo-rei já foi defendido. Amanhã há outra ronda.',
       boloReiCenas: [
-        { situacao: 'O bolo-rei arrefece na mesa da consoada. O Fygmo e o Fygmo2 contemplam-no com o respeito de quem já escolheu a fatia.', opcoes: ['Pedir-lhes que esperem pela meia-noite, como manda a tradição', 'Cobrir o bolo com um pano e deixar o Chizo a vigiar', 'Servir já uma fatia grande a cada um, para encerrar o assunto'], correta: 1 },
-        { situacao: 'O Fygmo2 sobe para uma cadeira e estica o focinho para o bolo-rei, com o ar de quem só veio ver se está bem cozinhado.', opcoes: ['Pôr o bolo em cima do armário, onde a cadeira não chega', 'Explicar-lhe que o bolo-rei é só depois da Missa do Galo', 'Afastar a cadeira devagar, com ele ainda lá em cima'], correta: 0 },
-        { situacao: 'O Fygmo puxa conversa sobre o preço do bacalhau enquanto o Fygmo2 contorna a mesa, pé ante pé, rumo ao bolo.', opcoes: ['Responder com paciência, que o bacalhau é assunto sério', 'Esconder o bolo debaixo do casaco e sair de fininho', 'Chamar o Chizo para tomar conta do bolo e da mesa toda'], correta: 2 }
+        { situacao: 'O bolo-rei arrefece na mesa da consoada. O Fygmo e o Fygmo II contemplam-no com o respeito de quem já escolheu a fatia.', opcoes: ['Pedir-lhes que esperem pela meia-noite, como manda a tradição', 'Cobrir o bolo com um pano e deixar o Chizo a vigiar', 'Servir já uma fatia grande a cada um, para encerrar o assunto'], correta: 1 },
+        { situacao: 'O Fygmo II sobe para uma cadeira e estica o focinho para o bolo-rei, com o ar de quem só veio ver se está bem cozinhado.', opcoes: ['Pôr o bolo em cima do armário, onde a cadeira não chega', 'Explicar-lhe que o bolo-rei é só depois da Missa do Galo', 'Afastar a cadeira devagar, com ele ainda lá em cima'], correta: 0 },
+        { situacao: 'O Fygmo puxa conversa sobre o preço do bacalhau enquanto o Fygmo II contorna a mesa, pé ante pé, rumo ao bolo.', opcoes: ['Responder com paciência, que o bacalhau é assunto sério', 'Esconder o bolo debaixo do casaco e sair de fininho', 'Chamar o Chizo para tomar conta do bolo e da mesa toda'], correta: 2 }
       ],
-      boloReiVitoria: 'O bolo-rei fica a salvo. O Fygmo e o Fygmo2 olham para as migalhas que não existem, suspiram e prometem portar-se bem até ao Dia de Reis.',
-      boloReiDerrota: 'Tarde demais: o Fygmo e o Fygmo2 já vão a caminho da mata, uma fatia cada. Quem encontrar a fava paga o próximo bolo-rei. Nada se perdeu.'
+      boloReiVitoria: 'O bolo-rei fica a salvo. O Fygmo e o Fygmo II olham para as migalhas que não existem, suspiram e prometem portar-se bem até ao Dia de Reis.',
+      boloReiDerrota: 'Tarde demais: o Fygmo e o Fygmo II já vão a caminho da mata, uma fatia cada. Quem encontrar a fava paga o próximo bolo-rei. Nada se perdeu.'
     },
     en: {
       faixa: "It's Christmas on the Quinta!",
@@ -546,18 +546,18 @@ const FESTAS_STRINGS = {
       docesTitulo: 'The Quinta Sweets',
       docesJaFeitaHoje: "You've already made sweets today. Tomorrow's will wait until tomorrow.",
       docesFalta: 'You still need more Drops for the sweets. Gather some more and come back.',
-      docesSucesso: 'The Quinta kitchen smells of Christmas: rabanadas turning golden, filhós rising. Fygmo and Fygmo2 swear they only dropped by to "check the quality".',
+      docesSucesso: 'The Quinta kitchen smells of Christmas: rabanadas turning golden, filhós rising. Fygmo and Fygmo II swear they only dropped by to "check the quality".',
 
       boloReiTitulo: 'The Bolo-Rei',
-      boloReiSubtitulo: 'Fygmo and Fygmo2 are circling the cake',
+      boloReiSubtitulo: 'Fygmo and Fygmo II are circling the cake',
       boloReiJaFeitaHoje: "Today the bolo-rei has already been defended. Tomorrow there's another round.",
       boloReiCenas: [
-        { situacao: 'The bolo-rei is cooling on the consoada table. Fygmo and Fygmo2 contemplate it with the respect of those who have already picked their slice.', opcoes: ['Ask them to wait until midnight, as tradition demands', 'Cover the cake with a cloth and leave Chizo on watch', 'Serve each of them a big slice right now, to close the matter'], correta: 1 },
-        { situacao: 'Fygmo2 climbs onto a chair and stretches his snout towards the bolo-rei, looking like he only came to check it is properly baked.', opcoes: ['Put the cake on the cupboard, where no chair reaches', 'Explain that bolo-rei is only for after Midnight Mass', 'Slowly pull the chair away, with him still up there'], correta: 0 },
-        { situacao: 'Fygmo strikes up a chat about the price of salt cod while Fygmo2 circles the table, tiptoeing towards the cake.', opcoes: ['Answer patiently, since salt cod is serious business', 'Hide the cake under your coat and slip away quietly', 'Call Chizo to guard the cake and the whole table'], correta: 2 }
+        { situacao: 'The bolo-rei is cooling on the consoada table. Fygmo and Fygmo II contemplate it with the respect of those who have already picked their slice.', opcoes: ['Ask them to wait until midnight, as tradition demands', 'Cover the cake with a cloth and leave Chizo on watch', 'Serve each of them a big slice right now, to close the matter'], correta: 1 },
+        { situacao: 'Fygmo II climbs onto a chair and stretches his snout towards the bolo-rei, looking like he only came to check it is properly baked.', opcoes: ['Put the cake on the cupboard, where no chair reaches', 'Explain that bolo-rei is only for after Midnight Mass', 'Slowly pull the chair away, with him still up there'], correta: 0 },
+        { situacao: 'Fygmo strikes up a chat about the price of salt cod while Fygmo II circles the table, tiptoeing towards the cake.', opcoes: ['Answer patiently, since salt cod is serious business', 'Hide the cake under your coat and slip away quietly', 'Call Chizo to guard the cake and the whole table'], correta: 2 }
       ],
-      boloReiVitoria: 'The bolo-rei stays safe. Fygmo and Fygmo2 look at the crumbs that do not exist, sigh and promise to behave until Three Kings Day.',
-      boloReiDerrota: 'Too late: Fygmo and Fygmo2 are already on their way to the woods, a slice each. Whoever finds the fava pays for the next bolo-rei. Nothing was lost.'
+      boloReiVitoria: 'The bolo-rei stays safe. Fygmo and Fygmo II look at the crumbs that do not exist, sigh and promise to behave until Three Kings Day.',
+      boloReiDerrota: 'Too late: Fygmo and Fygmo II are already on their way to the woods, a slice each. Whoever finds the fava pays for the next bolo-rei. Nothing was lost.'
     },
     es: {
       faixa: '¡Es Navidad en la Quinta!',
@@ -577,18 +577,18 @@ const FESTAS_STRINGS = {
       docesTitulo: 'Los Dulces de la Quinta',
       docesJaFeitaHoje: 'Ya has hecho dulces hoy. Los de mañana, para mañana.',
       docesFalta: 'Todavía faltan Gotas para los dulces. Junta más y vuelve.',
-      docesSucesso: 'La cocina de la Quinta huele a Navidad: rabanadas dorándose, filhós creciendo. El Fygmo y el Fygmo2 juran que solo pasaron por allí para "comprobar la calidad".',
+      docesSucesso: 'La cocina de la Quinta huele a Navidad: rabanadas dorándose, filhós creciendo. El Fygmo y el Fygmo II juran que solo pasaron por allí para "comprobar la calidad".',
 
       boloReiTitulo: 'El Bolo-Rei',
-      boloReiSubtitulo: 'El Fygmo y el Fygmo2 rondan el bizcocho',
+      boloReiSubtitulo: 'El Fygmo y el Fygmo II rondan el bizcocho',
       boloReiJaFeitaHoje: 'Hoy el bolo-rei ya ha sido defendido. Mañana hay otra ronda.',
       boloReiCenas: [
-        { situacao: 'El bolo-rei se enfría en la mesa de la consoada. El Fygmo y el Fygmo2 lo contemplan con el respeto de quien ya ha elegido su porción.', opcoes: ['Pedirles que esperen a la medianoche, como manda la tradición', 'Tapar el bolo con un paño y dejar al Chizo vigilando', 'Servir ya una porción grande a cada uno, para cerrar el asunto'], correta: 1 },
-        { situacao: 'El Fygmo2 se sube a una silla y estira el hocico hacia el bolo-rei, con aire de quien solo viene a ver si está bien cocido.', opcoes: ['Poner el bolo encima del armario, donde la silla no llega', 'Explicarle que el bolo-rei es solo después de la Misa del Gallo', 'Apartar la silla despacio, con él todavía allí arriba'], correta: 0 },
-        { situacao: 'El Fygmo da conversación sobre el precio del bacalao mientras el Fygmo2 rodea la mesa de puntillas, rumbo al bolo.', opcoes: ['Responder con paciencia, que el bacalao es cosa seria', 'Esconder el bolo bajo el abrigo y marcharse con disimulo', 'Llamar al Chizo para que cuide del bolo y de la mesa'], correta: 2 }
+        { situacao: 'El bolo-rei se enfría en la mesa de la consoada. El Fygmo y el Fygmo II lo contemplan con el respeto de quien ya ha elegido su porción.', opcoes: ['Pedirles que esperen a la medianoche, como manda la tradición', 'Tapar el bolo con un paño y dejar al Chizo vigilando', 'Servir ya una porción grande a cada uno, para cerrar el asunto'], correta: 1 },
+        { situacao: 'El Fygmo II se sube a una silla y estira el hocico hacia el bolo-rei, con aire de quien solo viene a ver si está bien cocido.', opcoes: ['Poner el bolo encima del armario, donde la silla no llega', 'Explicarle que el bolo-rei es solo después de la Misa del Gallo', 'Apartar la silla despacio, con él todavía allí arriba'], correta: 0 },
+        { situacao: 'El Fygmo da conversación sobre el precio del bacalao mientras el Fygmo II rodea la mesa de puntillas, rumbo al bolo.', opcoes: ['Responder con paciencia, que el bacalao es cosa seria', 'Esconder el bolo bajo el abrigo y marcharse con disimulo', 'Llamar al Chizo para que cuide del bolo y de la mesa'], correta: 2 }
       ],
-      boloReiVitoria: 'El bolo-rei queda a salvo. El Fygmo y el Fygmo2 miran las migas que no hay, suspiran y prometen portarse bien hasta el Día de Reyes.',
-      boloReiDerrota: 'Demasiado tarde: el Fygmo y el Fygmo2 ya van camino del monte, una porción cada uno. Quien encuentre el haba paga el próximo bolo-rei. No se perdió nada.'
+      boloReiVitoria: 'El bolo-rei queda a salvo. El Fygmo y el Fygmo II miran las migas que no hay, suspiran y prometen portarse bien hasta el Día de Reyes.',
+      boloReiDerrota: 'Demasiado tarde: el Fygmo y el Fygmo II ya van camino del monte, una porción cada uno. Quien encuentre el haba paga el próximo bolo-rei. No se perdió nada.'
     }
   },
   carnaval: {
@@ -613,14 +613,14 @@ const FESTAS_STRINGS = {
       fantasiasSucesso: 'Máscaras, penas, lantejoulas e muita cola: as fantasias ficam prontas! O Chizo recusa-se a usar chapéu, mas aceita um laço.',
 
       quemEstaMascaradoTitulo: 'Quem Está Mascarado?',
-      quemEstaMascaradoSubtitulo: 'O Fygmo e o Fygmo2 vieram de máscara',
+      quemEstaMascaradoSubtitulo: 'O Fygmo e o Fygmo II vieram de máscara',
       quemEstaMascaradoJaFeitaHoje: 'Hoje já descobriste os mascarados. Amanhã há mais disfarces.',
       quemEstaMascaradoCenas: [
         { situacao: 'Um mascarado de capa comprida rodeia a mesa dos doces, com umas orelhas cor-de-rosa a espreitar do capuz e um passo muito pouco convincente.', opcoes: ['Cumprimentá-lo com cerimónia e oferecer-lhe um lugar à mesa', 'Reconhecer o Fygmo pelas orelhas e mandar largar os doces', 'Elogiar o disfarce e deixá-lo servir-se, que é Carnaval'], correta: 1 },
-        { situacao: 'Dois mascarados tentam entrar no corso fingindo ser um só: o Fygmo às cavalitas do Fygmo2, com um sobretudo comprido por cima.', opcoes: ['Aplaudir o cavalheiro de duas cabeças, tão misterioso', 'Fechar o portão do corso para ninguém mais entrar', 'Contar as orelhas e convidá-los a desfilar à vista'], correta: 2 },
-        { situacao: 'O Fygmo2 pôs uma máscara de gato e mia baixinho atrás do YoshiCat, a ver se lhe leva o chapéu.', opcoes: ['Virar-te de repente e dizer «Boa noite, Fygmo2»', 'Miar de volta e deixar-lhe o chapéu, por cortesia', 'Fugir, que um gato desconhecido é mau sinal'], correta: 0 }
+        { situacao: 'Dois mascarados tentam entrar no corso fingindo ser um só: o Fygmo às cavalitas do Fygmo II, com um sobretudo comprido por cima.', opcoes: ['Aplaudir o cavalheiro de duas cabeças, tão misterioso', 'Fechar o portão do corso para ninguém mais entrar', 'Contar as orelhas e convidá-los a desfilar à vista'], correta: 2 },
+        { situacao: 'O Fygmo II pôs uma máscara de gato e mia baixinho atrás do YoshiCat, a ver se lhe leva o chapéu.', opcoes: ['Virar-te de repente: «Boa noite, Fygmo II»', 'Miar de volta e deixar-lhe o chapéu, por cortesia', 'Fugir, que um gato desconhecido é mau sinal'], correta: 0 }
       ],
-      quemEstaMascaradoVitoria: 'Descobertos. O Fygmo e o Fygmo2 tiram a máscara, riem-se e prometem comportar-se até à Quarta-feira de Cinzas. O corso segue, agora com todos à vista.',
+      quemEstaMascaradoVitoria: 'Descobertos. O Fygmo e o Fygmo II tiram a máscara, riem-se e prometem comportar-se até à Quarta-feira de Cinzas. O corso segue, agora com todos à vista.',
       quemEstaMascaradoDerrota: 'Desta vez o mascarado safou-se a assobiar, de capa ao vento. Ninguém leva a mal: é Carnaval, e nada se perdeu.'
     },
     en: {
@@ -644,14 +644,14 @@ const FESTAS_STRINGS = {
       fantasiasSucesso: 'Masks, feathers, sequins and plenty of glue: the costumes are ready! Chizo refuses to wear a hat, but accepts a bow.',
 
       quemEstaMascaradoTitulo: 'Who Is Masked?',
-      quemEstaMascaradoSubtitulo: 'Fygmo and Fygmo2 have come in masks',
+      quemEstaMascaradoSubtitulo: 'Fygmo and Fygmo II have come in masks',
       quemEstaMascaradoJaFeitaHoje: "Today you have already unmasked them. Tomorrow brings more disguises.",
       quemEstaMascaradoCenas: [
         { situacao: 'A masked figure in a long cape circles the sweets table, pink ears poking out of the hood and a very unconvincing stride.', opcoes: ['Greet them with ceremony and offer them a seat at the table', 'Recognise Fygmo by the ears and tell him to drop the sweets', 'Praise the costume and let them help themselves, it is Carnival'], correta: 1 },
-        { situacao: 'Two masked figures try to join the corso pretending to be one: Fygmo riding on the back of Fygmo2, with a long overcoat over both.', opcoes: ['Applaud the two-headed gentleman, so very mysterious', 'Shut the corso gate so that nobody else gets in', 'Count the ears and invite them to parade openly'], correta: 2 },
-        { situacao: 'Fygmo2 has put on a cat mask and meows softly behind YoshiCat, hoping to lift his hat.', opcoes: ['Turn around and say "Good evening, Fygmo2"', 'Meow back and let him keep the hat, out of courtesy', 'Run away: an unknown cat is a very bad omen'], correta: 0 }
+        { situacao: 'Two masked figures try to join the corso pretending to be one: Fygmo riding on the back of Fygmo II, with a long overcoat over both.', opcoes: ['Applaud the two-headed gentleman, so very mysterious', 'Shut the corso gate so that nobody else gets in', 'Count the ears and invite them to parade openly'], correta: 2 },
+        { situacao: 'Fygmo II has put on a cat mask and meows softly behind YoshiCat, hoping to lift his hat.', opcoes: ['Turn around and say "Good evening, Fygmo II"', 'Meow back and let him keep the hat, out of courtesy', 'Run away: an unknown cat is a very bad omen'], correta: 0 }
       ],
-      quemEstaMascaradoVitoria: 'Found out. Fygmo and Fygmo2 take off their masks, laugh and promise to behave until Ash Wednesday. The corso carries on, now with everyone in plain sight.',
+      quemEstaMascaradoVitoria: 'Found out. Fygmo and Fygmo II take off their masks, laugh and promise to behave until Ash Wednesday. The corso carries on, now with everyone in plain sight.',
       quemEstaMascaradoDerrota: 'This time the masked one got away whistling, cape in the wind. Nobody minds: it is Carnival, and nothing was lost.'
     },
     es: {
@@ -675,14 +675,14 @@ const FESTAS_STRINGS = {
       fantasiasSucesso: 'Máscaras, plumas, lentejuelas y mucho pegamento: ¡los disfraces están listos! El Chizo se niega a ponerse sombrero, pero acepta un lazo.',
 
       quemEstaMascaradoTitulo: '¿Quién Va Enmascarado?',
-      quemEstaMascaradoSubtitulo: 'El Fygmo y el Fygmo2 han venido con máscara',
+      quemEstaMascaradoSubtitulo: 'El Fygmo y el Fygmo II han venido con máscara',
       quemEstaMascaradoJaFeitaHoje: 'Hoy ya has descubierto a los enmascarados. Mañana habrá más disfraces.',
       quemEstaMascaradoCenas: [
         { situacao: 'Un enmascarado de capa larga ronda la mesa de los dulces, con unas orejas rosadas asomando por la capucha y un paso muy poco convincente.', opcoes: ['Saludarlo con mucha ceremonia y ofrecerle un sitio en la mesa', 'Reconocer al Fygmo por las orejas y mandarle soltar los dulces', 'Elogiar el disfraz y dejar que se sirva, que estamos en Carnaval'], correta: 1 },
-        { situacao: 'Dos enmascarados intentan entrar en el corso haciéndose pasar por uno solo: el Fygmo a caballito del Fygmo2, con un abrigo largo por encima.', opcoes: ['Aplaudir al distinguido caballero de dos cabezas, tan misterioso', 'Cerrar el portón del corso para que nadie más pueda entrar', 'Contar las orejas e invitarlos a desfilar a la vista'], correta: 2 },
-        { situacao: 'El Fygmo2 se ha puesto una máscara de gato y maúlla bajito detrás del YoshiCat, a ver si le quita el sombrero.', opcoes: ['Girarte de golpe y decir «Buenas noches, Fygmo2»', 'Maullar de vuelta y dejarle el sombrero, por cortesía', 'Huir, que un gato desconocido es mala señal'], correta: 0 }
+        { situacao: 'Dos enmascarados intentan entrar en el corso haciéndose pasar por uno solo: el Fygmo a caballito del Fygmo II, con un abrigo largo por encima.', opcoes: ['Aplaudir al distinguido caballero de dos cabezas, tan misterioso', 'Cerrar el portón del corso para que nadie más pueda entrar', 'Contar las orejas e invitarlos a desfilar a la vista'], correta: 2 },
+        { situacao: 'El Fygmo II se ha puesto una máscara de gato y maúlla bajito detrás del YoshiCat, a ver si le quita el sombrero.', opcoes: ['Girarte de golpe y decir «Buenas noches, Fygmo II»', 'Maullar de vuelta y dejarle el sombrero, por cortesía', 'Huir, que un gato desconocido es mala señal'], correta: 0 }
       ],
-      quemEstaMascaradoVitoria: 'Descubiertos. El Fygmo y el Fygmo2 se quitan la máscara, se ríen y prometen portarse bien hasta el Miércoles de Ceniza. El corso sigue, ahora con todos a la vista.',
+      quemEstaMascaradoVitoria: 'Descubiertos. El Fygmo y el Fygmo II se quitan la máscara, se ríen y prometen portarse bien hasta el Miércoles de Ceniza. El corso sigue, ahora con todos a la vista.',
       quemEstaMascaradoDerrota: 'Esta vez el enmascarado se escapó silbando, con la capa al viento. Nadie se lo toma a mal: es Carnaval, y no se perdió nada.'
     }
   },
@@ -705,17 +705,17 @@ const FESTAS_STRINGS = {
       amendoasTitulo: 'As Amêndoas',
       amendoasJaFeitaHoje: 'Já tens amêndoas para hoje. As de amanhã ficam para amanhã.',
       amendoasFalta: 'Ainda faltam Gotas para as amêndoas. Junta mais e volta cá.',
-      amendoasSucesso: 'As amêndoas ficam prontas, doces e estaladiças, em saquinhos atados com fita. O YoshiCat prova uma e o Fygmo2 jura que não viu nada.',
+      amendoasSucesso: 'As amêndoas ficam prontas, doces e estaladiças, em saquinhos atados com fita. O YoshiCat prova uma e o Fygmo II jura que não viu nada.',
 
       ovosTitulo: 'Os Ovos',
       ovosSubtitulo: 'Onde está o ovo?',
       ovosJaFeitaHoje: 'Hoje já encontraste o ovo. Amanhã há outro esconderijo.',
       ovosCenas: [
         { situacao: 'O YoshiCat escondeu o ovo onde o focinho do Fygmo não chega: bem no alto, fora do alcance de qualquer porco com ambições.', opcoes: ['No cesto do pátio, escondido debaixo de um pano', 'No alto da prateleira, atrás dos tachos de cobre', 'Debaixo da mesa, que ninguém procura onde se come'], correta: 1 },
-        { situacao: 'O Fygmo2 finge que dorme e não sabe de nada. Mas o YoshiCat viu o ovo num sítio macio e quente, onde as galinhas têm autoridade.', opcoes: ['No balde da água, onde ninguém olharia', 'No muro de pedra do pátio, ao sol da manhã', 'Na palha do galinheiro, ainda morna'], correta: 2 },
+        { situacao: 'O Fygmo II finge que dorme e não sabe de nada. Mas o YoshiCat viu o ovo num sítio macio e quente, onde as galinhas têm autoridade.', opcoes: ['No balde da água, onde ninguém olharia', 'No muro de pedra do pátio, ao sol da manhã', 'Na palha do galinheiro, ainda morna'], correta: 2 },
         { situacao: 'O Chizo não levanta o focinho do chão e abana a cauda: o ovo está onde o ar cheira a folar acabado de sair do forno.', opcoes: ['Junto ao forno, onde o folar ainda fumega', 'Junto ao poço, onde só cheira a musgo', 'Junto à horta, onde cheira a terra e couves'], correta: 0 }
       ],
-      ovosVitoria: 'Ovo encontrado. O Fygmo e o Fygmo2 suspiram, juram que só passavam por ali e o ovo volta para a mesa, ao lado do folar.',
+      ovosVitoria: 'Ovo encontrado. O Fygmo e o Fygmo II suspiram, juram que só passavam por ali e o ovo volta para a mesa, ao lado do folar.',
       ovosDerrota: 'Desta vez enganaste-te e o ovo mudou de dono. Nada se perdeu: amanhã há outro esconderijo.'
     },
     en: {
@@ -736,17 +736,17 @@ const FESTAS_STRINGS = {
       amendoasTitulo: 'The Almonds',
       amendoasJaFeitaHoje: 'You already have almonds for today. Tomorrow\'s will wait until tomorrow.',
       amendoasFalta: 'You still need more Drops for the almonds. Gather some more and come back.',
-      amendoasSucesso: 'The almonds are ready, sweet and crunchy, in little bags tied with ribbon. YoshiCat tries one and Fygmo2 swears he saw nothing.',
+      amendoasSucesso: 'The almonds are ready, sweet and crunchy, in little bags tied with ribbon. YoshiCat tries one and Fygmo II swears he saw nothing.',
 
       ovosTitulo: 'The Eggs',
       ovosSubtitulo: 'Where is the egg?',
       ovosJaFeitaHoje: 'Today you have already found the egg. Tomorrow there is another hiding place.',
       ovosCenas: [
         { situacao: 'YoshiCat hid the egg where Fygmo\'s snout cannot reach: way up high, out of range of any pig with ambitions.', opcoes: ['In the patio basket, hidden under a cloth', 'On the high shelf, behind the copper pots', 'Under the table, where nobody looks while eating'], correta: 1 },
-        { situacao: 'Fygmo2 pretends to sleep and knows nothing. But YoshiCat saw the egg somewhere soft and warm, where the hens are in charge.', opcoes: ['In the water bucket, where nobody would look', 'On the stone wall, in the morning sun', 'In the straw of the henhouse, still warm'], correta: 2 },
+        { situacao: 'Fygmo II pretends to sleep and knows nothing. But YoshiCat saw the egg somewhere soft and warm, where the hens are in charge.', opcoes: ['In the water bucket, where nobody would look', 'On the stone wall, in the morning sun', 'In the straw of the henhouse, still warm'], correta: 2 },
         { situacao: 'Chizo will not lift his nose from the ground and wags his tail: the egg is where the air smells of folar fresh from the oven.', opcoes: ['Next to the oven, where the folar still steams', 'Next to the well, where it only smells of moss', 'Next to the garden, where it smells of soil and cabbages'], correta: 0 }
       ],
-      ovosVitoria: 'Egg found. Fygmo and Fygmo2 sigh, swear they were only passing by, and the egg goes back on the table, next to the folar.',
+      ovosVitoria: 'Egg found. Fygmo and Fygmo II sigh, swear they were only passing by, and the egg goes back on the table, next to the folar.',
       ovosDerrota: 'This time you got it wrong and the egg changed owners. Nothing was lost: tomorrow there is another hiding place.'
     },
     es: {
@@ -767,17 +767,17 @@ const FESTAS_STRINGS = {
       amendoasTitulo: 'Las Almendras',
       amendoasJaFeitaHoje: 'Ya tienes almendras para hoy. Las de mañana, para mañana.',
       amendoasFalta: 'Todavía faltan Gotas para las almendras. Junta más y vuelve.',
-      amendoasSucesso: 'Las almendras están listas, dulces y crujientes, en bolsitas atadas con lazo. El YoshiCat prueba una y el Fygmo2 jura que no vio nada.',
+      amendoasSucesso: 'Las almendras están listas, dulces y crujientes, en bolsitas atadas con lazo. El YoshiCat prueba una y el Fygmo II jura que no vio nada.',
 
       ovosTitulo: 'Los Huevos',
       ovosSubtitulo: '¿Dónde está el huevo?',
       ovosJaFeitaHoje: 'Hoy ya has encontrado el huevo. Mañana hay otro escondite.',
       ovosCenas: [
         { situacao: 'El YoshiCat escondió el huevo donde el hocico del Fygmo no llega: bien en lo alto, fuera del alcance de cualquier cerdo con ambiciones.', opcoes: ['En el cesto del patio, escondido bajo un paño', 'En lo alto del estante, tras las ollas de cobre', 'Debajo de la mesa, donde nadie busca mientras come'], correta: 1 },
-        { situacao: 'El Fygmo2 finge dormir y no sabe nada. Pero el YoshiCat vio el huevo en un sitio blando y caliente, donde las gallinas mandan.', opcoes: ['En el cubo del agua, donde nadie miraría', 'En el muro del patio, al sol de la mañana', 'En la paja del gallinero, todavía tibia'], correta: 2 },
+        { situacao: 'El Fygmo II finge dormir y no sabe nada. Pero el YoshiCat vio el huevo en un sitio blando y caliente, donde las gallinas mandan.', opcoes: ['En el cubo del agua, donde nadie miraría', 'En el muro del patio, al sol de la mañana', 'En la paja del gallinero, todavía tibia'], correta: 2 },
         { situacao: 'El Chizo no levanta el hocico del suelo y mueve la cola: el huevo está donde el aire huele a folar recién salido del horno.', opcoes: ['Junto al horno, donde el folar aún humea', 'Junto al pozo, donde solo huele a musgo', 'Junto al huerto, donde huele a tierra y a coles'], correta: 0 }
       ],
-      ovosVitoria: 'Huevo encontrado. El Fygmo y el Fygmo2 suspiran, juran que solo pasaban por allí y el huevo vuelve a la mesa, junto al folar.',
+      ovosVitoria: 'Huevo encontrado. El Fygmo y el Fygmo II suspiran, juran que solo pasaban por allí y el huevo vuelve a la mesa, junto al folar.',
       ovosDerrota: 'Esta vez te has equivocado y el huevo cambió de dueño. No se perdió nada: mañana hay otro escondite.'
     }
   }

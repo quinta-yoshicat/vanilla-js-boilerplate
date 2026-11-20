@@ -43,11 +43,11 @@ const CADERNO_PAGINAS = [
       corpo: 'Racimos robados: 3. Racimos devueltos por error: 0. Veces que el perro nos vio: todas. Conclusión: el plan va muy bien.' } },
   { id: 'adega_1', alvo: 'adega', raridade: 'comum', autor: 'Fygmo',
     pt: { titulo: 'Plano da Adega',
-      corpo: '1. Trocar os barris de sítio: o gato conta-os, mas não os conhece. 2. Ficar com o do cheiro mais forte. 3. Dizer que é inspeção. 4. Se perguntarem, a ideia foi do Fygmo2.' },
+      corpo: '1. Trocar os barris de sítio: o gato conta-os, mas não os conhece. 2. Ficar com o do cheiro mais forte. 3. Dizer que é inspeção. 4. Se perguntarem, a ideia foi do Fygmo II.' },
     en: { titulo: 'Winery Plan',
-      corpo: '1. Move the barrels around: the cat counts them but doesn\'t know them. 2. Keep the one with the strongest smell. 3. Say it\'s an inspection. 4. If anyone asks, it was Fygmo2\'s idea.' },
+      corpo: '1. Move the barrels around: the cat counts them but doesn\'t know them. 2. Keep the one with the strongest smell. 3. Say it\'s an inspection. 4. If anyone asks, it was Fygmo II\'s idea.' },
     es: { titulo: 'Plan de la Bodega',
-      corpo: '1. Cambiar los barriles de sitio: el gato los cuenta, pero no los conoce. 2. Quedarse con el del olor más fuerte. 3. Decir que es una inspección. 4. Si preguntan, la idea fue de Fygmo2.' } },
+      corpo: '1. Cambiar los barriles de sitio: el gato los cuenta, pero no los conoce. 2. Quedarse con el del olor más fuerte. 3. Decir que es una inspección. 4. Si preguntan, la idea fue de Fygmo II.' } },
   { id: 'adega_2', alvo: 'adega', raridade: 'comum', autor: 'Fygmo',
     pt: { titulo: 'Nota sobre a aguardente',
       corpo: 'A aguardente é a alma do Moscatel. A alma, repara. Não é do gato nem do cão. Ficou ali sem dono. Alguém tem de tomar conta dela.' },
@@ -248,7 +248,7 @@ function renderCaderno() {
     const texto = p[currentLang] || p.pt;
     return '<div class="encyclopedia-card">' +
       '<h3>' + cadernoEscapar(texto.titulo) + '</h3>' +
-      '<p><em>' + t('caderno.autorLabel') + ' ' + cadernoEscapar(p.autor) + '</em></p>' +
+      '<p><em>' + t('caderno.autorLabel') + ' ' + cadernoEscapar(typeof nomeVisivelPersonagem === 'function' ? nomeVisivelPersonagem(p.autor) : p.autor) + '</em></p>' +
       '<p>' + cadernoEscapar(texto.corpo) + '</p>' +
     '</div>';
   };

@@ -32,9 +32,9 @@ const PROTEGER_STRINGS = {
     escutarEncostar: 'Encostar o ouvido',
     escutarEntrar: 'Entrar já',
     escutarFalas: [
-      'Wuf. Está lá alguém. Ouço um monóculo a embaciar e um focinho a resfolegar: é o Fygmo2, de certeza.',
-      'Shh. Do outro lado da porta, o Fygmo2 ensaia baixinho uma voz de visita: «boa noite, só passava por aqui». Não convence nem um cão.',
-      'Passinhos de quem pensa que ninguém ouve. O Fygmo2 devia saber que eu ouço tudo, até o monóculo a ser limpo à manga.'
+      'Wuf. Está lá alguém. Ouço um monóculo a embaciar e um focinho a resfolegar: é o Fygmo II, de certeza.',
+      'Shh. Do outro lado da porta, o Fygmo II ensaia baixinho uma voz de visita: «boa noite, só passava por aqui». Não convence nem um cão.',
+      'Passinhos de quem pensa que ninguém ouve. O Fygmo II devia saber que eu ouço tudo, até o monóculo a ser limpo à manga.'
     ],
     chizoBotao: 'Acordar o Chizo!',
     protegida: 'A Quinta está protegida!',
@@ -42,25 +42,25 @@ const PROTEGER_STRINGS = {
     jogarNovamente: 'Jogar Novamente',
     tentarOutraVez: 'Tentar Outra Vez',
     fechadura: [
-      { situacao: 'O Fygmo2 tira o monóculo e mede a fechadura da Reserva Especial milimetricamente, à procura do ponto fraco.', opcoes: ['Trocar a fechadura por um cadeado reforçado', 'Deixar uma luz acesa e esperar que ele desista', 'Gritar "quem está aí?" às escuras'], correta: 0 },
-      { situacao: 'Um barulho de metal ecoa na cave — o Fygmo2 está a testar ganzuas diferentes na fechadura.', opcoes: ['Ir dormir, deve ser só o vento', 'Colocar uma tranca extra na porta', 'Abrir a porta para ver quem é'], correta: 1 },
-      { situacao: 'O Fygmo, escondido nas escadas da cave, aponta o binóculo e faz sinal ao Fygmo2 para avançar.', opcoes: ['Acender as luzes da adega de repente', 'Esperar que ele abra a porta para o apanhar com as mãos na massa', 'Descer devagar para os apanhar de surpresa'], correta: 0 },
-      { situacao: 'De monóculo posto, o Fygmo2 encosta o ouvido à fechadura da Reserva Especial para ouvir as engrenagens.', opcoes: ['Distraí-lo com um balde a cair ruidosamente', 'Prender a porta com uma cadeira, por dentro', 'Ignorar: com tantas trancas, ele não entra'], correta: 0 }
+      { situacao: 'O Fygmo II tira o monóculo e mede a fechadura da Reserva Especial milimetricamente, à procura do ponto fraco.', opcoes: ['Trocar a fechadura por um cadeado reforçado', 'Deixar uma luz acesa e esperar que ele desista', 'Gritar "quem está aí?" às escuras'], correta: 0 },
+      { situacao: 'Um barulho de metal ecoa na cave — o Fygmo II está a testar ganzuas diferentes na fechadura.', opcoes: ['Ir dormir, deve ser só o vento', 'Colocar uma tranca extra na porta', 'Abrir a porta para ver quem é'], correta: 1 },
+      { situacao: 'O Fygmo, escondido nas escadas da cave, aponta o binóculo e faz sinal ao Fygmo II para avançar.', opcoes: ['Acender as luzes da adega de repente', 'Esperar que ele abra a porta para o apanhar com as mãos na massa', 'Descer devagar para os apanhar de surpresa'], correta: 0 },
+      { situacao: 'De monóculo posto, o Fygmo II encosta o ouvido à fechadura da Reserva Especial para ouvir as engrenagens.', opcoes: ['Distraí-lo com um balde a cair ruidosamente', 'Prender a porta com uma cadeira, por dentro', 'Ignorar: com tantas trancas, ele não entra'], correta: 0 }
     ],
     // Sem a Cave de Reserva aberta (ver caveReservaAberta() em js/garrafa.js) a Fechadura fala da adega.
     fechaduraSubtituloSemCave: 'A Fechadura da Adega',
     fechaduraSituacoesSemCave: [
-      'O Fygmo2 tira o monóculo e mede a fechadura da adega, milimetricamente, à procura do ponto fraco.',
-      'Um barulho de metal ecoa na adega — o Fygmo2 está a testar ganzuas diferentes na fechadura.',
-      'O Fygmo, escondido atrás dos barris da adega, aponta o binóculo e faz sinal ao Fygmo2 para avançar.',
-      'De monóculo posto, o Fygmo2 encosta o ouvido à fechadura da adega para ouvir as engrenagens.'
+      'O Fygmo II tira o monóculo e mede a fechadura da adega, milimetricamente, à procura do ponto fraco.',
+      'Um barulho de metal ecoa na adega — o Fygmo II está a testar ganzuas diferentes na fechadura.',
+      'O Fygmo, escondido atrás dos barris da adega, aponta o binóculo e faz sinal ao Fygmo II para avançar.',
+      'De monóculo posto, o Fygmo II encosta o ouvido à fechadura da adega para ouvir as engrenagens.'
     ],
-    fechaduraVitoriaSemCave: 'O Fygmo2 guarda o monóculo com a dignidade possível e retira-se pela vinha. A adega fica a salvo.',
-    fechaduraVitoria: 'O Fygmo2 guarda o monóculo com a dignidade possível e retira-se pela vinha. A Reserva Especial fica a salvo.',
-    fechaduraDerrota: 'Tarde demais… o Fygmo2 abre a fechadura, tropeça num barril e foge sem levar nada.',
+    fechaduraVitoriaSemCave: 'O Fygmo II guarda o monóculo com a dignidade possível e retira-se pela vinha. A adega fica a salvo.',
+    fechaduraVitoria: 'O Fygmo II guarda o monóculo com a dignidade possível e retira-se pela vinha. A Reserva Especial fica a salvo.',
+    fechaduraDerrota: 'Tarde demais… o Fygmo II abre a fechadura, tropeça num barril e foge sem levar nada.',
     fechaduraReservaFygmo: 'Hmpf… a Reserva safou-se. Mas já lhe sentimos o cheiro!',
     fechaduraReservaFygmo2: 'Ha! Por um focinho… a Reserva Especial ainda lá está. Voltamos!',
-    fechaduraDerrotaGarrafa: 'O Fygmo2 foge de patas vazias. A tua Reserva {cor} continua a salvo na Cave.',
+    fechaduraDerrotaGarrafa: 'O Fygmo II foge de patas vazias. A tua Reserva {cor} continua a salvo na Cave.',
     fechaduraReservaFygmoCor: 'Hmpf… a tua Reserva {cor} safou-se. Mas já lhe sentimos o cheiro!',
     fechaduraReservaFygmo2Cor: 'Ha! Uma Reserva {cor} destas não se desperdiça. Da próxima é nossa!',
     fechaduraReservaFygmoCobre: 'Hmpf… a Reserva Cobre safou-se. A mais escura da Cave… ainda vamos a ela!',
@@ -68,12 +68,12 @@ const PROTEGER_STRINGS = {
     disfarceVitoria: function (porco) { return 'Debaixo das folhas estava o ' + porco + ', apanhado em flagrante a tentar fugir com a colheita!'; },
     disfarceDerrota: function (porco) { return 'Era só uva a sério… O ' + porco + ' foge a rir, de cesto vazio e orgulho cheio.'; },
     chizoTurnos: [
-      'O Fygmo e o Fygmo2 aproximam-se devagar da adega, escondidos entre as sombras...',
-      'O Fygmo faz sinal ao Fygmo2 para avançarem mais um pouco...',
+      'O Fygmo e o Fygmo II aproximam-se devagar da adega, escondidos entre as sombras...',
+      'O Fygmo faz sinal ao Fygmo II para avançarem mais um pouco...',
       'Já se ouvem os passos deles junto à porta da adega...',
       'O Fygmo já está a abrir a porta da adega!'
     ],
-    chizoVitoria: 'O Chizo acorda a tempo e ladra! O Fygmo e o Fygmo2 fogem a correr, de mãos a abanar.',
+    chizoVitoria: 'O Chizo acorda a tempo e ladra! O Fygmo e o Fygmo II fogem a correr, de mãos a abanar.',
     chizoCedo: 'Falso alarme: o Chizo volta a dormir. Os porcos riem-se, mas não levam nada.',
     chizoTarde: 'Tarde demais… os porcos já se foram. Ficaram só as pegadas.',
     cadernoPagina: 'Página nova no Caderno (Perfil).',
@@ -90,7 +90,7 @@ const PROTEGER_STRINGS = {
         'O barril certo mudou de sítio outra vez. Os porcos fingem inspeção e saem de mãos vazias.'
       ],
       cave: [
-        'A fechadura aguentou. O monóculo embaciou, e o Fygmo2 retirou-se com dignidade.',
+        'A fechadura aguentou. O monóculo embaciou, e o Fygmo II retirou-se com dignidade.',
         'Três trancas, um palito partido, zero garrafas. A Reserva dorme descansada.'
       ],
       nevoeiro: [
@@ -123,9 +123,9 @@ const PROTEGER_STRINGS = {
     escutarEncostar: 'Press my ear to the door',
     escutarEntrar: 'Go in now',
     escutarFalas: [
-      'Woof. Somebody\'s there. I can hear a monocle fogging up and a snout huffing: it\'s Fygmo2, for sure.',
-      'Shh. On the other side of the door, Fygmo2 is softly rehearsing a visitor\'s voice: «good evening, just passing by». Wouldn\'t fool a dog.',
-      'Tiny steps from someone who thinks nobody can hear. Fygmo2 should know I hear everything, even the monocle being polished on a sleeve.'
+      'Woof. Somebody\'s there. I can hear a monocle fogging up and a snout huffing: it\'s Fygmo II, for sure.',
+      'Shh. On the other side of the door, Fygmo II is softly rehearsing a visitor\'s voice: «good evening, just passing by». Wouldn\'t fool a dog.',
+      'Tiny steps from someone who thinks nobody can hear. Fygmo II should know I hear everything, even the monocle being polished on a sleeve.'
     ],
     chizoBotao: 'Wake Chizo!',
     protegida: 'The Quinta is protected!',
@@ -133,25 +133,25 @@ const PROTEGER_STRINGS = {
     jogarNovamente: 'Play Again',
     tentarOutraVez: 'Try Again',
     fechadura: [
-      { situacao: 'Fygmo2 pulls out his monocle and measures the Special Reserve lock millimeter by millimeter, looking for a weak spot.', opcoes: ['Swap the lock for a reinforced padlock', 'Leave a light on and wait for him to give up', 'Shout "who\'s there?" into the dark'], correta: 0 },
-      { situacao: 'A metallic clatter echoes through the cellar — Fygmo2 is trying different picks on the lock.', opcoes: ['Go back to sleep, it must be the wind', 'Add an extra bolt to the door', 'Open the door to see who it is'], correta: 1 },
-      { situacao: 'Hidden on the cellar stairs, Fygmo raises his binoculars and signals Fygmo2 to move forward.', opcoes: ['Suddenly turn on the winery lights', 'Wait for him to open the door and catch him red-handed', 'Creep down slowly to take them by surprise'], correta: 0 },
-      { situacao: 'Monocle in place, Fygmo2 presses his ear against the Special Reserve lock to listen to the gears.', opcoes: ['Distract him with a noisy falling bucket', 'Wedge the door shut with a chair, from the inside', "Ignore it: with that many bolts, he won't get in"], correta: 0 }
+      { situacao: 'Fygmo II pulls out his monocle and measures the Special Reserve lock millimeter by millimeter, looking for a weak spot.', opcoes: ['Swap the lock for a reinforced padlock', 'Leave a light on and wait for him to give up', 'Shout "who\'s there?" into the dark'], correta: 0 },
+      { situacao: 'A metallic clatter echoes through the cellar — Fygmo II is trying different picks on the lock.', opcoes: ['Go back to sleep, it must be the wind', 'Add an extra bolt to the door', 'Open the door to see who it is'], correta: 1 },
+      { situacao: 'Hidden on the cellar stairs, Fygmo raises his binoculars and signals Fygmo II to move forward.', opcoes: ['Suddenly turn on the winery lights', 'Wait for him to open the door and catch him red-handed', 'Creep down slowly to take them by surprise'], correta: 0 },
+      { situacao: 'Monocle in place, Fygmo II presses his ear against the Special Reserve lock to listen to the gears.', opcoes: ['Distract him with a noisy falling bucket', 'Wedge the door shut with a chair, from the inside', "Ignore it: with that many bolts, he won't get in"], correta: 0 }
     ],
     // Sem a Cave de Reserva aberta (ver caveReservaAberta() em js/garrafa.js) a Fechadura fala da adega.
     fechaduraSubtituloSemCave: 'The Winery Lock',
     fechaduraSituacoesSemCave: [
-      'Fygmo2 pulls out his monocle and measures the winery lock millimeter by millimeter, looking for a weak spot.',
-      'A metallic clatter echoes through the winery — Fygmo2 is trying different picks on the lock.',
-      'Hidden behind the winery barrels, Fygmo raises his binoculars and signals Fygmo2 to move forward.',
-      'Monocle in place, Fygmo2 presses his ear against the winery lock to listen to the gears.'
+      'Fygmo II pulls out his monocle and measures the winery lock millimeter by millimeter, looking for a weak spot.',
+      'A metallic clatter echoes through the winery — Fygmo II is trying different picks on the lock.',
+      'Hidden behind the winery barrels, Fygmo raises his binoculars and signals Fygmo II to move forward.',
+      'Monocle in place, Fygmo II presses his ear against the winery lock to listen to the gears.'
     ],
-    fechaduraVitoriaSemCave: 'Fygmo2 pockets his monocle with what dignity he can muster and withdraws through the vineyard. The winery stays safe.',
-    fechaduraVitoria: 'Fygmo2 pockets his monocle with what dignity he can muster and withdraws through the vineyard. The Special Reserve stays safe.',
-    fechaduraDerrota: 'Too late… Fygmo2 opens the lock, trips over a barrel and runs off empty-handed.',
+    fechaduraVitoriaSemCave: 'Fygmo II pockets his monocle with what dignity he can muster and withdraws through the vineyard. The winery stays safe.',
+    fechaduraVitoria: 'Fygmo II pockets his monocle with what dignity he can muster and withdraws through the vineyard. The Special Reserve stays safe.',
+    fechaduraDerrota: 'Too late… Fygmo II opens the lock, trips over a barrel and runs off empty-handed.',
     fechaduraReservaFygmo: 'Hmpf… the Reserve is safe. But we can smell it already!',
     fechaduraReservaFygmo2: 'Ha! By a nose… the Special Reserve is still there. We\'ll be back!',
-    fechaduraDerrotaGarrafa: 'Fygmo2 flees empty-handed. Your {cor} Reserve is still safe in the Cellar.',
+    fechaduraDerrotaGarrafa: 'Fygmo II flees empty-handed. Your {cor} Reserve is still safe in the Cellar.',
     fechaduraReservaFygmoCor: 'Hmpf… your {cor} Reserve is safe. But we can smell it already!',
     fechaduraReservaFygmo2Cor: 'Ha! That {cor} Reserve won\'t go to waste. Next time it\'s ours!',
     fechaduraReservaFygmoCobre: 'Hmpf… the Copper Reserve is safe. The darkest in the Cellar… we\'ll get to it yet!',
@@ -159,12 +159,12 @@ const PROTEGER_STRINGS = {
     disfarceVitoria: function (porco) { return 'Under the leaves was ' + porco + ', caught red-handed trying to escape with the harvest!'; },
     disfarceDerrota: function (porco) { return 'It was real grapes after all… ' + porco + ' runs off laughing, basket empty and pride full.'; },
     chizoTurnos: [
-      'Fygmo and Fygmo2 creep slowly toward the winery, hidden among the shadows...',
-      'Fygmo signals Fygmo2 to move forward a little more...',
+      'Fygmo and Fygmo II creep slowly toward the winery, hidden among the shadows...',
+      'Fygmo signals Fygmo II to move forward a little more...',
       'You can already hear their footsteps by the winery door...',
       'Fygmo is already opening the winery door!'
     ],
-    chizoVitoria: 'Chizo wakes up just in time and barks! Fygmo and Fygmo2 run off empty-handed.',
+    chizoVitoria: 'Chizo wakes up just in time and barks! Fygmo and Fygmo II run off empty-handed.',
     chizoCedo: 'False alarm: Chizo goes back to sleep. The pigs laugh, but they take nothing.',
     chizoTarde: 'Too late… the pigs are gone. Only the footprints remain.',
     cadernoPagina: 'New page in the Notebook (Profile).',
@@ -181,7 +181,7 @@ const PROTEGER_STRINGS = {
         'The right barrel moved again. The pigs pretend it\'s an inspection and leave empty-handed.'
       ],
       cave: [
-        'The lock held. The monocle fogged up, and Fygmo2 withdrew with dignity.',
+        'The lock held. The monocle fogged up, and Fygmo II withdrew with dignity.',
         'Three locks, one broken toothpick, zero bottles. The Reserve sleeps peacefully.'
       ],
       nevoeiro: [
@@ -214,9 +214,9 @@ const PROTEGER_STRINGS = {
     escutarEncostar: 'Pegar la oreja',
     escutarEntrar: 'Entrar ya',
     escutarFalas: [
-      'Guau. Hay alguien. Oigo un monóculo empañándose y un hocico resoplando: es Fygmo2, seguro.',
-      'Shh. Al otro lado de la puerta, Fygmo2 ensaya bajito una voz de visita: «buenas noches, solo pasaba por aquí». No engaña ni a un perro.',
-      'Pasitos de quien cree que nadie lo oye. Fygmo2 debería saber que lo oigo todo, hasta el monóculo limpiándose en la manga.'
+      'Guau. Hay alguien. Oigo un monóculo empañándose y un hocico resoplando: es Fygmo II, seguro.',
+      'Shh. Al otro lado de la puerta, Fygmo II ensaya bajito una voz de visita: «buenas noches, solo pasaba por aquí». No engaña ni a un perro.',
+      'Pasitos de quien cree que nadie lo oye. Fygmo II debería saber que lo oigo todo, hasta el monóculo limpiándose en la manga.'
     ],
     chizoBotao: '¡Despertar a Chizo!',
     protegida: '¡La Quinta está protegida!',
@@ -224,25 +224,25 @@ const PROTEGER_STRINGS = {
     jogarNovamente: 'Jugar de Nuevo',
     tentarOutraVez: 'Intentar de Nuevo',
     fechadura: [
-      { situacao: 'El Fygmo2 saca el monóculo y mide la cerradura de la Reserva Especial al milímetro, buscando el punto débil.', opcoes: ['Cambiar la cerradura por un candado reforzado', 'Dejar una luz encendida y esperar a que desista', 'Gritar "¿quién anda ahí?" a oscuras'], correta: 0 },
-      { situacao: 'Un ruido metálico resuena en la cava — el Fygmo2 está probando ganzúas distintas en la cerradura.', opcoes: ['Irte a dormir, debe de ser el viento', 'Poner un cerrojo extra en la puerta', 'Abrir la puerta para ver quién es'], correta: 1 },
-      { situacao: 'Escondido en las escaleras de la cava, el Fygmo apunta los prismáticos y hace señas al Fygmo2 para que avance.', opcoes: ['Encender de repente las luces de la bodega', 'Esperar a que abra la puerta para pillarlo con las manos en la masa', 'Bajar despacio para pillarlos por sorpresa'], correta: 0 },
-      { situacao: 'Con el monóculo puesto, el Fygmo2 pega la oreja a la cerradura de la Reserva Especial para escuchar los engranajes.', opcoes: ['Distraerlo con un cubo que cae haciendo ruido', 'Atrancar la puerta con una silla, por dentro', 'Ignorarlo: con tantos cerrojos, no entra'], correta: 0 }
+      { situacao: 'El Fygmo II saca el monóculo y mide la cerradura de la Reserva Especial al milímetro, buscando el punto débil.', opcoes: ['Cambiar la cerradura por un candado reforzado', 'Dejar una luz encendida y esperar a que desista', 'Gritar "¿quién anda ahí?" a oscuras'], correta: 0 },
+      { situacao: 'Un ruido metálico resuena en la cava — el Fygmo II está probando ganzúas distintas en la cerradura.', opcoes: ['Irte a dormir, debe de ser el viento', 'Poner un cerrojo extra en la puerta', 'Abrir la puerta para ver quién es'], correta: 1 },
+      { situacao: 'Escondido en las escaleras de la cava, el Fygmo apunta los prismáticos y hace señas al Fygmo II para que avance.', opcoes: ['Encender de repente las luces de la bodega', 'Esperar a que abra la puerta para pillarlo con las manos en la masa', 'Bajar despacio para pillarlos por sorpresa'], correta: 0 },
+      { situacao: 'Con el monóculo puesto, el Fygmo II pega la oreja a la cerradura de la Reserva Especial para escuchar los engranajes.', opcoes: ['Distraerlo con un cubo que cae haciendo ruido', 'Atrancar la puerta con una silla, por dentro', 'Ignorarlo: con tantos cerrojos, no entra'], correta: 0 }
     ],
     // Sem a Cave de Reserva aberta (ver caveReservaAberta() em js/garrafa.js) a Fechadura fala da adega.
     fechaduraSubtituloSemCave: 'La Cerradura de la Bodega',
     fechaduraSituacoesSemCave: [
-      'El Fygmo2 saca el monóculo y mide la cerradura de la bodega al milímetro, buscando el punto débil.',
-      'Un ruido metálico resuena en la bodega — el Fygmo2 está probando ganzúas distintas en la cerradura.',
-      'Escondido detrás de los barriles de la bodega, el Fygmo apunta los prismáticos y hace señas al Fygmo2 para que avance.',
-      'Con el monóculo puesto, el Fygmo2 pega la oreja a la cerradura de la bodega para escuchar los engranajes.'
+      'El Fygmo II saca el monóculo y mide la cerradura de la bodega al milímetro, buscando el punto débil.',
+      'Un ruido metálico resuena en la bodega — el Fygmo II está probando ganzúas distintas en la cerradura.',
+      'Escondido detrás de los barriles de la bodega, el Fygmo apunta los prismáticos y hace señas al Fygmo II para que avance.',
+      'Con el monóculo puesto, el Fygmo II pega la oreja a la cerradura de la bodega para escuchar los engranajes.'
     ],
-    fechaduraVitoriaSemCave: 'El Fygmo2 guarda el monóculo con la dignidad que le queda y se retira por el viñedo. La bodega queda a salvo.',
-    fechaduraVitoria: 'El Fygmo2 guarda el monóculo con la dignidad que le queda y se retira por el viñedo. La Reserva Especial queda a salvo.',
-    fechaduraDerrota: 'Demasiado tarde… el Fygmo2 abre la cerradura, tropieza con un barril y huye sin llevarse nada.',
+    fechaduraVitoriaSemCave: 'El Fygmo II guarda el monóculo con la dignidad que le queda y se retira por el viñedo. La bodega queda a salvo.',
+    fechaduraVitoria: 'El Fygmo II guarda el monóculo con la dignidad que le queda y se retira por el viñedo. La Reserva Especial queda a salvo.',
+    fechaduraDerrota: 'Demasiado tarde… el Fygmo II abre la cerradura, tropieza con un barril y huye sin llevarse nada.',
     fechaduraReservaFygmo: 'Hmpf… la Reserva se salvó. ¡Pero ya le olemos!',
     fechaduraReservaFygmo2: '¡Ja! Por un hocico… la Reserva Especial sigue ahí. ¡Volveremos!',
-    fechaduraDerrotaGarrafa: 'El Fygmo2 huye con las manos vacías. Tu Reserva {cor} sigue a salvo en la Cava.',
+    fechaduraDerrotaGarrafa: 'El Fygmo II huye con las manos vacías. Tu Reserva {cor} sigue a salvo en la Cava.',
     fechaduraReservaFygmoCor: 'Hmpf… tu Reserva {cor} se salvó. ¡Pero ya le olemos!',
     fechaduraReservaFygmo2Cor: '¡Ja! Una Reserva {cor} así no se desperdicia. ¡A la próxima es nuestra!',
     fechaduraReservaFygmoCobre: 'Hmpf… la Reserva Cobre se salvó. La más oscura de la Cava… ¡aún vamos a por ella!',
@@ -250,12 +250,12 @@ const PROTEGER_STRINGS = {
     disfarceVitoria: function (porco) { return '¡Debajo de las hojas estaba el ' + porco + ', atrapado con las manos en la masa intentando huir con la cosecha!'; },
     disfarceDerrota: function (porco) { return 'Era solo uva de verdad… El ' + porco + ' huye riendo, con el cesto vacío y el orgullo lleno.'; },
     chizoTurnos: [
-      'Fygmo y Fygmo2 se acercan despacio a la bodega, escondidos entre las sombras...',
-      'Fygmo le hace una señal a Fygmo2 para que avance un poco más...',
+      'Fygmo y Fygmo II se acercan despacio a la bodega, escondidos entre las sombras...',
+      'Fygmo le hace una señal a Fygmo II para que avance un poco más...',
       'Ya se oyen sus pasos junto a la puerta de la bodega...',
       '¡Fygmo ya está abriendo la puerta de la bodega!'
     ],
-    chizoVitoria: '¡Chizo se despierta a tiempo y ladra! Fygmo y Fygmo2 huyen corriendo con las manos vacías.',
+    chizoVitoria: '¡Chizo se despierta a tiempo y ladra! Fygmo y Fygmo II huyen corriendo con las manos vacías.',
     chizoCedo: 'Falsa alarma: Chizo vuelve a dormirse. Los cerdos se ríen, pero no se llevan nada.',
     chizoTarde: 'Demasiado tarde… los cerdos ya se han ido. Solo quedan las huellas.',
     cadernoPagina: 'Página nueva en el Cuaderno (Perfil).',
@@ -272,7 +272,7 @@ const PROTEGER_STRINGS = {
         'El barril correcto cambió de sitio otra vez. Los cerdos fingen una inspección y se van con las manos vacías.'
       ],
       cave: [
-        'La cerradura aguantó. El monóculo se empañó, y Fygmo2 se retiró con dignidad.',
+        'La cerradura aguantó. El monóculo se empañó, y Fygmo II se retiró con dignidad.',
         'Tres cerrojos, un palillo roto, cero botellas. La Reserva duerme tranquila.'
       ],
       nevoeiro: [
@@ -455,7 +455,7 @@ function tipoProtegerPelaPista() {
 // Primeira fala da ronda: com isco, o balão nomeia o porco chamado antes da
 // fala de sempre (só texto).
 function protegerFalaInicio(texto) {
-  if (protegerIscoNaRonda) mostrarFalas([pStr().iscoFala(protegerPorcoIsco), texto], 'YoshiCat');
+  if (protegerIscoNaRonda) mostrarFalas([pStr().iscoFala(protegerPorcoIsco && typeof nomeVisivelPersonagem === 'function' ? nomeVisivelPersonagem(protegerPorcoIsco) : protegerPorcoIsco), texto], 'YoshiCat');
   else atualizarDialogo(texto, 'YoshiCat');
 }
 
@@ -795,7 +795,8 @@ function renderDisfarces() {
 function responderDisfarce(i) {
   const S = pStr();
   const venceu = i === currentDisfarceIndex;
-  const mensagem = venceu ? S.disfarceVitoria(currentDisfarcePorco) : S.disfarceDerrota(currentDisfarcePorco);
+  const porcoVisivel = (typeof nomeVisivelPersonagem === 'function') ? nomeVisivelPersonagem(currentDisfarcePorco) : currentDisfarcePorco;
+  const mensagem = venceu ? S.disfarceVitoria(porcoVisivel) : S.disfarceDerrota(porcoVisivel);
   finishProteger(venceu, mensagem);
 }
 

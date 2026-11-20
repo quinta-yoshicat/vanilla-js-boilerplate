@@ -38,14 +38,20 @@ const TEXTOS_FECHADURA = [
   ["'Llamar al Fygmo por su nombre, riendo'", "'Bajar despacio para pillarlos por sorpresa'"],
   ["'Dejarle una nota simpática'", "'Atrancar la puerta con una silla, por dentro'"],
   ["'Ignorarlo y volver a dormir'", "'Ignorarlo: con tantos cerrojos, no entra'"],
-  ["'O Fygmo2 desiste, guarda o monóculo e foge pela vinha fora — a adega está a salvo.'", "'O Fygmo2 guarda o monóculo com a dignidade possível e retira-se pela vinha. A adega fica a salvo.'"],
-  ["'O Fygmo2 desiste, guarda o monóculo e foge pela vinha fora — a Reserva Especial está a salvo.'", "'O Fygmo2 guarda o monóculo com a dignidade possível e retira-se pela vinha. A Reserva Especial fica a salvo.'"],
-  ["'Fygmo2 gives up, puts away his monocle and flees across the vineyard — the winery is safe.'", "'Fygmo2 pockets his monocle with what dignity he can muster and withdraws through the vineyard. The winery stays safe.'"],
-  ["'Fygmo2 gives up, puts away his monocle and flees across the vineyard — the Special Reserve is safe.'", "'Fygmo2 pockets his monocle with what dignity he can muster and withdraws through the vineyard. The Special Reserve stays safe.'"],
-  ["'El Fygmo2 se rinde, guarda el monóculo y huye por el viñedo — la bodega está a salvo.'", "'El Fygmo2 guarda el monóculo con la dignidad que le queda y se retira por el viñedo. La bodega queda a salvo.'"],
-  ["'El Fygmo2 se rinde, guarda el monóculo y huye por el viñedo — la Reserva Especial está a salvo.'", "'El Fygmo2 guarda el monóculo con la dignidad que le queda y se retira por el viñedo. La Reserva Especial queda a salvo.'"]
+  ["'O Fygmo2 desiste, guarda o monóculo e foge pela vinha fora — a adega está a salvo.'", "'O Fygmo II guarda o monóculo com a dignidade possível e retira-se pela vinha. A adega fica a salvo.'"],
+  ["'O Fygmo2 desiste, guarda o monóculo e foge pela vinha fora — a Reserva Especial está a salvo.'", "'O Fygmo II guarda o monóculo com a dignidade possível e retira-se pela vinha. A Reserva Especial fica a salvo.'"],
+  ["'Fygmo2 gives up, puts away his monocle and flees across the vineyard — the winery is safe.'", "'Fygmo II pockets his monocle with what dignity he can muster and withdraws through the vineyard. The winery stays safe.'"],
+  ["'Fygmo2 gives up, puts away his monocle and flees across the vineyard — the Special Reserve is safe.'", "'Fygmo II pockets his monocle with what dignity he can muster and withdraws through the vineyard. The Special Reserve stays safe.'"],
+  ["'El Fygmo2 se rinde, guarda el monóculo y huye por el viñedo — la bodega está a salvo.'", "'El Fygmo II guarda el monóculo con la dignidad que le queda y se retira por el viñedo. La bodega queda a salvo.'"],
+  ["'El Fygmo2 se rinde, guarda el monóculo y huye por el viñedo — la Reserva Especial está a salvo.'", "'El Fygmo II guarda el monóculo con la dignidad que le queda y se retira por el viñedo. La Reserva Especial queda a salvo.'"]
 ];
 if (ANTES) TEXTOS_FECHADURA.forEach(function (par) { ANTES = ANTES.split(par[0]).join(par[1]); });
+// O nome visível passou de «Fygmo2» a «Fygmo II» nos textos (o id interno 'Fygmo2' e os nomes de variáveis ficam): fazer o
+// mesmo no ANTES, fora dos comentários, para a comparação continuar a provar só o passo novo.
+if (ANTES) ANTES = ANTES.split('\n').map(function (linha) {
+  if (/^\s*\/\//.test(linha)) return linha;
+  return linha.replace(/(^|[^A-Za-z0-9_'"])Fygmo2(?![A-Za-z0-9_'":])/g, '$1Fygmo II').replace(/(['"])Fygmo2 /g, '$1Fygmo II ');
+}).join('\n');
 const HOJE = '2026-12-10';
 
 function abrir(src, opcoes) {
@@ -192,7 +198,7 @@ function correrTestes(src) {
     const f = g.ev('PROTEGER_STRINGS.' + l + '.escutarFalas');
     ok(Array.isArray(f) && f.length === 3 && f.every(function (x) { return typeof x === 'string' && x.length > 30; }), l + ': devia ter 3 falas');
     ok(new Set(f).size === 3, l + ': as 3 falas devem ser diferentes');
-    ok(f.every(function (x) { return /Fygmo2/.test(x); }), l + ': cada fala diz que é o Fygmo2');
+    ok(f.every(function (x) { return /Fygmo II/.test(x); }), l + ': cada fala diz que é o Fygmo II');
     ['escutarSubtitulo', 'escutarPergunta', 'escutarEncostar', 'escutarEntrar'].forEach(function (k) {
       const v = g.ev('PROTEGER_STRINGS.' + l + '.' + k); ok(typeof v === 'string' && v.length > 3, l + ': falta ' + k);
     });
@@ -283,12 +289,12 @@ const MUTANTES = [
   ['não segue depois do som', "    protegerEscutarTimers = [];\n    protegerIscoOuRonda();\n  });", "    protegerEscutarTimers = [];\n  });"],
   ['fala escolhida ao acaso', "falas[escutarPortaFalaDoDia(diaLisboaDeHoje(), falas.length)]", "falas[Math.floor(Math.random() * falas.length)]"],
   ['hash sem o dia', "const semente = dia + '#escutar#porta';", "const semente = '#escutar#porta';"],
-  ['fala menciona a despensa', "O Fygmo2 devia saber que eu ouço tudo", "O Fygmo2 devia saber que eu ouço tudo, até na despensa"],
+  ['fala menciona a despensa', "O Fygmo II devia saber que eu ouço tudo", "O Fygmo II devia saber que eu ouço tudo, até na despensa"],
   ['fala diz a opção certa', "Não convence nem um cão.", "Não convence nem um cão; a opção certa é a primeira."],
   ['sair não cancela', "function pararTemporizadorProteger() {\n  protegerEscutarParar();\n", "function pararTemporizadorProteger() {\n"],
   ['passo grava', "  protegerEscutarPendente = false;\n  document.querySelectorAll('.escutar-botao')", "  protegerEscutarPendente = false; saveState(state);\n  document.querySelectorAll('.escutar-botao')"],
   ['fundo errado', "const PROTEGER_FUNDO_ESCUTAR = 'assets/ecras/cave_de_inverno.jpg';", "const PROTEGER_FUNDO_ESCUTAR = 'assets/ecras/adega_juntos.jpg';"],
-  ['fala em falta (ES)', "Pasitos de quien cree que nadie lo oye. Fygmo2 debería saber que lo oigo todo, hasta el monóculo limpiándose en la manga.", ""],
+  ['fala em falta (ES)', "Pasitos de quien cree que nadie lo oye. Fygmo II debería saber que lo oigo todo, hasta el monóculo limpiándose en la manga.", ""],
   ['o isco passa a vir antes e muda', "function protegerIscoOuRonda() {\n  const indiceIsco = protegerIscoPerguntarAgora();\n  if (indiceIsco !== null) { renderIscoPergunta(indiceIsco); return; }\n  iniciarRondaProteger();", "function protegerIscoOuRonda() {\n  const indiceIsco = null;\n  if (indiceIsco !== null) { renderIscoPergunta(indiceIsco); return; }\n  iniciarRondaProteger();"]
 ];
 MUTANTES.forEach(function (m) {

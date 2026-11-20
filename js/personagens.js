@@ -19,6 +19,17 @@ const PERSONAGENS_CARAS_POR_ID = {
   'henrique': 'assets/personagens/henrique.jpg'
 };
 
+// Nome que o jogador vê, quando é diferente do nome interno (a chave de
+// PERSONAGENS_CARAS, que fica como id: falante, autor do Caderno, porco do isco).
+const PERSONAGENS_NOMES_VISIVEIS = {
+  'Fygmo2': 'Fygmo II'
+};
+
+// Nome visível de uma personagem (sem entrada acima = o próprio nome).
+function nomeVisivelPersonagem(nome) {
+  return Object.prototype.hasOwnProperty.call(PERSONAGENS_NOMES_VISIVEIS, nome) ? PERSONAGENS_NOMES_VISIVEIS[nome] : nome;
+}
+
 // Caminho da cara de uma personagem, ou null se não houver.
 function caraDoPersonagem(nome) {
   return Object.prototype.hasOwnProperty.call(PERSONAGENS_CARAS, nome) ? PERSONAGENS_CARAS[nome] : null;
