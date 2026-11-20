@@ -137,12 +137,13 @@ function abrirProteger(opcoes) {
     mostrarFalas: function (m) { reg.falas.push(Array.isArray(m) ? m : [m]); },
     localeAtual: function () { return 'pt-PT'; },
     TEMPO_CONFIG: { vantagens: { rondasExtraProteger: { nevoeiro: 1, trovoada: 1 } } },
-    currentLang: 'pt', setTimeout: function () { return 1; }, clearTimeout: function () {}
+    currentLang: 'pt', setTimeout: function () { return 1; }, clearTimeout: function () {},
+    Image: function () {}
   };
   sb.window = sb;
   const cx = vm.createContext(sb);
   require('./_regras-tempo').injetarRegrasTempo(cx);
-  ['assaltos.js', 'barril.js', 'proteger.js'].forEach(function (f) { vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', f), 'utf8'), cx, { filename: f }); });
+  ['personagens.js', 'assaltos.js', 'barril.js', 'proteger.js'].forEach(function (f) { vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'js', f), 'utf8'), cx, { filename: f }); });
   // O passo "Escutar à porta" (js/proteger.js, ver verificar-escutar-porta.js) vem antes do isco: aqui toca-se logo em "Entrar já".
   vm.runInContext('var __sp = startProteger; startProteger = function (c) { __sp(c); if (protegerEscutarPendente) protegerEscutarEntrar(); };', cx);
   return { cx: cx, reg: reg, ev: function (c) { return vm.runInContext(c, cx); } };
@@ -199,7 +200,7 @@ function abrirProteger(opcoes) {
   g = abrirProteger({ isco: { dia: HOJE, indice: 0, alvo: 'cave' }, ceu: 'trovoada' }); g.ev('startProteger()');
   ok(g.ev('ultimoTipoProteger') === 'fechadura', 'isco da cave devia dar a Fechadura, deu ' + g.ev('ultimoTipoProteger'));
   ok([0, 1, 3].indexOf(g.ev('currentFechaduraIndex')) !== -1, 'a cena devia ser do Fygmo2');
-  ok(g.reg.falas.some(function (f) { return f.length === 2 && /Fygmo2/.test(f[0]); }), 'o balão devia nomear o Fygmo2');
+  ok(g.reg.falas.some(function (f) { return f.length === 2 && /Fygmo II/.test(f[0]) && !/Fygmo2/.test(f[0]); }), 'o balão devia nomear o Fygmo II (nome visível, não o id Fygmo2)');
   // Isco da vinha -> Disfarces com o Fygmo.
   g = abrirProteger({ isco: { dia: HOJE, indice: 0, alvo: 'vinha' } }); g.ev('startProteger()');
   ok(g.ev('ultimoTipoProteger') === 'disfarces' && g.ev('currentDisfarcePorco') === 'Fygmo', 'isco da vinha devia dar Disfarces com o Fygmo');

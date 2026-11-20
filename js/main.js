@@ -275,7 +275,7 @@ function mostrarFalaAtual() {
   }
 
   const falante = (entrada && typeof entrada === 'object' && entrada.falante) ? entrada.falante : dialogoNomeAtual;
-  nomeEl.textContent = falante;
+  nomeEl.textContent = (typeof nomeVisivelPersonagem === 'function') ? nomeVisivelPersonagem(falante) : falante;
   if (typeof mostrarCaraNoBalao === 'function') mostrarCaraNoBalao(falante, (entrada && typeof entrada === 'object') ? entrada.personagem : undefined);
   msgEl.textContent = textoDaFala(entrada);
   bolha.hidden = false;

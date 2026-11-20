@@ -186,7 +186,7 @@ function suite(fontes) {
     ok(dBarril && dBarril.w === 300 && dBarril.h === 300 && fs.statSync(fBarril).size <= 100 * 1024, 'barril_botao.jpg tem 300x300 e pesa no máximo 100 KB');
     ok(fs.existsSync(path.join(RAIZ, 'assets/vinha/barril.jpg')) && fs.statSync(path.join(RAIZ, 'assets/vinha/barril.jpg')).size === 88988, 'assets/vinha/barril.jpg (o fundo do Proteger, outra imagem) continua igual (88988 bytes)');
     ok(fs.existsSync(path.join(RAIZ, 'assets/ecras/barril_simples.jpg')) && !fs.existsSync(path.join(RAIZ, 'barril.jpg')), 'o original barril_simples.jpg está em assets/ecras e o barril.jpg já não está na raiz');
-    ok(g.reg.timers.length === 1 && g.reg.timers[0].ms === 1500, 'a marca dura ~1,5 s (BARRIL_CONFIG.marcaMs)');
+    ok(g.reg.timers.length === 1 && g.reg.timers[0].ms === 3000, 'a marca dura ~3 s (BARRIL_CONFIG.marcaMs)');
     g.ev('barrilEscolher(0)');
     ok(g.resultados().length === 0, 'tocar durante a marca não devia contar');
     // 1.º temporizador: acaba a marca e começa a 1.ª troca

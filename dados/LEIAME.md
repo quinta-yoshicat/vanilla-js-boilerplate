@@ -21,7 +21,7 @@ Forma de cada tipo (os textos são sempre `{ pt, en, es }`):
 - visita: `{ id, personagem, reputacao (1 a 3), condicao (ou null), texto }`
 - nível: `{ id, min, nome }` (o `min` tem de ser maior que o do último nível)
 - história: `{ id, nivel (a partir do 2), falas: [ { texto, foto, som } ] }`
-- capítulo: `{ id, nivel, criterio: [ ... ], titulo, objetivo, conclusao, falante }`
+- capítulo: `{ id, nivel, criterio: [ ... ], titulo, objetivo, conclusao, falante }` (`falante` é o nome interno de `PERSONAGENS_CARAS`, em `js/personagens.js`: `'Fygmo2'` continua a ser o id, mas no balão aparece «Fygmo II»; nos textos escreve-se sempre «Fygmo II»)
 - enciclopédia: `{ id, titulo, texto, nivelMinimo (inteiro a partir do 1), imagem (opcional), meses (opcional), estacao (opcional), manual (opcional, true) }`: entra nas 3 línguas de `ENCYCLOPEDIA_ENTRIES` (`js/explorar.js`)
 - palavra: `{ id, palavra, explicacao: { pt, en, es }, nivel (inteiro a partir do 1, opcional) }`: entra em `PALAVRAS_DA_QUINTA` (`js/palavras.js`), uma vez, com as 3 explicações; a palavra é o termo em português, igual nas 3 línguas, e não pode repetir outra (sem contar acentos nem maiúsculas). O texto entra tal e qual: quem o desenhar passa-o por `escaparHtml`.
 
