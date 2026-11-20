@@ -618,7 +618,7 @@ const FESTAS_STRINGS = {
       quemEstaMascaradoCenas: [
         { situacao: 'Um mascarado de capa comprida rodeia a mesa dos doces, com umas orelhas cor-de-rosa a espreitar do capuz e um passo muito pouco convincente.', opcoes: ['Cumprimentá-lo com cerimónia e oferecer-lhe um lugar à mesa', 'Reconhecer o Fygmo pelas orelhas e mandar largar os doces', 'Elogiar o disfarce e deixá-lo servir-se, que é Carnaval'], correta: 1 },
         { situacao: 'Dois mascarados tentam entrar no corso fingindo ser um só: o Fygmo às cavalitas do Fygmo II, com um sobretudo comprido por cima.', opcoes: ['Aplaudir o cavalheiro de duas cabeças, tão misterioso', 'Fechar o portão do corso para ninguém mais entrar', 'Contar as orelhas e convidá-los a desfilar à vista'], correta: 2 },
-        { situacao: 'O Fygmo II pôs uma máscara de gato e mia baixinho atrás do YoshiCat, a ver se lhe leva o chapéu.', opcoes: ['Virar-te de repente e dizer «Boa noite, Fygmo II»', 'Miar de volta e deixar-lhe o chapéu, por cortesia', 'Fugir, que um gato desconhecido é mau sinal'], correta: 0 }
+        { situacao: 'O Fygmo II pôs uma máscara de gato e mia baixinho atrás do YoshiCat, a ver se lhe leva o chapéu.', opcoes: ['Virar-te de repente: «Boa noite, Fygmo II»', 'Miar de volta e deixar-lhe o chapéu, por cortesia', 'Fugir, que um gato desconhecido é mau sinal'], correta: 0 }
       ],
       quemEstaMascaradoVitoria: 'Descobertos. O Fygmo e o Fygmo II tiram a máscara, riem-se e prometem comportar-se até à Quarta-feira de Cinzas. O corso segue, agora com todos à vista.',
       quemEstaMascaradoDerrota: 'Desta vez o mascarado safou-se a assobiar, de capa ao vento. Ninguém leva a mal: é Carnaval, e nada se perdeu.'
