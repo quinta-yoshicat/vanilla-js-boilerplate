@@ -527,13 +527,12 @@
     #screen-garrafa .story-box { padding: 10px 12px; margin-bottom: 8px; font-size: 13px; line-height: 1.35; }
 
     /* Perfil no telemóvel: 3 colunas de cartões mais compactos, para caber
-       mesmo com a galeria de garrafas e o título especial */
+       mesmo com as garrafas feitas e o título especial */
     @media (max-width: 599px) {
       .profile-grid { grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
       .profile-card { padding: 10px 4px; }
       .profile-card .stat-icon { font-size: 20px; margin-bottom: 2px; }
       .profile-card .stat-value { font-size: 17px; }
-      #perfil-container .bottle-gallery { font-size: 20px; margin-bottom: 12px; }
       #screen-perfil h2 { margin-bottom: 6px; }
       #perfil-container .info-text { margin-bottom: 10px; }
       #perfil-container .badge-title { margin-bottom: 10px; }
@@ -873,7 +872,7 @@
       left: 50%;
       transform: translateX(-50%);
       top: calc(var(--topo-altura) + 60px);
-      bottom: calc(var(--nav-altura) + 8px + 44px + 8px + 44px + 8px + 52px + 8px); /* Voltar + "Arrumar a Coleção" + "As minhas garrafas" */
+      bottom: calc(var(--nav-altura) + 8px + 44px + 8px + 52px + 8px); /* Voltar + "Arrumar a Coleção" */
       width: var(--coluna);
       max-width: calc(100vw - 20px);
       z-index: 14;
@@ -882,20 +881,6 @@
       grid-template-rows: 1fr 1fr;
       gap: 8px;
     }
-    /* Ecrã "As Garrafas" (ver renderGarrafas() em js/garrafa.js): lista que desliza entre o
-       cartão do topo e o botão Voltar, como a do Livro de Conquistas. */
-    .scroll-panel.garrafas-lista {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      max-height: calc(100vh - var(--topo-altura) - 60px - var(--nav-altura) - 8px - 52px - 8px);
-    }
-    @supports (height: 100dvh) {
-      .scroll-panel.garrafas-lista {
-        max-height: calc(100dvh - var(--topo-altura) - 60px - var(--nav-altura) - 8px - 52px - 8px);
-      }
-    }
-    .garrafa-linha { padding: 10px 14px; font-size: 14px; flex: 0 0 auto; }
 
     /* Ecrã "A Estrada" (ver renderEstrada() em js/estrada.js): cartões dos vizinhos numa lista
        que desliza entre o cartão do topo e o botão Voltar, como "As Garrafas". */
@@ -1036,6 +1021,16 @@
       font-weight: 700;
       color: #f5d76e;
     }
+    /* Quantidade de garrafas da cor («×12»), debaixo do nome; a Edição São Martinho vai no topo, ao lado do "x / 4". */
+    .colecao-quantidade {
+      margin: 2px 0 0;
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      color: #f5d76e;
+      opacity: 0.85;
+    }
+    .colecao-sao-martinho { white-space: nowrap; }
 
     .encyclopedia-card {
       background: rgba(12, 14, 22, 0.55);
@@ -1074,7 +1069,7 @@
       color: #aaa;
     }
 
-    /* Título especial e galeria de garrafas (Perfil) */
+    /* Título especial (Perfil) */
     .badge-title {
       background: linear-gradient(135deg, #f5d76e, #d4a017);
       color: #1a1a1a;
@@ -1083,15 +1078,6 @@
       border-radius: 12px;
       padding: 10px 14px;
       margin-bottom: 18px;
-    }
-
-    .bottle-gallery {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-      justify-content: center;
-      margin-bottom: 20px;
-      font-size: 24px;
     }
 
     /* Ajustes para ecrãs maiores (PC) */
@@ -1671,15 +1657,6 @@
       cursor: pointer;
     }
 
-    /* "As minhas garrafas" (só no ecrã A Coleção): fundo e contorno como os cartões da
-       Coleção, texto dourado; mesma altura e borda de 1px do btn-ghost. */
-    #screen-colecao .action-panel .btn-ghost {
-      background: rgba(12, 14, 22, 0.88);
-      border-color: rgba(245, 215, 110, 0.4);
-      color: #f5d76e;
-      font-weight: 700;
-    }
-
     /* Painel com scroll interno, no máximo metade do ecrã (ex: a
        Enciclopédia, ou uma história comprida do Explorar). */
     .scroll-panel {
@@ -1932,7 +1909,6 @@
     body.jogo-cheio #screen-camara.content,
     body.jogo-cheio #screen-roxo.content,
     body.jogo-cheio #screen-loja.content,
-    body.jogo-cheio #screen-garrafas.content,
     body.jogo-cheio #screen-festa.content {
       background: none;
       border: none;
@@ -2233,11 +2209,6 @@
     <div id="roxo-container"></div>
   </div>
 
-  <!-- ECRÃ: AS GARRAFAS (Nível 6; lista só de leitura; aberto a partir de "A Coleção") -->
-  <div id="screen-garrafas" class="screen content">
-    <div id="garrafas-container"></div>
-  </div>
-
   <!-- ECRÃ: CADERNO DOS FYGMOS (só leitura; aberto a partir do Perfil) -->
   <div id="screen-caderno" class="screen content">
     <div id="caderno-container"></div>
@@ -2274,7 +2245,7 @@
   <script src="js/state.js?v=73"></script>
   <script src="js/som.js?v=53"></script>
   <script src="js/nuvem.js?v=62"></script>
-  <script src="js/i18n.js?v=109"></script>
+  <script src="js/i18n.js?v=110"></script>
   <script src="js/estacoes.js?v=42"></script>
   <script src="js/tempo.js?v=55"></script>
   <script src="js/festas.js?v=69"></script>
@@ -2286,9 +2257,9 @@
   <script src="js/barril.js?v=2"></script>
   <script src="js/proteger.js?v=70"></script>
   <script src="js/alambique.js?v=1"></script>
-  <script src="js/garrafa.js?v=66"></script>
+  <script src="js/garrafa.js?v=67"></script>
   <script src="js/personagens.js?v=3"></script>
-  <script src="js/perfil.js?v=66"></script>
+  <script src="js/perfil.js?v=67"></script>
   <script src="js/niveis.js?v=63"></script>
   <script src="js/historia.js?v=57"></script>
   <!-- ronda.js antes de objetivos.js: este chama rondaChizoReporDia() logo ao carregar -->
@@ -2316,6 +2287,6 @@
   <script src="js/roxo.js?v=4"></script>
   <script src="js/loja.js?v=2"></script>
   <script src="js/reserva.js?v=2"></script>
-  <script src="js/main.js?v=78"></script>
+  <script src="js/main.js?v=79"></script>
 </body>
 </html>

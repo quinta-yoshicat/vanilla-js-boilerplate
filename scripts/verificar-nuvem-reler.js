@@ -389,7 +389,7 @@ function correr(fonte) {
   }
 
   // ---------------------------------------------------------------- (j) ecrãs a meio de uma ação
-  ['lagar', 'garrafa', 'engarrafar', 'camara', 'roxo', 'loja', 'vinha', 'proteger', 'estrada', 'colecao', 'explorar', 'festa', 'garrafas', 'conquistas', 'lingua'].forEach(function (ecra) {
+  ['lagar', 'garrafa', 'engarrafar', 'camara', 'roxo', 'loja', 'vinha', 'proteger', 'estrada', 'colecao', 'explorar', 'festa', 'conquistas', 'lingua'].forEach(function (ecra) {
     const x = jogo(fonte, base(100, em, { lagar: lagarA }), base(150, em + 100000, { loja: lojaB }), ecra);
     const antes = J(x.g.estado()), lsAntes = x.ls[CHAVE];
     x.g.ciclo(MIN * 3);

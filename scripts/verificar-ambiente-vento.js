@@ -29,7 +29,7 @@ const VENTO = SONS + 'vento_grama_alta.mp3', CALMO = SONS + 'vento_arvores_passa
 const EXTERIORES = ['screen-quinta', 'screen-vinha'];
 const INTERIORES = ['screen-garrafa', 'screen-engarrafar', 'screen-proteger', 'screen-lagar', 'screen-camara', 'screen-loja', 'screen-roxo',
   'screen-estrada', 'screen-explorar', 'screen-festa', 'screen-perfil', 'screen-colecao', 'screen-caderno', 'screen-enciclopedia',
-  'screen-conquistas', 'screen-garrafas', 'screen-home'];
+  'screen-conquistas', 'screen-home'];
 
 // Cabeçalho do 1.º frame MP3 (MPEG-1 Layer III): { mono, kbps } ou null.
 function cabecalhoMp3(buf) {
