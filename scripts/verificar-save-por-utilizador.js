@@ -11,7 +11,7 @@
 //  (c) conta nova com nuvem vazia num telemóvel com o save de OUTRA conta na chave antiga: começa do zero e nada da
 //      outra conta chega à nuvem dela; o save antigo nunca se apaga nem se reescreve;
 //  (d) duas contas no mesmo telemóvel, cada uma com a sua chave: cada uma lê e grava só a sua (e só a sua nuvem);
-//  (e) «Apagar o meu progresso» (perfilApagarTudo, js/perfil.js) só toca na chave desta conta e na nuvem desta
+//  (e) «Apagar o meu progresso» (perfilApagarTudo, js/definicoes.js; antes no Perfil) só toca na chave desta conta e na nuvem desta
 //      conta: nunca na chave de outra conta nem na antiga; sem id apaga a antiga (como antes);
 //  (f) com o jogo completo (scripts/_jogo-vm.js, utilizadorId) o estado guardado é o da chave do utilizador.
 //
@@ -30,13 +30,13 @@ let falhas = 0;
 function ok(cond, msg) { if (!cond) { falhas++; console.log('FALHA: ' + msg); } }
 
 function lerJs(f) { return fs.readFileSync(path.join(RAIZ, 'js', f), 'utf8'); }
-// perfilApagarTudo() e perfilApagarBotoes() do perfil.js real (o ficheiro todo precisa de um ecrã inteiro).
+// perfilApagarTudo() e perfilApagarBotoes() do definicoes.js real (passaram do Perfil para as Definições; o ficheiro todo precisa de um ecrã inteiro).
 function funcoesDeApagar() {
-  const src = lerJs('perfil.js');
+  const src = lerJs('definicoes.js');
   function corta(nome) {
     const i = src.indexOf('function ' + nome + '(');
     const f = src.indexOf('\n}\n', i);
-    if (i === -1 || f === -1) throw new Error('não encontrei ' + nome + ' em js/perfil.js');
+    if (i === -1 || f === -1) throw new Error('não encontrei ' + nome + ' em js/definicoes.js');
     return src.slice(i, f + 3);
   }
   return corta('perfilApagarBotoes') + corta('perfilApagarTudo');
@@ -85,7 +85,7 @@ function abrir(opcoes) {
   const ctx = vm.createContext(sandbox);
   vm.runInContext(lerJs('state.js'), ctx, { filename: 'js/state.js' });
   vm.runInContext(lerJs('nuvem.js'), ctx, { filename: 'js/nuvem.js' });
-  vm.runInContext(TEMPO_CACHE + APAGAR, ctx, { filename: 'js/perfil.js (apagar)' });
+  vm.runInContext(TEMPO_CACHE + APAGAR, ctx, { filename: 'js/definicoes.js (apagar)' });
   const jogo = {
     ctx: ctx,
     ev: function (c) { return vm.runInContext(c, ctx); },
