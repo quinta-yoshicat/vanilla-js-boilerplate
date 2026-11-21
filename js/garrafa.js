@@ -18,10 +18,16 @@
 // opção (ex: até 7 dias, com risco dos porcos), muda só este bloco —
 // o resto do código nunca tem estes números espalhados.
 // ===================================================================
+// O «escalão» de descanso: 9 horas reais (antes era 1 dia de 24 h). Os escalões
+// continuam a ser 1 a 4 e a ser o que fica gravado em diasDescanso (o nome do campo
+// ficou o de sempre): 1 Jovem (9 h), 2 Dourado (18 h), 3 Âmbar (27 h), 4 ou mais
+// Cobre (36 h). Toda a conta de tempo da Cave usa só esta constante.
+const CAVE_ESCALAO_MS = 9 * 60 * 60 * 1000;
+
 const REGRAS_DESCANSO_CAVE = {
-  diasMinimos: 1,
-  // Ordenado por dias crescente. Aplica-se o ÚLTIMO cujo "dias" seja
-  // <= aos dias reais de descanso (4 dias ou mais usa sempre os +60).
+  diasMinimos: 1, // em escalões (1 escalão = 9 h)
+  // Ordenado por escalão crescente ("dias" = escalões de 9 h). Aplica-se o ÚLTIMO
+  // cujo "dias" seja <= aos escalões de descanso (4 ou mais usa sempre os +60).
   reputacaoPorDias: [
     { dias: 1, reputacao: 30 },
     { dias: 2, reputacao: 40 },
@@ -43,9 +49,9 @@ function reputacaoDaCave(diasDescansados) {
 }
 
 // ---------------------------------------------------------------------
-// COR DA GARRAFA — vem dos dias de descanso (nada é gravado: lê-se o
-// diasDescanso que já existe em state.adega.historico). 1 dia = Jovem,
-// 2 = Dourado, 3 = Âmbar, 4 ou mais = Cobre. Dias em falta ou inválidos
+// COR DA GARRAFA — vem dos escalões de descanso (nada é gravado: lê-se o
+// diasDescanso que já existe em state.adega.historico; 1 escalão = 9 h, antes 1 dia).
+// 1 = Jovem, 2 = Dourado, 3 = Âmbar, 4 ou mais = Cobre. Valores em falta ou inválidos
 // usam a Jovem. Reutilizável (ex.: pela prateleira da Coleção): devolve
 // { imagem, nomeKey, dias }, com dias = null se o valor não era válido.
 // ---------------------------------------------------------------------
@@ -67,12 +73,10 @@ function garrafaPorDias(dias) {
   return { imagem: escolhida.imagem, nomeKey: escolhida.nomeKey, dias: d };
 }
 
-// "Âmbar · 3 dias" — o nome e os dias aparecem sempre juntos, porque o
-// Dourado e o Âmbar quase não se distinguem num ecrã pequeno.
+// A legenda da garrafa é só o nome da cor («Âmbar»). Já não diz «3 dias»: os escalões
+// são de 9 h e as garrafas antigas descansaram dias de 24 h, por isso só a cor é sempre verdade.
 function garrafaLegenda(g) {
-  const dias = g.dias === null ? '' :
-    ' · ' + t(g.dias === 1 ? 'adega.garrafaDiasUm' : 'adega.garrafaDias').replace('{n}', g.dias);
-  return t(g.nomeKey) + dias;
+  return t(g.nomeKey);
 }
 
 // Garrafa acabada de engarrafar (só em memória): preenchida por
@@ -85,16 +89,16 @@ let adegaDingTocou = false;
 // ---------------------------------------------------------------------
 // ESTADO DO LOTE PARA A PÁGINA DA GARRAFA — função pura (não lê o
 // state nem o relógio), por isso fácil de testar. Recebe os dias de
-// descanso (fracionários, ver diasDescansadosNaCave()); valores
+// descanso em escalões (fracionários, ver diasDescansadosNaCave()); valores
 // negativos ou inválidos (ex.: relógio do aparelho errado) contam como 0.
 // Devolve:
-//   diasCompletos  dias inteiros de descanso
-//   atual          garrafaPorDias(diasCompletos), ou null antes de 1 dia
+//   diasCompletos  escalões inteiros de descanso (o que fica gravado em diasDescanso)
+//   atual          garrafaPorDias(diasCompletos), ou null antes do 1.º escalão (9 h)
 //   proxima        { dias, imagem, nomeKey } da próxima cor, ou null na última (Cobre)
 //   msAteProxima   milissegundos até à próxima cor (0 na última)
 //   fracao         0 a 1, progresso entre a cor anterior e a próxima (1 na última)
 // ---------------------------------------------------------------------
-const DIA_MS = 24 * 60 * 60 * 1000;
+const DIA_MS = CAVE_ESCALAO_MS; // o «dia» da Cave é um escalão de 9 h (o nome ficou o de sempre)
 
 function estadoGarrafaLote(diasDescanso) {
   const n = Number(diasDescanso);
@@ -115,14 +119,12 @@ function estadoGarrafaLote(diasDescanso) {
   };
 }
 
-// "5 h 20 min", "2 d 3 h", "12 min" — arredonda para cima, para nunca
-// mostrar "0 min" antes de a hora chegar.
+// "5 h 20 min", "27 h", "12 min" — tempo real em horas e minutos (nunca em dias),
+// arredondado para cima, para nunca mostrar "0 min" antes de a hora chegar.
 function formatarFaltaGarrafa(ms) {
   const totalMin = Math.max(1, Math.ceil(ms / 60000));
-  const d = Math.floor(totalMin / 1440);
-  const h = Math.floor((totalMin % 1440) / 60);
+  const h = Math.floor(totalMin / 60);
   const m = totalMin % 60;
-  if (d > 0) return d + ' d' + (h > 0 ? ' ' + h + ' h' : '');
   if (h > 0) return h + ' h' + (m > 0 ? ' ' + m + ' min' : '');
   return m + ' min';
 }
@@ -186,7 +188,8 @@ function preCarregarFotoAdega(chave) {
 }
 
 // Para testar: acrescenta ?dias=3 ao endereço para simular que um lote
-// já descansou 3 dias, em vez de esperares o tempo real. Só se aplica
+// já descansou 3 ESCALÕES (3 x 9 h = 27 h, Âmbar), em vez de esperares o tempo
+// real. Aceita frações (?dias=0.5 = 4 h 30 min). Só se aplica
 // quando já existe mesmo um lote a descansar (state.adega.lote).
 function diasForcadosNoEndereco() {
   const valor = new URLSearchParams(location.search).get('dias');
@@ -195,22 +198,24 @@ function diasForcadosNoEndereco() {
   return Number.isFinite(n) && n >= 0 ? n : null;
 }
 
-// Dias de descanso do lote atual (pode ser fracionário, ex: 1.25 dias).
+// Escalões de descanso do lote atual (pode ser fracionário, ex: 1.25 = 11 h 15 min).
+// Conta a partir da hora gravada em state.adega.lote.iniciadoEm, por isso um lote
+// que já estava a meio passa a ser contado em escalões de 9 h (só ganha).
 function diasDescansadosNaCave() {
   if (!state.adega.lote) return 0;
   const forcado = diasForcadosNoEndereco();
   if (forcado !== null) return forcado;
   const agora = Date.now();
-  return Math.max(0, agora - carimboCorrigirFuturo(state.adega.lote, 'iniciadoEm', agora)) / (24 * 60 * 60 * 1000);
+  return Math.max(0, agora - carimboCorrigirFuturo(state.adega.lote, 'iniciadoEm', agora)) / CAVE_ESCALAO_MS;
 }
 
-function formatarDiasAdega(diasFracionarios) {
-  const totalMin = Math.max(0, Math.round(diasFracionarios * 24 * 60));
-  const dias = Math.floor(totalMin / (24 * 60));
-  const horas = Math.floor((totalMin % (24 * 60)) / 60);
-  if (dias > 0) return dias + 'd' + (horas > 0 ? ' ' + horas + 'h' : '');
-  if (horas > 0) return horas + 'h';
-  return (totalMin % 60) + 'm';
+// Escalões (fracionários) em tempo real: "14h 5m", "36h", "45m" (horas e minutos, nunca dias).
+function formatarDiasAdega(escaloesFracionarios) {
+  const totalMin = Math.max(0, Math.round(escaloesFracionarios * CAVE_ESCALAO_MS / 60000));
+  const horas = Math.floor(totalMin / 60);
+  const minutos = totalMin % 60;
+  if (horas > 0) return horas + 'h' + (minutos > 0 ? ' ' + minutos + 'm' : '');
+  return minutos + 'm';
 }
 
 function tempoRestanteAdega(acao) {
@@ -437,8 +442,9 @@ function reservaHtml() {
   if (state.garrafas <= 0) {
     linha = '<p class="phase-progress" data-i18n="perfil.semGarrafas"></p>';
   } else if (dias !== null) {
+    // Diz a cor (a verdade para todas as garrafas, antigas e novas), não os «dias».
     linha = '<p class="phase-progress">' +
-      t(dias === 1 ? 'adega.reservaMaisDescansouUm' : 'adega.reservaMaisDescansou').replace('{n}', dias) + '</p>';
+      t(dias === 1 ? 'adega.reservaMaisDescansouUm' : 'adega.reservaMaisDescansou').replace('{cor}', t(garrafaPorDias(dias).nomeKey)) + '</p>';
   }
   // Com garrafas feitas, a foto é a da que mais descansou (mesma classe e tamanho
   // do barril; o ponto de foco desce para o rótulo, nas fotos de 512x512); sem
@@ -602,7 +608,7 @@ function executarAcaoAdega(acao) {
     if (!a.lote) return;
     const diasCompletos = Math.floor(diasDescansadosNaCave());
     if (diasCompletos < REGRAS_DESCANSO_CAVE.diasMinimos) {
-      adegaMensagemAtual = t('adega.msgAindaNaoPode').replace('{dias}', REGRAS_DESCANSO_CAVE.diasMinimos);
+      adegaMensagemAtual = t('adega.msgAindaNaoPode').replace('{tempo}', formatarDiasAdega(REGRAS_DESCANSO_CAVE.diasMinimos));
       renderAdega();
       return;
     }
@@ -758,7 +764,7 @@ function enterEngarrafar() {
   if (typeof somPodeTocar === 'function' && somPodeTocar()) somCarregarFicheiro(GARRAFA_SOM_ENGARRAFAR);
 }
 
-// Ambiente só com foto (1 dia ou mais). Idempotente: chamar outra vez (ex.:
+// Ambiente só com foto (1 escalão, 9 h, ou mais). Idempotente: chamar outra vez (ex.:
 // ao mudar de dia com a página aberta) não o reinicia. Pára em goTo() ao
 // sair, e em engarrafarAgora().
 function iniciarAmbienteEngarrafar() {
@@ -799,7 +805,7 @@ function renderEngarrafar() {
     const pronto = est.diasCompletos >= REGRAS_DESCANSO_CAVE.diasMinimos;
     engarrafarDiasMostrados = est.diasCompletos;
     corpoHtml =
-      (est.atual ? garrafaGrandeHtml(est.atual, est) : '<p class="phase-desc" data-i18n="adega.paginaAindaDescansa"></p>') +
+      (est.atual ? garrafaGrandeHtml(est.atual, est) : '<p class="phase-desc">' + t('adega.paginaAindaDescansa').replace('{tempo}', formatarDiasAdega(REGRAS_DESCANSO_CAVE.diasMinimos)) + '</p>') +
       '<div class="nivel-barra"><div class="nivel-barra-cheio" id="engarrafar-barra" style="width:' + Math.round(est.fracao * 100) + '%"></div></div>' +
       '<p class="phase-progress" id="engarrafar-proxima">' + textoProximaCorGarrafa(est) + '</p>' +
       (pronto ? '<p class="phase-progress">' + t('adega.caveReputacaoPrevista').replace('{valor}', reputacaoDaCave(est.diasCompletos)) + '</p>' : '');

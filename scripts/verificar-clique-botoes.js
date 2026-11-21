@@ -252,10 +252,10 @@ async function suite(fontes) {
   { // Ver o lote / Voltar: silenciosos, clique
     const g = jogador(); ok(igual(g.tocar(botao(), function () { g.ev("goTo('engarrafar')"); }).sons, CLIQUE), 'Ver o lote: clique');
     // Engarrafar agora: ficheiro (data-sem-vibracao) sem objetivo; com objetivo, o ding
-    const e = jogador(); e.ev('state.adega.lote = { iniciadoEm: ' + (AGORA - 2 * 86400000) + ' };');
+    const e = jogador(); e.ev('state.adega.lote = { iniciadoEm: ' + (AGORA - 2 * 9 * 3600000) + ' };');
     const re = e.tocar(botao(['btn-pill'], { attrs: { 'data-sem-vibracao': '' } }), function () { e.ev('engarrafarAgora()'); });
     ok(igual(re.sons, []) && re.ficheiros.length === 1, 'Engarrafar agora: só o ficheiro, deu ' + JSON.stringify(re));
-    const d = jogador(); d.objetivos(['adega_engarrafar']); d.ev('state.adega.lote = { iniciadoEm: ' + (AGORA - 2 * 86400000) + ' };');
+    const d = jogador(); d.objetivos(['adega_engarrafar']); d.ev('state.adega.lote = { iniciadoEm: ' + (AGORA - 2 * 9 * 3600000) + ' };');
     const rd = d.tocar(botao(['btn-pill'], { attrs: { 'data-sem-vibracao': '' } }), function () { d.ev('engarrafarAgora()'); });
     ok(igual(rd.sons, ['objetivoCumprido']) && rd.ficheiros.length === 0, 'Engarrafar agora com objetivo: só o ding, deu ' + JSON.stringify(rd));
   }

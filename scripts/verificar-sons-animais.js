@@ -320,14 +320,16 @@ function suite(fontes) {
   }
 
   // ---------------- 4. Engarrafar ----------------
-  const engarrafar = function (g, dias) {
-    g.ev('state.adega.lote = { iniciadoEm: ' + (AGORA - dias * 86400000) + ' }; adegaGarrafaFeita = null;');
+  // O lote descansa por escalões de 9 h (CAVE_ESCALAO_MS em js/garrafa.js; antes eram dias de 24 h).
+  const ESCALAO = 9 * 3600000;
+  const engarrafar = function (g, escaloes) {
+    g.ev('state.adega.lote = { iniciadoEm: ' + (AGORA - escaloes * ESCALAO) + ' }; adegaGarrafaFeita = null;');
     g.limpar(); g.ev('engarrafarAgora()');
   };
   { const g = jogador(); engarrafar(g, 2); so(g, [], [ENGARRAFAR], 'Engarrafar sem objetivo (toca o ficheiro)'); ok(g.ev('state.garrafas') === 5, 'Engarrafar devia dar a garrafa'); }
   { const g = jogador(); g.objetivos(['adega_engarrafar']); engarrafar(g, 2); so(g, ['objetivoCumprido'], [], 'Engarrafar com objetivo (só o ding)'); ok(g.cumprido('adega_engarrafar'), 'Engarrafar: o objetivo devia contar'); }
   { const g = jogador(); g.objetivos(['adega_prensar']); engarrafar(g, 2); so(g, [], [ENGARRAFAR], 'Engarrafar com outro objetivo do dia (toca o ficheiro)'); }
-  { const g = jogador(); engarrafar(g, 0.5); nada(g, 'Engarrafar ainda sem 1 dia'); }
+  { const g = jogador(); engarrafar(g, 0.5); nada(g, 'Engarrafar ainda sem 1 escalão (9 h)'); }
   { const g = jogador(); g.ev('state.som = false;'); engarrafar(g, 2); nada(g, 'Engarrafar com o Som desligado'); }
   { // O "ding" de uma ação anterior da Adega não cala o engarrafar seguinte
     const g = jogador(); g.objetivos(['adega_prensar']); g.ev("executarAcaoAdega('prensar')"); ok(g.cumprido('adega_prensar'), 'Prensar devia cumprir o objetivo');
