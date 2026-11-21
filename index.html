@@ -1531,6 +1531,44 @@
       text-align: center;
     }
 
+    /* Telemóvel (até 599 px): fora das filas que deslizam (.pill-scroll), o texto de um .btn-pill
+       parte linha e o botão cresce em altura, sem nada cortado nem fora da caixa. Com o texto numa
+       linha fica igual a antes: 44 px de altura (52 px no .pill-grande) e os cantos de meia altura
+       (22/26 px) dão a mesma pastilha que os 999px; com 2 linhas, os cantos já não comem o texto.
+       As filas que deslizam ficam como estavam (o Colher continua a poder partir, ver acima). */
+    @media (max-width: 599px) {
+      .btn-pill {
+        white-space: normal;
+        flex-wrap: wrap;
+        row-gap: 0;
+        max-width: 100%;
+        min-width: 0;
+        padding: 6px 16px;
+        line-height: 1.2;
+        text-align: center;
+        overflow-wrap: anywhere;
+        border-radius: 22px;
+      }
+      .btn-pill.pill-grande { border-radius: 26px; }
+      .pill-scroll .btn-pill {
+        white-space: nowrap;
+        flex-wrap: nowrap;
+        row-gap: 6px;
+        max-width: none;
+        min-width: auto;
+        padding: 0 16px;
+        line-height: normal;
+        overflow-wrap: normal;
+        border-radius: 999px;
+      }
+      .pill-scroll .btn-pill[data-acao="colher"] { white-space: normal; max-width: 272px; }
+      /* O cartão de "nova entrada" e do pedido do dia: o botão fica ao lado do texto, no máximo a metade. */
+      .unlock-card .btn-pill { max-width: 50%; border-radius: 20px; }
+      /* Visitar a Reserva: o nome numa linha e o motivo («já feito hoje»...) por baixo, mais pequeno e centrado. */
+      .reserva-bloco .reserva-visita-botao { flex-direction: column; flex-wrap: nowrap; align-items: center; row-gap: 1px; min-height: 44px; }
+      .reserva-visita-botao .cooldown-suffix { display: block; margin: 0; font-size: 11px; line-height: 1.2; text-align: center; }
+    }
+
     /* Esbatido dos dois lados da fila — genérico (.pill-fade-left /
        .pill-fade-right), pronto para reutilizar noutros ecrãs. */
     .pill-fade {
