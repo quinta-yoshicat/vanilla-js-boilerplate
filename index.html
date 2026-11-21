@@ -530,9 +530,29 @@
        mesmo com as garrafas feitas e o título especial */
     @media (max-width: 599px) {
       .profile-grid { grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-      .profile-card { padding: 10px 4px; }
-      .profile-card .stat-icon { font-size: 20px; margin-bottom: 2px; }
-      .profile-card .stat-value { font-size: 17px; }
+      /* Cada janela com cerca de metade da altura de antes (~44 px em vez de ~82 px): o ícone à
+         esquerda do número, na mesma linha, e o nome por baixo, pequeno. Só CSS: os 3 filhos de
+         perfilCard() (js/perfil.js) vão para uma grelha de 2 linhas. O número nunca parte
+         («9 / 14», «6 / 15», «1 / 4»); o nome pode ir a 2 linhas, como já ia nos ecrãs estreitos.
+         min-height 44px: a área de toque das clicáveis (Conquistas, Caderno, Palavras, Coleção). */
+      .profile-card {
+        display: grid;
+        grid-template-columns: auto auto;
+        grid-template-areas: "icone valor" "nome nome";
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        column-gap: 4px;
+        row-gap: 1px;
+        min-height: 44px;
+        min-width: 0;
+        padding: 5px 4px;
+        box-sizing: border-box;
+      }
+      .profile-card .stat-icon { grid-area: icone; font-size: 16px; margin: 0; line-height: 0; }
+      .profile-card .stat-icon svg { display: block; width: 16px; height: 16px; }
+      .profile-card .stat-value { grid-area: valor; font-size: 14px; line-height: 1.15; white-space: nowrap; }
+      .profile-card .stat-label { grid-area: nome; font-size: 9px; line-height: 1.15; letter-spacing: 0.02em; text-align: center; overflow-wrap: anywhere; }
       #screen-perfil h2 { margin-bottom: 6px; }
       #perfil-container .info-text { margin-bottom: 10px; }
       #perfil-container .badge-title { margin-bottom: 10px; }
