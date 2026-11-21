@@ -241,8 +241,61 @@ function defaultState() {
     },
     colecao: {
       arrumouDia: null
+    },
+    // Encomendas das visitas (nível 5+, ver js/encomendas.js; ainda invisíveis no jogo). atual: a encomenda aceite, ou
+    // null: { personagem, escalao (1 a 4, o da Cave), aceiteDia e prazoDia ('AAAA-MM-DD', Lisboa), historicoInicio (quantas
+    // entradas tinha state.adega.historico ao aceitar: só contam as garrafas feitas depois) }. ultimoDia: o dia (Lisboa) da
+    // última encomenda nova (no máximo uma por dia). cumpridas: quantas já foram entregues (só sobe). Junta-se na nuvem como
+    // as áreas leves (nuvemJuntarLeves, js/nuvem.js); reparação em memória em encomendasEstado() abaixo.
+    encomendas: {
+      atual: null,
+      ultimoDia: null,
+      cumpridas: 0
     }
   };
+}
+
+// ---------------------------------------------------------------------
+// ENCOMENDAS: a forma certa de state.encomendas (uma nuvem, um save antigo ou um estranho podem
+// trazer null, outro tipo, um escalão fora de 1 a 4 ou datas mal escritas). Puras: recebem o valor
+// por argumento. encomendasNormalizar() devolve um objeto NOVO (a nuvem usa-a); encomendasEstado()
+// repara em memória o estado que recebe (grava-se com o próximo saveState) e devolve state.encomendas.
+// ---------------------------------------------------------------------
+function encomendasDataValida(x) {
+  if (typeof x !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(x)) return null;
+  const ano = Number(x.slice(0, 4)), mes = Number(x.slice(5, 7)) - 1, dia = Number(x.slice(8, 10));
+  const d = new Date(Date.UTC(ano, mes, dia));
+  return d.getUTCFullYear() === ano && d.getUTCMonth() === mes && d.getUTCDate() === dia ? x : null;
+}
+
+function encomendasAtualNormalizar(a) {
+  if (!a || typeof a !== 'object' || Array.isArray(a)) return null;
+  const escalao = a.escalao;
+  if (typeof escalao !== 'number' || !Number.isInteger(escalao) || escalao < 1 || escalao > 4) return null;
+  if (typeof a.personagem !== 'string' || !/^[a-z0-9_]{1,40}$/.test(a.personagem)) return null;
+  const aceite = encomendasDataValida(a.aceiteDia), prazo = encomendasDataValida(a.prazoDia);
+  if (aceite === null || prazo === null || prazo < aceite) return null;
+  const inicio = a.historicoInicio;
+  if (typeof inicio !== 'number' || !Number.isInteger(inicio) || inicio < 0) return null;
+  return { personagem: a.personagem, escalao: escalao, aceiteDia: aceite, prazoDia: prazo, historicoInicio: inicio };
+}
+
+function encomendasNormalizar(x) {
+  const e = x && typeof x === 'object' && !Array.isArray(x) ? x : {};
+  const c = e.cumpridas;
+  return {
+    atual: encomendasAtualNormalizar(e.atual),
+    ultimoDia: encomendasDataValida(e.ultimoDia),
+    cumpridas: typeof c === 'number' && Number.isInteger(c) && c >= 0 ? c : 0
+  };
+}
+
+function encomendasEstado(estado) {
+  if (!estado || typeof estado !== 'object') return encomendasNormalizar(null);
+  const atual = estado.encomendas;
+  const certo = encomendasNormalizar(atual);
+  if (JSON.stringify(atual) !== JSON.stringify(certo)) estado.encomendas = certo;
+  return estado.encomendas;
 }
 
 // Combina o estado guardado com o estado por omissão, campo a campo,

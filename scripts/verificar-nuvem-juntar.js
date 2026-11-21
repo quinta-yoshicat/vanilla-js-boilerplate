@@ -22,7 +22,7 @@ const vm = require('vm');
 const RAIZ = path.join(__dirname, '..');
 const STATE_JS = fs.readFileSync(path.join(RAIZ, 'js', 'state.js'), 'utf8');
 const NUVEM_JS = fs.readFileSync(path.join(RAIZ, 'js', 'nuvem.js'), 'utf8');
-const AREAS = ['despensa', 'visitas', 'lagar', 'camara', 'roxo', 'loja', 'reserva', 'colecao'];
+const AREAS = ['despensa', 'visitas', 'lagar', 'camara', 'roxo', 'loja', 'reserva', 'colecao', 'encomendas'];
 
 // Nuvem falsa (CloudStorage) em memória, como em verificar-nuvem.js.
 function nuvemFalsa(inicial) {
