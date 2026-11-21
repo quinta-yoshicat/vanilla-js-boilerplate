@@ -107,7 +107,13 @@ function suite(fontes) {
   try { master = execFileSync('git', ['show', 'origin/master:index.html'], { cwd: RAIZ, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }); } catch (e) { master = null; }
   if (master !== null && fontes === FONTES) {
     const M = partir(master);
-    ok(normal(M.fora) === fora, '(c) o CSS de fora do bloco é igual ao do master (origin/master)');
+    // Tirando as regras da Prova às cegas (PR 2: o botão e a prova no ecrã da Coleção, seletores com «prova»), que não
+    // são de ecrã baixo nem mexem no que este bloco mexe; o resto tem de ser igual ao do master.
+    const semProva = function (x) {
+      return normal(x.replace(/@supports \(height: 100dvh\) \{\s*[^{}]*prova[^{}]*\{[^{}]*\}\s*\}/g, '').replace(/[^{}]*prova[^{}]*\{[^{}]*\}/g, ''));
+    };
+    ok(semProva(M.fora) === semProva(fora), '(c) o CSS de fora do bloco é igual ao do master (origin/master), tirando as regras da Prova às cegas');
+    ok(semProva(fora) !== fora || !/prova/.test(fora), '(c) (as regras da prova saem mesmo da comparação)');
   }
 
   // (d) botões com 44 px

@@ -164,6 +164,7 @@ const DIA = '2026-10-09';
   const pos = function (f) { return html.indexOf('<script src="js/' + f + '?v='); };
   ok(pos('garrafa.js') > 0 && pos('reserva.js') > pos('garrafa.js') && pos('reserva.js') < pos('main.js'), 'ordem de carga: garrafa.js, reserva.js, main.js');
   ok(/colecao-painel \{[^}]*bottom: calc\(var\(--nav-altura\) \+ 8px \+ 44px \+ 8px \+ 52px \+ 8px\);/.test(html.replace(/\n/g, ' ')), 'o painel da Coleção deixa espaço para o Voltar e o "Arrumar a Coleção" (o "As minhas garrafas" saiu)');
+  ok(/\.colecao-painel\.com-prova \{[^}]*bottom: calc\(var\(--nav-altura\) \+ 8px \+ 44px \+ 8px \+ 44px \+ 8px \+ 52px \+ 8px\);/.test(html), 'com o botão da Prova às cegas (nível 6+, a classe com-prova) a grelha guarda mais 44 px + 8 px');
   ok(/\.reserva-visita-botao:disabled/.test(html) && /\.colecao-arrumar-botao:disabled/.test(html), 'estilo dos botões apagados');
 }
 

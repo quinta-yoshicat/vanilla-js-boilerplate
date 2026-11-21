@@ -934,6 +934,11 @@
       grid-template-rows: 1fr 1fr;
       gap: 8px;
     }
+    /* Com o botão da Prova às cegas (nível 6+, ver provaColecaoHtml() em js/prova-jogo.js) por cima de «Arrumar a
+       Coleção»: mais 44 px do botão e 8 px de espaço. Durante a prova o painel de ações cresce por cima da grelha. */
+    .colecao-painel.com-prova {
+      bottom: calc(var(--nav-altura) + 8px + 44px + 8px + 44px + 8px + 52px + 8px); /* Voltar + "Arrumar a Coleção" + "Prova às cegas" */
+    }
 
     /* Ecrã "A Estrada" (ver renderEstrada() em js/estrada.js): cartões dos vizinhos numa lista
        que desliza entre o cartão do topo e o botão Voltar, como "As Garrafas". */
@@ -1089,6 +1094,57 @@
       opacity: 0.85;
     }
     .colecao-sao-martinho { white-space: nowrap; }
+
+    /* A Prova às cegas (ver provaColecaoHtml() em js/prova-jogo.js), DENTRO do painel de ações da Coleção: o painel
+       pode ir até metade do ecrã (nunca mais) e fica por cima da grelha; se faltar altura, desliza. O texto parte
+       linha e os botões têm 44 px de toque (regras da PR 211). */
+    /* O botão de entrada: menos margem dos lados para «Prova às cegas com o Dr. Henrique» caber numa linha a 320 px (44 px,
+       como a conta da grelha); se mesmo assim partir, parte e cresce (regra dos .btn-pill no telemóvel). */
+    .action-panel .prova-botao { padding-left: 10px; padding-right: 10px; }
+    .prova-botao:disabled { opacity: 0.55; cursor: default; }
+    #colecao-container .action-panel.prova-a-decorrer { max-height: 50vh; }
+    @supports (height: 100dvh) {
+      #colecao-container .action-panel.prova-a-decorrer { max-height: 50dvh; }
+    }
+    .prova-bloco {
+      flex: 0 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding: 8px;
+      background: rgba(12, 14, 22, 0.92);
+      border: 1px solid rgba(245, 215, 110, 0.4);
+      border-radius: 14px;
+      color: #fff;
+      font-size: 13px;
+      line-height: 1.3;
+      overflow-wrap: anywhere;
+    }
+    .prova-bloco p { margin: 0; }
+    .prova-cabeca { display: flex; align-items: center; gap: 8px; min-width: 0; }
+    .prova-cara { flex: 0 0 auto; width: 32px; height: 32px; border-radius: 50%; object-fit: cover; border: 2px solid #f5d76e; background: #2a1a1a; }
+    .prova-cabeca p { min-width: 0; }
+    .prova-nome { font-weight: 700; color: #f5d76e; }
+    .prova-ronda { color: #e8e8e8; }
+    .prova-descricao { font-style: italic; }
+    .prova-cores { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+    /* Cada cor: a miniatura e o nome lado a lado; no telemóvel parte linha como os outros .btn-pill (PR 211). */
+    .prova-cores .prova-cor {
+      justify-content: flex-start;
+      gap: 6px;
+      min-width: 0;
+      min-height: 44px;
+    }
+    .prova-cor img { flex: 0 0 auto; width: 34px; height: 34px; border-radius: 10px; object-fit: cover; object-position: center 64%; }
+    .prova-cor span { min-width: 0; overflow-wrap: anywhere; }
+    .prova-veredicto { font-weight: 700; font-size: 14px; }
+    .prova-veredicto.certo { color: #d7ffb8; }
+    .prova-veredicto.errado { color: #ffd2c2; }
+    .prova-ensino { color: #f5d76e; }
+    .prova-premio { font-weight: 700; color: #f5d76e; }
+    .prova-nota { font-size: 12px; color: #e8e8e8; }
+    .prova-fala { font-style: italic; }
+    .prova-bloco .prova-seguinte { width: 100%; white-space: normal; text-align: center; }
 
     .encyclopedia-card {
       background: rgba(12, 14, 22, 0.55);
@@ -2497,7 +2553,7 @@
   <script src="js/state.js?v=75"></script>
   <script src="js/som.js?v=53"></script>
   <script src="js/nuvem.js?v=64"></script>
-  <script src="js/i18n.js?v=115"></script>
+  <script src="js/i18n.js?v=116"></script>
   <script src="js/estacoes.js?v=42"></script>
   <script src="js/tempo.js?v=55"></script>
   <script src="js/festas.js?v=69"></script>
@@ -2509,7 +2565,7 @@
   <script src="js/barril.js?v=2"></script>
   <script src="js/proteger.js?v=70"></script>
   <script src="js/alambique.js?v=1"></script>
-  <script src="js/garrafa.js?v=70"></script>
+  <script src="js/garrafa.js?v=71"></script>
   <script src="js/personagens.js?v=3"></script>
   <script src="js/perfil.js?v=68"></script>
   <script src="js/definicoes.js?v=1"></script>
@@ -2537,7 +2593,7 @@
   <script src="dados/objetivos.js?v=1"></script>
   <script src="dados/enciclopedia.js?v=12"></script>
   <script src="dados/palavras.js?v=1"></script>
-  <script src="dados/provas.js?v=1"></script>
+  <script src="dados/provas.js?v=2"></script>
   <script src="js/estrada-dados.js?v=14"></script>
   <script src="js/despensa.js?v=7"></script>
   <script src="js/estrada.js?v=11"></script>
@@ -2546,6 +2602,8 @@
   <script src="js/roxo.js?v=4"></script>
   <script src="js/loja.js?v=2"></script>
   <script src="js/reserva.js?v=2"></script>
+  <!-- Prova às cegas no ecrã da Coleção (o botão e a prova a decorrer): usa as regras de js/prova.js -->
+  <script src="js/prova-jogo.js?v=1"></script>
   <script src="js/main.js?v=80"></script>
 </body>
 </html>
