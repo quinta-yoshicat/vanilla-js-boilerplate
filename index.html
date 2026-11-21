@@ -1205,6 +1205,64 @@
       font-family: 'Nunito', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
+    /* --- Faixa «Há uma versão nova do jogo» (ver js/novaversao.js) ------- */
+    /* Fina, no lugar da barra de topo (por cima dela, do mesmo tamanho): não tapa o cenário, o cartão
+       do ecrã nem o menu de baixo. O texto parte linha se for preciso; botões com 44 px de toque. */
+    .nova-versao {
+      position: fixed;
+      top: var(--topo-offset);
+      left: 50%;
+      transform: translateX(-50%);
+      width: var(--coluna);
+      max-width: calc(100vw - 20px);
+      box-sizing: border-box;
+      z-index: 25;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 44px;
+      padding: 0 4px 0 12px;
+      background: var(--topo-fundo);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border: 1px solid var(--dourado);
+      border-radius: 22px;
+      color: #fff5df;
+      font-family: 'Nunito', sans-serif;
+    }
+    .nova-versao[hidden] { display: none; }
+    .nova-versao-texto {
+      flex: 1 1 auto;
+      min-width: 0;
+      margin: 4px 0;
+      font-size: 12.5px;
+      font-weight: 700;
+      line-height: 1.25;
+      overflow-wrap: anywhere;
+    }
+    .nova-versao-botoes { flex: 0 0 auto; display: flex; gap: 4px; }
+    .nova-versao-btn {
+      min-height: 44px;
+      min-width: 44px;
+      padding: 0 10px;
+      background: none;
+      border: none;
+      border-radius: 18px;
+      color: #f0e6d8;
+      font-family: inherit;
+      font-size: 12.5px;
+      font-weight: 700;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    /* «Atualizar»: pastilha dourada de 34 px, mas com 44 px de toque (a borda transparente conta para o toque). */
+    .nova-versao-btn.nova-versao-atualizar { color: #2a1608; background: var(--dourado); background-clip: padding-box; border: 5px solid transparent; border-radius: 22px; padding: 0 10px; }
+    .nova-versao-btn:disabled { opacity: 0.6; cursor: default; }
+    @media (max-width: 360px) {
+      .nova-versao-texto { font-size: 12px; }
+      .nova-versao-btn { padding: 0 8px; font-size: 12px; }
+    }
+
     /* --- Barra de topo: Perfil + recursos ------------------------------- */
     #app-topbar {
       position: fixed;
@@ -2131,6 +2189,16 @@
     </div>
   </header>
 
+  <!-- Faixa «Há uma versão nova do jogo» (ver js/novaversao.js): por cima da barra de topo, escondida até
+       haver versão nova; os textos vêm do js/i18n.js quando aparece. -->
+  <div id="app-novaversao" class="nova-versao" role="status" aria-live="polite" hidden>
+    <p class="nova-versao-texto" id="novaversao-texto"></p>
+    <div class="nova-versao-botoes">
+      <button type="button" class="nova-versao-btn nova-versao-atualizar" id="novaversao-atualizar" onclick="novaVersaoAtualizar()"></button>
+      <button type="button" class="nova-versao-btn" id="novaversao-mais-tarde" onclick="novaVersaoMaisTarde()"></button>
+    </div>
+  </div>
+
   <!-- Balão de fala (personagem) — usado por todos os ecrãs do jogo;
        escondido quando não há mensagem (ver mostrarFalas() em
        js/main.js). Tocar no balão também avança a fala; a seta só
@@ -2342,7 +2410,7 @@
   <script src="js/state.js?v=73"></script>
   <script src="js/som.js?v=53"></script>
   <script src="js/nuvem.js?v=62"></script>
-  <script src="js/i18n.js?v=111"></script>
+  <script src="js/i18n.js?v=112"></script>
   <script src="js/estacoes.js?v=42"></script>
   <script src="js/tempo.js?v=55"></script>
   <script src="js/festas.js?v=69"></script>
@@ -2358,6 +2426,7 @@
   <script src="js/personagens.js?v=3"></script>
   <script src="js/perfil.js?v=68"></script>
   <script src="js/definicoes.js?v=1"></script>
+  <script src="js/novaversao.js?v=1"></script>
   <script src="js/niveis.js?v=63"></script>
   <script src="js/historia.js?v=57"></script>
   <!-- ronda.js antes de objetivos.js: este chama rondaChizoReporDia() logo ao carregar -->
