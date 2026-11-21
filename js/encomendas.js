@@ -192,16 +192,21 @@ function encomendaExpirar(estado, dia) {
 // nem se grava. O dia é o efetivo das visitas (visitaDiaEfetivo): com o relógio errado nada se perde.
 // ---------------------------------------------------------------------
 
-// Falas das três personagens das visitas (as mesmas de VISITAS_BAGACEIRA_FALAS, js/visitas.js), no mesmo tom.
+// Falas de cada personagem que pode pedir (as das visitas, VISITAS_PERSONAGENS em js/visitas.js), no jeito de cada uma:
+// o Sr. Valentim calmo e a falar da videira, a Marisa prática e bem-disposta, o Dr. Henrique provador e irónico. Uma
+// frase curta (até cerca de 80 carateres), sem factos novos. Uma personagem sem fala própria usa a 'geral' (nunca
+// fica vazio; ver encomendaFala).
 const ENCOMENDAS_FALAS_PEDIDO = {
-  valentim: { pt: 'Tenho uns amigos à mesa no fim de semana e queria lá pôr uma garrafa feita com calma. Sem pressas: só com tempo.', en: 'I have some friends coming to dinner at the weekend and I\'d like to put a bottle made without hurry on the table. No rush: just time.', es: 'Tengo unos amigos a la mesa el fin de semana y quería poner una botella hecha con calma. Sin prisas: solo con tiempo.' },
-  marisa: { pt: 'A minha avó faz anos e só bebe Moscatel daqui. Arranjas-me uma? Eu digo-lhe que fui eu que apanhei as uvas.', en: 'It\'s my grandmother\'s birthday and she only drinks Moscatel from here. Could you find me one? I\'ll tell her I picked the grapes myself.', es: 'Mi abuela cumple años y solo bebe Moscatel de aquí. ¿Me consigues una? Le diré que las uvas las recogí yo.' },
-  henrique: { pt: 'Vou dar uma prova a uns colegas e queria um exemplar da casa. Prometo cuspir com elegância.', en: 'I\'m giving a tasting to some colleagues and I\'d like a bottle from the house. I promise to spit elegantly.', es: 'Voy a dar una cata a unos colegas y quería un ejemplar de la casa. Prometo escupir con elegancia.' }
+  valentim: { pt: 'Preciso de uma garrafa feita sem pressa. A videira não gosta de correrias.', en: 'I need a bottle made without hurry. The vine dislikes a rush.', es: 'Necesito una botella hecha sin prisa. A la vid no le gustan las carreras.' },
+  marisa: { pt: 'Arranjas-me uma garrafa? Depois da vindima, sabe pela vida.', en: 'Could you sort me out a bottle? After the harvest, it\'s a treat.', es: '¿Me consigues una botella? Después de la vendimia, sabe a gloria.' },
+  henrique: { pt: 'Queria um exemplar da casa para provar. Prometo cuspir com elegância.', en: 'I\'d like a bottle from the house to taste. I promise to spit elegantly.', es: 'Quería un ejemplar de la casa para catar. Prometo escupir con elegancia.' },
+  geral: { pt: 'Podes guardar-me uma garrafa desta cor? Fico à espera.', en: 'Could you set aside a bottle of this colour for me? I\'ll wait.', es: '¿Me guardas una botella de este color? Te espero.' }
 };
 const ENCOMENDAS_FALAS_OBRIGADO = {
-  valentim: { pt: 'Esta tem paciência no copo. Os meus amigos vão perguntar o segredo, e eu vou dizer que é teu.', en: 'This one has patience in the glass. My friends will ask for the secret, and I\'ll say it\'s yours.', es: 'Esta tiene paciencia en la copa. Mis amigos preguntarán el secreto, y diré que es tuyo.' },
-  marisa: { pt: 'Ela vai adorar! E se perguntar quem a fez, digo que foi a equipa toda, gato incluído.', en: 'She\'ll love it! And if she asks who made it, I\'ll say the whole team did, cat included.', es: '¡Le va a encantar! Y si pregunta quién la hizo, diré que todo el equipo, gato incluido.' },
-  henrique: { pt: 'Cor certa, nariz honesto, final comprido. Os meus colegas vão ficar com inveja, e eu também fico um bocadinho.', en: 'Right colour, honest nose, long finish. My colleagues will be jealous, and so will I, a little.', es: 'Color justo, nariz honesta, final largo. Mis colegas tendrán envidia, y yo también un poquito.' }
+  valentim: { pt: 'Esta tem paciência no copo. Obrigado, a videira também agradece.', en: 'This one has patience in the glass. Thank you, the vine thanks you too.', es: 'Esta tiene paciencia en la copa. Gracias, la vid también lo agradece.' },
+  marisa: { pt: 'Perfeita! Digo a todos que a equipa inteira ajudou, gato incluído.', en: 'Perfect! I\'ll tell everyone the whole team helped, cat included.', es: '¡Perfecta! Diré a todos que ayudó todo el equipo, gato incluido.' },
+  henrique: { pt: 'Cor certa, nariz honesto, final comprido. Aprovo, com uma ponta de inveja.', en: 'Right colour, honest nose, long finish. I approve, with a hint of envy.', es: 'Color justo, nariz honesta, final largo. Lo apruebo, con un punto de envidia.' },
+  geral: { pt: 'Muito obrigado! Esta garrafa vai ser bem estimada.', en: 'Thank you so much! This bottle will be well looked after.', es: '¡Muchas gracias! Esta botella estará bien cuidada.' }
 };
 
 // Só em memória: o que acabou de acontecer, para mostrar uma vez na Quinta. { dia, tipo: 'entregue' | 'acabou', personagem, premio }.
@@ -265,9 +270,12 @@ function encomendaPremioTexto(premio) {
   return partes.join(', ');
 }
 
+// A fala da personagem na língua do jogador; sem fala própria (ou sem essa língua), a 'geral'. Nunca vazia.
 function encomendaFala(falas, personagem) {
-  const f = falas[personagem];
-  return f ? (f[currentLang] || f.pt) : '';
+  const lingua = typeof currentLang === 'string' ? currentLang : 'pt';
+  const propria = Object.prototype.hasOwnProperty.call(falas, personagem) ? falas[personagem] : null;
+  const f = propria && propria[lingua] ? propria : falas.geral;
+  return f[lingua] || f.pt;
 }
 
 // O agradecimento e o prémio de uma entrega (Quinta e página da garrafa).
