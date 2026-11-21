@@ -233,7 +233,7 @@ const MUTANTES = [
   ['sem a frase do Alambique', "'<p class=\"oferta-linha\">' + t('bagaceira.sem') + '</p></div>'", "'</div>'"],
   ['sem a linha de já ofereceu', "if (p.motivo === 'ja_hoje') return", "if (false) return"],
   ['sem fala no resultado', "(fala ? '<p class=\"oferta-fala\">«' + cadernoEscapar(fala[currentLang] || fala.pt) + '»</p>' : '')", "''"],
-  ['não liga à linha da Quinta', "(function () { try { return visitaBagaceiraHtml(); } catch (e) { return ''; } })();", "'';"],
+  ['não liga à linha da Quinta', "(function () { try { return visitaBagaceiraHtml(); } catch (e) { return ''; } })() +", "'' +"],
   ['fala do Chizo', "  henrique: {", "  chizo: { pt: 'a', en: 'a', es: 'a' },\n  henrique: {"],
   ['fala em falta (ES Marisa)', "es: '¿Para mí? ¡Qué amable! Un brindis por el viñedo y luego, a trabajar.'", "es: ''"],
   ['fala diz que aquece', 'Aprovo os três.', 'Aquece e ajuda a digestão.'],
