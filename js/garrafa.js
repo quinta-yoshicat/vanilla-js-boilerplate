@@ -131,6 +131,9 @@ function formatarFaltaGarrafa(ms) {
 // vontade: com o que o Prensar dá por cada uso, um jogador normal
 // nunca fica preso à espera de bagaço para o Alambique.
 const ADEGA_CUSTO_UVAS_PRENSAR = 10;
+// Gotas que cada prensada dá (sorteio entre o mínimo e o máximo, os dois incluídos).
+const ADEGA_GOTAS_PRENSAR_MIN = 12;
+const ADEGA_GOTAS_PRENSAR_MAX = 18;
 const ADEGA_CUSTO_GOTAS_FORTIFICAR = 100;
 const ADEGA_CUSTO_AGUARDENTE_FORTIFICAR = 1;
 
@@ -551,7 +554,7 @@ function executarAcaoAdega(acao) {
       return;
     }
     state.uvas -= ADEGA_CUSTO_UVAS_PRENSAR;
-    const gotasGanhas = randInt(8, 12);
+    const gotasGanhas = randInt(ADEGA_GOTAS_PRENSAR_MIN, ADEGA_GOTAS_PRENSAR_MAX);
     const bagacoGanho = randInt(2, 4);
     state.gotas += gotasGanhas;
     a.bagaco += bagacoGanho;
