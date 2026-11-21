@@ -97,6 +97,8 @@ function renderPerfil() {
       tituloHtml +
       '<h2 data-i18n="perfil.galeriaTitulo"></h2>' +
       garrafasInfoHtml +
+      // Encomendas entregues (state.encomendas.cumpridas, pelo reparo de sempre; 0 se nunca entregou nenhuma).
+      '<p class="info-text perfil-encomendas">' + t('perfil.encomendasEntregues').replace('{n}', typeof encomendasNormalizar === 'function' ? encomendasNormalizar(state.encomendas).cumpridas : 0) + '</p>' +
     '</div>' +
     '<div class="action-panel">' +
       convidarHtml +

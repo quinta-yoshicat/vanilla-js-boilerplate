@@ -45,6 +45,11 @@ function conquistasCapitulosConcluidos() {
   return (c && typeof c === 'object') ? Object.keys(c).length : 0;
 }
 
+// Encomendas entregues, pelo reparo de sempre (um estado estranho conta 0).
+function conquistasEncomendas() {
+  return typeof encomendasNormalizar === 'function' ? encomendasNormalizar(state.encomendas).cumpridas : 0;
+}
+
 function conquistasEstacoesFeitas() {
   const vistas = {};
   conquistasHistorico().forEach(function (e) {
@@ -95,7 +100,15 @@ const CONQUISTAS_CONFIG = [
     cumprida: function () { return nivelPelaReputacao(state.reputacao) >= 6; } },
   // Nível 7: cumprida quando o capítulo 7 fica concluído (ver js/capitulos.js).
   { id: 'boa_vizinhanca', nomeKey: 'conquista.boa_vizinhanca.nome', descKey: 'conquista.boa_vizinhanca.desc',
-    cumprida: function () { return !!(state.capitulos && state.capitulos.concluidos && state.capitulos.concluidos.cap7 === true); } }
+    cumprida: function () { return !!(state.capitulos && state.capitulos.concluidos && state.capitulos.concluidos.cap7 === true); } },
+  // Encomendas entregues (state.encomendas.cumpridas, js/encomendas.js), lidas pelo reparo de sempre (encomendasNormalizar):
+  // um jogador antigo que já as tenha ganha-as logo, uma só vez (fica em state.conquistasGanhas).
+  { id: 'encomenda_1', nomeKey: 'conquista.encomenda_1.nome', descKey: 'conquista.encomenda_1.desc',
+    cumprida: function () { return conquistasEncomendas() >= 1; } },
+  { id: 'encomenda_10', nomeKey: 'conquista.encomenda_10.nome', descKey: 'conquista.encomenda_10.desc',
+    cumprida: function () { return conquistasEncomendas() >= 10; } },
+  { id: 'encomenda_30', nomeKey: 'conquista.encomenda_30.nome', descKey: 'conquista.encomenda_30.desc',
+    cumprida: function () { return conquistasEncomendas() >= 30; } }
 ];
 
 // Conquistas ganhas (permanentes): state.conquistasGanhas, id -> true. A medalha

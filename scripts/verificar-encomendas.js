@@ -341,12 +341,17 @@ function suite(fontes) {
     // Desde a PR 2 (no jogo): o engarrafar (js/garrafa.js), o cartão da Quinta (js/visitas.js) e os textos (js/i18n.js)
     // também falam delas; mais nenhum ficheiro (nem a jeropiga, js/festas.js).
     // Desde o sinal do cartão da Quinta, js/objetivos.js (quintaPendentes) também as LÊ.
-    ok(J(quem) === J(['garrafa.js', 'i18n.js', 'nuvem.js', 'objetivos.js', 'state.js', 'visitas.js']), '(g) só js/state.js, js/nuvem.js, js/garrafa.js, js/visitas.js, js/objetivos.js e js/i18n.js falam das encomendas: ' + J(quem));
+    // Desde a parte 3: o Perfil (o contador) e o Livro de Conquistas (os marcos) também as LEEM, só por encomendasNormalizar.
+    ok(J(quem) === J(['conquistas.js', 'garrafa.js', 'i18n.js', 'nuvem.js', 'objetivos.js', 'perfil.js', 'state.js', 'visitas.js']), '(g) só js/state.js, js/nuvem.js, js/garrafa.js, js/visitas.js, js/objetivos.js, js/perfil.js, js/conquistas.js e js/i18n.js falam das encomendas: ' + J(quem));
+    ['perfil.js', 'conquistas.js'].forEach(function (f) {
+      const lidas = (LER('js/' + f).replace(/\/\/.*$/gm, '').match(/\bencomenda[A-Za-z]*\(/g) || []).filter(function (x, i, l) { return l.indexOf(x) === i; });
+      ok(J(lidas) === J(['encomendasNormalizar(']) && !/state\.encomendas\s*=|\.cumpridas\s*[+-]?=/.test(LER('js/' + f)), '(g) js/' + f + ' só lê as encomendas (encomendasNormalizar): ' + J(lidas));
+    });
     const lidas = (LER('js/objetivos.js').replace(/\/\/.*$/gm, '').match(/\bencomenda[A-Za-z]*\(/g) || []).filter(function (x, i, l) { return l.indexOf(x) === i; }).sort();
     ok(J(lidas) === J(['encomendaAtiva(', 'encomendaDiaDeHoje(', 'encomendaPodePedir(', 'encomendasNormalizar(']), '(g) js/objetivos.js só lê (encomendaPodePedir, encomendaAtiva, encomendaDiaDeHoje, encomendasNormalizar): ' + J(lidas));
     const usadas = (fontes['garrafa.js'].replace(/\/\/.*$/gm, '').match(/\bencomenda[A-Za-z]*/g) || []).filter(function (x, i, l) { return l.indexOf(x) === i; }).sort();
     ok(J(usadas) === J(['encomenda', 'encomendaDiaDeHoje', 'encomendaEngarrafada', 'encomendaEntregueHtml', 'encomendaEntregueTexto', 'encomendaResultado']) && (fontes['garrafa.js'].match(/encomendaEngarrafada\(state/g) || []).length === 1, '(g) js/garrafa.js só chama encomendaEngarrafada (uma vez, no engarrafar) e os textos da entrega: ' + J(usadas));
-    ok(fontes['i18n.js'].split('\n').filter(function (l) { return /encomenda/i.test(l); }).every(function (l) { return /^\s*'(encomenda\.[A-Za-z]+|quinta\.sinal\.encomenda)': /.test(l); }) && /'encomenda\.pedido'/.test(fontes['i18n.js']), '(g) no js/i18n.js só há as chaves encomenda.*');
+    ok(fontes['i18n.js'].split('\n').filter(function (l) { return /encomenda/i.test(l); }).every(function (l) { return /^\s*'(encomenda\.[A-Za-z]+|quinta\.sinal\.encomenda|conquista\.encomenda_\d+\.(nome|desc)|perfil\.encomendasEntregues)': /.test(l); }) && /'encomenda\.pedido'/.test(fontes['i18n.js']), '(g) no js/i18n.js só há as chaves encomenda.*');
     const I = fontes['index.html'];
     const pos = function (f) { return I.indexOf('<script src="js/' + f + '?v='); };
     ok(/<script src="js\/encomendas\.js\?v=\d+"><\/script>/.test(I) && ['visitas.js', 'garrafa.js', 'tempo.js', 'niveis.js', 'main.js'].every(function (f) { return pos(f) > 0; }) && pos('encomendas.js') > pos('visitas.js') && pos('encomendas.js') > pos('garrafa.js') && pos('encomendas.js') > pos('tempo.js') && pos('encomendas.js') > pos('niveis.js') && pos('encomendas.js') < pos('main.js'), '(g) index.html: js/encomendas.js?v=1 depois de visitas.js e garrafa.js (e de tempo.js e niveis.js), antes de main.js');
