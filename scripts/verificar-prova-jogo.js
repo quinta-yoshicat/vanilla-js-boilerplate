@@ -21,7 +21,7 @@
 //  (h) textos nas 3 línguas, os de PT tal como combinados, sem «dias» nem «Fygmo2»; a prova desenha-se em EN e ES;
 //  (i) layout: a conta da grelha com o botão (44 + 8 a mais), o painel da prova até metade do ecrã, as cores com 44 px,
 //      e uma estimativa de 320 a 430 px de largura e 640 px de altura: nada corta, nada sai da caixa, tudo cabe;
-//  (j) sem Math.random; o index.html carrega js/prova-jogo.js?v=1 depois de js/prova.js, js/garrafa.js e js/reserva.js;
+//  (j) sem Math.random; o index.html carrega js/prova-jogo.js depois de js/prova.js, js/garrafa.js e js/reserva.js;
 //  (k) dados/provas.js: «laranja cristalizada» só no Âmbar e «figo» só no Cobre (nas 3 línguas), o resto das regras
 //      continua a passar sem avisos.
 //
@@ -310,8 +310,9 @@ function suite(fontes) {
     ok(!rebentou && g.ev('state.prova.dias') === 1, '(j) joga-se com Math.random a rebentar');
     const I = fontes['index.html'];
     const pos = function (f) { return I.indexOf('<script src="' + f + '?v='); };
-    ok(/<script src="js\/prova-jogo\.js\?v=1"><\/script>/.test(I) && pos('js/prova-jogo.js') > pos('js/prova.js') && pos('js/prova-jogo.js') > pos('js/garrafa.js') && pos('js/prova-jogo.js') > pos('js/reserva.js') && pos('js/prova-jogo.js') < pos('js/main.js') && pos('js/prova.js') > 0, '(j) js/prova-jogo.js?v=1 depois de js/prova.js, js/garrafa.js e js/reserva.js, antes de js/main.js');
-    ok(/js\/garrafa\.js\?v=71"/.test(I) && /js\/i18n\.js\?v=116"/.test(I) && /dados\/provas\.js\?v=2"/.test(I) && /js\/prova\.js\?v=1"/.test(I), '(j) sobem garrafa.js (71), i18n.js (116) e dados/provas.js (2); js/prova.js não muda (1)');
+    ok(/<script src="js\/prova-jogo\.js\?v=\d+"><\/script>/.test(I) && pos('js/prova-jogo.js') > pos('js/prova.js') && pos('js/prova-jogo.js') > pos('js/garrafa.js') && pos('js/prova-jogo.js') > pos('js/reserva.js') && pos('js/prova-jogo.js') < pos('js/main.js') && pos('js/prova.js') > 0, '(j) js/prova-jogo.js depois de js/prova.js, js/garrafa.js e js/reserva.js, antes de js/main.js');
+    const v = function (f) { const m = new RegExp(f.replace(/[.\/]/g, '\\$&') + '\\?v=(\\d+)"').exec(I); return m ? Number(m[1]) : 0; };
+    ok(v('js/garrafa.js') >= 71 && v('js/i18n.js') >= 116 && v('dados/provas.js') >= 2 && v('js/prova.js') === 1 && v('js/prova-jogo.js') >= 1, '(j) subiram garrafa.js (71+), i18n.js (116+) e dados/provas.js (2+); js/prova.js não muda (1)');
     // Só garrafa.js encaixa a prova no ecrã (e só pelas funções do ecrã: nunca começa nem paga por si).
     const G = fontes['garrafa.js'].replace(/\/\/.*$/gm, '');
     ok(!/provaComecar\(|provaTerminar\(|provaVerificar\(/.test(G) && /provaColecaoHtml\(\)/.test(G) && /provaAoEntrarNaColecao\(\)/.test(G), '(j) js/garrafa.js só desenha a prova (nunca começa nem paga)');
@@ -348,7 +349,7 @@ let impossiveis = 0;
 const MUTACOES = [
   ['o botão aparece no nível 5', 'prova-jogo.js', "  if (p.motivo === 'ja_hoje') return 'ja_hoje';\n  return 'escondido';", "  if (p.motivo === 'ja_hoje') return 'ja_hoje';\n  return 'pode';"],
   ['já provou hoje e o botão não se apaga', 'prova-jogo.js', "  if (p.motivo === 'ja_hoje') return 'ja_hoje';", "  if (p.motivo === 'ja_hoje') return 'pode';"],
-  ['não grava ao começar', 'prova-jogo.js', '      if (r.ok) {\n        saveState(state);\n        provaJogo = {', '      if (r.ok) {\n        provaJogo = {'],
+  ['não grava ao começar', 'prova-jogo.js', '      if (r.ok) {\n        saveState(state);\n', '      if (r.ok) {\n'],
   ['a resposta muda', 'prova-jogo.js', '|| j.resultado || j.revelada || PROVA_CORES', '|| j.resultado || PROVA_CORES'],
   ['«Seguinte» sem resposta', 'prova-jogo.js', '|| j.resultado || !j.revelada) return;', '|| j.resultado) return;'],
   ['tocar depois do fim volta a acabar', 'prova-jogo.js', 'if (provaOcupado || !j || j.resultado || !j.revelada) return;', 'if (provaOcupado || !j || !j.revelada) return;'],
@@ -381,7 +382,7 @@ const MUTACOES = [
   ['as cores com menos de 44 px', 'index.html', '      min-width: 0;\n      min-height: 44px;\n    }\n    .prova-cor img', '      min-width: 0;\n      min-height: 36px;\n    }\n    .prova-cor img'],
   ['o botão de entrada com a margem de sempre', 'index.html', '    .action-panel .prova-botao { padding-left: 10px; padding-right: 10px; }\n', ''],
   ['as palavras compridas saem da caixa', 'index.html', '    .prova-cor span { min-width: 0; overflow-wrap: anywhere; }', '    .prova-cor span { min-width: 0; }'],
-  ['sem o script no index', 'index.html', '  <script src="js/prova-jogo.js?v=1"></script>\n', ''],
+  ['sem o script no index', 'index.html', '  <script src="js/prova-jogo.js?v=2"></script>\n', ''],
   ['um texto com «dias»', 'i18n.js', "    'prova.jaHoje': 'Já provaste hoje',", "    'prova.jaHoje': 'Já provaste hoje, volta daqui a uns dias',"],
   ['um texto em falta em EN', 'i18n.js', "    'prova.seguinte': 'Next',\n", ''],
   ['o botão com outro texto', 'i18n.js', "    'prova.btn': 'Prova às cegas com o Dr. Henrique',", "    'prova.btn': 'Prova às cegas',"],
