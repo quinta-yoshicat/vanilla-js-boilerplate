@@ -285,7 +285,8 @@ function suite(fontes) {
     r = juntar({ atual: A('2026-10-09', 1), ultimoDia: '2026-10-09', cumpridas: 1 }, { atual: A('2026-10-10', 2), ultimoDia: '2026-10-10', cumpridas: 1 });
     ok(J(r.atual) === J(A('2026-10-10', 2)) && r.ultimoDia === '2026-10-10', '(f) as duas aceites: fica a mais recente');
     r = juntar({ atual: A('2026-10-10', 4), ultimoDia: '2026-10-10', cumpridas: 1 }, { atual: A('2026-10-10', 2), ultimoDia: '2026-10-10', cumpridas: 1 });
-    ok(J(r.atual) === J(A('2026-10-10', 4)), '(f) no mesmo dia: fica a do "base"');
+    const r2 = juntar({ atual: A('2026-10-10', 2), ultimoDia: '2026-10-10', cumpridas: 1 }, { atual: A('2026-10-10', 4), ultimoDia: '2026-10-10', cumpridas: 1 });
+    ok(J(r.atual) === J(A('2026-10-10', 4)) && J(r2) === J(r), '(f) no mesmo dia: fica a de escalão maior, qualquer que seja a ordem');
     r = juntar({ atual: 'lixo', ultimoDia: 'x', cumpridas: -2 }, { atual: A('2026-10-10'), ultimoDia: '2026-10-10', cumpridas: 2 });
     ok(r.cumpridas === 2 && J(r.atual) === J(A('2026-10-10')) && r.ultimoDia === '2026-10-10', '(f) um lado estragado conta como vazio');
     r = juntar(undefined, undefined);
@@ -381,7 +382,8 @@ const MUTACOES = [
   ['nuvem: ultimoDia fica o mais antigo', 'nuvem.js', 'ultimoDia: nuvemLevesMaisRecente(x.ultimoDia, y.ultimoDia)', 'ultimoDia: nuvemLevesMaisAntiga(x.ultimoDia, y.ultimoDia)'],
   ['nuvem: um null apaga a aceite', 'nuvem.js', '  else if (x.atual === null) atual = y.atual;\n  else if (y.atual === null) atual = x.atual;\n', '  else if (x.atual === null || y.atual === null) atual = null;\n'],
   ['nuvem: ignora quem tem mais cumpridas', 'nuvem.js', '  if (x.cumpridas > y.cumpridas) atual = x.atual;\n  else if (y.cumpridas > x.cumpridas) atual = y.atual;\n  else if', '  if'],
-  ['nuvem: fica a mais antiga', 'nuvem.js', 'atual = y.atual.aceiteDia > x.atual.aceiteDia ? y.atual : x.atual;', 'atual = y.atual.aceiteDia < x.atual.aceiteDia ? y.atual : x.atual;'],
+  ['nuvem: fica a mais antiga', 'nuvem.js', 'atual = chave(y.atual) > chave(x.atual) ? y.atual : x.atual;', 'atual = chave(y.atual) < chave(x.atual) ? y.atual : x.atual;'],
+  ['nuvem: no mesmo dia depende da ordem', 'nuvem.js', "return e.aceiteDia + '|' + e.escalao", "return e.aceiteDia + '|' + 0"],
   ['nuvem: sem a área', 'nuvem.js', "'reserva', 'colecao', 'encomendas'];", "'reserva', 'colecao'];"],
   ['o engarrafar passa a chamá-las', 'garrafa.js', '    a.lote = null;\n    adegaGarrafaFeita', '    a.lote = null; if (typeof encomendaProcurarGarrafa === "function") encomendaProcurarGarrafa(state, "x");\n    adegaGarrafaFeita'],
   ['carregado antes de visitas.js', 'index.html', '  <script src="js/visitas.js?v=12"></script>\n', '']

@@ -397,7 +397,8 @@ function nuvemJuntarCaderno(a, b) {
 //     nunca se "desoferece"); no mesmo dia com ids diferentes fica o do "base".
 //   encomendas {atual, ultimoDia, cumpridas} (js/encomendas.js): cumpridas = o MAIOR; ultimoDia = o mais recente;
 //     atual: se um lado tem mais cumpridas, fica o desse lado (pode ser null: já entregue); com o mesmo número, uma
-//     encomenda aceite nunca é apagada (com um null fica a outra) e, com as duas, fica a aceite mais recente (empate: "base").
+//     encomenda aceite nunca é apagada (com um null fica a outra) e, com as duas, fica a aceite mais recente (no mesmo dia,
+//     a de escalão maior, depois por personagem e historicoInicio: o resultado não depende da ordem dos dois lados).
 //     Cada lado passa antes por encomendasNormalizar() (js/state.js): o mal formado conta como null/0.
 const NUVEM_LEVES_AREAS = ['despensa', 'visitas', 'lagar', 'camara', 'roxo', 'loja', 'reserva', 'colecao', 'encomendas'];
 
@@ -509,7 +510,10 @@ function nuvemLevesEncomendas(a, b) {
   else if (y.cumpridas > x.cumpridas) atual = y.atual;
   else if (x.atual === null) atual = y.atual;
   else if (y.atual === null) atual = x.atual;
-  else atual = y.atual.aceiteDia > x.atual.aceiteDia ? y.atual : x.atual;
+  else {
+    const chave = function (e) { return e.aceiteDia + '|' + e.escalao + '|' + e.personagem + '|' + ('000000000' + e.historicoInicio).slice(-9) + '|' + e.prazoDia; };
+    atual = chave(y.atual) > chave(x.atual) ? y.atual : x.atual;
+  }
   return {
     atual: atual ? Object.assign({}, atual) : null,
     ultimoDia: nuvemLevesMaisRecente(x.ultimoDia, y.ultimoDia),
