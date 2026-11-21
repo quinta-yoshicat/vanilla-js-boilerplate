@@ -382,7 +382,7 @@ const MUTACOES = [
   ['as cores com menos de 44 px', 'index.html', '      min-width: 0;\n      min-height: 44px;\n    }\n    .prova-cor img', '      min-width: 0;\n      min-height: 36px;\n    }\n    .prova-cor img'],
   ['o botão de entrada com a margem de sempre', 'index.html', '    .action-panel .prova-botao { padding-left: 10px; padding-right: 10px; }\n', ''],
   ['as palavras compridas saem da caixa', 'index.html', '    .prova-cor span { min-width: 0; overflow-wrap: anywhere; }', '    .prova-cor span { min-width: 0; }'],
-  ['sem o script no index', 'index.html', '  <script src="js/prova-jogo.js?v=2"></script>\n', ''],
+  ['sem o script no index', 'index.html', '<script src="js/prova-jogo.js?v=', '<script src="js/prova-jogo-x.js?v='],
   ['um texto com «dias»', 'i18n.js', "    'prova.jaHoje': 'Já provaste hoje',", "    'prova.jaHoje': 'Já provaste hoje, volta daqui a uns dias',"],
   ['um texto em falta em EN', 'i18n.js', "    'prova.seguinte': 'Next',\n", ''],
   ['o botão com outro texto', 'i18n.js', "    'prova.btn': 'Prova às cegas com o Dr. Henrique',", "    'prova.btn': 'Prova às cegas',"],

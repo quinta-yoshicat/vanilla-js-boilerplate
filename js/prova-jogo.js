@@ -220,6 +220,8 @@ function provaAcabar(j) {
   }
   const r = provaTerminar(state, j.sessao, j.respostas);
   if (r.ok) {
+    // O objetivo do dia «Faz a Prova às cegas» (js/objetivos.js) conta ao ACABAR (aqui), nunca ao começar nem em teste.
+    if (typeof marcarObjetivoCumprido === 'function') marcarObjetivoCumprido('prova_jogar');
     saveState(state);
     if (typeof updateStatsDisplays === 'function') updateStatsDisplays();
     if (typeof atualizarResumoQuinta === 'function') atualizarResumoQuinta(); // o sinal do cartão da Quinta (js/objetivos.js)

@@ -198,7 +198,7 @@ function encomendaExpirar(estado, dia) {
 // fica vazio; ver encomendaFala).
 const ENCOMENDAS_FALAS_PEDIDO = {
   valentim: { pt: 'Preciso de uma garrafa feita sem pressa. A videira não gosta de correrias.', en: 'I need a bottle made without hurry. The vine dislikes a rush.', es: 'Necesito una botella hecha sin prisa. A la vid no le gustan las carreras.' },
-  marisa: { pt: 'Arranjas-me uma garrafa? Depois da vindima, sabe pela vida.', en: 'Could you sort me out a bottle? After the harvest, it\'s a treat.', es: '¿Me consigues una botella? Después de la vendimia, sabe a gloria.' },
+  marisa: { pt: 'Arranjas-me uma garrafa? Depois da vindima, sabe mesmo bem.', en: 'Could you sort me out a bottle? After the harvest, it\'s a treat.', es: '¿Me consigues una botella? Después de la vendimia, sabe a gloria.' },
   henrique: { pt: 'Queria um exemplar da casa para provar. Prometo cuspir com elegância.', en: 'I\'d like a bottle from the house to taste. I promise to spit elegantly.', es: 'Quería un ejemplar de la casa para catar. Prometo escupir con elegancia.' },
   geral: { pt: 'Podes guardar-me uma garrafa desta cor? Fico à espera.', en: 'Could you set aside a bottle of this colour for me? I\'ll wait.', es: '¿Me guardas una botella de este color? Te espero.' }
 };

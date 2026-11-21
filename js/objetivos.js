@@ -10,9 +10,10 @@
 // Nunca se escolhe um objetivo impossível hoje: cada candidato só entra
 // no sorteio se a sua condição (elegivel()) for verdadeira NESTE
 // MOMENTO. Os "cooldowns" próprios de cada ação (ex: Regar 3h) não
-// entram nessa condição — como o mais longo do jogo é 4h, uma ação
-// elegível pela fase/recursos fica sempre disponível ainda dentro do
-// mesmo dia.
+// entram nessa condição — os da Vinha e da Adega vão até 4h, por isso uma
+// ação elegível pela fase/recursos fica disponível ainda dentro do mesmo
+// dia. A espera mais longa é a da Cave (cada escalão de descanso são 9 h):
+// por isso "Engarrafar" só entra quando o lote já tem 1 escalão feito.
 // ---------------------------------------------------------------------
 
 // Recompensas fixas — usadas tanto para somar a Reputação como para
@@ -48,10 +49,37 @@ const OBJETIVOS_POOL_A = [
 // --- GRUPO B — Ação (Objetivo 2) ---------------------------------------
 // (ecraDesbloqueado() ver js/niveis.js — jogadores antigos ignoram-no
 // sempre, ver state.acesso.jogadorAntigo em js/state.js)
+//
+// As tarefas do dia dos níveis 5 e 6 (js/reserva.js, js/prova.js) também estão aqui, só quando se podem cumprir hoje
+// (usam as mesmas regras dos botões, sem repetir contas) e nunca em modo de teste (objetivoForaDoTeste):
+//   reserva_visitar  Cave de Reserva aberta, nível 5+, ainda não visitada hoje (reservaPodeVisitar)
+//   colecao_arrumar  nível 6+ e o «Arrumar a Coleção» disponível hoje, não apagado (colecaoPodeArrumar)
+//   prova_jogar      a Prova às cegas de hoje ainda por jogar (provaPodeJogar); conta ao ACABAR a prova
 const OBJETIVOS_POOL_B = [
   { id: 'proteger_vencer', elegivel: function () { return ecraDesbloqueado('proteger') && vitoriasProtegerComPremioRestantesHoje() > 0; } },
-  { id: 'explorar_descobrir', elegivel: function () { return ecraDesbloqueado('explorar') && entradasBloqueadas().length > 0; } }
+  { id: 'explorar_descobrir', elegivel: function () { return ecraDesbloqueado('explorar') && entradasBloqueadas().length > 0; } },
+  { id: 'reserva_visitar', elegivel: function () {
+    return objetivoForaDoTeste() && typeof reservaPodeVisitar === 'function' && typeof caveReservaAberta === 'function' && caveReservaAberta() &&
+      nivelPelaReputacao(state.reputacao) >= 5 && reservaPodeVisitar(state, diaLisboaDeHoje()).ok === true;
+  } },
+  { id: 'colecao_arrumar', elegivel: function () {
+    return objetivoForaDoTeste() && typeof colecaoPodeArrumar === 'function' && typeof colecaoContarCores === 'function' &&
+      nivelPelaReputacao(state.reputacao) >= 6 && colecaoPodeArrumar(state, diaLisboaDeHoje(), colecaoContarCores()).ok === true;
+  } },
+  { id: 'prova_jogar', elegivel: function () {
+    return objetivoForaDoTeste() && typeof provaPodeJogar === 'function' && provaPodeJogar(state, diaLisboaDeHoje(), false).ok === true;
+  } }
 ];
+
+// Fora do modo de teste (?visita=, ?dias=, ..., e ?prova=1 da Prova às cegas): as tarefas dos níveis 5 e 6 não entram
+// no sorteio nem contam em modo de teste.
+function objetivoForaDoTeste() {
+  try {
+    if (typeof visitaEmModoTeste === 'function' && visitaEmModoTeste()) return false;
+    if (typeof provaModoTeste === 'function' && provaModoTeste()) return false;
+  } catch (e) { return false; }
+  return true;
+}
 
 // --- GRUPO C — "Do dia": festa > tempo real > bónus de estação --------
 // Os ids do Grupo C que não estão em nenhuma pool (a regra de cada um está em

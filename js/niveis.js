@@ -142,7 +142,6 @@ const NIVEL_NECESSARIO_POR_ECRA = {
   enciclopedia: 4,
   festa: 4,
   colecao: 6,
-  garrafas: 6,
   estrada: 7,
   loja: 7,
   lagar: 8,
