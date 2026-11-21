@@ -217,6 +217,8 @@ function reposicionarFlutuantes() {
 
   const bolha = document.getElementById('app-dialogue');
   if (bolha) bolha.style.setProperty('--balao-extra', baseBalao + 'px');
+  // «Ver cenário» (js/cenario.js): se abriu uma janela por cima, mostra tudo outra vez.
+  if (typeof cenarioVerJanelas === 'function') cenarioVerJanelas();
 }
 
 // ---------------------------------------------------------------------
@@ -313,6 +315,8 @@ function mostrarFalas(mensagens, nome) {
   dialogoIndice = 0;
   dialogoNomeAtual = nome || 'YoshiCat';
   dialogoComFotoPropria = lista.some(function (m) { return m && typeof m === 'object' && m.foto; });
+  // «Ver cenário» (js/cenario.js): uma fala nova mostra tudo outra vez (nunca fica escondida).
+  if (lista.length && typeof cenarioSair === 'function') cenarioSair();
   mostrarFalaAtual();
 }
 
@@ -746,6 +750,8 @@ function goTo(screen, opcoes) {
     historicoEcras.push(idAnterior);
   }
 
+  // «Ver cenário» (js/cenario.js): mudar de ecrã (ou voltar a tocar na Quinta) mostra tudo outra vez.
+  if (typeof cenarioSair === 'function') cenarioSair();
   document.querySelectorAll('.screen').forEach(function (s) { s.classList.remove('active'); });
   document.getElementById('screen-' + screen).classList.add('active');
   document.body.classList.toggle('tela-home', screen === 'home');

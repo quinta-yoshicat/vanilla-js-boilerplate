@@ -1421,6 +1421,37 @@
       padding: 8px 10px;
     }
 
+    /* «Ver cenário» (ver js/cenario.js): o olho no canto de cima à direita da Quinta, na altura do cartão e do lado
+       oposto (o cartão tem no máximo 60% da coluna, à esquerda), por baixo da barra de cima e longe da de baixo. 44 px
+       de toque. Com a classe quinta-ver-cenario no <body>, o cartão e o balão deixam de se ver (visibility: só não se
+       veem, continuam lá a funcionar) e a camada das falas não recebe toques; o olho fica riscado e dourado. */
+    .cenario-btn {
+      position: fixed;
+      right: calc(50% - min(var(--coluna), 100vw - 20px) / 2); /* alinhado com a ponta direita da barra de cima */
+      top: calc(var(--topo-offset) + 44px + 8px);
+      z-index: 19;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      border-radius: 50%;
+      background: var(--topo-fundo);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+      border: 1.5px solid rgba(245, 215, 110, 0.6);
+      color: #fff5df;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .cenario-btn .cenario-olho-riscado { display: none; }
+    .cenario-btn.ativo { background: var(--dourado); color: #2a1608; border-color: transparent; }
+    .cenario-btn.ativo .cenario-olho { display: none; }
+    .cenario-btn.ativo .cenario-olho-riscado { display: block; }
+    body.quinta-ver-cenario #quinta-topcard,
+    body.quinta-ver-cenario #app-dialogue { visibility: hidden; pointer-events: none; }
+    body.quinta-ver-cenario .overlay { pointer-events: none; }
+
     /* Aberto, o cartão (cabeçalho + conteúdo) nunca passa do meio do ecrã. */
     .topcard.aberto {
       max-height: 50vh;
@@ -2439,6 +2470,11 @@
         <div id="objetivos-container"></div>
       </div>
     </div>
+    <!-- «Ver cenário» (js/cenario.js): esconde o cartão e o balão para ver a Quinta; tocar outra vez mostra tudo -->
+    <button type="button" id="quinta-cenario-btn" class="cenario-btn" onclick="cenarioAlternar()" aria-pressed="false" data-i18n-aria="quinta.cenario.ver" data-i18n-title="quinta.cenario.ver" aria-label="Ver cenário" title="Ver cenário">
+      <svg class="cenario-olho" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+      <svg class="cenario-olho-riscado" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true"><path d="M2 12s3.5-7 10-7c2.1 0 3.9.7 5.4 1.7M22 12s-3.5 7-10 7c-2.1 0-3.9-.7-5.4-1.7"></path><circle cx="12" cy="12" r="3"></circle><path d="M3 3l18 18"></path></svg>
+    </button>
   </div>
 
   <!-- ECRÃ: A VINHA (ciclo de trabalho agrícola) -->
@@ -2553,7 +2589,7 @@
   <script src="js/state.js?v=75"></script>
   <script src="js/som.js?v=53"></script>
   <script src="js/nuvem.js?v=64"></script>
-  <script src="js/i18n.js?v=117"></script>
+  <script src="js/i18n.js?v=118"></script>
   <script src="js/estacoes.js?v=42"></script>
   <script src="js/tempo.js?v=55"></script>
   <script src="js/festas.js?v=69"></script>
@@ -2604,6 +2640,8 @@
   <script src="js/reserva.js?v=2"></script>
   <!-- Prova às cegas no ecrã da Coleção (o botão e a prova a decorrer): usa as regras de js/prova.js -->
   <script src="js/prova-jogo.js?v=2"></script>
-  <script src="js/main.js?v=80"></script>
+  <!-- «Ver cenário» na Quinta (o olho): antes do main.js, que o chama ao mudar de ecrã -->
+  <script src="js/cenario.js?v=1"></script>
+  <script src="js/main.js?v=81"></script>
 </body>
 </html>
