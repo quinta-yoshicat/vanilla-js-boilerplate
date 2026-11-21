@@ -112,7 +112,10 @@ function suite(fontes) {
     const semProva = function (x) {
       return normal(x.replace(/@supports \(height: 100dvh\) \{\s*[^{}]*prova[^{}]*\{[^{}]*\}\s*\}/g, '').replace(/[^{}]*prova[^{}]*\{[^{}]*\}/g, ''));
     };
-    ok(semProva(M.fora) === semProva(fora), '(c) o CSS de fora do bloco é igual ao do master (origin/master), tirando as regras da Prova às cegas');
+    // E as do «Ver cenário» (o olho da Quinta, js/cenario.js: seletores com «cenario»), que também não são de ecrã baixo.
+    const semCenario = function (x) { return normal(x.replace(/[^{}]*cenario[^{}]*\{[^{}]*\}/g, '')); };
+    ok(semCenario(semProva(M.fora)) === semCenario(semProva(fora)), '(c) o CSS de fora do bloco é igual ao do master (origin/master), tirando as regras da Prova às cegas e do «Ver cenário»');
+    ok(semCenario(fora) !== fora || !/cenario/.test(fora), '(c) (as regras do «Ver cenário» saem mesmo da comparação)');
     ok(semProva(fora) !== fora || !/prova/.test(fora), '(c) (as regras da prova saem mesmo da comparação)');
   }
 
