@@ -387,14 +387,14 @@ const MUTACOES = [
   ['reparação aceita escalão 5', 'state.js', 'escalao < 1 || escalao > 4) return null;', 'escalao < 1 || escalao > 5) return null;'],
   ['reparação aceita datas mal escritas', 'state.js', "  if (typeof x !== 'string' || !/^\\d{4}-\\d{2}-\\d{2}$/.test(x)) return null;", "  if (typeof x !== 'string') return null; return x;"],
   ['reparação aceita cumpridas negativo', 'state.js', 'Number.isInteger(c) && c >= 0 ? c : 0', 'Number.isInteger(c) ? c : 0'],
-  ['sem o campo no estado por omissão', 'state.js', '    encomendas: {\n      atual: null,\n      ultimoDia: null,\n      cumpridas: 0\n    }\n', '    encomendasX: {}\n'],
+  ['sem o campo no estado por omissão', 'state.js', '    encomendas: {\n      atual: null,\n      ultimoDia: null,\n      cumpridas: 0\n    },\n', '    encomendasX: {},\n'],
   ['nuvem: cumpridas desce', 'nuvem.js', 'cumpridas: Math.max(x.cumpridas, y.cumpridas)', 'cumpridas: y.cumpridas'],
   ['nuvem: ultimoDia fica o mais antigo', 'nuvem.js', 'ultimoDia: nuvemLevesMaisRecente(x.ultimoDia, y.ultimoDia)', 'ultimoDia: nuvemLevesMaisAntiga(x.ultimoDia, y.ultimoDia)'],
   ['nuvem: um null apaga a aceite', 'nuvem.js', '  else if (x.atual === null) atual = y.atual;\n  else if (y.atual === null) atual = x.atual;\n', '  else if (x.atual === null || y.atual === null) atual = null;\n'],
   ['nuvem: ignora quem tem mais cumpridas', 'nuvem.js', '  if (x.cumpridas > y.cumpridas) atual = x.atual;\n  else if (y.cumpridas > x.cumpridas) atual = y.atual;\n  else if', '  if'],
   ['nuvem: fica a mais antiga', 'nuvem.js', 'atual = chave(y.atual) > chave(x.atual) ? y.atual : x.atual;', 'atual = chave(y.atual) < chave(x.atual) ? y.atual : x.atual;'],
   ['nuvem: no mesmo dia depende da ordem', 'nuvem.js', "return e.aceiteDia + '|' + e.escalao", "return e.aceiteDia + '|' + 0"],
-  ['nuvem: sem a área', 'nuvem.js', "'reserva', 'colecao', 'encomendas'];", "'reserva', 'colecao'];"],
+  ['nuvem: sem a área', 'nuvem.js', "'reserva', 'colecao', 'encomendas', 'prova'];", "'reserva', 'colecao', 'prova'];"],
   ['o engarrafar passa a chamá-las', 'garrafa.js', '    a.lote = null;\n    adegaGarrafaFeita', '    a.lote = null; if (typeof encomendaProcurarGarrafa === "function") encomendaProcurarGarrafa(state, "x");\n    adegaGarrafaFeita'],
   ['carregado antes de visitas.js', 'index.html', (FONTES['index.html'].match(/  <script src="js\/visitas\.js\?v=\d+"><\/script>\n/) || ['(sem a linha do visitas.js)'])[0], '']
 ];
