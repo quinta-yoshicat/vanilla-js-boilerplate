@@ -291,6 +291,101 @@ function atualizarResumoQuinta() {
   const feitos = visiveis.filter(function (o) { return o.cumprido; }).length;
   el.textContent = t('nivel.label') + ' ' + nivelAtual + ' · ' +
     t('objetivos.resumoLabel') + ' ' + feitos + '/' + visiveis.length;
+  atualizarSinalQuinta();
+}
+
+// ---------------------------------------------------------------------
+// SINAL NO CARTÃO DA QUINTA FECHADO: o que está por tratar no corpo do cartão (que fechado não se vê).
+// quintaPendentes() só LÊ (nunca grava nem lança erro) e devolve, por prioridade e sem repetições:
+//   'visita'    a visita de hoje existe (com texto) e ainda não foi tocada (js/visitas.js)
+//   'encomenda' há um pedido à espera de «Aceitar» / «Agora não», ou a encomenda em curso acaba hoje (js/encomendas.js)
+//   'oferta'    visita de hoje já tocada e há o que oferecer que ainda não foi oferecido hoje: o copo de bagaceira
+//               (com bagaceira) ou um bem da Estrada (js/visitas.js, js/estrada.js)
+//   'festa'     há uma festa aberta (e aberta para este jogador) com tarefa por fazer hoje (js/festas.js)
+// Em modo de teste (visitaEmModoTeste: parâmetros no endereço) devolve []. Cada leitura isolada: se falhar, não conta.
+// ---------------------------------------------------------------------
+const QUINTA_PENDENTES_ORDEM = ['visita', 'encomenda', 'oferta', 'festa'];
+
+function quintaPendentes() {
+  const tem = {};
+  const tentar = function (chave, fn) { try { if (fn() === true) tem[chave] = true; } catch (e) { /* esta não conta */ } };
+  try { if (typeof visitaEmModoTeste === 'function' && visitaEmModoTeste()) return []; } catch (e) { return []; }
+  let visitaTocada = false;
+  tentar('visita', function () {
+    if (typeof visitaResolverHoje !== 'function') return false;
+    const r = visitaResolverHoje();
+    if (!r || !r.visita || (typeof visitaTextoPorEscrever === 'function' && visitaTextoPorEscrever(r.visita))) return false;
+    if (r.feita === true) { visitaTocada = true; return false; }
+    return true;
+  });
+  tentar('encomenda', function () {
+    if (typeof encomendaPodePedir !== 'function' || typeof encomendaDiaDeHoje !== 'function') return false;
+    const dia = encomendaDiaDeHoje();
+    if (encomendaPodePedir(state, dia, false).ok) return true;
+    const a = encomendasNormalizar(state.encomendas).atual;
+    return !!a && encomendaAtiva(state, dia) && a.prazoDia === dia;
+  });
+  tentar('oferta', function () {
+    if (!visitaTocada) return false;
+    let copo = false, bem = false;
+    try { copo = typeof visitaBagaceiraPode === 'function' && visitaBagaceiraPode(state, visitaDiaEfetivo()).ok === true; } catch (e) { copo = false; }
+    try { bem = typeof estradaOfertaPendente === 'function' && estradaOfertaPendente() === true; } catch (e) { bem = false; }
+    return copo || bem;
+  });
+  tentar('festa', function () {
+    if (typeof festaAtual !== 'function' || typeof festaTemTarefaPorFazerHoje !== 'function') return false;
+    if (typeof ecraDesbloqueado === 'function' && !ecraDesbloqueado('festa')) return false;
+    const festa = festaAtual();
+    return !!festa && festaTemTarefaPorFazerHoje(festa) === true;
+  });
+  return QUINTA_PENDENTES_ORDEM.filter(function (k) { return tem[k] === true; });
+}
+
+// O dia (Lisboa) em que o ponto já pulsou: só pulsa a 1.ª vez em cada dia com pendentes. Só em memória. A pulsação
+// dura uns segundos (QUINTA_SINAL_PULSAR_MS): os desenhos seguidos logo a seguir (ao entrar na Quinta o resumo
+// desenha-se mais do que uma vez) não a cortam a meio.
+const QUINTA_SINAL_PULSAR_MS = 3500;
+let quintaSinalPulsouDia = null;
+let quintaSinalPulsouEm = 0;
+// O dia do último desenho (para redesenhar se o dia mudar com a app aberta).
+let quintaSinalDia = null;
+
+// A linha do sinal (#quinta-sinal, dentro do cabeçalho do cartão: tocar nela abre o cartão como hoje). Com o cartão
+// aberto o CSS esconde-a (já se vê tudo); sem pendentes fica escondida e o cartão tem a altura de sempre.
+function atualizarSinalQuinta() {
+  const el = document.getElementById('quinta-sinal');
+  if (!el) return;
+  let lista = [];
+  try { lista = quintaPendentes(); } catch (e) { lista = []; }
+  let dia = null;
+  try { dia = diaLisboaDeHoje(); } catch (e) { dia = null; }
+  quintaSinalDia = dia;
+  const atributo = function (k, v) { try { if (v === null) el.removeAttribute(k); else el.setAttribute(k, v); } catch (e) { /* elemento sem atributos */ } };
+  const classe = function (c, ligada) { try { el.classList.toggle(c, ligada); } catch (e) { /* elemento sem classList */ } };
+  if (!lista.length) { el.hidden = true; el.innerHTML = ''; atributo('aria-label', null); classe('pulsar', false); return; }
+  const nomes = lista.map(function (k) { return t('quinta.sinal.' + k); });
+  el.innerHTML = '<span class="quinta-sinal-ponto" aria-hidden="true"></span>' +
+    '<span class="quinta-sinal-texto" aria-hidden="true">' + nomes[0] + (lista.length > 1 ? ' +' + (lista.length - 1) : '') + '</span>';
+  atributo('aria-label', t('quinta.sinal.aria').replace('{lista}', nomes.join(', ')));
+  const agora = Date.now();
+  let pulsar = false;
+  if (dia !== null && quintaSinalPulsouDia !== dia) { quintaSinalPulsouDia = dia; quintaSinalPulsouEm = agora; pulsar = true; }
+  else if (dia !== null && agora - quintaSinalPulsouEm < QUINTA_SINAL_PULSAR_MS) pulsar = true;
+  classe('pulsar', pulsar);
+  el.hidden = false;
+}
+
+// Mudar de dia com a app aberta (ou voltar a ela): na Quinta, o sinal redesenha-se. Só lê o dia; não grava nada.
+function quintaSinalVerDia() {
+  try {
+    const ativo = document.querySelector('.screen.active');
+    if (!ativo || ativo.id !== 'screen-quinta') return;
+    if (diaLisboaDeHoje() !== quintaSinalDia) atualizarResumoQuinta();
+  } catch (e) { /* nada */ }
+}
+if (typeof setInterval === 'function') setInterval(quintaSinalVerDia, 60000);
+if (typeof document !== 'undefined' && document && typeof document.addEventListener === 'function') {
+  document.addEventListener('visibilitychange', function () { if (document.visibilityState === 'visible') quintaSinalVerDia(); });
 }
 
 // >>> mapa-botoes (scripts/verificar-fila-objetivo.js carrega só este bloco)

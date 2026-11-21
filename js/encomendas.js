@@ -329,6 +329,7 @@ function encomendaHtml() {
 
 function encomendaRedesenhar() {
   if (typeof atualizarLinhaVisitaQuinta === 'function') atualizarLinhaVisitaQuinta();
+  if (typeof atualizarResumoQuinta === 'function') atualizarResumoQuinta(); // o sinal do cartão fechado (js/objetivos.js)
 }
 
 // Os ÚNICOS sítios que pedem e gravam. Se recusou, não grava. O toque duplo é travado pelas próprias regras

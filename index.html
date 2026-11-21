@@ -1371,6 +1371,42 @@
       overflow-y: auto;
     }
 
+    /* Sinal do cartão da Quinta FECHADO (ver atualizarSinalQuinta() em js/objetivos.js): «● Visita», «● Encomenda +1».
+       Uma linha pequena (14 px + 2 px de margem): o cartão fechado cresce no máximo 16 px. Com o cartão aberto não
+       aparece (já se vê tudo). O ponto pulsa só na 1.ª vez em cada dia, e nunca com "reduzir movimento". */
+    .quinta-sinal {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 2px;
+      height: 14px;
+      max-width: 100%;
+      overflow: hidden;
+      font-size: 11px;
+      line-height: 14px;
+      font-weight: 800;
+      color: var(--dourado);
+      white-space: nowrap;
+    }
+    .quinta-sinal[hidden], .topcard.aberto .quinta-sinal { display: none; }
+    .quinta-sinal-ponto {
+      flex: 0 0 auto;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--dourado);
+      box-shadow: 0 0 0 2px rgba(224, 178, 82, 0.35);
+    }
+    .quinta-sinal-texto { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+    .quinta-sinal.pulsar .quinta-sinal-ponto { animation: quinta-sinal-pulsar 1.1s ease-in-out 3; }
+    @keyframes quinta-sinal-pulsar {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 2px rgba(224, 178, 82, 0.35); }
+      50% { transform: scale(1.35); box-shadow: 0 0 0 5px rgba(224, 178, 82, 0.15); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .quinta-sinal.pulsar .quinta-sinal-ponto { animation: none; }
+    }
+
     /* Encolhido, o corpo fica escondido — só o cabeçalho (título +
        resumo curto) fica visível. Na Vinha/Adega isto nunca chega a
        fazer diferença (o corpo nem é desenhado quando encolhido), mas
@@ -2288,6 +2324,8 @@
         <span class="cartao-textos">
           <span class="mini-title" data-i18n="hub.title">A Quinta do Moscatel</span>
           <span id="quinta-resumo-linha" class="mini-sub"></span>
+          <!-- O que está por tratar no corpo (que fechado não se vê): ver atualizarSinalQuinta() em js/objetivos.js -->
+          <span id="quinta-sinal" class="quinta-sinal" role="img" hidden></span>
         </span>
         <svg class="cartao-seta" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><path d="M6 9l6 6 6-6"></path></svg>
       </button>
@@ -2415,7 +2453,7 @@
   <script src="js/state.js?v=74"></script>
   <script src="js/som.js?v=53"></script>
   <script src="js/nuvem.js?v=63"></script>
-  <script src="js/i18n.js?v=114"></script>
+  <script src="js/i18n.js?v=115"></script>
   <script src="js/estacoes.js?v=42"></script>
   <script src="js/tempo.js?v=55"></script>
   <script src="js/festas.js?v=69"></script>
@@ -2436,12 +2474,12 @@
   <script src="js/historia.js?v=57"></script>
   <!-- ronda.js antes de objetivos.js: este chama rondaChizoReporDia() logo ao carregar -->
   <script src="js/ronda.js?v=7"></script>
-  <script src="js/objetivos.js?v=58"></script>
+  <script src="js/objetivos.js?v=59"></script>
   <script src="js/capitulos.js?v=20"></script>
   <script src="js/conquistas.js?v=6"></script>
   <script src="js/visitas.js?v=13"></script>
   <!-- Encomendas (só regras, ainda invisíveis): DEPOIS de visitas.js (visitaPorId) e de garrafa.js -->
-  <script src="js/encomendas.js?v=2"></script>
+  <script src="js/encomendas.js?v=3"></script>
   <!-- Palavras da Quinta (o glossário): a lista, as contas e o ecrã; ANTES de dados.js, que enche a lista a partir de dados/palavras.js -->
   <script src="js/palavras.js?v=2"></script>
   <!-- dados.js e os ficheiros de dados/ (ver dados/LEIAME.md): DEPOIS das listas que alimentam (niveis, historia, capitulos, visitas, explorar, palavras) e ANTES de main.js e de qualquer código que as use no arranque -->
@@ -2455,7 +2493,7 @@
   <script src="dados/palavras.js?v=1"></script>
   <script src="js/estrada-dados.js?v=14"></script>
   <script src="js/despensa.js?v=7"></script>
-  <script src="js/estrada.js?v=10"></script>
+  <script src="js/estrada.js?v=11"></script>
   <script src="js/lagar.js?v=6"></script>
   <script src="js/camara.js?v=4"></script>
   <script src="js/roxo.js?v=4"></script>
