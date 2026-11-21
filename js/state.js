@@ -251,6 +251,14 @@ function defaultState() {
       atual: null,
       ultimoDia: null,
       cumpridas: 0
+    },
+    // Prova às cegas (nível 6+, ver js/prova.js; ainda invisível no jogo). ultimoDia: o dia (Lisboa, 'AAAA-MM-DD') da última
+    // prova começada (uma por dia; grava-se logo ao começar). dias: quantas provas já terminou (só sobe). acertos: quantas
+    // rondas já acertou, no total (só sobe). Junta-se na nuvem como as áreas leves (nuvemJuntarLeves, js/nuvem.js).
+    prova: {
+      ultimoDia: null,
+      dias: 0,
+      acertos: 0
     }
   };
 }
@@ -288,6 +296,22 @@ function encomendasNormalizar(x) {
     ultimoDia: encomendasDataValida(e.ultimoDia),
     cumpridas: typeof c === 'number' && Number.isInteger(c) && c >= 0 ? c : 0
   };
+}
+
+// PROVA ÀS CEGAS: a forma certa de state.prova (as mesmas regras das encomendas). provaNormalizar() devolve um objeto
+// NOVO (a nuvem usa-a); provaEstado() repara em memória o estado que recebe e devolve state.prova.
+function provaNormalizar(x) {
+  const p = x && typeof x === 'object' && !Array.isArray(x) ? x : {};
+  const inteiro = function (n) { return typeof n === 'number' && Number.isInteger(n) && n >= 0 ? n : 0; };
+  return { ultimoDia: encomendasDataValida(p.ultimoDia), dias: inteiro(p.dias), acertos: inteiro(p.acertos) };
+}
+
+function provaEstado(estado) {
+  if (!estado || typeof estado !== 'object') return provaNormalizar(null);
+  const atual = estado.prova;
+  const certo = provaNormalizar(atual);
+  if (JSON.stringify(atual) !== JSON.stringify(certo)) estado.prova = certo;
+  return estado.prova;
 }
 
 function encomendasEstado(estado) {
