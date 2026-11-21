@@ -168,10 +168,10 @@ const savePossuiNivel6 = function (extra) {
   ok(c.ev('FALAS[0].quem') === 'YoshiCat', 'o cap7 fala o YoshiCat');
 }
 
-// 4. Conquistas: "Quinta completa" não se perde; "Boa vizinhança" liga ao cap7; total 14.
+// 4. Conquistas: "Quinta completa" não se perde; "Boa vizinhança" liga ao cap7; total 14 (mais as 3 das encomendas, desde a parte 3: 17).
 {
   const g = abrir(savePossuiNivel6());
-  ok(g.ev('CONQUISTAS_CONFIG.length') === 14, 'devia haver 14 conquistas, há ' + g.ev('CONQUISTAS_CONFIG.length'));
+  ok(g.ev('CONQUISTAS_CONFIG.length') === 17 && g.ev('CONQUISTAS_CONFIG.filter(function (c) { return !/^encomenda_/.test(c.id); }).length') === 14, 'devia haver 14 conquistas (mais as 3 das encomendas: 17), há ' + g.ev('CONQUISTAS_CONFIG.length'));
   // Premissa: com a regra antiga (comparar com CAPITULOS_CONFIG.length = 7) quem tinha os 6 perdia-a.
   ok(g.ev('conquistasCapitulosConcluidos() >= CAPITULOS_CONFIG.length') === false, 'premissa: a regra antiga perderia a "Quinta completa" com 7 capítulos');
   ok(g.conq('quinta_completa') === true, '"Quinta completa" devia continuar cumprida com os 6 capítulos feitos e o 7 por fazer');
@@ -182,7 +182,7 @@ const savePossuiNivel6 = function (extra) {
   ok(g.conq('boa_vizinhanca') === true, '"Boa vizinhança" devia cumprir-se com o cap7 concluído');
   ok(g.conq('quinta_completa') === true, '"Quinta completa" continua cumprida');
   ok(g.ev('conquistasCumpridas()') === antes + 1, 'o n / total devia subir 1');
-  ok(/ \/ 14$/.test(g.ev('conquistasResumo()')), 'o resumo devia terminar em "/ 14": ' + g.ev('conquistasResumo()'));
+  ok(/ \/ 17$/.test(g.ev('conquistasResumo()')), 'o resumo devia terminar em "/ 17" (14 + as 3 das encomendas): ' + g.ev('conquistasResumo()'));
   // Só 5 dos 6 antigos: não cumpre; o cap7 sozinho não substitui um dos antigos.
   const h = abrir(savePossuiNivel6());
   h.ev('delete state.capitulos.concluidos.cap6; state.capitulos.concluidos.cap7 = true');
