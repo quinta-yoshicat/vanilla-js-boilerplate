@@ -266,6 +266,18 @@ function estradaOfertaHtml() {
     cadernoEscapar(t('oferta.btn').replace('{bem}', estradaNomeBem(bem))) + '</button></div>';
 }
 
+// Há um bem da Estrada para oferecer à visita de hoje (já tocada) que ainda não foi oferecido hoje? Só lê; é o mesmo que
+// faz aparecer o botão «Oferecer» em estradaOfertaHtml(). Usada pelo sinal do cartão da Quinta (quintaPendentes, js/objetivos.js).
+function estradaOfertaPendente() {
+  try {
+    if (typeof ecraDesbloqueado !== 'function' || !ecraDesbloqueado('estrada')) return false;
+    if (!estradaVisitaTocadaHoje()) return false;
+    const ultima = despensaOfertaDia(state);
+    if (ultima !== null && ultima >= estradaDiaDeHoje()) return false;
+    return despensaBemParaOferecer(state) !== null;
+  } catch (e) { return false; }
+}
+
 // O ÚNICO sítio que oferece e grava. Toque no botão: desativa-o logo (clique duplo), oferece (despensaOferecer) e,
 // se correu bem, grava UMA vez e atualiza a barra de cima (updateStatsDisplays). Se recusou, não grava.
 function estradaOferecerClique() {
