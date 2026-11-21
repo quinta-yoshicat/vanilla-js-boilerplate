@@ -277,7 +277,9 @@ function suite(fontes) {
     ok(so(600, { search: '?prova=0' }).p().indexOf('prova') !== -1, '(f) ?prova=0 não é modo de teste');
     const a = so(600); a.ev('state.prova.ultimoDia = "2026-07-16";');
     ok(a.p().indexOf('prova') === -1, '(f) relógio atrás (a prova foi feita «amanhã»): sem «prova», como em provaPodeJogar');
-    const o = fontes['objetivos.js'].replace(/\/\/.*$/gm, '');
+    // Só o bloco do sinal da prova (tentar('prova', ...)): os objetivos do dia têm as suas regras noutro sítio.
+    const oTudo = fontes['objetivos.js'].replace(/\/\/.*$/gm, '');
+    const o = oTudo.slice(oTudo.indexOf("tentar('prova'"), oTudo.indexOf('});', oTudo.indexOf("tentar('prova'")) + 3);
     ok(/provaPodeJogar\(state, provaDiaDeHoje\(\), false\)/.test(o) && !/ultimoDia|nivelPelaReputacao\(state\.reputacao\) >= 6/.test(o), '(f) usa provaPodeJogar (não repete a conta do nível nem do dia)');
   }
   return falhas;

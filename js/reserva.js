@@ -151,6 +151,8 @@ function reservaVisitarClique() {
     if (botao) botao.disabled = true;
     const r = reservaVisitar(state, reservaDiaDeHoje());
     if (r.ok) {
+      // O objetivo do dia «Visita a Reserva» (js/objetivos.js), se for de hoje: sem o «ding», que já toca a seguir (um só som).
+      if (typeof marcarObjetivoCumprido === 'function' && typeof objetivoForaDoTeste === 'function' && objetivoForaDoTeste()) marcarObjetivoCumprido('reserva_visitar', { semSom: true });
       saveState(state);
       updateStatsDisplays();
       adegaFotoAtual = RESERVA_CONFIG.imagemResultado;
@@ -184,6 +186,8 @@ function colecaoArrumarClique() {
     if (botao) botao.disabled = true;
     const r = colecaoArrumar(state, reservaDiaDeHoje(), colecaoContarCores());
     if (r.ok) {
+      // O objetivo do dia «Arruma a Coleção» (js/objetivos.js), se for de hoje: sem o «ding», que já toca a seguir.
+      if (typeof marcarObjetivoCumprido === 'function' && typeof objetivoForaDoTeste === 'function' && objetivoForaDoTeste()) marcarObjetivoCumprido('colecao_arrumar', { semSom: true });
       saveState(state);
       updateStatsDisplays();
       colecaoResultado = { rep: r.reputacaoGanha };

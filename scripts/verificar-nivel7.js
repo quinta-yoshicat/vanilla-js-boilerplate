@@ -71,7 +71,8 @@ const savePossuiNivel6 = function (extra) {
     ok(g.ev('nivelPelaReputacao(' + p[0] + ')') === p[1], 'Reputação ' + p[0] + ' devia dar nível ' + p[1]);
   });
   ok(JSON.stringify(g.ev('Object.keys(NIVEL_NECESSARIO_POR_ECRA).slice(0, 9).map(function (k) { return k + ":" + NIVEL_NECESSARIO_POR_ECRA[k]; })')) ===
-    JSON.stringify(['proteger:2', 'garrafa:3', 'caderno:3', 'explorar:4', 'enciclopedia:4', 'festa:4', 'colecao:6', 'garrafas:6', 'estrada:7']), 'a Estrada (nível 7) é a tranca nova do nível 7');
+    JSON.stringify(['proteger:2', 'garrafa:3', 'caderno:3', 'explorar:4', 'enciclopedia:4', 'festa:4', 'colecao:6', 'estrada:7', 'loja:7']), 'a Estrada (nível 7) é a tranca nova do nível 7 (a «garrafas: 6» saiu: o ecrã já não existe)');
+  ok(g.ev('"garrafas" in NIVEL_NECESSARIO_POR_ECRA') === false, 'sem a tranca do ecrã «As minhas garrafas», que já não existe');
   ok(g.ev("typeof ecraDesbloqueado('estrada')") === 'boolean', 'ecraDesbloqueado("estrada") devia dar true ou false');
   ok(g.ev("state.acesso.jogadorAntigo = false; state.reputacao = 300; ecraDesbloqueado('estrada')") === false, 'a Estrada devia estar trancada no nível 5 (jogador novo)');
   ok(g.ev("state.reputacao = 999; ecraDesbloqueado('estrada')") === false, 'a Estrada devia estar trancada no nível 6 (jogador novo)');
