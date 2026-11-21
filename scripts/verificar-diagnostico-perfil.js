@@ -1,13 +1,14 @@
 #!/usr/bin/env node
-// O diagnóstico ESCONDIDO do Perfil (só para o Nuno ver): perfilToqueTitulo(), perfilAtualizarDiagnostico() e
-// perfilDiagnosticoTexto() em js/perfil.js, com nuvemDiag (js/nuvem.js). Só LÊ js/ e corre-os num ambiente simulado
+// O diagnóstico ESCONDIDO (só para o Nuno ver), que passou do Perfil para as Definições: perfilToqueTitulo(),
+// perfilAtualizarDiagnostico() e perfilDiagnosticoTexto() em js/definicoes.js, com nuvemDiag (js/nuvem.js). Só LÊ js/ e corre-os num ambiente simulado
 // (vm) com um utilizador do Telegram e uma nuvem falsa em memória (scripts/_jogo-vm.js): nunca toca em browser,
 // Telegram nem conta real.
 //
 // Prova:
 //  (a) o bloco não aparece sem os 5 toques seguidos no título (nem com 4, nem com 5 espalhados por mais de 3 s);
 //      aparece com 5 em menos de 3 s, e esconde-se com outros 5; escondido não tem texto;
-//  (b) o HTML do Perfil tem o título com o toque e o bloco escondido e vazio (não entra em nenhum texto visível);
+//  (b) o HTML das Definições tem o título com o toque e o bloco escondido e vazio (não entra em nenhum texto visível);
+//      o título do Perfil já não tem o toque;
 //  (c) o que mostra corresponde ao arranque: nuvem CHEIA (de onde veio: nuvem; hora do meta; chaves = meta + partes),
 //      nuvem VAZIA com e sem progresso no aparelho (local / novo), SEM nuvem (fora do Telegram) e nuvem com ERRO;
 //      a hora da última gravação confirmada só aparece depois de gravar; a versão do state.js vem do ?v= do index;
@@ -30,19 +31,20 @@ function ok(cond, msg) { if (!cond) { falhas++; console.log('FALHA: ' + msg); } 
 
 function lerJs(f) { return fs.readFileSync(path.join(RAIZ, 'js', f), 'utf8'); }
 const PERFIL = lerJs('perfil.js');
-// As funções do diagnóstico (do perfil.js real; o ficheiro todo precisa de um ecrã inteiro).
+const DEFINICOES = lerJs('definicoes.js');
+// As funções do diagnóstico (do definicoes.js real; o ficheiro todo precisa de um ecrã inteiro).
 const DIAGNOSTICO = (function () {
-  const i = PERFIL.indexOf('const PERFIL_DIAG_TOQUES');
-  const f = PERFIL.indexOf('\n}\n', PERFIL.indexOf('function perfilAtualizarDiagnostico('));
-  if (i === -1 || f === -1) throw new Error('não encontrei o diagnóstico em js/perfil.js');
-  return PERFIL.slice(i, f + 3);
+  const i = DEFINICOES.indexOf('const PERFIL_DIAG_TOQUES');
+  const f = DEFINICOES.indexOf('\n}\n', DEFINICOES.indexOf('function perfilAtualizarDiagnostico('));
+  if (i === -1 || f === -1) throw new Error('não encontrei o diagnóstico em js/definicoes.js');
+  return DEFINICOES.slice(i, f + 3);
 })();
 const VERSAO_INDEX = (/js\/state\.js\?v=([0-9]+)/.exec(fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8')) || [])[1];
 
 function dois(n) { return ('0' + n).slice(-2); }
 function horaEsperada(ms) { const d = new Date(ms); return dois(d.getDate()) + '/' + dois(d.getMonth() + 1) + ' ' + dois(d.getHours()) + ':' + dois(d.getMinutes()) + ':' + dois(d.getSeconds()); }
 
-// Abre o jogo (state.js + nuvem.js reais + o diagnóstico do perfil.js) como uma conta.
+// Abre o jogo (state.js + nuvem.js reais + o diagnóstico do definicoes.js) como uma conta.
 function abrir(o) {
   const relogio = o.relogio || { t: 20000000 };
   const temporizadores = [];
@@ -86,7 +88,7 @@ function abrir(o) {
   const ctx = vm.createContext(sandbox);
   vm.runInContext(lerJs('state.js'), ctx, { filename: 'js/state.js' });
   vm.runInContext(lerJs('nuvem.js'), ctx, { filename: 'js/nuvem.js' });
-  vm.runInContext(DIAGNOSTICO, ctx, { filename: 'js/perfil.js (diagnóstico)' });
+  vm.runInContext(DIAGNOSTICO, ctx, { filename: 'js/definicoes.js (diagnóstico)' });
   return {
     ev: function (c) { return vm.runInContext(c, ctx); },
     el: elemento, getKeys: getKeys, relogio: relogio,
@@ -140,13 +142,14 @@ function naNuvem(rep, em, partes) {
 }
 
 // =====================================================================
-// (b) O HTML do Perfil
+// (b) O HTML das Definições (antes era o do Perfil)
 // =====================================================================
 {
-  ok(/id="perfil-titulo"[^>]*onclick="perfilToqueTitulo\(\)"/.test(PERFIL), '(b) o título «Perfil» tem o toque');
-  ok(/<p class="info-text nuvem-estado" id="perfil-diagnostico"[^>]* hidden><\/p>/.test(PERFIL), '(b) o bloco nasce escondido e vazio no HTML do Perfil');
-  const abaixo = PERFIL.indexOf('id="perfil-nuvem-estado"') < PERFIL.indexOf('id="perfil-diagnostico"') && PERFIL.indexOf('id="perfil-diagnostico"') < PERFIL.indexOf('id="perfil-apagar-aviso"');
+  ok(/id="definicoes-titulo"[^>]*onclick="perfilToqueTitulo\(\)"/.test(DEFINICOES), '(b) o título «Definições» tem o toque');
+  ok(/<p class="info-text nuvem-estado" id="perfil-diagnostico"[^>]* hidden><\/p>/.test(DEFINICOES), '(b) o bloco nasce escondido e vazio no HTML das Definições');
+  const abaixo = DEFINICOES.indexOf('id="perfil-nuvem-estado"') < DEFINICOES.indexOf('id="perfil-diagnostico"') && DEFINICOES.indexOf('id="perfil-diagnostico"') < DEFINICOES.indexOf('id="perfil-apagar-aviso"');
   ok(abaixo, '(b) o bloco fica por baixo da linha da nuvem');
+  ok(PERFIL.indexOf('perfilToqueTitulo') === -1 && PERFIL.indexOf('perfil-diagnostico') === -1, '(b) o Perfil já não tem o toque nem o bloco');
 }
 
 // =====================================================================

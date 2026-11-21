@@ -1,10 +1,10 @@
 #!/usr/bin/env node
-// A versão visível e o botão «Atualizar o jogo» do Perfil: perfilMostrarVersao(), perfilEnderecoAtualizado() e
-// perfilAtualizarJogo() em js/perfil.js, com o jogo real em vm (scripts/_jogo-vm.js) e um endereço, um relógio e uma
+// A versão visível e o botão «Atualizar o jogo» das Definições (antes no Perfil): perfilMostrarVersao(), perfilEnderecoAtualizado() e
+// perfilAtualizarJogo() em js/definicoes.js, com o jogo real em vm (scripts/_jogo-vm.js) e um endereço, um relógio e uma
 // nuvem falsos. Nunca toca em browser, Telegram nem conta real.
 //
 // Prova:
-//  (a) o HTML do Perfil leva sempre a linha da versão e o botão (fora de qualquer condição) e a versão mostra «v<?v= do
+//  (a) o HTML das Definições leva sempre a linha da versão e o botão (fora de qualquer condição) e a versão mostra «v<?v= do
 //      state.js do index.html>» nas 3 línguas;
 //  (b) o endereço novo mantém o caminho e o # (tgWebAppData) tal e qual, põe r=<hora> se não havia e muda-o se já havia,
 //      e guarda os outros parâmetros do ?;
@@ -26,17 +26,20 @@ let falhas = 0;
 function ok(cond, msg) { if (!cond) { falhas++; console.log('FALHA: ' + msg); } }
 
 const PERFIL = fs.readFileSync(path.join(RAIZ, 'js', 'perfil.js'), 'utf8');
+// A versão e o «Atualizar o jogo» passaram do Perfil para as Definições (js/definicoes.js), com a mesma lógica.
+const DEFINICOES = fs.readFileSync(path.join(RAIZ, 'js', 'definicoes.js'), 'utf8');
 const INDEX = fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8');
 const VERSAO_INDEX = (/js\/state\.js\?v=([0-9]+)/.exec(INDEX) || [])[1];
 
+// Corta de "de" até "ate" (sem "ate": até ao fim do ficheiro) no js/definicoes.js.
 function cortar(de, ate) {
-  const i = PERFIL.indexOf(de);
-  const f = PERFIL.indexOf(ate, i);
-  if (i === -1 || f === -1) throw new Error('não encontrei ' + de + ' em js/perfil.js');
-  return PERFIL.slice(i, f);
+  const i = DEFINICOES.indexOf(de);
+  const f = ate === undefined ? DEFINICOES.length : DEFINICOES.indexOf(ate, i);
+  if (i === -1 || f === -1) throw new Error('não encontrei ' + de + ' em js/definicoes.js');
+  return DEFINICOES.slice(i, f);
 }
 const VERSAO_FN = cortar('function perfilDiagVersaoStateJs', '\nfunction perfilDiagnosticoTexto');
-const ATUALIZAR = cortar('const PERFIL_ATUALIZAR_ESPERA_MS', '// Abre a partilha do Telegram');
+const ATUALIZAR = cortar('const PERFIL_ATUALIZAR_ESPERA_MS');
 
 // Abre o jogo e acrescenta-lhe as funções do Perfil, um endereço, um relógio, temporizadores e botões falsos.
 function abrir(o) {
@@ -68,7 +71,7 @@ function abrir(o) {
   vm.runInContext('var _nuvemTimerGravacao = null;\n' +
     'function nuvemGravarJa() { if (!_nuvemTimerGravacao) return; _nuvemTimerGravacao = null; __envios++; __emCurso = true; }\n' +
     'function nuvemGravacaoEmCurso() { return __emCurso; }', cx);
-  vm.runInContext(VERSAO_FN + '\n' + ATUALIZAR, cx, { filename: 'js/perfil.js (versão e atualizar)' });
+  vm.runInContext(VERSAO_FN + '\n' + ATUALIZAR, cx, { filename: 'js/definicoes.js (versão e atualizar)' });
   return {
     cx: cx, ev: jogo.ev, guardado: guardado, chamadas: chamadas, botao: botao, versao: versao, relogio: relogio,
     avancar: function (ms) {
@@ -86,13 +89,14 @@ function abrir(o) {
 }
 
 // =====================================================================
-// (a) Versão sempre visível, nas 3 línguas, e botão no HTML do Perfil
+// (a) Versão sempre visível, nas 3 línguas, e botão no HTML das Definições (antes era o do Perfil)
 // =====================================================================
 {
   const html = cortar('container.innerHTML =', 'const checkVibracao');
-  ok(/<p class="info-text nuvem-estado" id="perfil-versao"><\/p>/.test(html), '(a) o HTML do Perfil tem a linha da versão');
-  ok(/id="perfil-atualizar" onclick="perfilAtualizarJogo\(\)" data-i18n="perfil.btnAtualizar"/.test(html), '(a) o HTML do Perfil tem o botão «Atualizar o jogo»');
-  ok(/AtualizarDiagnostico\(\);\n  perfilMostrarVersao\(\);\n  perfilLigarIndicadorScroll\(\);/.test(PERFIL), '(a) renderPerfil() mostra a versão, sem condições');
+  ok(/<p class="info-text nuvem-estado" id="perfil-versao"><\/p>/.test(html), '(a) o HTML das Definições tem a linha da versão');
+  ok(/id="perfil-atualizar" onclick="perfilAtualizarJogo\(\)" data-i18n="perfil.btnAtualizar"/.test(html), '(a) o HTML das Definições tem o botão «Atualizar o jogo»');
+  ok(/AtualizarDiagnostico\(\);\n  perfilMostrarVersao\(\);\n\}/.test(DEFINICOES), '(a) renderDefinicoes() mostra a versão, sem condições');
+  ok(PERFIL.indexOf('perfil-versao') === -1 && PERFIL.indexOf('perfil-atualizar') === -1, '(a) o Perfil já não tem a versão nem o botão');
   ok(!/convitesVisiveis\(\)[^;]*perfil-versao/.test(html), '(a) a linha da versão não depende de condições');
   ok(VERSAO_INDEX && Number(VERSAO_INDEX) > 0, '(a) o index.html tem ?v= no state.js');
   const esperado = { pt: 'Versão: v', en: 'Version: v', es: 'Versión: v' };

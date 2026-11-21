@@ -103,6 +103,7 @@ const FUNDO_DOS_ECRAS = {
   caderno: { src: 'assets/ecras/fygmos_fazem_das_suas.jpg' },
   palavras: { src: 'assets/ecras/enciclopedia_yoshi_cat_2.jpg' },
   perfil: { src: 'assets/ecras/yoshi_cat_varanda.jpg' },
+  definicoes: { src: 'assets/ecras/yoshi_cat_varanda.jpg' }, // o mesmo fundo do Perfil, de onde se abre
   lagar: { src: 'assets/ecras/festa_vindima_todos_juntos.jpg' },
   camara: { src: 'assets/vinha/barril_dourado.jpg' },
   roxo: { src: 'assets/ecras/yoshi_cat_festa_vindima.jpg' },
@@ -138,6 +139,7 @@ const NAV_ATIVO_POR_ECRA = {
   camara: 'explorar',
   roxo: 'explorar',
   loja: 'explorar'
+  // perfil e definicoes: sem entrada, de propósito (abrem-se pelo botão do topo, não pela barra de baixo: nenhum botão acende)
 };
 
 // "Limpeza ao sair" por ecrã — um minijogo com temporizador (ex: o
@@ -801,6 +803,7 @@ function goTo(screen, opcoes) {
   if (screen === 'explorar') enterExplorar();
   if (screen === 'enciclopedia') renderEnciclopedia();
   if (screen === 'perfil') renderPerfil();
+  if (screen === 'definicoes') renderDefinicoes();
   if (screen === 'conquistas') renderConquistas();
   if (screen === 'caderno') renderCaderno();
   if (screen === 'palavras') renderPalavras();

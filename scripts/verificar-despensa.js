@@ -97,8 +97,8 @@ const entregar = function (estado, bem, n) { PURO.__e = estado; PURO.__b = bem; 
   ok(J(clone(g.ev('mergeDeep(defaultState(), { despensa: { recebidos: { mel_sesimbra: 3 } } }).despensa.recebidos'))) === J({ mel_sesimbra: 3 }), 'estado da nuvem com despensa devia manter os recebidos');
 
   // "Apagar o meu progresso" remove a chave do estado: o jogo volta a abrir com a despensa vazia.
-  const perfil = ler(path.join(RAIZ, 'js', 'perfil.js'));
-  ok(/localStorage\.removeItem\(STORAGE_KEY\)/.test(perfil) && /nuvemApagarTudo\(/.test(perfil), 'perfilApagarTudo devia apagar o estado inteiro (STORAGE_KEY e a nuvem)');
+  const definicoes = ler(path.join(RAIZ, 'js', 'definicoes.js')); // o «Apagar» passou do Perfil para as Definições
+  ok(/localStorage\.removeItem\(STORAGE_KEY\)/.test(definicoes) && /nuvemApagarTudo\(/.test(definicoes), 'perfilApagarTudo devia apagar o estado inteiro (STORAGE_KEY e a nuvem)');
   const c = abrir(comDespensa);
   c.ev('localStorage.removeItem("yoshicat_quinta_state_v2")');
   ok(J(clone(c.ev('loadState().despensa'))) === J(VAZIA), 'depois de apagar o estado, o jogo devia abrir com a despensa vazia');

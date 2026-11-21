@@ -555,6 +555,39 @@
     }
     #perfil-container .scroll-panel.fim::after { opacity: 0; }
 
+    /* Roda dentada no canto superior direito do cartão do título do Perfil (abre as Definições,
+       ver renderPerfil() em js/perfil.js). Área de toque de 44 px; as margens negativas não
+       deixam o cartão crescer. */
+    .topcard.perfil-topo { display: flex; align-items: center; gap: 6px; }
+    .perfil-definicoes-btn {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 44px; min-height: 44px; margin: -8px -6px -8px 0; padding: 0;
+      background: none; border: none; border-radius: 12px; color: #f5d76e; cursor: pointer;
+    }
+    .perfil-definicoes-btn:focus-visible { outline: 2px solid #f5d76e; outline-offset: -4px; }
+    /* Os dois botões de baixo do Perfil lado a lado, metade da largura cada um. */
+    .perfil-botoes-lado { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .perfil-botoes-lado > button { width: 100%; min-width: 0; margin: 0; white-space: normal; }
+
+    /* Definições (ver renderDefinicoes() em js/definicoes.js): o painel acaba por cima do Voltar. */
+    .scroll-panel.definicoes-painel {
+      display: flex; flex-direction: column; gap: 4px;
+      max-height: calc(100vh - var(--topo-altura) - 60px - var(--nav-altura) - 8px - 52px - 8px);
+    }
+    @supports (height: 100dvh) {
+      .scroll-panel.definicoes-painel { max-height: calc(100dvh - var(--topo-altura) - 60px - var(--nav-altura) - 8px - 52px - 8px); }
+    }
+    .definicoes-painel .info-text { margin-bottom: 8px; }
+    /* Zona de perigo: separada do resto por uma linha, aviso forte a vermelho antes do botão. */
+    .definicoes-perigo {
+      margin-top: 14px; padding-top: 12px;
+      border-top: 1px solid rgba(255, 120, 110, 0.45);
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .definicoes-perigo-aviso { margin: 0; font-size: 14px; font-weight: 800; line-height: 1.35; color: #ff8a80; }
+    .btn-ghost.btn-perigo { border-color: rgba(255, 110, 100, 0.8); color: #ffb4ab; font-weight: 700; }
+    #perfil-apagar-confirmar.btn-perigo { background: #b3261e; border-color: #b3261e; color: #fff; }
+
     /* Fase atual da Vinha */
     .phase-card {
       background: rgba(12, 14, 22, 0.55);
@@ -1900,6 +1933,7 @@
     body.jogo-cheio #screen-explorar.content,
     body.jogo-cheio #screen-enciclopedia.content,
     body.jogo-cheio #screen-perfil.content,
+    body.jogo-cheio #screen-definicoes.content,
     body.jogo-cheio #screen-conquistas.content,
     body.jogo-cheio #screen-caderno.content,
     body.jogo-cheio #screen-palavras.content,
@@ -2224,6 +2258,11 @@
     <div id="perfil-container"></div>
   </div>
 
+  <!-- ECRÃ: DEFINIÇÕES (sem nível mínimo; aberto pela roda dentada do Perfil, ver js/definicoes.js) -->
+  <div id="screen-definicoes" class="screen content">
+    <div id="definicoes-container"></div>
+  </div>
+
   <!-- ECRÃ: ESCOLHER LÍNGUA -->
   <div id="screen-lingua" class="screen content">
     <h2 data-i18n="lingua.title">Escolher Língua</h2>
@@ -2245,7 +2284,7 @@
   <script src="js/state.js?v=73"></script>
   <script src="js/som.js?v=53"></script>
   <script src="js/nuvem.js?v=62"></script>
-  <script src="js/i18n.js?v=110"></script>
+  <script src="js/i18n.js?v=111"></script>
   <script src="js/estacoes.js?v=42"></script>
   <script src="js/tempo.js?v=55"></script>
   <script src="js/festas.js?v=69"></script>
@@ -2259,7 +2298,8 @@
   <script src="js/alambique.js?v=1"></script>
   <script src="js/garrafa.js?v=67"></script>
   <script src="js/personagens.js?v=3"></script>
-  <script src="js/perfil.js?v=67"></script>
+  <script src="js/perfil.js?v=68"></script>
+  <script src="js/definicoes.js?v=1"></script>
   <script src="js/niveis.js?v=63"></script>
   <script src="js/historia.js?v=57"></script>
   <!-- ronda.js antes de objetivos.js: este chama rondaChizoReporDia() logo ao carregar -->
@@ -2287,6 +2327,6 @@
   <script src="js/roxo.js?v=4"></script>
   <script src="js/loja.js?v=2"></script>
   <script src="js/reserva.js?v=2"></script>
-  <script src="js/main.js?v=79"></script>
+  <script src="js/main.js?v=80"></script>
 </body>
 </html>
