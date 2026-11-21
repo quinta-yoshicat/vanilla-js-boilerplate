@@ -85,6 +85,8 @@ function garrafaLegenda(g) {
 let adegaGarrafaFeita = null;
 // true se o "ding" do objetivo do dia tocou na última ação da Adega: então o som de engarrafar (ficheiro) fica calado.
 let adegaDingTocou = false;
+// A encomenda entregue na última ação da Adega (ver encomendaEngarrafada em js/encomendas.js), ou null.
+let adegaEncomendaEntregue = null;
 
 // ---------------------------------------------------------------------
 // ESTADO DO LOTE PARA A PÁGINA DA GARRAFA — função pura (não lê o
@@ -543,6 +545,7 @@ function executarAcaoAdega(acao) {
   adegaFotoAtual = null;
   adegaNovaEntrada = null;
   adegaGarrafaFeita = null;
+  adegaEncomendaEntregue = null;
   alambiqueEstado(state);
   const a = state.adega;
   const chaveCooldown = ADEGA_CHAVE_COOLDOWN[acao] || acao;
@@ -620,9 +623,22 @@ function executarAcaoAdega(acao) {
     if (nivelPelaReputacao(state.reputacao) >= 6) carimbarGarrafasAoNivel6(a.historico.length);
     state.ultimaGarrafaData = new Date().toLocaleDateString(localeAtual());
     a.historico.push({ data: state.ultimaGarrafaData, estacao: estacaoAtual(), diasDescanso: diasCompletos });
+    // Encomenda da visita (js/encomendas.js): se esta garrafa cumpre a ativa, paga UMA vez (grava-se com o resto, mais
+    // abaixo). A garrafa não se gasta. Em modo de teste não paga. Só aqui: a jeropiga (js/festas.js) não chama.
+    if (typeof encomendaEngarrafada === 'function') {
+      const modoTeste = typeof visitaEmModoTeste === 'function' && visitaEmModoTeste();
+      const entrega = encomendaEngarrafada(state, encomendaDiaDeHoje(), a.historico.length - 1, modoTeste);
+      if (entrega.ok) {
+        adegaEncomendaEntregue = entrega;
+        encomendaResultado = { dia: encomendaDiaDeHoje(), tipo: 'entregue', personagem: entrega.personagem, premio: entrega.premio };
+        // O prémio também pode fazer chegar ao nível 6: então esta garrafa já conta para a Coleção (como acima).
+        if (nivelPelaReputacao(state.reputacao) >= 6) carimbarGarrafasAoNivel6(a.historico.length - 1);
+      }
+    }
     a.lote = null;
     adegaGarrafaFeita = garrafaPorDias(diasCompletos);
-    adegaMensagemAtual = t('garrafa.passo4') + ' ' + t('adega.resultadoEngarrafar').replace('{rep}', repGanha);
+    adegaMensagemAtual = t('garrafa.passo4') + ' ' + t('adega.resultadoEngarrafar').replace('{rep}', repGanha) +
+      (adegaEncomendaEntregue ? ' ' + encomendaEntregueTexto(adegaEncomendaEntregue) : '');
     adegaNovaEntrada = desbloquearEntradaEnciclopedia('curtimenta');
     adegaFotoAtual = ADEGA_FOTOS.engarrafar;
   } else {
@@ -633,6 +649,8 @@ function executarAcaoAdega(acao) {
   const dingAdega = typeof marcarObjetivoCumprido === 'function' && marcarObjetivoCumprido(acao === 'destilarVinho' || acao === 'destilarBagaco' ? 'adega_alambique' : 'adega_' + acao) === true;
   adegaDingTocou = dingAdega;
   if (!dingAdega && SOM_ACAO_ADEGA[acao]) tocarSomDaAcao(SOM_ACAO_ADEGA[acao]);
+  // Encomenda entregue: o mesmo som da oferta da bagaceira, em vez do ficheiro do engarrafar (nunca dois sons juntos).
+  if (adegaEncomendaEntregue && !dingAdega) { tocarSom('objetivoCumprido'); adegaDingTocou = true; }
   saveState(state);
   updateStatsDisplays();
   renderAdega();
@@ -797,7 +815,8 @@ function renderEngarrafar() {
     corpoHtml =
       garrafaGrandeHtml(engarrafarResultado.garrafa, null) +
       '<p class="phase-desc">' + t('garrafa.passo4') + '</p>' +
-      '<p class="phase-progress">' + t('adega.resultadoEngarrafar').replace('{rep}', engarrafarResultado.rep) + '</p>';
+      '<p class="phase-progress">' + t('adega.resultadoEngarrafar').replace('{rep}', engarrafarResultado.rep) + '</p>' +
+      (engarrafarResultado.encomenda && typeof encomendaEntregueHtml === 'function' ? encomendaEntregueHtml(engarrafarResultado.encomenda) : '');
     botoesHtml = '<button type="button" class="btn-pill pill-main pill-grande" onclick="voltarEcraAnterior()" data-i18n="nav.voltar"></button>';
   } else {
     const dias = diasDescansadosNaCave();
@@ -870,7 +889,9 @@ function engarrafarAgora() {
   const repAntes = state.reputacao;
   executarAcaoAdega('engarrafar'); // a lógica de sempre (garrafa, Reputação, histórico, objetivo)
   if (a.lote || !adegaGarrafaFeita) { renderEngarrafar(); return; }
-  engarrafarResultado = { garrafa: adegaGarrafaFeita, rep: state.reputacao - repAntes };
+  // rep = só a da garrafa; o prémio da encomenda (se houve) mostra-se à parte.
+  const repEncomenda = adegaEncomendaEntregue && adegaEncomendaEntregue.premio ? adegaEncomendaEntregue.premio.reputacao : 0;
+  engarrafarResultado = { garrafa: adegaGarrafaFeita, rep: state.reputacao - repAntes - repEncomenda, encomenda: adegaEncomendaEntregue };
   pararRelogioEngarrafar();
   pararSomAmbiente();                                        // o ambiente sai em fundo
   if (!adegaDingTocou) tocarSomFicheiro(GARRAFA_SOM_ENGARRAFAR, GARRAFA_ENGARRAFAR_VOLUME); // um só som: com o "ding" do objetivo, o ficheiro cala-se
