@@ -14,7 +14,10 @@
 //      existe (escondida e vazia); com o cartão aberto não aparece (CSS); o ponto pulsa só na 1.ª vez em cada dia
 //      (e não com "reduzir movimento"); atualiza-se com o resumo (aceitar/recusar a encomenda, mudar de dia na Quinta);
 //  (e) textos nas 3 línguas; a linha cabe no cartão fechado de 320 a 430 px (60% da largura) numa só linha pequena
-//      (14 px + 2 px), sem cortar nem sair da caixa.
+//      (14 px + 2 px), sem cortar nem sair da caixa;
+//  (f) a Prova às cegas (PR 3): 'prova' só quando provaPodeJogar() diz que sim (nível 6+, ainda não provou hoje),
+//      nunca em modo de teste nem com uma prova a decorrer, sempre por último; começar e acabar a prova redesenham o
+//      sinal, e o dia novo também (quintaSinalVerDia); «Prova às cegas» nas 3 línguas, numa linha.
 //
 // Depois de passar, aplica "mutações" (estraga cada regra de propósito) e confirma que o teste as apanha.
 // Uso: node scripts/verificar-quinta-sinal.js     Sai com 0 se estiver tudo OK e 1 se alguma verificação falhar.
@@ -28,6 +31,9 @@ const FICHEIROS = ['state.js', 'i18n.js', 'niveis.js', 'personagens.js', 'histor
 const FONTES = {};
 FICHEIROS.forEach(function (f) { FONTES[f] = LER('js/' + f); });
 FONTES['index.html'] = LER('index.html');
+// A Prova às cegas (PR 3): só se carrega nos casos da secção (f), para os de antes ficarem como estavam.
+['prova.js', 'dados.js', 'prova-jogo.js'].forEach(function (f) { FONTES[f] = LER('js/' + f); });
+FONTES['provas.js'] = LER('dados/provas.js');
 const J = JSON.stringify;
 const SEM_FESTA = '2026-07-15', SAO_MARTINHO = '2026-11-11';
 
@@ -80,6 +86,7 @@ function suite(fontes) {
       function festaAtual() { return null; } function festaTemTarefaPorFazerHoje() { return false; } // o js/festas.js real substitui-as
     `, cx);
     ['historia.js', 'capitulos.js', 'objetivos.js', 'visitas.js', 'alambique.js', 'festas.js', 'estrada-dados.js', 'despensa.js', 'estrada.js', 'encomendas.js'].forEach(carregar);
+    if (o.prova) ['prova.js', 'dados.js', 'provas.js', 'prova-jogo.js'].forEach(carregar);
     vm.runInContext(`
       saveState = function () { SAVES++; };
       state = defaultState();
@@ -220,6 +227,7 @@ function suite(fontes) {
         const v = T['quinta.sinal.' + k];
         ok(typeof v === 'string' && v.length >= 3 && v.length <= 10, '(e) ' + l + ': quinta.sinal.' + k + ' curto (deu ' + J(v) + ')');
       });
+      ok(typeof T['quinta.sinal.prova'] === 'string' && T['quinta.sinal.prova'].length >= 3 && T['quinta.sinal.prova'].length <= 14, '(e) ' + l + ': quinta.sinal.prova curto (deu ' + J(T['quinta.sinal.prova']) + ')');
       ok(typeof T['quinta.sinal.aria'] === 'string' && T['quinta.sinal.aria'].indexOf('{lista}') !== -1, '(e) ' + l + ': quinta.sinal.aria com {lista}');
     });
     const css = fontes['index.html'].replace(/\n\s*/g, ' ');
@@ -233,13 +241,44 @@ function suite(fontes) {
     [320, 360, 430].forEach(function (w) {
       const dentro = Math.min(w, 480) * 0.6 - 20 - 2 - 24;
       let maior = 0, qual = '';
-      ['pt', 'en', 'es'].forEach(function (l) { ['visita', 'encomenda', 'oferta', 'festa'].forEach(function (k) {
+      ['pt', 'en', 'es'].forEach(function (l) { ['visita', 'encomenda', 'oferta', 'festa', 'prova'].forEach(function (k) {
         const s = g.ev('TRANSLATIONS.' + l + "['quinta.sinal." + k + "']") + ' +3';
         const larg = s.length * 11 * 0.62 + 8 + 5;
         if (larg > maior) { maior = larg; qual = s; }
       }); });
       ok(maior <= dentro, '(e) ' + w + ' px: «' + qual + '» (' + maior.toFixed(0) + ' px) cabe em ' + dentro.toFixed(0) + ' px');
     });
+  }
+
+  // ---------------------------------------------------------------- (f) a Prova às cegas (PR 3)
+  {
+    ok(abrir().json('QUINTA_PENDENTES_ORDEM').join() === 'visita,encomenda,oferta,festa,prova', '(f) a ordem: visita, encomenda, oferta, festa, prova (a prova por último)');
+    ok(abrir({ prova: true, tocada: true }).ev("TRANSLATIONS.pt['quinta.sinal.prova']") === 'Prova às cegas', '(f) PT: «Prova às cegas»');
+    // só a prova por tratar: visita tocada, encomenda recusada, sem bagaceira nem festa
+    const so = function (rep, o) { const g = abrir(Object.assign({ prova: true, tocada: true, reputacao: rep }, o || {})); g.ev('encomendaRecusar(state, encomendaDiaDeHoje(), false); var __res = 0, __resOrig = atualizarResumoQuinta; atualizarResumoQuinta = function () { __res++; __resOrig(); };'); return g; };
+    ok(so(300).p().indexOf('prova') === -1, '(f) nível 5: sem «prova»');
+    const g = so(600);
+    ok(J(g.p()) === J(['prova']), '(f) nível 6 sem a prova de hoje feita: «prova» (deu ' + J(g.p()) + ')');
+    let sinal = g.sinal();
+    ok(sinal.hidden === false && />Prova às cegas<\/span>$/.test(sinal.innerHTML), '(f) a linha: «● Prova às cegas»: ' + sinal.innerHTML);
+    ok(J(abrir({ prova: true, dia: SAO_MARTINHO, reputacao: 1200 }).p()) === J(['visita', 'festa', 'prova']), '(f) com outras pendentes, a prova fica por último');
+    g.ev('provaComecarClique()');
+    ok(g.ev('state.prova.ultimoDia') === g.ev('__dia') && g.ev('__res') >= 1 && g.els['quinta-sinal'].hidden === true && g.p().indexOf('prova') === -1, '(f) começar a prova: sai logo do sinal (o resumo redesenha-se)');
+    const antes = g.ev('__res');
+    g.ev('provaJogo.sessao.rondas.forEach(function (r) { provaResponderClique(r.cor); provaSeguinteClique(); })');
+    ok(g.ev('state.prova.dias') === 1 && g.ev('__res') > antes && g.els['quinta-sinal'].hidden === true, '(f) acabar a prova: o sinal redesenha-se e continua sem a prova');
+    g.ev('provaJogo = null');
+    ok(g.p().indexOf('prova') === -1, '(f) depois de provar hoje: sem «prova»');
+    g.dia('2026-07-16'); g.ev('quintaSinalVerDia()');
+    ok(g.p().indexOf('prova') !== -1 && g.els['quinta-sinal'].hidden === false && /Prova às cegas$/.test(g.els['quinta-sinal'].getAttribute('aria-label') || ''), '(f) à meia-noite (dia novo, pelo caminho de sempre): a prova volta ao sinal');
+    const c = so(600); c.ev('provaJogo = { sessao: { dia: __dia, rondas: [], paga: false }, teste: false, indice: 0, respostas: [], revelada: false, resultado: null };');
+    ok(c.p().indexOf('prova') === -1, '(f) com uma prova a decorrer: sem «prova»');
+    ['?prova=1', '?visita=valentim_4'].forEach(function (q) { ok(so(600, { search: q }).p().indexOf('prova') === -1, '(f) modo de teste ' + q + ': sem «prova»'); });
+    ok(so(600, { search: '?prova=0' }).p().indexOf('prova') !== -1, '(f) ?prova=0 não é modo de teste');
+    const a = so(600); a.ev('state.prova.ultimoDia = "2026-07-16";');
+    ok(a.p().indexOf('prova') === -1, '(f) relógio atrás (a prova foi feita «amanhã»): sem «prova», como em provaPodeJogar');
+    const o = fontes['objetivos.js'].replace(/\/\/.*$/gm, '');
+    ok(/provaPodeJogar\(state, provaDiaDeHoje\(\), false\)/.test(o) && !/ultimoDia|nivelPelaReputacao\(state\.reputacao\) >= 6/.test(o), '(f) usa provaPodeJogar (não repete a conta do nível nem do dia)');
   }
   return falhas;
 }
@@ -268,7 +307,14 @@ const MUTACOES = [
   ['oferta sem o bem da Estrada', 'objetivos.js', "bem = typeof estradaOfertaPendente === 'function' && estradaOfertaPendente() === true;", 'bem = false;'],
   ['festa com tudo feito', 'objetivos.js', 'return !!festa && festaTemTarefaPorFazerHoje(festa) === true;', 'return !!festa;'],
   ['festa fechada conta', 'objetivos.js', "    if (typeof ecraDesbloqueado === 'function' && !ecraDesbloqueado('festa')) return false;\n    const festa", '    const festa'],
-  ['ordem trocada', 'objetivos.js', "const QUINTA_PENDENTES_ORDEM = ['visita', 'encomenda', 'oferta', 'festa'];", "const QUINTA_PENDENTES_ORDEM = ['festa', 'visita', 'encomenda', 'oferta'];"],
+  ['ordem trocada', 'objetivos.js', "const QUINTA_PENDENTES_ORDEM = ['visita', 'encomenda', 'oferta', 'festa', 'prova'];", "const QUINTA_PENDENTES_ORDEM = ['festa', 'visita', 'encomenda', 'oferta', 'prova'];"],
+  ['a prova antes da festa', 'objetivos.js', "const QUINTA_PENDENTES_ORDEM = ['visita', 'encomenda', 'oferta', 'festa', 'prova'];", "const QUINTA_PENDENTES_ORDEM = ['visita', 'encomenda', 'oferta', 'prova', 'festa'];"],
+  ['a prova sempre por tratar', 'objetivos.js', '    return provaPodeJogar(state, provaDiaDeHoje(), false).ok === true;', '    return true;'],
+  ['a prova em modo de teste', 'objetivos.js', "    if (typeof provaModoTeste === 'function' && provaModoTeste()) return false;\n", ''],
+  ['a prova a decorrer conta', 'objetivos.js', "    if (typeof provaEmCurso === 'function' && provaEmCurso()) return false;\n", ''],
+  ['começar a prova não atualiza o sinal', 'prova-jogo.js', "        saveState(state);\n        if (typeof atualizarResumoQuinta === 'function') atualizarResumoQuinta();", '        saveState(state);\n        void 0;'],
+  ['acabar a prova não atualiza o sinal', 'prova-jogo.js', "    if (typeof updateStatsDisplays === 'function') updateStatsDisplays();\n    if (typeof atualizarResumoQuinta === 'function') atualizarResumoQuinta();", "    if (typeof updateStatsDisplays === 'function') updateStatsDisplays();"],
+  ['texto da prova em falta (EN)', 'i18n.js', "    'quinta.sinal.prova': 'Blind tasting',\n", ''],
   ['em modo de teste mostra', 'objetivos.js', "  try { if (typeof visitaEmModoTeste === 'function' && visitaEmModoTeste()) return []; } catch (e) { return []; }\n", ''],
   ['um erro rebenta', 'objetivos.js', "  const tentar = function (chave, fn) { try { if (fn() === true) tem[chave] = true; } catch (e) { /* esta não conta */ } };", '  const tentar = function (chave, fn) { if (fn() === true) tem[chave] = true; };'],
   ['sem o «+1»', 'objetivos.js', "nomes[0] + (lista.length > 1 ? ' +' + (lista.length - 1) : '')", 'nomes[0]'],

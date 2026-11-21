@@ -17,6 +17,8 @@
 //   - Fim: provaTerminar() paga UMA vez e grava UMA vez; «Acertaste X de 3», o prémio (só as partes > 0) e uma fala
 //     do Dr. Henrique; atualiza a barra de cima. A subida de nível vem depois, ao entrar na Quinta, como com qualquer
 //     outra Reputação (verificarSubidaNivel() em js/niveis.js).
+//   - O sinal do cartão da Quinta (quintaPendentes, js/objetivos.js) mostra 'prova' enquanto se pode jogar; começar e
+//     acabar redesenham-no (atualizarResumoQuinta), e a meia-noite também, pelo caminho de sempre (quintaSinalVerDia).
 //   - Sons: acertar toca o som de objetivoCumprido (como a bagaceira e o pedido entregue na Adega); errar não toca nada.
 // Sem Math.random: as rondas vêm do dia (provaRondasDoDia).
 // ---------------------------------------------------------------------
@@ -158,6 +160,7 @@ function provaComecarClique() {
       const r = provaComecar(state, dia, false);
       if (r.ok) {
         saveState(state);
+        if (typeof atualizarResumoQuinta === 'function') atualizarResumoQuinta(); // o sinal do cartão da Quinta (js/objetivos.js)
         provaJogo = { sessao: r.sessao, teste: false, indice: 0, respostas: [], revelada: false, resultado: null };
       }
     }
@@ -219,6 +222,7 @@ function provaAcabar(j) {
   if (r.ok) {
     saveState(state);
     if (typeof updateStatsDisplays === 'function') updateStatsDisplays();
+    if (typeof atualizarResumoQuinta === 'function') atualizarResumoQuinta(); // o sinal do cartão da Quinta (js/objetivos.js)
     j.resultado = { certas: r.certas, premio: r.premio, pago: true };
   } else {
     j.resultado = { certas: provaContarCertas(j), premio: provaPremio(0), pago: false };

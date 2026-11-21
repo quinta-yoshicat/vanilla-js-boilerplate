@@ -17,7 +17,8 @@
 //  (h) dados: 5 descrições por cor e uma linha que ensina cada cor, nas 3 línguas, sem números, «dias», «horas», «anos»,
 //      nem «Fygmo»; nenhuma descrição diz o nome de uma cor; a linha que ensina diz o da sua; o validador rejeita o que
 //      não presta;
-//  (i) só js/prova.js, js/state.js, js/nuvem.js, js/dados.js e (desde a PR 2) js/prova-jogo.js conhecem as regras;
+//  (i) só js/prova.js, js/state.js, js/nuvem.js, js/dados.js, (desde a PR 2) js/prova-jogo.js e (desde a PR 3)
+//      js/objetivos.js (só provaPodeJogar) conhecem as regras;
 //      js/garrafa.js e js/reserva.js não usam as regras); o index.html carrega js/prova.js?v=1 depois de js/encomendas.js e
 //      antes de js/dados.js, e dados/provas.js a seguir aos outros dados/.
 //
@@ -33,6 +34,7 @@ const FONTES = { 'state.js': LER('js/state.js'), 'nuvem.js': LER('js/nuvem.js'),
 const J = JSON.stringify;
 const DATE_NOW = Date.now;
 // as funções e constantes de js/prova.js (e de state.js); provaDia (js/camara.js) e provaTitulo (js/festas.js) são outra coisa
+const PROVA_NOMES_G = /\bprova(Hash|RondasDoDia|Nivel|PodeJogar|Comecar|Verificar|Premio|Numero|Terminar|Ensino|Normalizar|Estado)\b|\bPROVA_[A-Z_]+\b|\bstate\.prova\b/g;
 const PROVA_NOMES = /\b(prova(Hash|RondasDoDia|Nivel|PodeJogar|Comecar|Verificar|Premio|Numero|Terminar|Ensino|Normalizar|Estado)|PROVA_[A-Z_]+)\b|\bstate\.prova\b/;
 const DIA = '2026-10-10';
 const REP_NIVEL = { 1: 0, 5: 300, 6: 600, 7: 1000 };
@@ -281,7 +283,8 @@ function suite(fontes) {
       const s = (FONTES[f] !== undefined ? fontes[f] : LER('js/' + f)).replace(/\/\/.*$/gm, '');
       return PROVA_NOMES.test(s);
     }).sort();
-    ok(J(quem) === J(['dados.js', 'nuvem.js', 'prova-jogo.js', 'state.js']), '(i) só js/state.js, js/nuvem.js, js/dados.js e, desde a PR 2, js/prova-jogo.js (o ecrã da prova) conhecem as regras: ' + J(quem));
+    ok(J(quem) === J(['dados.js', 'nuvem.js', 'objetivos.js', 'prova-jogo.js', 'state.js']), '(i) só js/state.js, js/nuvem.js, js/dados.js, desde a PR 2 js/prova-jogo.js (o ecrã da prova) e desde a PR 3 js/objetivos.js (o sinal da Quinta, só provaPodeJogar) conhecem as regras: ' + J(quem));
+    ok((LER('js/objetivos.js').replace(/\/\/.*$/gm, '').match(PROVA_NOMES_G) || []).every(function (n) { return n === 'provaPodeJogar'; }), '(i) js/objetivos.js só usa provaPodeJogar (só lê)');
     ok(!PROVA_NOMES.test(fontes['garrafa.js']) && !PROVA_NOMES.test(fontes['reserva.js']), '(i) js/garrafa.js e js/reserva.js (a Coleção) não usam as regras da prova (desde a PR 2 a Coleção só desenha o que js/prova-jogo.js lhe dá)');
     const I = fontes['index.html'];
     const pos = function (f) { return I.indexOf('<script src="' + f + '?v='); };

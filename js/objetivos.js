@@ -302,9 +302,12 @@ function atualizarResumoQuinta() {
 //   'oferta'    visita de hoje já tocada e há o que oferecer que ainda não foi oferecido hoje: o copo de bagaceira
 //               (com bagaceira) ou um bem da Estrada (js/visitas.js, js/estrada.js)
 //   'festa'     há uma festa aberta (e aberta para este jogador) com tarefa por fazer hoje (js/festas.js)
+//   'prova'     a Prova às cegas de hoje ainda pode ser jogada: provaPodeJogar() (nível 6+, ainda não provou hoje, dia
+//               de Lisboa; js/prova.js); nunca em modo de teste (?prova=1, provaModoTeste) nem com uma prova a decorrer
+//               (provaEmCurso, js/prova-jogo.js). Começar ou acabar a prova redesenha o sinal (atualizarResumoQuinta).
 // Em modo de teste (visitaEmModoTeste: parâmetros no endereço) devolve []. Cada leitura isolada: se falhar, não conta.
 // ---------------------------------------------------------------------
-const QUINTA_PENDENTES_ORDEM = ['visita', 'encomenda', 'oferta', 'festa'];
+const QUINTA_PENDENTES_ORDEM = ['visita', 'encomenda', 'oferta', 'festa', 'prova'];
 
 function quintaPendentes() {
   const tem = {};
@@ -337,6 +340,12 @@ function quintaPendentes() {
     if (typeof ecraDesbloqueado === 'function' && !ecraDesbloqueado('festa')) return false;
     const festa = festaAtual();
     return !!festa && festaTemTarefaPorFazerHoje(festa) === true;
+  });
+  tentar('prova', function () {
+    if (typeof provaPodeJogar !== 'function' || typeof provaDiaDeHoje !== 'function') return false;
+    if (typeof provaModoTeste === 'function' && provaModoTeste()) return false;
+    if (typeof provaEmCurso === 'function' && provaEmCurso()) return false;
+    return provaPodeJogar(state, provaDiaDeHoje(), false).ok === true;
   });
   return QUINTA_PENDENTES_ORDEM.filter(function (k) { return tem[k] === true; });
 }
