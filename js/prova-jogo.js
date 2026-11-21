@@ -4,7 +4,7 @@
 // As regras são as de js/prova.js (provaPodeJogar, provaComecar, provaVerificar, provaPremio, provaTerminar,
 // provaEnsino) e o estado é state.prova (js/state.js). Aqui só o que falta para se jogar: o botão no painel de ações
 // da Coleção (por cima de «Arrumar a Coleção», ver renderColecaoDesenhar() em js/garrafa.js), a prova a decorrer DENTRO
-// desse painel (sem ecrã novo, como as cenas do Proteger e do barril e o bloco da encomenda) e os toques.
+// desse painel (sem ecrã novo, como as cenas do Proteger e do barril e o bloco do pedido da visita no cartão da Quinta) e os toques.
 //
 //   - Botão: só no nível 6+ (provaPodeJogar diz 'nivel' abaixo). Pode jogar: botão normal. Já provou hoje: apagado,
 //     «Já provaste hoje». Modo de teste (?prova=1 ou o modo de teste geral, visitaEmModoTeste): deixa jogar sempre,
@@ -17,7 +17,7 @@
 //   - Fim: provaTerminar() paga UMA vez e grava UMA vez; «Acertaste X de 3», o prémio (só as partes > 0) e uma fala
 //     do Dr. Henrique; atualiza a barra de cima. A subida de nível vem depois, ao entrar na Quinta, como com qualquer
 //     outra Reputação (verificarSubidaNivel() em js/niveis.js).
-//   - Sons: acertar toca o som de objetivoCumprido (como a bagaceira e a encomenda); errar não toca nada.
+//   - Sons: acertar toca o som de objetivoCumprido (como a bagaceira e o pedido entregue na Adega); errar não toca nada.
 // Sem Math.random: as rondas vêm do dia (provaRondasDoDia).
 // ---------------------------------------------------------------------
 
