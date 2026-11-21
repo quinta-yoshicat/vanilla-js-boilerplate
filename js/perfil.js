@@ -1,5 +1,5 @@
 // ---------------------------------------------------------------------
-// PERFIL — pontos atuais, galeria de garrafas e título especial
+// PERFIL — pontos atuais, garrafas feitas (número e data da última) e título especial
 // ---------------------------------------------------------------------
 
 // Convite de amigos (botão "Convidar amigos" no Perfil): escondido por defeito.
@@ -25,7 +25,6 @@ const PERFIL_ICONES = {
 
 const PERFIL_MEDALHA_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="18" height="18"><circle cx="12" cy="9" r="5"></circle><path d="M9 13l-1.5 8L12 18l4.5 3-1.5-8"></path></svg>';
 
-const PERFIL_GARRAFA_PEQUENA_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><path d="M10 2h4v3.8l1.8 2.7c.4.6.7 1.4.7 2.2V20a2 2 0 0 1-2 2h-5a2 2 0 0 1-2-2V10.7c0-.8.2-1.6.7-2.2L10 5.8V2z"></path><path d="M10 11.5h4"></path></svg>';
 
 // Cartão "A Coleção x / 4": só a partir do nível 6 (colecaoVisivel, js/garrafa.js).
 function colecaoCartaoPerfil() {
@@ -53,14 +52,6 @@ function palavrasCartaoPerfil() {
   if (typeof palavrasResumo !== 'function' || typeof ecraDesbloqueado !== 'function' || !ecraDesbloqueado('palavras')) return '';
   return perfilCard(PERFIL_ICONES.palavras, palavrasResumo(), 'perfil.palavras',
     ' role="button" tabindex="0" onclick="goTo(\'palavras\')" onkeydown="if (event.key === \'Enter\') goTo(\'palavras\')"');
-}
-
-function renderGaleriaGarrafas() {
-  const max = Math.min(state.garrafas, 12);
-  let html = '';
-  for (let i = 0; i < max; i++) html += '<span>' + PERFIL_GARRAFA_PEQUENA_SVG + '</span>';
-  if (state.garrafas > 12) html += '<span>+' + (state.garrafas - 12) + '</span>';
-  return html;
 }
 
 function renderPerfil() {
@@ -98,7 +89,6 @@ function renderPerfil() {
       tituloHtml +
       '<h2 data-i18n="perfil.galeriaTitulo"></h2>' +
       garrafasInfoHtml +
-      '<div class="bottle-gallery">' + renderGaleriaGarrafas() + '</div>' +
       '<p class="info-text">' +
         '<label><input type="checkbox" id="perfil-vibracao-check" onchange="alternarVibracao(this.checked)"> ' +
         '<span data-i18n="perfil.vibracao"></span></label>' +

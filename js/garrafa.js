@@ -336,6 +336,24 @@ function colecaoCoresFeitas(estado) {
   return cores;
 }
 
+// Quantas garrafas de cada cor já foram feitas, em TODO o state.adega.historico (não só desde o nível 6): cor pelos dias
+// de descanso (garrafaPorDias: 1 Jovem, 2 Dourado, 3 Âmbar, 4 ou mais Cobre). A Edição São Martinho (festa: 'saomartinho')
+// conta à parte. Entradas sem dias válidos (garrafas antigas) não contam. Só para mostrar no ecrã "A Coleção": o ✓, o
+// "x / 4" e o capítulo 6 continuam a ler colecaoCoresFeitas(). Função pura que só lê (o estado vem por argumento).
+function colecaoQuantidadesPorCor(estado) {
+  const q = { jovem: 0, dourado: 0, ambar: 0, cobre: 0, saoMartinho: 0 };
+  const h = estado && estado.adega && estado.adega.historico;
+  if (!Array.isArray(h)) return q;
+  h.forEach(function (e) {
+    if (!e || typeof e !== 'object') return;
+    if (e.festa) { if (e.festa === 'saomartinho') q.saoMartinho++; return; }
+    const g = garrafaPorDias(e.diasDescanso);
+    if (g.dias === null) return;
+    q[COLECAO_COR_POR_NOME[g.nomeKey]]++;
+  });
+  return q;
+}
+
 // Imagem da garrafa para o fundo depois de "Arrumar a Coleção": a cor MAIS ESCURA entre as cores já feitas da Coleção
 // (Jovem, Dourado, Âmbar, Cobre, por esta ordem), as mesmas do "x / 4" do ecrã: só contam as garrafas feitas desde o
 // nível 6 (colecaoCoresFeitas), por isso o fundo bate sempre certo com a grelha. Função pura que só lê (o estado vem por
@@ -361,7 +379,8 @@ function colecaoResumo() {
 }
 
 // Ecrã "A Coleção" (só leitura, Nível 6; ver ecraDesbloqueado('colecao') em js/niveis.js):
-// grelha 2x2 com as 4 cores; as que ainda não foram feitas aparecem apagadas.
+// grelha 2x2 com as 4 cores; as que ainda não foram feitas aparecem apagadas. Debaixo do nome, «×N» = todas as
+// garrafas dessa cor (colecaoQuantidadesPorCor); a Edição São Martinho só aparece, no topo, se houver alguma.
 // Ao entrar no ecrã (ver goTo() em js/main.js): esquece o resultado da arrumação anterior.
 function renderColecao() {
   if (typeof colecaoResultado !== 'undefined') colecaoResultado = null;
@@ -371,22 +390,27 @@ function renderColecao() {
 function renderColecaoDesenhar() {
   const container = document.getElementById('colecao-container');
   const cores = colecaoCoresFeitas(state);
+  const quantidades = colecaoQuantidadesPorCor(state);
   const celulas = GARRAFAS_POR_DIAS.map(function (g) {
-    const feita = !!cores[COLECAO_COR_POR_NOME[g.nomeKey]];
+    const cor = COLECAO_COR_POR_NOME[g.nomeKey];
+    const feita = !!cores[cor];
     return '<div class="colecao-cor' + (feita ? '' : ' por-fazer') + '">' +
       '<img src="' + g.imagem + '" alt="" decoding="async">' +
       '<p class="colecao-nome"><span>' + t(g.nomeKey) + '</span>' + (feita ? '<span class="colecao-visto" aria-hidden="true">✓</span>' : '') + '</p>' +
+      '<p class="colecao-quantidade">' + t('colecao.quantidade').replace('{n}', quantidades[cor]) + '</p>' +
     '</div>';
   }).join('');
+  const saoMartinhoHtml = quantidades.saoMartinho > 0
+    ? ' <span class="colecao-sao-martinho">· ' + t('colecao.saoMartinho').replace('{n}', quantidades.saoMartinho) + '</span>'
+    : '';
 
   container.innerHTML =
     '<div class="topcard">' +
       '<p class="mini-title" data-i18n="colecao.title"></p>' +
-      '<p class="mini-sub">' + colecaoResumo() + '</p>' +
+      '<p class="mini-sub">' + colecaoResumo() + saoMartinhoHtml + '</p>' +
     '</div>' +
     '<div class="colecao-painel">' + celulas + '</div>' +
     '<div class="action-panel">' +
-      '<button type="button" class="btn-ghost" onclick="goTo(\'garrafas\')" data-i18n="garrafas.btn"></button>' +
       // Tarefa do dia "Arrumar a Coleção" (nível 6; ver js/reserva.js), por cima do "Voltar"
       (typeof colecaoTarefaBotaoHtml === 'function' ? colecaoTarefaBotaoHtml() : '') +
       '<button type="button" class="btn-pill pill-main pill-grande" onclick="voltarEcraAnterior()" data-i18n="nav.voltar"></button>' +
@@ -400,56 +424,6 @@ function renderColecaoDesenhar() {
   } else {
     atualizarDialogo('', '');
   }
-  applyTranslations();
-}
-
-// Ecrã "As Garrafas" (Nível 6; ver ecraDesbloqueado('garrafas') em js/niveis.js): lista só de
-// leitura de TODAS as garrafas de state.adega.historico, a mais recente primeiro. Nada é gravado.
-// Número = posição no historico (1.ª = 1); a de festa não leva número, leva a etiqueta da edição.
-// Ano lido do fim do texto da data; sem ano ou sem estação válidos, a linha sai sem eles.
-const GARRAFAS_ESTACOES = ['inverno', 'primavera', 'verao', 'outono'];
-
-function garrafasLinhas() {
-  const h = state.adega && state.adega.historico;
-  if (!Array.isArray(h)) return [];
-  const linhas = [];
-  h.forEach(function (e, i) {
-    if (!e || typeof e !== 'object') return;
-    const partes = [];
-    if (e.festa) {
-      partes.push(t('adega.colecaoSaoMartinho').replace(/\s*[:：]?\s*\{n\}\s*$/, ''));
-    } else {
-      const g = garrafaPorDias(e.diasDescanso);
-      if (g.dias === null) return; // garrafa antiga, sem dias válidos: ignorada
-      partes.push(String(i + 1), t(g.nomeKey), t(g.dias === 1 ? 'adega.garrafaDiasUm' : 'adega.garrafaDias').replace('{n}', g.dias));
-    }
-    if (GARRAFAS_ESTACOES.indexOf(e.estacao) !== -1) partes.push(t('estacao.' + e.estacao));
-    const ano = typeof e.data === 'string' ? e.data.match(/(\d{4})\s*$/) : null;
-    if (ano) partes.push(ano[1]);
-    linhas.push(partes);
-  });
-  return linhas.reverse();
-}
-
-function renderGarrafas() {
-  const container = document.getElementById('garrafas-container');
-  const linhas = garrafasLinhas();
-  const corpo = linhas.length
-    ? linhas.map(function (p) {
-        return '<div class="encyclopedia-card garrafa-linha">' + p.map(cadernoEscapar).join(' · ') + '</div>';
-      }).join('')
-    : '<p class="info-text">' + t('adega.colecaoVazia') + '</p>';
-
-  container.innerHTML =
-    '<div class="topcard">' +
-      '<p class="mini-title" data-i18n="garrafas.title"></p>' +
-    '</div>' +
-    '<div class="scroll-panel garrafas-lista">' + corpo + '</div>' +
-    '<div class="action-panel">' +
-      '<button type="button" class="btn-pill pill-main pill-grande" onclick="voltarEcraAnterior()" data-i18n="nav.voltar"></button>' +
-    '</div>';
-
-  atualizarDialogo('', '');
   applyTranslations();
 }
 

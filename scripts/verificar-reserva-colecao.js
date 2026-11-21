@@ -163,7 +163,7 @@ const DIA = '2026-10-09';
   const html = ler(path.join(RAIZ, 'index.html'));
   const pos = function (f) { return html.indexOf('<script src="js/' + f + '?v='); };
   ok(pos('garrafa.js') > 0 && pos('reserva.js') > pos('garrafa.js') && pos('reserva.js') < pos('main.js'), 'ordem de carga: garrafa.js, reserva.js, main.js');
-  ok(/colecao-painel \{[^}]*44px \+ 8px \+ 44px \+ 8px \+ 52px/.test(html.replace(/\n/g, ' ')) || /bottom: calc\(var\(--nav-altura\) \+ 8px \+ 44px \+ 8px \+ 44px \+ 8px \+ 52px/.test(html), 'o painel da Coleção deixa espaço para o 3.º botão');
+  ok(/colecao-painel \{[^}]*bottom: calc\(var\(--nav-altura\) \+ 8px \+ 44px \+ 8px \+ 52px \+ 8px\);/.test(html.replace(/\n/g, ' ')), 'o painel da Coleção deixa espaço para o Voltar e o "Arrumar a Coleção" (o "As minhas garrafas" saiu)');
   ok(/\.reserva-visita-botao:disabled/.test(html) && /\.colecao-arrumar-botao:disabled/.test(html), 'estilo dos botões apagados');
 }
 
