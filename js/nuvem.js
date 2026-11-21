@@ -400,7 +400,9 @@ function nuvemJuntarCaderno(a, b) {
 //     encomenda aceite nunca é apagada (com um null fica a outra) e, com as duas, fica a aceite mais recente (no mesmo dia,
 //     a de escalão maior, depois por personagem e historicoInicio: o resultado não depende da ordem dos dois lados).
 //     Cada lado passa antes por encomendasNormalizar() (js/state.js): o mal formado conta como null/0.
-const NUVEM_LEVES_AREAS = ['despensa', 'visitas', 'lagar', 'camara', 'roxo', 'loja', 'reserva', 'colecao', 'encomendas'];
+//   prova {ultimoDia, dias, acertos} (js/prova.js): ultimoDia = o mais recente (uma prova por dia nos dois aparelhos);
+//     dias e acertos = o MAIOR. Cada lado passa antes por provaNormalizar() (js/state.js).
+const NUVEM_LEVES_AREAS = ['despensa', 'visitas', 'lagar', 'camara', 'roxo', 'loja', 'reserva', 'colecao', 'encomendas', 'prova'];
 
 function nuvemLevesData(x) {
   return (typeof x === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(x)) ? x : null;
@@ -521,6 +523,13 @@ function nuvemLevesEncomendas(a, b) {
   };
 }
 
+// A prova às cegas de dois lados. Pura; devolve um objeto novo com a forma de defaultState().
+function nuvemLevesProva(a, b) {
+  const norm = typeof provaNormalizar === 'function' ? provaNormalizar : function () { return { ultimoDia: null, dias: 0, acertos: 0 }; };
+  const x = norm(a), y = norm(b);
+  return { ultimoDia: nuvemLevesMaisRecente(x.ultimoDia, y.ultimoDia), dias: Math.max(x.dias, y.dias), acertos: Math.max(x.acertos, y.acertos) };
+}
+
 function nuvemJuntarLeves(base, outro) {
   const a = nuvemLevesObjeto(base), b = nuvemLevesObjeto(outro);
   const da = nuvemLevesObjeto(a.despensa), db = nuvemLevesObjeto(b.despensa);
@@ -570,7 +579,8 @@ function nuvemJuntarLeves(base, outro) {
     },
     reserva: { visitaDia: nuvemLevesMaisRecente(sa.visitaDia, sb.visitaDia) },
     colecao: { arrumouDia: nuvemLevesMaisRecente(ka.arrumouDia, kb.arrumouDia) },
-    encomendas: nuvemLevesEncomendas(a.encomendas, b.encomendas)
+    encomendas: nuvemLevesEncomendas(a.encomendas, b.encomendas),
+    prova: nuvemLevesProva(a.prova, b.prova)
   };
 }
 

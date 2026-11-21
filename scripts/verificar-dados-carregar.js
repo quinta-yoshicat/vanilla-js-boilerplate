@@ -78,7 +78,9 @@ const ESPERADO_EM_DADOS = {
   'visitas.js': ['marisa_5', 'henrique_5'], 'niveis.js': ['nivel_11', 'nivel_12', 'nivel_13', 'nivel_14', 'nivel_15', 'nivel_16', 'nivel_17', 'nivel_18', 'nivel_19', 'nivel_20'],
   'historias.js': ['historia_11', 'historia_12', 'historia_13', 'historia_14', 'historia_15', 'historia_16', 'historia_17', 'historia_18', 'historia_19', 'historia_20'], 'capitulos.js': ['cap11', 'cap12', 'cap13', 'cap14', 'cap15', 'cap16', 'cap17', 'cap18', 'cap19', 'cap20'],
   'objetivos.js': [], 'enciclopedia.js': IDS_CAVE.concat(IDS_COLECAO, IDS_ARRABIDA, IDS_SADO, IDS_PALMELA, IDS_AZEITAO, IDS_SESIMBRA, IDS_SETUBAL, IDS_ALCACER, IDS_COMPORTA, IDS_MONTADO, IDS_BOCAGE),
-  'palavras.js': IDS_PALAVRAS
+  'palavras.js': IDS_PALAVRAS,
+  // A Prova às cegas (js/prova.js): 5 descrições e a linha que ensina, por cor (Jovem, Dourado, Âmbar, Cobre).
+  'provas.js': ['jovem', 'dourado', 'ambar', 'cobre'].reduce(function (l, c) { return l.concat([1, 2, 3, 4, 5].map(function (i) { return 'prova_' + c + '_' + i; }), ['prova_ensino_' + c]); }, [])
 };
 
 // ----- 0b. Com a pasta dados/ real: só as visitas marisa_5 e henrique_5 e o pacote do nível 11 vêm de lá; o jogo de origem fica igual -----
@@ -266,7 +268,7 @@ const ESPERADO_EM_DADOS = {
     anterior = p;
   });
   const naPasta = fs.readdirSync(path.join(RAIZ, 'dados')).filter(function (f) { return /\.js$/.test(f); }).sort().join();
-  ok(naPasta === FICHEIROS_DE_DADOS.slice().sort().join(), 'a pasta dados/ devia ter só os 7 ficheiros de dados (.js): ' + naPasta);
+  ok(naPasta === FICHEIROS_DE_DADOS.slice().sort().join(), 'a pasta dados/ devia ter só os ' + FICHEIROS_DE_DADOS.length + ' ficheiros de dados (.js): ' + naPasta);
   FICHEIROS_DE_DADOS.forEach(function (f) {
     const codigo = fs.readFileSync(path.join(RAIZ, 'dados', f), 'utf8').replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '').trim();
     const esperados = ESPERADO_EM_DADOS[f];

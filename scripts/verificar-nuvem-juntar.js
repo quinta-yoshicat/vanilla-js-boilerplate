@@ -22,7 +22,7 @@ const vm = require('vm');
 const RAIZ = path.join(__dirname, '..');
 const STATE_JS = fs.readFileSync(path.join(RAIZ, 'js', 'state.js'), 'utf8');
 const NUVEM_JS = fs.readFileSync(path.join(RAIZ, 'js', 'nuvem.js'), 'utf8');
-const AREAS = ['despensa', 'visitas', 'lagar', 'camara', 'roxo', 'loja', 'reserva', 'colecao', 'encomendas'];
+const AREAS = ['despensa', 'visitas', 'lagar', 'camara', 'roxo', 'loja', 'reserva', 'colecao', 'encomendas', 'prova'];
 
 // Nuvem falsa (CloudStorage) em memória, como em verificar-nuvem.js.
 function nuvemFalsa(inicial) {
@@ -140,7 +140,8 @@ function estadoAleatorio(rnd) {
     loja: { dia: dia(), vendasHoje: n() },
     reserva: { visitaDia: dia() },
     colecao: { arrumouDia: dia() },
-    encomendas: { atual: atual, ultimoDia: dia(), cumpridas: n() }
+    encomendas: { atual: atual, ultimoDia: dia(), cumpridas: n() },
+    prova: { ultimoDia: dia(), dias: n(), acertos: n() }
   };
 }
 

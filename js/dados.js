@@ -3,16 +3,16 @@
 // como dados (ver dados/LEIAME.md). Os ficheiros de dados/ chamam
 // dadosAcrescentar(tipo, entrada); a entrada é conferida e, se estiver
 // bem, entra no fim da lista certa (VISITAS, NIVEIS_CONFIG,
-// HISTORIA_NIVEIS, CAPITULOS_CONFIG, ENCYCLOPEDIA_ENTRIES, PALAVRAS_DA_QUINTA).
+// HISTORIA_NIVEIS, CAPITULOS_CONFIG, ENCYCLOPEDIA_ENTRIES, PALAVRAS_DA_QUINTA, PROVA_DESCRICOES / PROVA_ENSINO).
 //
 // Regras:
 //   - Nunca lança erro nem parte o arranque: uma entrada má é IGNORADA e
 //     avisa na consola (console.warn) com o motivo.
 //   - Nunca substitui nem muda uma entrada que já existe: só acrescenta.
 //   - Carrega DEPOIS dos ficheiros que definem as listas (niveis.js,
-//     historia.js, capitulos.js, visitas.js, explorar.js, palavras.js) e ANTES de js/main.js.
+//     historia.js, capitulos.js, visitas.js, explorar.js, palavras.js, prova.js) e ANTES de js/main.js.
 //
-// Tipos: 'visitas', 'niveis', 'historias', 'capitulos', 'enciclopedia' e 'palavras'. 'objetivos' ainda
+// Tipos: 'visitas', 'niveis', 'historias', 'capitulos', 'enciclopedia', 'palavras' e 'provas'. 'objetivos' ainda
 // NÃO é suportado: cada objetivo precisa de uma regra no código
 // (elegivel() em js/objetivos.js) e o objetivos.js gera os do dia ao
 // carregar, antes de este ficheiro correr.
@@ -30,9 +30,14 @@
 //   palavras:  { id, palavra, explicacao: { pt, en, es }, nivel (inteiro >= 1, opcional) }
 //                 entra em PALAVRAS_DA_QUINTA (js/palavras.js, o glossário «Palavras da Quinta»); a palavra é o termo em português,
 //                 igual nas 3 línguas, e não pode repetir outra (sem contar acentos nem maiúsculas). Só leitura: não guarda nada.
+//   provas:    { id, cor (1 a 4: Jovem, Dourado, Âmbar, Cobre), texto: { pt, en, es }, ensino (true, opcional) }
+//                 a descrição de um vinho da Prova às cegas (js/prova.js, PROVA_DESCRICOES); com ensino: true é a linha
+//                 que ensina essa cor (PROVA_ENSINO, uma por cor). Os textos não podem ter números, nem «dias», «horas» ou
+//                 «anos» (nas 3 línguas), nem «Fygmo»; uma descrição não diz o nome de nenhuma cor (seria dar a
+//                 resposta); a linha que ensina diz o nome da SUA cor e de nenhuma outra.
 // ---------------------------------------------------------------------
 
-const DADOS_TIPOS = ['visitas', 'niveis', 'historias', 'capitulos', 'enciclopedia', 'palavras', 'objetivos'];
+const DADOS_TIPOS = ['visitas', 'niveis', 'historias', 'capitulos', 'enciclopedia', 'palavras', 'provas', 'objetivos'];
 const DADOS_LINGUAS = ['pt', 'en', 'es'];
 const DADOS_FORMATO_ID = /^[a-z0-9_]+$/;
 const DADOS_CONDICOES_VISITA = ['estacao', 'fase', 'festa', 'garrafa', 'cave'];
@@ -45,7 +50,7 @@ const DADOS_FORMATO_ID_CRITERIO = /^[A-Za-z0-9_]+$/;
 
 // O que já entrou por aqui: { id } por tipo (e { id, nivel } nas histórias). Serve para os
 // testes e para o validador (scripts/verificar-dados.js) saberem o que veio de dados/.
-const DADOS_ACRESCENTADOS = { visitas: [], niveis: [], historias: [], capitulos: [], enciclopedia: [], palavras: [], objetivos: [] };
+const DADOS_ACRESCENTADOS = { visitas: [], niveis: [], historias: [], capitulos: [], enciclopedia: [], palavras: [], provas: [], objetivos: [] };
 
 function dadosAvisar(tipo, entrada, motivo) {
   let nome = '?';
@@ -250,8 +255,43 @@ function dadosInserirPalavra(e) {
   PALAVRAS_DA_QUINTA.push(p);
 }
 
-const DADOS_CONFERIDORES = { visitas: dadosMotivoVisita, niveis: dadosMotivoNivel, historias: dadosMotivoHistoria, capitulos: dadosMotivoCapitulo, enciclopedia: dadosMotivoEnciclopedia, palavras: dadosMotivoPalavra };
-const DADOS_INSERTORES = { visitas: dadosInserirVisita, niveis: dadosInserirNivel, historias: dadosInserirHistoria, capitulos: dadosInserirCapitulo, enciclopedia: dadosInserirEnciclopedia, palavras: dadosInserirPalavra };
+// Prova às cegas: palavras proibidas nos textos (números, durações) e os nomes das cores em cada língua.
+const DADOS_PROVA_PROIBIDO = /\d|\b(dias?|days?|d[ií]as?|horas?|hours?|anos?|years?|a[ñn]os?)\b|fygmo/i;
+const DADOS_PROVA_CORES = {
+  1: { pt: /jove(m|ns)/i, en: /young/i, es: /joven/i },
+  2: { pt: /dourad/i, en: /golden/i, es: /dorad/i },
+  3: { pt: /[âa]mbar/i, en: /amber/i, es: /[áa]mbar/i },
+  4: { pt: /cobre|acobread/i, en: /copper/i, es: /cobr[ei]/i }
+};
+
+function dadosMotivoProva(e) {
+  if (typeof PROVA_DESCRICOES === 'undefined' || typeof PROVA_ENSINO === 'undefined') return 'o jogo ainda não tem as listas da Prova às cegas (js/prova.js; ordem dos scripts)';
+  if (dadosJaTemId(PROVA_DESCRICOES, e.id) || Object.keys(PROVA_ENSINO).some(function (k) { return PROVA_ENSINO[k].id === e.id; })) return 'já existe uma entrada da prova com este id';
+  if (!Number.isInteger(e.cor) || e.cor < 1 || e.cor > 4) return 'a cor devia ser um inteiro de 1 a 4 (Jovem, Dourado, Âmbar, Cobre)';
+  if (e.ensino !== undefined && e.ensino !== true) return 'ensino, se existir, devia ser true';
+  const m = dadosMotivoTexto3(e.texto, 'o texto');
+  if (m) return m;
+  for (let i = 0; i < DADOS_LINGUAS.length; i++) {
+    const l = DADOS_LINGUAS[i], txt = e.texto[l];
+    if (DADOS_PROVA_PROIBIDO.test(txt)) return 'o texto em ' + l + ' tem números, «dias», «horas», «anos» ou «Fygmo»';
+    for (let c = 1; c <= 4; c++) {
+      const tem = DADOS_PROVA_CORES[c][l].test(txt);
+      if (e.ensino === true && c === e.cor && !tem) return 'a linha que ensina devia dizer o nome da sua cor (em ' + l + ')';
+      if (tem && (e.ensino !== true || c !== e.cor)) return 'o texto em ' + l + ' diz o nome de uma cor (' + c + '): ' + (e.ensino ? 'a linha que ensina só diz a sua' : 'uma descrição não pode dar a resposta');
+    }
+  }
+  if (e.ensino === true && PROVA_ENSINO[e.cor]) return 'já existe a linha que ensina esta cor';
+  return null;
+}
+
+function dadosInserirProva(e) {
+  const texto = { pt: e.texto.pt, en: e.texto.en, es: e.texto.es };
+  if (e.ensino === true) PROVA_ENSINO[e.cor] = { id: e.id, texto: texto };
+  else PROVA_DESCRICOES.push({ id: e.id, cor: e.cor, texto: texto });
+}
+
+const DADOS_CONFERIDORES = { visitas: dadosMotivoVisita, niveis: dadosMotivoNivel, historias: dadosMotivoHistoria, capitulos: dadosMotivoCapitulo, enciclopedia: dadosMotivoEnciclopedia, palavras: dadosMotivoPalavra, provas: dadosMotivoProva };
+const DADOS_INSERTORES = { visitas: dadosInserirVisita, niveis: dadosInserirNivel, historias: dadosInserirHistoria, capitulos: dadosInserirCapitulo, enciclopedia: dadosInserirEnciclopedia, palavras: dadosInserirPalavra, provas: dadosInserirProva };
 
 // Acrescenta UMA entrada. Devolve true se entrou, false se foi ignorada (com um console.warn
 // a dizer porquê). Nunca lança erro.
