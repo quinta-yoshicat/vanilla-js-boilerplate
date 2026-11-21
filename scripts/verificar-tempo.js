@@ -164,22 +164,25 @@ function suite(fontes) {
   {
     const agora = d(9, '10:00');
     const g = jogador(agora);
-    ok(g.ev('diasDescansadosNaCave()') === 0, 'sem lote: 0 dias');
-    g.ev('state.adega.lote = { iniciadoEm: ' + (agora - 3 * DIA) + ' };');
-    ok(g.ev('diasDescansadosNaCave()') === 3, 'lote normal: 3 dias');
+    // O lote conta em escalões de 9 h (CAVE_ESCALAO_MS, js/garrafa.js; antes eram dias de 24 h).
+    const ESCALAO = g.ev('CAVE_ESCALAO_MS');
+    ok(ESCALAO === 9 * 60 * 60 * 1000, 'o escalão da Cave é de 9 h');
+    ok(g.ev('diasDescansadosNaCave()') === 0, 'sem lote: 0 escalões');
+    g.ev('state.adega.lote = { iniciadoEm: ' + (agora - 3 * ESCALAO) + ' };');
+    ok(g.ev('diasDescansadosNaCave()') === 3, 'lote normal: 3 escalões (27 h)');
     g.ev('state.adega.lote = { iniciadoEm: ' + (agora + 5 * DIA) + ' };');
-    ok(g.ev('diasDescansadosNaCave()') === 0, 'lote com início no futuro: 0 dias (nunca negativos), deu ' + g.ev('diasDescansadosNaCave()'));
+    ok(g.ev('diasDescansadosNaCave()') === 0, 'lote com início no futuro: 0 escalões (nunca negativos), deu ' + g.ev('diasDescansadosNaCave()'));
     ok(g.ev('state.adega.lote.iniciadoEm') === agora, 'o início do lote no futuro foi corrigido para agora');
-    g.ir(agora + 2 * DIA);
-    ok(g.ev('diasDescansadosNaCave()') === 2, 'o lote recomeça a contar a partir de agora: +2 dias → 2');
-    ok(g.ev('Math.floor(diasDescansadosNaCave()) >= REGRAS_DESCANSO_CAVE.diasMinimos') === (2 >= g.ev('REGRAS_DESCANSO_CAVE.diasMinimos')), 'o mínimo de dias para engarrafar usa os dias lidos');
+    g.ir(agora + 2 * ESCALAO);
+    ok(g.ev('diasDescansadosNaCave()') === 2, 'o lote recomeça a contar a partir de agora: +2 escalões → 2');
+    ok(g.ev('Math.floor(diasDescansadosNaCave()) >= REGRAS_DESCANSO_CAVE.diasMinimos') === (2 >= g.ev('REGRAS_DESCANSO_CAVE.diasMinimos')), 'o mínimo para engarrafar usa os escalões lidos');
     // Voltar ao normal: o lote não fica bloqueado para sempre.
-    g.ir(agora + g.ev('REGRAS_DESCANSO_CAVE.diasMinimos') * DIA);
+    g.ir(agora + g.ev('REGRAS_DESCANSO_CAVE.diasMinimos') * ESCALAO);
     ok(g.ev('Math.floor(diasDescansadosNaCave()) >= REGRAS_DESCANSO_CAVE.diasMinimos'), 'passados os dias normais a partir de agora, o lote pode engarrafar');
     // Modo de teste ?dias=
     const t1 = abrir(agora, null, '?dias=9');
     t1.ev('state.adega.lote = { iniciadoEm: ' + (agora + 5 * DIA) + ' };');
-    ok(t1.ev('diasDescansadosNaCave()') === 9, '?dias=9 continua a forçar os dias com lote');
+    ok(t1.ev('diasDescansadosNaCave()') === 9, '?dias=9 continua a forçar o descanso com lote (9 escalões)');
     const t2 = abrir(agora, null, '?dias=9');
     ok(t2.ev('diasDescansadosNaCave()') === 0, '?dias= sem lote continua a dar 0');
   }
