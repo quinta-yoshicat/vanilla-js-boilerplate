@@ -22,7 +22,7 @@ const vm = require('vm');
 const RAIZ = path.join(__dirname, '..');
 const STATE_JS = fs.readFileSync(path.join(RAIZ, 'js', 'state.js'), 'utf8');
 const NUVEM_JS = fs.readFileSync(path.join(RAIZ, 'js', 'nuvem.js'), 'utf8');
-const AREAS = ['despensa', 'visitas', 'lagar', 'camara', 'roxo', 'loja', 'reserva', 'colecao'];
+const AREAS = ['despensa', 'visitas', 'lagar', 'camara', 'roxo', 'loja', 'reserva', 'colecao', 'encomendas'];
 
 // Nuvem falsa (CloudStorage) em memória, como em verificar-nuvem.js.
 function nuvemFalsa(inicial) {
@@ -127,6 +127,10 @@ function estadoAleatorio(rnd) {
   const vd = dia();
   const hoje = (vd === null || rnd() < 0.2) ? null : { dia: vd, id: ['valentim', 'marisa'][Math.floor(rnd() * 2)], feita: rnd() < 0.5 };
   if (hoje && rnd() < 0.4) hoje.bagaceiraDia = hoje.dia;
+  // Encomendas (js/encomendas.js): uma encomenda válida ou null; prazoDia = aceiteDia + 2 dias.
+  const prazos = { '2026-10-01': '2026-10-03', '2026-10-02': '2026-10-04', '2026-10-05': '2026-10-07', '2026-10-09': '2026-10-11', '2026-10-10': '2026-10-12', '2026-10-11': '2026-10-13' };
+  const aceite = dias[Math.floor(rnd() * dias.length)];
+  const atual = rnd() < 0.5 ? null : { personagem: ['valentim', 'marisa', 'henrique'][Math.floor(rnd() * 3)], escalao: 1 + Math.floor(rnd() * 4), aceiteDia: aceite, prazoDia: prazos[aceite], historicoInicio: n() };
   return {
     despensa: { recebidos: recebidos, entregues: entregues, primeiraTroca: primeiraTroca, hoje: { dia: diaDespensa, feitas: feitas } },
     visitas: { feitas: vFeitas, hoje: hoje },
@@ -135,7 +139,8 @@ function estadoAleatorio(rnd) {
     roxo: { brindeDia: dia(), dias: n() },
     loja: { dia: dia(), vendasHoje: n() },
     reserva: { visitaDia: dia() },
-    colecao: { arrumouDia: dia() }
+    colecao: { arrumouDia: dia() },
+    encomendas: { atual: atual, ultimoDia: dia(), cumpridas: n() }
   };
 }
 

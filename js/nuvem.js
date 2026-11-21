@@ -395,7 +395,12 @@ function nuvemJuntarCaderno(a, b) {
 //   visitas.hoje {dia, id, feita, bagaceiraDia}: com um null fica o outro; senão o dia mais recente; no mesmo dia e com o mesmo id,
 //     feita = true se algum for true e bagaceiraDia = a data mais recente (o copo oferecido à visita, 1 por dia, js/visitas.js,
 //     nunca se "desoferece"); no mesmo dia com ids diferentes fica o do "base".
-const NUVEM_LEVES_AREAS = ['despensa', 'visitas', 'lagar', 'camara', 'roxo', 'loja', 'reserva', 'colecao'];
+//   encomendas {atual, ultimoDia, cumpridas} (js/encomendas.js): cumpridas = o MAIOR; ultimoDia = o mais recente;
+//     atual: se um lado tem mais cumpridas, fica o desse lado (pode ser null: já entregue); com o mesmo número, uma
+//     encomenda aceite nunca é apagada (com um null fica a outra) e, com as duas, fica a aceite mais recente (no mesmo dia,
+//     a de escalão maior, depois por personagem e historicoInicio: o resultado não depende da ordem dos dois lados).
+//     Cada lado passa antes por encomendasNormalizar() (js/state.js): o mal formado conta como null/0.
+const NUVEM_LEVES_AREAS = ['despensa', 'visitas', 'lagar', 'camara', 'roxo', 'loja', 'reserva', 'colecao', 'encomendas'];
 
 function nuvemLevesData(x) {
   return (typeof x === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(x)) ? x : null;
@@ -496,6 +501,26 @@ function nuvemLevesVisitasHoje(a, b) {
   return h;
 }
 
+// As encomendas de dois lados (ver as regras acima). Pura; devolve um objeto novo com a forma de defaultState().
+function nuvemLevesEncomendas(a, b) {
+  const norm = typeof encomendasNormalizar === 'function' ? encomendasNormalizar : function () { return { atual: null, ultimoDia: null, cumpridas: 0 }; };
+  const x = norm(a), y = norm(b);
+  let atual;
+  if (x.cumpridas > y.cumpridas) atual = x.atual;
+  else if (y.cumpridas > x.cumpridas) atual = y.atual;
+  else if (x.atual === null) atual = y.atual;
+  else if (y.atual === null) atual = x.atual;
+  else {
+    const chave = function (e) { return e.aceiteDia + '|' + e.escalao + '|' + e.personagem + '|' + ('000000000' + e.historicoInicio).slice(-9) + '|' + e.prazoDia; };
+    atual = chave(y.atual) > chave(x.atual) ? y.atual : x.atual;
+  }
+  return {
+    atual: atual ? Object.assign({}, atual) : null,
+    ultimoDia: nuvemLevesMaisRecente(x.ultimoDia, y.ultimoDia),
+    cumpridas: Math.max(x.cumpridas, y.cumpridas)
+  };
+}
+
 function nuvemJuntarLeves(base, outro) {
   const a = nuvemLevesObjeto(base), b = nuvemLevesObjeto(outro);
   const da = nuvemLevesObjeto(a.despensa), db = nuvemLevesObjeto(b.despensa);
@@ -544,7 +569,8 @@ function nuvemJuntarLeves(base, outro) {
       dias: Math.max(nuvemLevesInteiro(ra.dias), nuvemLevesInteiro(rb.dias))
     },
     reserva: { visitaDia: nuvemLevesMaisRecente(sa.visitaDia, sb.visitaDia) },
-    colecao: { arrumouDia: nuvemLevesMaisRecente(ka.arrumouDia, kb.arrumouDia) }
+    colecao: { arrumouDia: nuvemLevesMaisRecente(ka.arrumouDia, kb.arrumouDia) },
+    encomendas: nuvemLevesEncomendas(a.encomendas, b.encomendas)
   };
 }
 
