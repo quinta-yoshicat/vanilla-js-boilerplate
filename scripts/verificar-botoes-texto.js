@@ -136,6 +136,8 @@ function contexto(b) {
   const sitio = { 'lagar-botao': 'lagar', 'lagar-botao-mesa': 'lagar', 'lagar-botao-assalto': 'lagar', 'camara-botao': 'camara', 'roxo-botao': 'roxo', 'loja-botao': 'loja' };
   for (const k in sitio) if (c.indexOf(k) !== -1) return { ctx: ['#' + sitio[k] + '-container', '.action-panel'] };
   if (['estrada-botao', 'oferta-botao', 'explorar-botao'].some(function (k) { return c.indexOf(k) !== -1; })) return { ctx: ['.scroll-panel', '.mini-bloco'] };
+  // Encomenda da visita (js/encomendas.js): no cartão da Quinta, dentro do bloco do pedido, lado a lado.
+  if (c.indexOf('encomenda-botao') !== -1) return { ctx: ['.topcard', '.cartao-corpo', '.mini-bloco', '.encomenda-pedido', '.encomenda-botoes'] };
   if (c.indexOf('pill-grande') !== -1 || c.indexOf('colecao-arrumar-botao') !== -1 || c.join(' ') === 'btn-pill' || c.join(' ') === 'btn-pill pill-main') return { ctx: ['.action-panel'] };
   return null;
 }

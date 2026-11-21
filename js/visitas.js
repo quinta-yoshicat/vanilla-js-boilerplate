@@ -374,7 +374,9 @@ function atualizarLinhaVisitaQuinta() {
   if (!container) return;
   let r;
   try { r = visitaParaLinha(); } catch (e) { r = { visita: null }; }
-  if (!r.visita) { container.innerHTML = ''; return; }
+  // A encomenda (nível 5, ver encomendaHtml() em js/encomendas.js): a em curso e o resultado também se veem nos dias sem visita.
+  const encomendaBloco = function () { try { return typeof encomendaHtml === 'function' ? encomendaHtml() : ''; } catch (e) { return ''; } };
+  if (!r.visita) { container.innerHTML = encomendaBloco(); return; }
   const texto = t('visita.linha').replace('{nome}', t('visita.nome.' + r.visita.personagem));
   container.innerHTML =
     '<div class="mini-bloco">' +
@@ -385,7 +387,9 @@ function atualizarLinhaVisitaQuinta() {
     // Oferecer um bem da Despensa a esta visita (Estrada, nível 7): ver estradaOfertaHtml() em js/estrada.js.
     (function () { try { return typeof estradaOfertaHtml === 'function' ? estradaOfertaHtml() : ''; } catch (e) { return ''; } })() +
     // O copo de bagaceira (nível 4): ver visitaBagaceiraHtml() acima. Não depende da Despensa nem da Estrada.
-    (function () { try { return visitaBagaceiraHtml(); } catch (e) { return ''; } })();
+    (function () { try { return visitaBagaceiraHtml(); } catch (e) { return ''; } })() +
+    // A encomenda da visita (nível 5): por baixo do copo.
+    encomendaBloco();
 }
 
 function visitaLinhaToque() {

@@ -118,7 +118,10 @@ function suite(fontes) {
     ok(Object.keys(diferentes).length >= 3, '(a) a cor muda com o contador de cumpridas');
     ok(g.ev("encomendaEscalaoDoDia(4, '" + DIA + "', 0)") === null, '(a) abaixo do nível 5 não há cor');
     const src = fontes['encomendas.js'].replace(/\/\/.*$/gm, '');
-    ok(!/Math\.random|Date\.now|new Date\(\)|saveState|localStorage/.test(src), '(a) sem Math.random, sem relógio, sem gravar');
+    // As regras (a parte da PR 1, antes do bloco «PR 2 de 3: NO JOGO») nunca gravam; o ficheiro todo não sorteia nem lê o relógio.
+    const marca = fontes['encomendas.js'].indexOf('// PR 2 de 3: NO JOGO');
+    const regras = (marca === -1 ? fontes['encomendas.js'] : fontes['encomendas.js'].slice(0, marca)).replace(/\/\/.*$/gm, '');
+    ok(!/Math\.random|Date\.now|new Date\(\)|localStorage/.test(src) && !/saveState/.test(regras), '(a) sem Math.random, sem relógio, e as regras não gravam');
     // com Math.random e Date.now proibidos, tudo corre
     const p = abrir();
     p.ev('Math.random = function () { throw new Error("Math.random"); }; Date.now = function () { throw new Error("Date.now"); };');
@@ -335,11 +338,15 @@ function suite(fontes) {
       const s = (f === 'state.js' || f === 'nuvem.js' || f === 'garrafa.js' || f === 'i18n.js' || f === 'visitas.js') ? fontes[f] : LER('js/' + f);
       return /encomenda/i.test(s);
     }).sort();
-    ok(J(quem) === J(['nuvem.js', 'state.js']), '(g) só js/state.js e js/nuvem.js falam das encomendas (nada do jogo as chama): ' + J(quem));
-    ok(!/encomenda/i.test(fontes['garrafa.js']) && !/encomenda/i.test(fontes['i18n.js']), '(g) js/garrafa.js não as chama e não há textos no js/i18n.js');
+    // Desde a PR 2 (no jogo): o engarrafar (js/garrafa.js), o cartão da Quinta (js/visitas.js) e os textos (js/i18n.js)
+    // também falam delas; mais nenhum ficheiro (nem a jeropiga, js/festas.js).
+    ok(J(quem) === J(['garrafa.js', 'i18n.js', 'nuvem.js', 'state.js', 'visitas.js']), '(g) só js/state.js, js/nuvem.js, js/garrafa.js, js/visitas.js e js/i18n.js falam das encomendas: ' + J(quem));
+    const usadas = (fontes['garrafa.js'].replace(/\/\/.*$/gm, '').match(/\bencomenda[A-Za-z]*/g) || []).filter(function (x, i, l) { return l.indexOf(x) === i; }).sort();
+    ok(J(usadas) === J(['encomenda', 'encomendaDiaDeHoje', 'encomendaEngarrafada', 'encomendaEntregueHtml', 'encomendaEntregueTexto', 'encomendaResultado']) && (fontes['garrafa.js'].match(/encomendaEngarrafada\(state/g) || []).length === 1, '(g) js/garrafa.js só chama encomendaEngarrafada (uma vez, no engarrafar) e os textos da entrega: ' + J(usadas));
+    ok(fontes['i18n.js'].split('\n').filter(function (l) { return /encomenda/i.test(l); }).every(function (l) { return /^\s*'encomenda\.[A-Za-z]+': /.test(l); }) && /'encomenda\.pedido'/.test(fontes['i18n.js']), '(g) no js/i18n.js só há as chaves encomenda.*');
     const I = fontes['index.html'];
     const pos = function (f) { return I.indexOf('<script src="js/' + f + '?v='); };
-    ok(/<script src="js\/encomendas\.js\?v=1"><\/script>/.test(I) && ['visitas.js', 'garrafa.js', 'tempo.js', 'niveis.js', 'main.js'].every(function (f) { return pos(f) > 0; }) && pos('encomendas.js') > pos('visitas.js') && pos('encomendas.js') > pos('garrafa.js') && pos('encomendas.js') > pos('tempo.js') && pos('encomendas.js') > pos('niveis.js') && pos('encomendas.js') < pos('main.js'), '(g) index.html: js/encomendas.js?v=1 depois de visitas.js e garrafa.js (e de tempo.js e niveis.js), antes de main.js');
+    ok(/<script src="js\/encomendas\.js\?v=\d+"><\/script>/.test(I) && ['visitas.js', 'garrafa.js', 'tempo.js', 'niveis.js', 'main.js'].every(function (f) { return pos(f) > 0; }) && pos('encomendas.js') > pos('visitas.js') && pos('encomendas.js') > pos('garrafa.js') && pos('encomendas.js') > pos('tempo.js') && pos('encomendas.js') > pos('niveis.js') && pos('encomendas.js') < pos('main.js'), '(g) index.html: js/encomendas.js?v=1 depois de visitas.js e garrafa.js (e de tempo.js e niveis.js), antes de main.js');
   }
   return falhas;
 }
@@ -386,7 +393,7 @@ const MUTACOES = [
   ['nuvem: no mesmo dia depende da ordem', 'nuvem.js', "return e.aceiteDia + '|' + e.escalao", "return e.aceiteDia + '|' + 0"],
   ['nuvem: sem a área', 'nuvem.js', "'reserva', 'colecao', 'encomendas'];", "'reserva', 'colecao'];"],
   ['o engarrafar passa a chamá-las', 'garrafa.js', '    a.lote = null;\n    adegaGarrafaFeita', '    a.lote = null; if (typeof encomendaProcurarGarrafa === "function") encomendaProcurarGarrafa(state, "x");\n    adegaGarrafaFeita'],
-  ['carregado antes de visitas.js', 'index.html', '  <script src="js/visitas.js?v=12"></script>\n', '']
+  ['carregado antes de visitas.js', 'index.html', (FONTES['index.html'].match(/  <script src="js\/visitas\.js\?v=\d+"><\/script>\n/) || ['(sem a linha do visitas.js)'])[0], '']
 ];
 MUTACOES.forEach(function (m) {
   const f = mutar(m[1], m[2], m[3]);

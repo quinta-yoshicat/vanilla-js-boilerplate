@@ -180,3 +180,171 @@ function encomendaExpirar(estado, dia) {
   encomendasEstado(estado).atual = null;
   return true;
 }
+
+// ---------------------------------------------------------------------
+// PR 2 de 3: NO JOGO. Um bloco no cartão da Quinta, por baixo da linha da visita do dia e do copo de bagaceira
+// (desenhado por atualizarLinhaVisitaQuinta(), js/visitas.js), e o pagamento ao engarrafar (executarAcaoAdega,
+// js/garrafa.js, logo a seguir ao historico.push do engarrafar normal; a jeropiga de js/festas.js nunca chama).
+// Estados do bloco: (a) pode pedir: a fala da personagem, o pedido e «Aceitar» / «Agora não»; (b) em curso: uma
+// linha; (c) acabou o prazo: acaba ao desenhar e mostra uma vez «A encomenda acabou»; (d) entregue: o
+// agradecimento e o prémio. (c) e (d) ficam só em memória (encomendaResultado) até se sair da app, como
+// visitaBagaceiraResultado. Em modo de teste (visitaEmModoTeste: ?visita=, ?dias=, ...) não se pede, não se paga
+// nem se grava. O dia é o efetivo das visitas (visitaDiaEfetivo): com o relógio errado nada se perde.
+// ---------------------------------------------------------------------
+
+// Falas das três personagens das visitas (as mesmas de VISITAS_BAGACEIRA_FALAS, js/visitas.js), no mesmo tom.
+const ENCOMENDAS_FALAS_PEDIDO = {
+  valentim: { pt: 'Tenho uns amigos à mesa no fim de semana e queria lá pôr uma garrafa feita com calma. Sem pressas: só com tempo.', en: 'I have some friends coming to dinner at the weekend and I\'d like to put a bottle made without hurry on the table. No rush: just time.', es: 'Tengo unos amigos a la mesa el fin de semana y quería poner una botella hecha con calma. Sin prisas: solo con tiempo.' },
+  marisa: { pt: 'A minha avó faz anos e só bebe Moscatel daqui. Arranjas-me uma? Eu digo-lhe que fui eu que apanhei as uvas.', en: 'It\'s my grandmother\'s birthday and she only drinks Moscatel from here. Could you find me one? I\'ll tell her I picked the grapes myself.', es: 'Mi abuela cumple años y solo bebe Moscatel de aquí. ¿Me consigues una? Le diré que las uvas las recogí yo.' },
+  henrique: { pt: 'Vou dar uma prova a uns colegas e queria um exemplar da casa. Prometo cuspir com elegância.', en: 'I\'m giving a tasting to some colleagues and I\'d like a bottle from the house. I promise to spit elegantly.', es: 'Voy a dar una cata a unos colegas y quería un ejemplar de la casa. Prometo escupir con elegancia.' }
+};
+const ENCOMENDAS_FALAS_OBRIGADO = {
+  valentim: { pt: 'Esta tem paciência no copo. Os meus amigos vão perguntar o segredo, e eu vou dizer que é teu.', en: 'This one has patience in the glass. My friends will ask for the secret, and I\'ll say it\'s yours.', es: 'Esta tiene paciencia en la copa. Mis amigos preguntarán el secreto, y diré que es tuyo.' },
+  marisa: { pt: 'Ela vai adorar! E se perguntar quem a fez, digo que foi a equipa toda, gato incluído.', en: 'She\'ll love it! And if she asks who made it, I\'ll say the whole team did, cat included.', es: '¡Le va a encantar! Y si pregunta quién la hizo, diré que todo el equipo, gato incluido.' },
+  henrique: { pt: 'Cor certa, nariz honesto, final comprido. Os meus colegas vão ficar com inveja, e eu também fico um bocadinho.', en: 'Right colour, honest nose, long finish. My colleagues will be jealous, and so will I, a little.', es: 'Color justo, nariz honesta, final largo. Mis colegas tendrán envidia, y yo también un poquito.' }
+};
+
+// Só em memória: o que acabou de acontecer, para mostrar uma vez na Quinta. { dia, tipo: 'entregue' | 'acabou', personagem, premio }.
+let encomendaResultado = null;
+
+function encomendaEscapar(s) {
+  return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function encomendaModoTeste() {
+  try { return typeof visitaEmModoTeste === 'function' && visitaEmModoTeste() === true; } catch (e) { return false; }
+}
+
+// O dia de hoje para as encomendas: o dia efetivo das visitas (relógio atrás: o guardado conta como hoje).
+function encomendaDiaDeHoje() {
+  try { if (typeof visitaDiaEfetivo === 'function') return visitaDiaEfetivo(); } catch (e) { /* segue */ }
+  try { return diaLisboaDeHoje(); } catch (e) { return null; }
+}
+
+// «Agora não»: só se pode recusar o que se podia pedir; grava ultimoDia = hoje (não volta a pedir nesse dia). Pura,
+// não grava (quem chama grava). { ok, motivo }.
+function encomendaRecusar(estado, dia, modoTeste) {
+  const p = encomendaPodePedir(estado, dia, modoTeste);
+  if (!p.ok) return { ok: false, motivo: p.motivo };
+  encomendasEstado(estado).ultimoDia = dia;
+  return { ok: true, motivo: null };
+}
+
+// Uma garrafa acabada de engarrafar (posição `indice` do histórico): se cumpre a encomenda ativa, entrega-a (paga uma
+// só vez). Em modo de teste nunca. Pura, não grava. { ok, premio, escalao, personagem }.
+function encomendaEngarrafada(estado, dia, indice, modoTeste) {
+  if (modoTeste === true) return { ok: false, premio: null, escalao: null, personagem: null };
+  return encomendaEntregar(estado, dia, indice);
+}
+
+// Textos.
+function encomendaMaiuscula(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+function encomendaNome(personagem) { return t('visita.nome.' + personagem); }
+function encomendaCorNome(escalao) { return t(garrafaPorDias(escalao).nomeKey); }
+
+// O dia do prazo na língua do jogador: o dia da semana e o dia/mês («sábado, 12/10»), a partir do dia de Lisboa
+// (sem relógio: a data vem do texto 'AAAA-MM-DD'). Nunca uma duração em «dias».
+function encomendaDiaTexto(dia) {
+  const p = diaLisboaPartes(dia);
+  if (!p) return '';
+  const loc = typeof localeAtual === 'function' ? localeAtual() : 'pt-PT';
+  try {
+    return new Intl.DateTimeFormat(loc, { weekday: 'long', day: 'numeric', month: 'numeric', timeZone: 'UTC' }).format(new Date(Date.UTC(p.ano, p.mes, p.dia)));
+  } catch (e) {
+    return (p.dia < 10 ? '0' : '') + p.dia + '/' + (p.mes < 9 ? '0' : '') + (p.mes + 1);
+  }
+}
+
+// «+6 Reputação, +30 Uvas»: só as partes maiores do que 0.
+function encomendaPremioTexto(premio) {
+  if (!premio) return '';
+  const partes = [];
+  if (premio.reputacao > 0) partes.push(t('encomenda.premioRep').replace('{n}', premio.reputacao));
+  if (premio.uvas > 0) partes.push(t('encomenda.premioUvas').replace('{n}', premio.uvas));
+  if (premio.gotas > 0) partes.push(t('encomenda.premioGotas').replace('{n}', premio.gotas));
+  return partes.join(', ');
+}
+
+function encomendaFala(falas, personagem) {
+  const f = falas[personagem];
+  return f ? (f[currentLang] || f.pt) : '';
+}
+
+// O agradecimento e o prémio de uma entrega (Quinta e página da garrafa).
+function encomendaEntregueHtml(r) {
+  if (!r || !r.personagem) return '';
+  const fala = encomendaFala(ENCOMENDAS_FALAS_OBRIGADO, r.personagem);
+  return '<div class="mini-bloco"><div class="oferta-resultado encomenda-resultado">' +
+    '<p>' + encomendaEscapar(t('encomenda.entregue').replace('{nome}', t('oferta.a.' + r.personagem))) + '</p>' +
+    '<p>' + encomendaEscapar(encomendaPremioTexto(r.premio)) + '</p>' +
+    (fala ? '<p class="oferta-fala">«' + encomendaEscapar(fala) + '»</p>' : '') +
+  '</div></div>';
+}
+
+// O texto curto da entrega (para a mensagem do engarrafar).
+function encomendaEntregueTexto(r) {
+  if (!r || !r.personagem) return '';
+  return t('encomenda.entregue').replace('{nome}', t('oferta.a.' + r.personagem)) + ' ' + encomendaPremioTexto(r.premio) + '.';
+}
+
+// O bloco da Quinta. Só desenha (e, se o prazo passou, acaba a encomenda e grava UMA vez). '' se não houver nada.
+function encomendaHtml() {
+  if (encomendaModoTeste()) return '';
+  const dia = encomendaDiaDeHoje();
+  if (typeof dia !== 'string') return '';
+  let html = '';
+  // (c) o prazo passou: acaba agora, sem tirar nada, e mostra-se uma vez.
+  const antes = encomendasNormalizar(state.encomendas).atual;
+  if (antes && encomendaExpirar(state, dia)) {
+    encomendaResultado = { dia: dia, tipo: 'acabou', personagem: antes.personagem, premio: null };
+    saveState(state);
+  }
+  const res = encomendaResultado;
+  if (res && res.dia === dia) {
+    if (res.tipo === 'entregue') html += encomendaEntregueHtml(res);
+    else if (res.tipo === 'acabou') html += '<div class="mini-bloco"><p class="oferta-linha encomenda-linha">' + encomendaEscapar(t('encomenda.acabou').replace('{nome}', encomendaNome(res.personagem))) + '</p></div>';
+  }
+  // (b) em curso.
+  const a = encomendasNormalizar(state.encomendas).atual;
+  if (a && encomendaAtiva(state, dia)) {
+    return html + '<div class="mini-bloco"><p class="oferta-linha encomenda-linha">' +
+      encomendaEscapar(t('encomenda.emCurso').replace('{nome}', encomendaNome(a.personagem)).replace('{cor}', encomendaCorNome(a.escalao)).replace('{dia}', encomendaDiaTexto(a.prazoDia))) + '</p></div>';
+  }
+  // (a) pode pedir.
+  const p = encomendaPodePedir(state, dia, false);
+  if (p.ok) {
+    const prazo = encomendaSomarDias(dia, ENCOMENDAS_PRAZO_DIAS);
+    const fala = encomendaFala(ENCOMENDAS_FALAS_PEDIDO, p.personagem);
+    html += '<div class="mini-bloco encomenda-pedido">' +
+      (fala ? '<p class="oferta-fala">«' + encomendaEscapar(fala) + '»</p>' : '') +
+      '<p class="oferta-linha encomenda-linha">' + encomendaEscapar(encomendaMaiuscula(t('encomenda.pedido').replace('{nome}', encomendaNome(p.personagem)).replace('{cor}', encomendaCorNome(p.escalao)).replace('{dia}', encomendaDiaTexto(prazo)))) + '</p>' +
+      '<div class="encomenda-botoes">' +
+        '<button type="button" class="btn-pill pill-main encomenda-botao" onclick="encomendaAceitarClique()">' + encomendaEscapar(t('encomenda.aceitar')) + '</button>' +
+        '<button type="button" class="btn-pill encomenda-botao" onclick="encomendaAgoraNaoClique()">' + encomendaEscapar(t('encomenda.agoraNao')) + '</button>' +
+      '</div>' +
+    '</div>';
+  }
+  return html;
+}
+
+function encomendaRedesenhar() {
+  if (typeof atualizarLinhaVisitaQuinta === 'function') atualizarLinhaVisitaQuinta();
+}
+
+// Os ÚNICOS sítios que pedem e gravam. Se recusou, não grava. O toque duplo é travado pelas próprias regras
+// (uma ativa; ultimoDia = hoje).
+function encomendaAceitarClique() {
+  if (!encomendaModoTeste()) {
+    const r = encomendaCriar(state, encomendaDiaDeHoje(), false);
+    if (r.ok) saveState(state); // a vibração leve do toque já vem do listener geral dos botões (js/main.js)
+  }
+  encomendaRedesenhar();
+}
+
+function encomendaAgoraNaoClique() {
+  if (!encomendaModoTeste()) {
+    const r = encomendaRecusar(state, encomendaDiaDeHoje(), false);
+    if (r.ok) saveState(state);
+  }
+  encomendaRedesenhar();
+}
