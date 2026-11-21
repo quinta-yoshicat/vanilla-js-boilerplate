@@ -2187,6 +2187,50 @@
       border: 1px solid rgba(255, 255, 255, 0.35);
       color: #fff;
     }
+
+    /* ===================================================================
+       PAINÉIS NOS TELEMÓVEIS DE ECRÃ BAIXO (até 700 px de altura e 599 px de largura): devolver cenário nos ecrãs
+       onde o cenário e o gato contam (Quinta, Vinha, Proteger, Festa, Lagar, Câmara e Cepa Roxa; a Adega só no
+       fundo e no balão, porque a Reserva do cartão aberto não cabe em menos do que os 58% de hoje). Só aqui:
+       os ecrãs altos ou largos e as listas e ecrãs de leitura (Explorar, Enciclopédia, Conquistas, Caderno,
+       Palavras, Estrada, Coleção, Perfil, Definições, Loja) ficam exatamente como estavam.
+         - o cartão do topo aberto (Quinta e Vinha): de 50% para 40% da altura;
+         - o painel de ações do Proteger e da Festa (cenas): de 42% para 36% (continua com scroll);
+         - Lagar, Câmara e Cepa Roxa mais compactos: menos espaço entre caixas e dentro delas, letra um pouco
+           menor; os botões mantêm os 44 px de toque (regras de cima);
+         - o balão de fala mais baixo nestes ecrãs (cara de 32 px, menos espaço); fica onde sempre esteve, por
+           cima dos botões (--balao-extra, js/main.js). Usa :has(): num WebView que não o conheça, fica como antes;
+         - fundos dos cartões e das caixas um pouco mais transparentes (cartão de 62% para 50%, caixas e balão de
+           72% para 60%), com sombra no texto para continuar a ler-se em fundos claros.
+       O texto continua a partir linha e os botões continuam com as regras da PR 211 (nada aqui as muda).
+       =================================================================== */
+    @media (max-height: 700px) and (max-width: 599px) {
+      #screen-quinta .topcard.aberto, #screen-vinha .topcard.aberto { max-height: 40vh; }
+      #screen-quinta .topcard, #screen-vinha .topcard, #screen-garrafa .topcard, #screen-proteger .topcard,
+      #screen-festa .topcard, #screen-lagar .topcard, #screen-camara .topcard, #screen-roxo .topcard {
+        background: rgba(34, 16, 22, 0.5);
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+      }
+      #screen-proteger .action-panel, #screen-festa .action-panel { max-height: 36vh; }
+      #screen-lagar .action-panel, #screen-camara .action-panel, #screen-roxo .action-panel { gap: 4px; }
+      #screen-lagar .lagar-info, #screen-camara .camara-info, #screen-roxo .roxo-info {
+        padding: 6px 8px;
+        font-size: 12.5px;
+        line-height: 1.25;
+        background: rgba(30, 12, 18, 0.6);
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+      }
+      #screen-lagar .lagar-info p + p, #screen-camara .camara-info p + p, #screen-roxo .roxo-info p + p { margin-top: 2px; }
+      body:has(:is(#screen-quinta, #screen-vinha, #screen-garrafa, #screen-proteger, #screen-festa, #screen-lagar, #screen-camara, #screen-roxo).active) .dialogue-bubble {
+        gap: 8px;
+        padding: 6px 10px;
+        margin-bottom: 4px;
+        background: rgba(30, 12, 18, 0.6);
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+      }
+      body:has(:is(#screen-quinta, #screen-vinha, #screen-garrafa, #screen-proteger, #screen-festa, #screen-lagar, #screen-camara, #screen-roxo).active) .dialogue-avatar { width: 32px; height: 32px; }
+      body:has(:is(#screen-quinta, #screen-vinha, #screen-garrafa, #screen-proteger, #screen-festa, #screen-lagar, #screen-camara, #screen-roxo).active) .dialogue-msg { font-size: 12px; line-height: 1.25; }
+    }
   </style>
 </head>
 <body class="tela-home">
