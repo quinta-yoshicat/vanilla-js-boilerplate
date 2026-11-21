@@ -394,6 +394,8 @@ function colecaoResumo() {
 // Ao entrar no ecrã (ver goTo() em js/main.js): esquece o resultado da arrumação anterior.
 function renderColecao() {
   if (typeof colecaoResultado !== 'undefined') colecaoResultado = null;
+  // A Prova às cegas (js/prova-jogo.js): uma prova acabada (ou de outro dia) esquece-se; uma a meio retoma-se.
+  if (typeof provaAoEntrarNaColecao === 'function') provaAoEntrarNaColecao();
   renderColecaoDesenhar();
 }
 
@@ -410,6 +412,10 @@ function renderColecaoDesenhar() {
       '<p class="colecao-quantidade">' + t('colecao.quantidade').replace('{n}', quantidades[cor]) + '</p>' +
     '</div>';
   }).join('');
+  // A Prova às cegas (js/prova-jogo.js): o botão por cima de «Arrumar a Coleção» ou, a decorrer, a prova no painel todo.
+  const provaAtiva = typeof provaEmCurso === 'function' && provaEmCurso();
+  const provaHtml = typeof provaColecaoHtml === 'function' ? provaColecaoHtml() : '';
+  const provaLugar = typeof provaOcupaLugar === 'function' && provaOcupaLugar();
   const saoMartinhoHtml = quantidades.saoMartinho > 0
     ? ' <span class="colecao-sao-martinho">· ' + t('colecao.saoMartinho').replace('{n}', quantidades.saoMartinho) + '</span>'
     : '';
@@ -419,15 +425,16 @@ function renderColecaoDesenhar() {
       '<p class="mini-title" data-i18n="colecao.title"></p>' +
       '<p class="mini-sub">' + colecaoResumo() + saoMartinhoHtml + '</p>' +
     '</div>' +
-    '<div class="colecao-painel">' + celulas + '</div>' +
-    '<div class="action-panel">' +
-      // Tarefa do dia "Arrumar a Coleção" (nível 6; ver js/reserva.js), por cima do "Voltar"
-      (typeof colecaoTarefaBotaoHtml === 'function' ? colecaoTarefaBotaoHtml() : '') +
+    '<div class="colecao-painel' + (provaLugar ? ' com-prova' : '') + '">' + celulas + '</div>' +
+    '<div class="action-panel' + (provaAtiva ? ' prova-a-decorrer' : '') + '">' +
+      provaHtml +
+      // Tarefa do dia "Arrumar a Coleção" (nível 6; ver js/reserva.js), por cima do "Voltar" (escondida durante a prova)
+      (!provaAtiva && typeof colecaoTarefaBotaoHtml === 'function' ? colecaoTarefaBotaoHtml() : '') +
       '<button type="button" class="btn-pill pill-main pill-grande" onclick="voltarEcraAnterior()" data-i18n="nav.voltar"></button>' +
     '</div>';
 
   // Depois de arrumar: a garrafa de fundo e o agradecimento (ver colecaoArrumarClique() em js/reserva.js).
-  if (typeof colecaoResultado !== 'undefined' && colecaoResultado) {
+  if (typeof colecaoResultado !== 'undefined' && colecaoResultado && !provaAtiva) {
     const imagem = colecaoImagemMaisEscura(state); // a cor mais escura da Coleção; sem nenhuma, o fundo fica como estava
     if (imagem) definirFundo('foto', imagem);
     atualizarDialogo(t('colecao.arrumarOk').replace('{rep}', colecaoResultado.rep), 'YoshiCat');

@@ -138,6 +138,10 @@ function contexto(b) {
   if (['estrada-botao', 'oferta-botao', 'explorar-botao'].some(function (k) { return c.indexOf(k) !== -1; })) return { ctx: ['.scroll-panel', '.mini-bloco'] };
   // Encomenda da visita (js/encomendas.js): no cartão da Quinta, dentro do bloco do pedido, lado a lado.
   if (c.indexOf('encomenda-botao') !== -1) return { ctx: ['.topcard', '.cartao-corpo', '.mini-bloco', '.encomenda-pedido', '.encomenda-botoes'] };
+  // Prova às cegas (js/prova-jogo.js): no painel de ações da Coleção; as cores (2x2) e o «Seguinte» dentro do bloco da prova.
+  if (c.indexOf('prova-cor') !== -1) return { ctx: ['#colecao-container', '.action-panel', '.prova-bloco', '.prova-cores'] };
+  if (c.indexOf('prova-seguinte') !== -1) return { ctx: ['#colecao-container', '.action-panel', '.prova-bloco'] };
+  if (c.indexOf('prova-botao') !== -1) return { ctx: ['#colecao-container', '.action-panel'] };
   if (c.indexOf('pill-grande') !== -1 || c.indexOf('colecao-arrumar-botao') !== -1 || c.join(' ') === 'btn-pill' || c.join(' ') === 'btn-pill pill-main') return { ctx: ['.action-panel'] };
   return null;
 }

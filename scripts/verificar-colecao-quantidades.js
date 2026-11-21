@@ -170,6 +170,7 @@ function suite(fontes) {
     ok(INDEX.indexOf('screen-garrafas') === -1 && INDEX.indexOf('garrafas-container') === -1 && INDEX.indexOf('garrafas-lista') === -1 && INDEX.indexOf('garrafa-linha') === -1, 'index.html sem o ecrã "As Garrafas" nem o seu CSS');
     ok(!/#screen-colecao \.action-panel \.btn-ghost/.test(INDEX), 'index.html sem o estilo do botão "As minhas garrafas"');
     ok(/\.colecao-painel \{[^}]*bottom: calc\(var\(--nav-altura\) \+ 8px \+ 44px \+ 8px \+ 52px \+ 8px\);/.test(INDEX), 'o espaço por baixo da grelha é o do Voltar e do "Arrumar a Coleção" (sem o botão retirado)');
+    ok(/\.colecao-painel\.com-prova \{[^}]*bottom: calc\(var\(--nav-altura\) \+ 8px \+ 44px \+ 8px \+ 44px \+ 8px \+ 52px \+ 8px\);/.test(INDEX), 'com o botão da Prova às cegas (nível 6+, a classe com-prova) a grelha guarda mais 44 px + 8 px');
     ok(/\.colecao-quantidade \{/.test(INDEX), 'index.html tem o estilo da quantidade');
     ok(PERFIL.indexOf('bottle-gallery') === -1 && PERFIL.indexOf('renderGaleriaGarrafas') === -1 && PERFIL.indexOf('PERFIL_GARRAFA_PEQUENA_SVG') === -1 && INDEX.indexOf('bottle-gallery') === -1, 'Perfil sem as garrafinhas (código e CSS)');
     ok(/state\.garrafas \+ ' — <span data-i18n="perfil\.ultimaLabel"><\/span>: ' \+ state\.ultimaGarrafaData/.test(PERFIL), 'Perfil continua com «N — última: data»');

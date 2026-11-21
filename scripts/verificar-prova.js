@@ -17,9 +17,9 @@
 //  (h) dados: 5 descrições por cor e uma linha que ensina cada cor, nas 3 línguas, sem números, «dias», «horas», «anos»,
 //      nem «Fygmo»; nenhuma descrição diz o nome de uma cor; a linha que ensina diz o da sua; o validador rejeita o que
 //      não presta;
-//  (i) INVISÍVEL: nada do jogo chama a prova (só js/prova.js, js/state.js, js/nuvem.js e js/dados.js a conhecem;
-//      js/garrafa.js e a Coleção não mudam); o index.html carrega js/prova.js?v=1 depois de js/encomendas.js e antes de
-//      js/dados.js, e dados/provas.js?v=1 a seguir aos outros dados/.
+//  (i) só js/prova.js, js/state.js, js/nuvem.js, js/dados.js e (desde a PR 2) js/prova-jogo.js conhecem as regras;
+//      js/garrafa.js e js/reserva.js não usam as regras); o index.html carrega js/prova.js?v=1 depois de js/encomendas.js e
+//      antes de js/dados.js, e dados/provas.js a seguir aos outros dados/.
 //
 // Depois de passar, aplica "mutações" e confirma que o teste as apanha.
 // Uso: node scripts/verificar-prova.js     Sai com 0 se estiver tudo OK e 1 se alguma verificação falhar.
@@ -281,12 +281,12 @@ function suite(fontes) {
       const s = (FONTES[f] !== undefined ? fontes[f] : LER('js/' + f)).replace(/\/\/.*$/gm, '');
       return PROVA_NOMES.test(s);
     }).sort();
-    ok(J(quem) === J(['dados.js', 'nuvem.js', 'state.js']), '(i) só js/state.js, js/nuvem.js e js/dados.js conhecem a prova (nada do jogo a chama): ' + J(quem));
-    ok(!PROVA_NOMES.test(fontes['garrafa.js']) && !PROVA_NOMES.test(fontes['reserva.js']), '(i) js/garrafa.js e js/reserva.js (a Coleção) não mudam');
+    ok(J(quem) === J(['dados.js', 'nuvem.js', 'prova-jogo.js', 'state.js']), '(i) só js/state.js, js/nuvem.js, js/dados.js e, desde a PR 2, js/prova-jogo.js (o ecrã da prova) conhecem as regras: ' + J(quem));
+    ok(!PROVA_NOMES.test(fontes['garrafa.js']) && !PROVA_NOMES.test(fontes['reserva.js']), '(i) js/garrafa.js e js/reserva.js (a Coleção) não usam as regras da prova (desde a PR 2 a Coleção só desenha o que js/prova-jogo.js lhe dá)');
     const I = fontes['index.html'];
     const pos = function (f) { return I.indexOf('<script src="' + f + '?v='); };
     ok(/<script src="js\/prova\.js\?v=1"><\/script>/.test(I) && pos('js/encomendas.js') > 0 && pos('js/prova.js') > pos('js/encomendas.js') && pos('js/prova.js') < pos('js/dados.js') && pos('js/niveis.js') < pos('js/prova.js'), '(i) js/prova.js?v=1 depois de js/encomendas.js (e de js/niveis.js) e antes de js/dados.js');
-    ok(/<script src="dados\/provas\.js\?v=1"><\/script>/.test(I) && pos('dados/provas.js') > pos('dados/palavras.js') && pos('dados/palavras.js') > 0 && pos('dados/provas.js') < pos('js/main.js'), '(i) dados/provas.js?v=1 a seguir aos outros dados/ e antes de js/main.js');
+    ok(/<script src="dados\/provas\.js\?v=\d+"><\/script>/.test(I) && pos('dados/provas.js') > pos('dados/palavras.js') && pos('dados/palavras.js') > 0 && pos('dados/provas.js') < pos('js/main.js'), '(i) dados/provas.js a seguir aos outros dados/ e antes de js/main.js');
   }
   return falhas;
 }

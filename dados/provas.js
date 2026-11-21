@@ -59,9 +59,9 @@ dadosAcrescentar('provas', { id: 'prova_dourado_4', cor: 2, texto: {
   es: 'Brillo de oro pulido, aroma de orejón y un toque de miel.'
 } });
 dadosAcrescentar('provas', { id: 'prova_dourado_5', cor: 2, texto: {
-  pt: 'Já não é pálido nem escuro: cor de ouro, com laranja cristalizada e mel.',
-  en: 'Neither pale nor dark any more: gold, with candied orange and honey.',
-  es: 'Ya no es pálido ni oscuro: color oro, con naranja confitada y miel.'
+  pt: 'Já não é pálido nem escuro: cor de ouro, com damasco maduro e um fio de mel novo.',
+  en: 'Neither pale nor dark any more: gold, with ripe apricot and a thread of new honey.',
+  es: 'Ya no es pálido ni oscuro: color oro, con albaricoque maduro y un hilo de miel nueva.'
 } });
 dadosAcrescentar('provas', { id: 'prova_ensino_dourado', cor: 2, ensino: true, texto: {
   pt: 'Dourado: algum descanso na Cave, cor de ouro e aromas de mel e laranja.',
@@ -76,9 +76,9 @@ dadosAcrescentar('provas', { id: 'prova_ambar_1', cor: 3, texto: {
   es: 'Color de miel oscura, huele a miel y frutos secos. Ya reposó bastante en la Cava.'
 } });
 dadosAcrescentar('provas', { id: 'prova_ambar_2', cor: 3, texto: {
-  pt: 'Tom de topázio, com aroma de figo seco e de laranja cristalizada.',
-  en: 'Topaz tone, with dried fig and candied orange on the nose.',
-  es: 'Tono topacio, con higo seco y naranja confitada en nariz.'
+  pt: 'Tom de topázio, com aroma de tâmara e de laranja cristalizada.',
+  en: 'Topaz tone, with date and candied orange on the nose.',
+  es: 'Tono topacio, con dátil y naranja confitada en nariz.'
 } });
 dadosAcrescentar('provas', { id: 'prova_ambar_3', cor: 3, texto: {
   pt: 'Cor de chá forte e brilhante, com tâmara e passas no nariz.',
@@ -86,9 +86,9 @@ dadosAcrescentar('provas', { id: 'prova_ambar_3', cor: 3, texto: {
   es: 'Como un té fuerte y brillante, con dátiles y pasas en nariz.'
 } });
 dadosAcrescentar('provas', { id: 'prova_ambar_4', cor: 3, texto: {
-  pt: 'Cor de caramelo claro, aroma de mel, figo e amêndoa torrada.',
-  en: 'Light caramel colour, aromas of honey, fig and toasted almond.',
-  es: 'Color caramelo claro, aromas de miel, higo y almendra tostada.'
+  pt: 'Tom de mel escuro, aroma de passas e de amêndoa torrada.',
+  en: 'Dark honey tone, aromas of raisins and toasted almond.',
+  es: 'Tono de miel oscura, aromas de pasas y almendra tostada.'
 } });
 dadosAcrescentar('provas', { id: 'prova_ambar_5', cor: 3, texto: {
   pt: 'Cor de mel de castanheiro, com aromas de frutos secos e de passas.',
@@ -123,9 +123,9 @@ dadosAcrescentar('provas', { id: 'prova_cobre_4', cor: 4, texto: {
   es: 'Marrón con brillo rojizo, huele a café tostado y a nueces.'
 } });
 dadosAcrescentar('provas', { id: 'prova_cobre_5', cor: 4, texto: {
-  pt: 'O mais escuro da Cave: tons de tijolo, caramelo queimado e frutos secos tostados.',
-  en: 'The darkest in the Cellar: brick tones, burnt caramel and toasted nuts.',
-  es: 'El más oscuro de la Cava: tonos de ladrillo, caramelo quemado y frutos secos tostados.'
+  pt: 'O mais escuro da Cave: tons de tijolo, caramelo queimado e nozes tostadas.',
+  en: 'The darkest in the Cellar: brick tones, burnt caramel and toasted walnuts.',
+  es: 'El más oscuro de la Cava: tonos de ladrillo, caramelo quemado y nueces tostadas.'
 } });
 dadosAcrescentar('provas', { id: 'prova_ensino_cobre', cor: 4, ensino: true, texto: {
   pt: 'Cobre: o que mais descansou, reflexos avermelhados, figo e noz.',
