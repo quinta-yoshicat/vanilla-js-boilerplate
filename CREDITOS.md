@@ -100,14 +100,21 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/lojas_casas_janelas_abertas_2.jpg` | A Loja da Quinta (fundo com trovoada ou granizo) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/menu_quinta.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/moscatel_roxo_com_uvas.jpg` | ainda sem uso direto no código (original; a versão pequena é `assets/garrafas/garrafa_roxo_uvas.jpg`, o brinde da Cepa Roxa) | imagem gerada com IA pelo autor do jogo, sem marcas |
+| `assets/ecras/natal_bolorei.jpg` | festa de Natal, tarefa «O Bolo-Rei» (cena e resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
+| `assets/ecras/natal_consoada.jpg` | festa de Natal, tarefa «A Consoada» (cena e resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
 | `assets/ecras/natal_dia25.jpg` | festa de Natal, dia 25 (cópia de `imagens_JOGO_TELEGRAM/natal_patio_de_vindima.jpg`) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/natal_festa.jpg` | festa de Natal, ecrã da festa e tarefas (cópia de `imagens_JOGO_TELEGRAM/natal_patio_vindimas_2.jpg`) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
+| `assets/ecras/natal_doces.jpg` | festa de Natal, tarefa «Doces da Quinta» (resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
+| `assets/ecras/natal_festa.jpg` | festa de Natal, ecrã da festa; e imagem de reserva das tarefas do Natal e da festa dos Reis (quando falta a imagem própria) (cópia de `imagens_JOGO_TELEGRAM/natal_patio_vindimas_2.jpg`) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/nevoeiro_1.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/pascoa_dia_grande.jpg` | festa da Páscoa, dia grande (versão cortada e comprimida de `imagens_JOGO_TELEGRAM/pascoa_dia_grande.jpg`, 714x1280) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/pascoa_festa.jpg` | festa da Páscoa, ecrã da festa e tarefas (versão redimensionada de `imagens_JOGO_TELEGRAM/pascoa_festa.jpg`, 714x1280) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/perfil_yoshi_cat_e_chizo.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/pragas_sol.jpg` | Vigiar a vinha (sinal de oídio, com calor) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/pragas_sol_2.jpg` | Vigiar a vinha (depois de vigiar, oídio) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
+| `assets/ecras/reis_dia_grande.jpg` | festa Reis e Janeiras, menu da festa no Dia de Reis (6 de janeiro) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
+| `assets/ecras/reis_fava.jpg` | festa Reis e Janeiras, tarefa «A Fava» (cena e resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
+| `assets/ecras/reis_festa.jpg` | festa Reis e Janeiras, menu da festa (1 a 5 de janeiro) e tarefa «Bolo-Rei de Reis» (resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
+| `assets/ecras/reis_janeiras.jpg` | festa Reis e Janeiras, tarefa «Cantar as Janeiras» (cena e resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
 | `assets/ecras/sao_martinho_castanhas.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/sao_martinho_dia11.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/sao_martinho_festa.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
