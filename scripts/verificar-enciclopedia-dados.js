@@ -81,10 +81,10 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
 // =====================================================================
 {
   const g = abrir({ nivel11: false });
-  // As 32 de antes da festa dos Reis ficam iguais; a 33.ª (a «janeiras») é verificada em verificar-enciclopedia-natal.js.
+  // As 32 de antes da festa dos Reis ficam iguais; a 33.ª (a «janeiras») e a 34.ª (a «santosPopulares») são verificadas em verificar-enciclopedia-natal.js.
   const lista = g.ev('JSON.stringify({ pt: ENCYCLOPEDIA_ENTRIES.pt.slice(0, 32), en: ENCYCLOPEDIA_ENTRIES.en.slice(0, 32), es: ENCYCLOPEDIA_ENTRIES.es.slice(0, 32) })');
   ok(crypto.createHash('sha256').update(lista).digest('hex') === IMPRESSAO_DIGITAL_DE_HOJE, '(f) as entradas de hoje (ENCYCLOPEDIA_ENTRIES) devem ser idênticas às da master (as 32 de antes da festa dos Reis)');
-  ok(['pt', 'en', 'es'].every(function (l) { return g.ev('ENCYCLOPEDIA_ENTRIES.' + l + '.length') === 33 && g.ev('ENCYCLOPEDIA_ENTRIES.' + l + '[32].id') === 'janeiras'; }), '(f) e só se juntou a «janeiras», no fim, nas 3 línguas');
+  ok(['pt', 'en', 'es'].every(function (l) { return g.ev('ENCYCLOPEDIA_ENTRIES.' + l + '.length') === 34 && g.ev('ENCYCLOPEDIA_ENTRIES.' + l + '[32].id') === 'janeiras' && g.ev('ENCYCLOPEDIA_ENTRIES.' + l + '[33].id') === 'santosPopulares'; }), '(f) e só se juntaram a «janeiras» e a «santosPopulares», no fim, nas 3 línguas');
   // A entrada «origem»: o rei Ricardo II importar Moscatel não está confirmado, por isso diz-se com cautela e admite-se que a origem exata ainda está por desvendar.
   const CAUTELA = { pt: ['Diz-se que ', 'ainda está por desvendar'], en: ['It is said that ', 'is still unknown'], es: ['Se dice que ', 'aún está por descubrir'] };
   LINGUAS.forEach(function (l) {
@@ -94,13 +94,13 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     ok(!!origem && /(Ricardo|Richard) II/.test(origem.texto) && /XIV|14th/.test(origem.texto), '(f) a entrada «origem» (' + l + ') mantém o rei Ricardo II e o século XIV');
     ok(JSON.parse(lista)[l].filter(function (e) { return e.id === 'regiao'; })[0].texto.indexOf('1907') !== -1, '(f) a entrada «regiao» (' + l + ') mantém a demarcação em 1907');
   });
-  ok(g.ev('ENCYCLOPEDIA_ENTRIES.pt.length') === 33 && g.ev('ENCYCLOPEDIA_ENTRIES.en.length') === 33 && g.ev('ENCYCLOPEDIA_ENTRIES.es.length') === 33, '(f) 33 histórias em cada língua');
+  ok(g.ev('ENCYCLOPEDIA_ENTRIES.pt.length') === 34 && g.ev('ENCYCLOPEDIA_ENTRIES.en.length') === 34 && g.ev('ENCYCLOPEDIA_ENTRIES.es.length') === 34, '(f) 34 histórias em cada língua');
   ok(g.ev('ENCYCLOPEDIA_ENTRIES.pt.some(function (e) { return e.nivelMinimo !== undefined; })') === false, '(f) nenhuma entrada de hoje tem nivelMinimo');
   ['pt', 'en', 'es'].forEach(function (l) {
     lingua(g, l);
     ok(g.ev('encyclopediaEntries() === ENCYCLOPEDIA_ENTRIES.' + l) === true, '(f) sem nivelMinimo, a lista do jogo é exatamente a de hoje (' + l + ')');
   });
-  // Com a pasta dados/ real: as 32 de antes (nas 3 línguas) ficam idênticas, a 33.ª é a «janeiras», e só entram as 3 da Cave de Reserva (nível mínimo 5), as 3 da Coleção (6), as 3 da Arrábida (nível mínimo 11), as 3 do
+  // Com a pasta dados/ real: as 32 de antes (nas 3 línguas) ficam idênticas, a 33.ª é a «janeiras», a 34.ª a «santosPopulares», e só entram as 3 da Cave de Reserva (nível mínimo 5), as 3 da Coleção (6), as 3 da Arrábida (nível mínimo 11), as 3 do
   // Sado (12), as 3 de Palmela (13), as 3 de Azeitão (14), as 3 de Sesimbra (15), as 3 de Setúbal (16), as 3 de Alcácer (17), as 3 da Comporta (18), as 3 do Montado (19) e as 3 de Bocage (20), por esta ordem, sem imagem (cada nível novo acrescenta aqui o seu grupo).
   const real = abrir({ dadosDir: path.join(RAIZ, 'dados'), nivel11: false });
   const GRUPOS = [
@@ -121,11 +121,11 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
   ok(real.avisos.length === 0, '(f) carregar o jogo com dados/ não devia avisar nada: ' + real.avisos);
   ok(real.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; }).join()') === TODOS.join(), '(f) de dados/ só deviam vir as histórias da Cave de Reserva, da Coleção, da Arrábida, do Sado, de Palmela, de Azeitão, de Sesimbra, de Setúbal, de Alcácer, da Comporta, do Montado e de Bocage, por ordem: ' + real.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; }).join()'));
   const dasTresLinguas = real.ev('JSON.stringify({ pt: ENCYCLOPEDIA_ENTRIES.pt.slice(0, 32), en: ENCYCLOPEDIA_ENTRIES.en.slice(0, 32), es: ENCYCLOPEDIA_ENTRIES.es.slice(0, 32) })');
-  ok(['pt', 'en', 'es'].every(function (l) { return real.ev('ENCYCLOPEDIA_ENTRIES.' + l + '[32].id') === 'janeiras'; }), '(f) a 33.ª entrada de hoje, nas 3 línguas, é a «janeiras» (festa dos Reis), logo a seguir às 32 de antes');
+  ok(['pt', 'en', 'es'].every(function (l) { return real.ev('ENCYCLOPEDIA_ENTRIES.' + l + '[32].id') === 'janeiras' && real.ev('ENCYCLOPEDIA_ENTRIES.' + l + '[33].id') === 'santosPopulares'; }), '(f) a 33.ª e a 34.ª entradas de hoje, nas 3 línguas, são a «janeiras» (Reis) e a «santosPopulares», logo a seguir às 32 de antes');
   ok(crypto.createHash('sha256').update(dasTresLinguas).digest('hex') === IMPRESSAO_DIGITAL_DE_HOJE, '(f) com dados/ as 32 entradas de antes da festa dos Reis ficam idênticas às da master, nas 3 línguas');
   LINGUAS.forEach(function (l) {
-    const fim = real.ev('ENCYCLOPEDIA_ENTRIES.' + l + '.slice(33)');
-    ok(fim.length === TODOS.length && fim.map(function (e) { return e.id; }).join() === TODOS.join(), '(f) ' + l + ': depois das 33 de hoje vêm só as ' + TODOS.length + ' de dados/, por ordem');
+    const fim = real.ev('ENCYCLOPEDIA_ENTRIES.' + l + '.slice(34)');
+    ok(fim.length === TODOS.length && fim.map(function (e) { return e.id; }).join() === TODOS.join(), '(f) ' + l + ': depois das 34 de hoje vêm só as ' + TODOS.length + ' de dados/, por ordem');
     GRUPOS.forEach(function (gr, i) {
       const grupo = fim.slice(i * 3, i * 3 + 3);
       ok(grupo.length === 3 && grupo.every(function (e) { return e.nivelMinimo === gr.nivel && e.imagem === undefined && !e.manual && e.estacao === undefined && e.meses === undefined && typeof e.titulo === 'string' && typeof e.texto === 'string'; }), '(f) ' + l + ': as 3 do ' + gr.nome + ' são de nível ' + gr.nivel + ', sem imagem, manual, estação nem meses');
@@ -160,12 +160,12 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
   // Nível 4.
   jogador(g, REP_NIVEL_4, false); lingua(g, 'pt');
   ok(g.ev('nivelPelaReputacao(state.reputacao)') === 4, '(a) o jogador devia estar no nível 4');
-  ok(g.ev('encyclopediaEntries().length') === 33, '(a) nível 4: a lista do jogo devia ter só as 33 de hoje');
+  ok(g.ev('encyclopediaEntries().length') === 34, '(a) nível 4: a lista do jogo devia ter só as 34 de hoje');
   ok(g.ev("entradasBloqueadas().some(function (e) { return e.id === 'cultura_t11'; })") === false, '(a) nível 4: não devia entrar no sorteio');
   ok(g.ev("desbloquearEntradaEnciclopedia('cultura_t11')") === null && g.ev('state.encyclopedia.unlocked.length') === 0 && g.ev('state.conhecimento') === 0, '(a) nível 4: não se devia desbloquear por uma ação (nem somar Conhecimento)');
   g.ev('renderEnciclopedia();');
   let h = g.el('enciclopedia-container').innerHTML;
-  ok(h.indexOf('Cultura de teste') === -1 && (h.match(/encyclopedia-card/g) || []).length === 33 && h.indexOf('0 / 33') !== -1, '(a) nível 4: a Enciclopédia não devia mostrar a entrada (nem como cartão bloqueado): 33 cartões');
+  ok(h.indexOf('Cultura de teste') === -1 && (h.match(/encyclopedia-card/g) || []).length === 34 && h.indexOf('0 / 34') !== -1, '(a) nível 4: a Enciclopédia não devia mostrar a entrada (nem como cartão bloqueado): 34 cartões');
   for (let i = 0; i < 80; i++) g.ev('enterExplorar();');
   ok(g.ev("state.encyclopedia.unlocked.indexOf('cultura_t11')") === -1, '(a) nível 4: o Explorar nunca devia desbloqueá-la');
   // Um jogador antigo (tudo aberto por ecrã) NÃO ultrapassa o nível mínimo.
@@ -175,17 +175,17 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
   // Nível 11.
   jogador(g, REP_NIVEL_11, false);
   ok(g.ev('nivelPelaReputacao(state.reputacao)') === 11, '(a) o jogador devia estar no nível 11');
-  ok(g.ev('encyclopediaEntries().length') === 34, '(a) nível 11: a lista do jogo devia ter 34');
+  ok(g.ev('encyclopediaEntries().length') === 35, '(a) nível 11: a lista do jogo devia ter 35');
   ok(g.ev("entradasBloqueadas().some(function (e) { return e.id === 'cultura_t11'; })") === true, '(a) nível 11: devia entrar no sorteio');
   g.ev('renderEnciclopedia();');
   h = g.el('enciclopedia-container').innerHTML;
-  ok((h.match(/encyclopedia-card/g) || []).length === 34 && h.indexOf('0 / 34') !== -1, '(a) nível 11: a Enciclopédia devia ter 34 cartões (a nova bloqueada, como as outras)');
+  ok((h.match(/encyclopedia-card/g) || []).length === 35 && h.indexOf('0 / 35') !== -1, '(a) nível 11: a Enciclopédia devia ter 35 cartões (a nova bloqueada, como as outras)');
   abrirTodasMenos(g, ['cultura_t11']);
   g.ev('enterExplorar();');
   ok(g.ev("state.encyclopedia.unlocked.indexOf('cultura_t11') !== -1") && g.ev('state.conhecimento') === 1, '(a) nível 11: o Explorar devia desbloqueá-la');
   g.ev('renderEnciclopedia();');
   h = g.el('enciclopedia-container').innerHTML;
-  ok(h.indexOf('Cultura de teste [pt]') !== -1 && h.indexOf('Texto de teste [pt]') !== -1 && h.indexOf('34 / 34') !== -1, '(a) nível 11: depois de desbloqueada, a Enciclopédia mostra-a (34 / 34)');
+  ok(h.indexOf('Cultura de teste [pt]') !== -1 && h.indexOf('Texto de teste [pt]') !== -1 && h.indexOf('35 / 35') !== -1, '(a) nível 11: depois de desbloqueada, a Enciclopédia mostra-a (35 / 35)');
   jogador(g, REP_NIVEL_11, false);
   const nova = g.ev("desbloquearEntradaEnciclopedia('cultura_t11')");
   ok(nova && nova.id === 'cultura_t11' && nova.titulo === 'Cultura de teste [pt]', '(a) nível 11: a ação devia desbloqueá-la e devolver a entrada na língua atual');
@@ -207,26 +207,26 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
   const g = abrir();
   g.ev('dadosAcrescentar("enciclopedia", ' + js(entradaTeste()) + ')');
   const MSG = g.ev("t('explorar.tudoDesbloqueado')");
-  // Nível 4 com as 33 de hoje abertas: já sabe tudo o que existe PARA ELE.
+  // Nível 4 com as 34 de hoje abertas: já sabe tudo o que existe PARA ELE.
   jogador(g, REP_NIVEL_4, false); lingua(g, 'pt');
   abrirTodasMenos(g, []);
-  ok(g.ev('state.encyclopedia.unlocked.length') === 33, '(b) preparação: 33 abertas');
+  ok(g.ev('state.encyclopedia.unlocked.length') === 34, '(b) preparação: 34 abertas');
   g.ev('enterExplorar();');
   let h = g.el('explorar-container').innerHTML;
-  ok(h.indexOf(esc(MSG)) !== -1 && h.indexOf('33 / 33') !== -1, '(b) nível 4: a mensagem de «todo o conhecimento» devia sair, com 33 / 33, sem contar a entrada do nível 11');
-  ok(g.ev('tituloEspecialCumprido()') === true, '(b) nível 4: o Guardião conta só as disponíveis (33 de 33)');
-  ok(g.ev('conquistasTotalEnciclopedia()') === 33 && g.ev('CONQUISTAS_CONFIG.filter(function (c) { return c.id === "sabio"; })[0].cumprida()') === true, '(b) nível 4: o Sábio conta só as disponíveis (33)');
-  ok(g.ev("capitulosResolverAlvo('totalEnciclopedia')") === 33, '(b) nível 4: o alvo totalEnciclopedia conta 33');
-  // Nível 11 com as mesmas 33: já falta uma.
+  ok(h.indexOf(esc(MSG)) !== -1 && h.indexOf('34 / 34') !== -1, '(b) nível 4: a mensagem de «todo o conhecimento» devia sair, com 34 / 34, sem contar a entrada do nível 11');
+  ok(g.ev('tituloEspecialCumprido()') === true, '(b) nível 4: o Guardião conta só as disponíveis (34 de 34)');
+  ok(g.ev('conquistasTotalEnciclopedia()') === 34 && g.ev('CONQUISTAS_CONFIG.filter(function (c) { return c.id === "sabio"; })[0].cumprida()') === true, '(b) nível 4: o Sábio conta só as disponíveis (34)');
+  ok(g.ev("capitulosResolverAlvo('totalEnciclopedia')") === 34, '(b) nível 4: o alvo totalEnciclopedia conta 34');
+  // Nível 11 com as mesmas 34: já falta uma.
   g.ev('state.reputacao = ' + REP_NIVEL_11 + ';');
   g.ev('enterExplorar();');
-  ok(g.ev("state.encyclopedia.unlocked.indexOf('cultura_t11') !== -1"), '(b) nível 11: com 33 abertas, o Explorar devia dar a que falta');
+  ok(g.ev("state.encyclopedia.unlocked.indexOf('cultura_t11') !== -1"), '(b) nível 11: com 34 abertas, o Explorar devia dar a que falta');
   jogador(g, REP_NIVEL_11, false);
   abrirTodasMenos(g, ['cultura_t11']);
-  ok(g.ev('tituloEspecialCumprido()') === false && g.ev('conquistasTotalEnciclopedia()') === 34 && g.ev('CONQUISTAS_CONFIG.filter(function (c) { return c.id === "sabio"; })[0].cumprida()') === false, '(b) nível 11: com 33 de 34 o Guardião e o Sábio ainda não valem');
-  ok(g.ev("capitulosResolverAlvo('totalEnciclopedia')") === 34, '(b) nível 11: o alvo totalEnciclopedia conta 34');
+  ok(g.ev('tituloEspecialCumprido()') === false && g.ev('conquistasTotalEnciclopedia()') === 35 && g.ev('CONQUISTAS_CONFIG.filter(function (c) { return c.id === "sabio"; })[0].cumprida()') === false, '(b) nível 11: com 34 de 35 o Guardião e o Sábio ainda não valem');
+  ok(g.ev("capitulosResolverAlvo('totalEnciclopedia')") === 35, '(b) nível 11: o alvo totalEnciclopedia conta 35');
   g.ev('state.encyclopedia.unlocked.push("cultura_t11");');
-  ok(g.ev('tituloEspecialCumprido()') === true, '(b) nível 11: com as 34 o Guardião vale');
+  ok(g.ev('tituloEspecialCumprido()') === true, '(b) nível 11: com as 35 o Guardião vale');
   // A medalha já ganha antes não se perde com entradas novas.
   jogador(g, REP_NIVEL_11, false);
   g.ev('state.conquistasGanhas = { guardiao: true };');
@@ -355,9 +355,9 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
   ok(salvo.indexOf('nivelMinimo') === -1, '(e) o estado não guarda o nivelMinimo');
 
   // Jogo B: a entrada deixou de existir (nem o nível 11 do teste: o jogo de origem). O jogador tinha o id dela e
-  // 32 das 33 de hoje (falta a «origem»): a contar só os ids que existem são 32; a contar todos os ids seriam 33.
+  // 33 das 34 de hoje (falta a «origem»): a contar só os ids que existem são 33; a contar todos os ids seriam 34.
   estado.encyclopedia.unlocked = estado.encyclopedia.unlocked.filter(function (i) { return i !== 'origem'; });
-  ok(estado.encyclopedia.unlocked.length === 33 && estado.encyclopedia.unlocked.indexOf('cultura_t11') !== -1, '(e) preparação: 32 de hoje + o id solto');
+  ok(estado.encyclopedia.unlocked.length === 34 && estado.encyclopedia.unlocked.indexOf('cultura_t11') !== -1, '(e) preparação: 33 de hoje + o id solto');
   const b = abrir({ estadoGuardado: JSON.stringify(estado), nivel11: false }); lingua(b, 'pt');
   ok(b.ev("state.encyclopedia.unlocked.indexOf('cultura_t11') !== -1"), '(e) o id solto continua guardado (nunca se apaga)');
   let erro = null;
@@ -365,13 +365,13 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
   ok(erro === null, '(e) o jogo devia carregar e desenhar a Enciclopédia sem erro: ' + erro);
   const hb = b.el('enciclopedia-container').innerHTML;
   ok(!/NaN|undefined|null/.test(hb), '(e) sem NaN, undefined nem null no ecrã: ' + hb.slice(0, 200));
-  ok(b.ev('encyclopediaContarDesbloqueadas()') === 32, '(e) o id solto não conta nos totais (32 das de hoje)');
-  ok(b.el('enciclopedia-container').innerHTML.indexOf('32 / 33') !== -1, '(e) a Enciclopédia mostra 32 / 33, sem inflar');
+  ok(b.ev('encyclopediaContarDesbloqueadas()') === 33, '(e) o id solto não conta nos totais (33 das de hoje)');
+  ok(b.el('enciclopedia-container').innerHTML.indexOf('33 / 34') !== -1, '(e) a Enciclopédia mostra 33 / 34, sem inflar');
   ok(b.ev('tituloEspecialCumprido()') === false, '(e) com o id solto, o Guardião não vale por engano (falta uma de hoje)');
   // O Explorar do jogo B desenha sem erro e ainda dá a que falta.
   try { b.ev('enterExplorar();'); } catch (e) { ok(false, '(e) o Explorar devia desenhar sem erro: ' + e.message); }
   ok(!/NaN|undefined|null/.test(b.el('explorar-container').innerHTML), '(e) o Explorar sem NaN, undefined nem null');
-  ok(b.ev('encyclopediaContarDesbloqueadas()') === 33 && b.ev("state.encyclopedia.unlocked.indexOf('origem')") !== -1, '(e) o Explorar devia continuar a dar as que faltam');
+  ok(b.ev('encyclopediaContarDesbloqueadas()') === 34 && b.ev("state.encyclopedia.unlocked.indexOf('origem')") !== -1, '(e) o Explorar devia continuar a dar as que faltam');
 
   // Jogo C: a entrada volta. Nada se repete.
   const c = abrir({ estadoGuardado: JSON.stringify(estado) }); lingua(c, 'pt');

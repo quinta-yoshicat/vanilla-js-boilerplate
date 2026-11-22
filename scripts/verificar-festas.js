@@ -654,13 +654,13 @@ function suite(fontes) {
         if (f.ev('festaAbertaNoDia(CT, ' + JSON.stringify(d) + ')') !== dentro) aberturaMal++;
         if (f.ev('festaDiaGrandeNoDia(CT, ' + JSON.stringify(d) + ')') !== (d === JAN[y][2])) grandeMal++;
         const viaMotor = f.ev('(festaAtivaPelaDataReal(' + JSON.stringify(d) + ') || {}).id || null');
-        const esperado = dentro ? (d <= JAN[y][2] ? 'pascoa' : 'festaMovelTeste') : (d >= JC[y][0] && d <= JC[y][1] ? 'carnaval' : d >= y + '-11-08' && d <= y + '-11-14' ? 'saomartinho' : (d >= y + '-12-20' && d <= y + '-12-26' ? 'natal' : (d >= y + '-01-01' && d <= y + '-01-06' ? 'reis' : null)));
+        const esperado = dentro ? (d <= JAN[y][2] ? 'pascoa' : 'festaMovelTeste') : (d >= JC[y][0] && d <= JC[y][1] ? 'carnaval' : d >= y + '-11-08' && d <= y + '-11-14' ? 'saomartinho' : (d >= y + '-12-20' && d <= y + '-12-26' ? 'natal' : (d >= y + '-01-01' && d <= y + '-01-06' ? 'reis' : (d >= y + '-06-12' && d <= y + '-06-29' ? 'santos' : null))));
         if (viaMotor !== esperado) fora1++;
       }
     }
     ok(aberturaMal === 0, 'Festa móvel de teste (Sexta-feira Santa a Segunda de Páscoa): abre exatamente dentro da janela em todos os dias de 2026 a 2035 (' + aberturaMal + ' erros)');
     ok(grandeMal === 0, 'Festa móvel de teste (Sexta-feira Santa a Segunda de Páscoa): o dia grande é só a terça em todos os dias de 2026 a 2035 (' + grandeMal + ' erros)');
-    ok(fora1 === 0, 'o motor (festaAtivaPelaDataReal com o dia) escolhe a festa certa em todos os dias de 2026 a 2035: Páscoa (Sexta-feira Santa a domingo, que vem antes na lista), festa móvel de teste (só a segunda-feira), Carnaval, São Martinho, Natal, Reis (1 a 6/1) ou nenhuma (' + fora1 + ' erros)');
+    ok(fora1 === 0, 'o motor (festaAtivaPelaDataReal com o dia) escolhe a festa certa em todos os dias de 2026 a 2035: Páscoa (Sexta-feira Santa a domingo, que vem antes na lista), festa móvel de teste (só a segunda-feira), Carnaval, São Martinho, Natal, Reis (1 a 6/1), Santos Populares (12 a 29/6) ou nenhuma (' + fora1 + ' erros)');
     const abre = function (d) { return f.ev('festaAbertaNoDia(CT, ' + JSON.stringify(d) + ')'); };
     ok(abre('2027-03-25') === false && abre('2027-03-26') === true && abre('2027-03-29') === true && abre('2027-03-30') === false, '2027: abre a 26/03 (sexta) e fecha a 29/03 (segunda)');
     ok(abre('2026-04-02') === false && abre('2026-04-03') === true && abre('2026-04-06') === true && abre('2026-04-07') === false, '2026: abre a 03/04 (sexta) e fecha a 06/04 (segunda)');
@@ -710,23 +710,23 @@ function suite(fontes) {
         const pg = gauss(y), tp = Date.UTC(y, Number(pg.slice(5, 7)) - 1, Number(pg.slice(8, 10)));
         const emCarnaval = d >= fmt(tp - 50 * 86400000) && d <= fmt(tp - 47 * 86400000);
         const emPascoa = d >= fmt(tp - 2 * 86400000) && d <= fmt(tp);
-        const esperado = emCarnaval ? 'carnaval' : emPascoa ? 'pascoa' : (mmdd >= '11-08' && mmdd <= '11-14') ? 'saomartinho' : ((mmdd >= '12-20' && mmdd <= '12-26') ? 'natal' : ((mmdd >= '01-01' && mmdd <= '01-06') ? 'reis' : null));
+        const esperado = emCarnaval ? 'carnaval' : emPascoa ? 'pascoa' : (mmdd >= '11-08' && mmdd <= '11-14') ? 'saomartinho' : ((mmdd >= '12-20' && mmdd <= '12-26') ? 'natal' : ((mmdd >= '01-01' && mmdd <= '01-06') ? 'reis' : ((mmdd >= '06-12' && mmdd <= '06-29') ? 'santos' : null)));
         const obtido = g.ev('(festaAtivaPelaDataReal(' + JSON.stringify(d) + ') || {}).id || null');
         total++;
         if (obtido !== esperado) aberto++;
         const esperaGrande = mmdd === '11-11' || mmdd === '12-25';
-        const festaDoDia = g.ev('festaAtivaPelaDataReal(' + JSON.stringify(d) + ') !== null') && esperado !== 'carnaval' && esperado !== 'pascoa' && esperado !== 'reis'; // o dia grande dos Reis tem verificação própria (secção K)
+        const festaDoDia = g.ev('festaAtivaPelaDataReal(' + JSON.stringify(d) + ') !== null') && esperado !== 'carnaval' && esperado !== 'pascoa' && esperado !== 'reis' && esperado !== 'santos'; // o dia grande dos Reis e o dos Santos Populares têm verificação própria (secções K e L)
         const obtidoGrande = festaDoDia && g.ev('estaNoDiaGrandeFesta(festaAtivaPelaDataReal(' + JSON.stringify(d) + '), ' + JSON.stringify(d) + ')');
         if (obtidoGrande !== (esperaGrande && festaDoDia)) grande++;
         if (esperado === 'saomartinho' && obtido !== 'saomartinho') sm++;
         if (esperado === 'natal' && obtido !== 'natal') nat++;
       }
     }
-    ok(total === 4749 && aberto === 0 && sm === 0 && nat === 0, 'São Martinho (8 a 14/11) e Natal (20 a 26/12) abrem exatamente como antes, e o Carnaval, a Páscoa e os Reis só nas suas janelas, em todos os ' + total + ' dias de 2024 a 2036 (' + aberto + ' diferenças)');
+    ok(total === 4749 && aberto === 0 && sm === 0 && nat === 0, 'São Martinho (8 a 14/11) e Natal (20 a 26/12) abrem exatamente como antes, e o Carnaval, a Páscoa, os Reis e os Santos Populares só nas suas janelas, em todos os ' + total + ' dias de 2024 a 2036 (' + aberto + ' diferenças)');
     ok(grande === 0, 'São Martinho e Natal: o dia grande é exatamente 11/11 e 25/12 em todos os dias de 2024 a 2036 (' + grande + ' diferenças)');
     const bordas = ['2026-11-07', '2026-11-08', '2026-11-11', '2026-11-14', '2026-11-15', '2026-12-19', '2026-12-20', '2026-12-25', '2026-12-26', '2026-12-27', '2028-11-08', '2028-12-26'];
     ok(JSON.stringify(bordas.map(function (d) { return g.ev('(festaAtivaPelaDataReal(' + JSON.stringify(d) + ') || {}).id || null'); })) === JSON.stringify([null, 'saomartinho', 'saomartinho', 'saomartinho', null, null, 'natal', 'natal', 'natal', null, 'saomartinho', 'natal']), 'São Martinho e Natal: dias de fronteira (dia antes, primeiro, grande, último, dia depois)');
-    ok(g.json('FESTAS_CONFIG.map(function (x) { return x.id; })').join() === 'saomartinho,natal,carnaval,pascoa,reis' && g.json("FESTAS_CONFIG.map(function (x) { return !!x.movel; })").join() === 'false,false,true,true,false', 'o jogo tem o São Martinho e o Natal (datas fixas), o Carnaval e a Páscoa (datas móveis) e, por último, os Reis (datas fixas)');
+    ok(g.json('FESTAS_CONFIG.map(function (x) { return x.id; })').join() === 'saomartinho,natal,carnaval,pascoa,reis,santos' && g.json("FESTAS_CONFIG.map(function (x) { return !!x.movel; })").join() === 'false,false,true,true,false,false', 'o jogo tem o São Martinho e o Natal (datas fixas), o Carnaval e a Páscoa (datas móveis) e, por último, os Reis e os Santos Populares (datas fixas)');
 
     // as regras de datas são puras: nada de relógio do aparelho
     const fonte = fontes['festas.js'];
@@ -1054,7 +1054,7 @@ function suite(fontes) {
   {
     const g = abrir(lis(11, 10));
     const TXT = g.json('FESTAS_STRINGS');
-    const CENAS = [['saomartinho', 'castanhasCenas', 'São Martinho'], ['natal', 'boloReiCenas', 'Natal'], ['carnaval', 'quemEstaMascaradoCenas', 'Carnaval'], ['pascoa', 'ovosCenas', 'Páscoa'], ['natal', 'consoadaCenas', 'Natal (consoada)'], ['reis', 'janeirasCenas', 'Reis (Janeiras)'], ['reis', 'favaCenas', 'Reis (Fava)']];
+    const CENAS = [['saomartinho', 'castanhasCenas', 'São Martinho'], ['natal', 'boloReiCenas', 'Natal'], ['carnaval', 'quemEstaMascaradoCenas', 'Carnaval'], ['pascoa', 'ovosCenas', 'Páscoa'], ['natal', 'consoadaCenas', 'Natal (consoada)'], ['reis', 'janeirasCenas', 'Reis (Janeiras)'], ['reis', 'favaCenas', 'Reis (Fava)'], ['santos', 'manjericoCenas', 'Santos Populares (Manjerico)'], ['santos', 'arraialCenas', 'Santos Populares (Arraial)']];
     CENAS.forEach(function (fc) {
       const festa = fc[0], chave = fc[1], nome = fc[2];
       const pt = TXT[festa] && TXT[festa].pt && TXT[festa].pt[chave];
@@ -1420,6 +1420,253 @@ function suite(fontes) {
     ok(g.json('Object.keys(defaultState().festas)').join() === 'tarefasDia', 'Reis: nenhum campo novo no estado');
   }
 
+  // ---------------- L. Santos Populares: 12 a 29 de junho, 3 dias grandes (13, 24 e 29), Manjerico, Sardinhada e Arraial ----------------
+  {
+    const jun = function (dia, hhmm, ano) { return Date.parse((ano || 2027) + '-06-' + String(dia).padStart(2, '0') + 'T' + (hhmm || '12:00') + ':00Z'); }; // Lisboa em junho = UTC+1
+    const crypto = require('crypto');
+    const g = abrir(jun(15));
+    const sp = g.json("FESTAS_CONFIG.filter(function (f) { return f.id === 'santos'; })[0]");
+    ok(!!sp, 'Santos: existe em FESTAS_CONFIG');
+    if (sp) {
+      ok(JSON.stringify([sp.inicio, sp.fim]) === JSON.stringify([{ mes: 5, dia: 12 }, { mes: 5, dia: 29 }]) && sp.movel === undefined && sp.diaGrande === undefined, 'Santos: datas fixas de 12 a 29 de junho, sem diaGrande (só diasGrandes)');
+      ok(JSON.stringify(sp.diasGrandes) === JSON.stringify([{ mes: 5, dia: 13 }, { mes: 5, dia: 24 }, { mes: 5, dia: 29 }]), 'Santos: diasGrandes são 13, 24 e 29 de junho');
+      ok(sp.recompensas.multiplicadorDiaGrande === 2 && sp.entradaEnciclopedia === 'santosPopulares', 'Santos: dia grande a dobrar e abre a entrada santosPopulares ao entrar');
+      ok(JSON.stringify(sp.tarefas.map(function (x) { return [x.id, x.onde, x.regra, x.btn, x.cenasSemRepetir === true, JSON.stringify(x.premio), x.entradaEnciclopedia || ''].join('|'); })) === JSON.stringify([
+        'manjerico|festa|cena_do_dia|btnManjerico|true|{"reputacao":5}|', 'sardinhada|festa|gastar_gotas|btnSardinhada|false|{"custoGotas":30,"reputacao":12}|', 'arraial|festa|cena_do_dia|btnArraial|true|{"reputacao":6}|']), 'Santos: manjerico (escolha, +5), sardinhada (30 Gotas, +12) e arraial (escolha, +6); as tarefas não abrem entradas');
+      ok(!/uvas|aguardente|bagaceira/i.test(JSON.stringify(sp.tarefas)), 'Santos: nenhuma tarefa custa ou dá Uvas, Aguardente ou Bagaceira');
+      ok(sp.modoTesteSemGravar === true && sp.menuComReserva === true, 'Santos: modo de teste sem gravar e a faixa e o dia grande também com reserva');
+      ok(JSON.stringify(sp.imagens) === JSON.stringify({ diaGrande: 'assets/ecras/santos_dia_grande.jpg', faixa: 'assets/ecras/santos_festa.jpg', reserva: 'assets/ecras/natal_festa.jpg', manjerico: 'assets/ecras/santos_manjerico.jpg', sardinhada: 'assets/ecras/santos_sardinhada.jpg', arraial: 'assets/ecras/santos_arraial.jpg' }), 'Santos: as imagens santos_festa, santos_dia_grande, santos_manjerico, santos_sardinhada e santos_arraial, com a natal_festa de reserva');
+      ok(fs.existsSync(path.join(RAIZ, sp.imagens.reserva)), 'Santos: a imagem de reserva existe');
+    }
+    ok(g.ev('NIVEL_NECESSARIO_POR_ECRA.festa') === 4, 'Santos: o nível mínimo é o 4 de todas as festas');
+
+    // L1. Abre de 12 a 29/6 e não noutros dias; dia grande só a 13, 24 e 29/6 (de 2026 a 2036, dia de Lisboa)
+    const fmt = function (t) { const d = new Date(t); return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0') + '-' + String(d.getUTCDate()).padStart(2, '0'); };
+    g.ev("var SANTOS = FESTAS_CONFIG.filter(function (f) { return f.id === 'santos'; })[0]; var TS = function (id) { return SANTOS.tarefas.filter(function (x) { return x.id === id; })[0]; };");
+    let abreMal = 0, grandeMal = 0, motorMal = 0;
+    for (let t = Date.UTC(2026, 0, 1); t <= Date.UTC(2036, 11, 31); t += 86400000) {
+      const d = fmt(t), mmdd = d.slice(5), dentro = mmdd >= '06-12' && mmdd <= '06-29';
+      if (g.ev('festaAbertaNoDia(SANTOS, ' + JSON.stringify(d) + ')') !== dentro) abreMal++;
+      if (g.ev('festaDiaGrandeNoDia(SANTOS, ' + JSON.stringify(d) + ')') !== (mmdd === '06-13' || mmdd === '06-24' || mmdd === '06-29')) grandeMal++;
+      if (dentro && g.ev('(festaAtivaPelaDataReal(' + JSON.stringify(d) + ') || {}).id') !== 'santos') motorMal++;
+    }
+    ok(abreMal === 0 && grandeMal === 0 && motorMal === 0, 'Santos: abre exatamente de 12 a 29/6 e o dia grande é só 13, 24 e 29/6, em todos os dias de 2026 a 2036 (' + abreMal + '/' + grandeMal + '/' + motorMal + ' erros)');
+    const q = function (t) { const x = abrir(t); return x.ev('(festaAtivaPelaDataReal() || {}).id || null'); };
+    ok(q(Date.parse('2027-06-11T23:30:00Z')) === 'santos' && q(Date.parse('2027-06-11T22:30:00Z')) === null && q(Date.parse('2027-06-29T22:30:00Z')) === 'santos' && q(Date.parse('2027-06-29T23:30:00Z')) === null, 'Santos: abre às 00:00 de 12/6 em Lisboa (23:00 UTC de 11/6), fecha no fim de 29/6, dia de Lisboa e não o do aparelho');
+    ok(g.ev("festaJanela(SANTOS, 2027).diaGrande") === '2027-06-13' && JSON.stringify(g.json("festaJanela(SANTOS, 2027).diasGrandes")) === JSON.stringify(['2027-06-13', '2027-06-24', '2027-06-29']) && g.ev("festaJanela(SANTOS, 2027).inicio") === '2027-06-12' && g.ev("festaJanela(SANTOS, 2027).fim") === '2027-06-29', 'Santos: a janela de 2027 traz 12/6 a 29/6 e os 3 dias grandes');
+    ok(g.ev("festaJanela({ inicio: { mes: 5, dia: 12 }, fim: { mes: 5, dia: 29 }, diasGrandes: [{ mes: 5, dia: 13 }, { mes: 1, dia: 30 }] }, 2027)") === null && g.ev("festaJanela({ inicio: { mes: 5, dia: 12 }, fim: { mes: 5, dia: 29 }, diasGrandes: [] }, 2027)") === null, 'Santos: diasGrandes com um dia que não existe (30/2) ou vazio não abre a festa, sem rebentar');
+    ok(g.ev("festaJanela({ inicio: { mes: 5, dia: 12 }, fim: { mes: 5, dia: 29 }, diaGrande: { mes: 5, dia: 13 } }, 2027).diasGrandes") === undefined && g.ev("festaDiaGrandeNoDia({ inicio: { mes: 5, dia: 12 }, fim: { mes: 5, dia: 29 }, diaGrande: { mes: 5, dia: 13 } }, '2027-06-13')") === true, 'Motor: uma festa só com diaGrande (como as de antes) continua a funcionar sem diasGrandes');
+
+    // L2. No ecrã, nos Santos a sério (15/6, dia normal): cada tarefa 1 vez por dia, errar não custa nada, objetivo do dia, Enciclopédia
+    const e = abrir(jun(15));
+    e.ev('state.reputacao = 372; state.gotas = 100; state.uvas = 7; state.adega.aguardente = 2;');
+    e.ev('enterFesta()');
+    ok(e.json('ENTRADAS').join() === 'santosPopulares' && e.json('AVISOS').join() === 'santosPopulares', 'Santos: entrar na festa abre a entrada santosPopulares, com o aviso');
+    e.ev('renderFestaHub()');
+    const hub = e.ev('caixa.innerHTML');
+    ok(/iniciarTarefaFesta\('manjerico'\)/.test(hub) && /iniciarTarefaFesta\('sardinhada'\)/.test(hub) && /iniciarTarefaFesta\('arraial'\)/.test(hub) && !/consoada|castanhas|corso|folar|janeiras|fava/.test(hub), 'Santos: o menu mostra os 3 botões dos Santos e nenhum de outra festa');
+    ok(['diaGrandeAviso'].concat([13, 24, 29].map(function (n) { return 'diaGrandeAvisos[' + n + ']'; })).every(function (k) { return hub.indexOf(e.ev('FESTAS_STRINGS.santos.pt.' + k)) === -1; }), 'Santos: a 15/6 não há aviso de dia grande');
+    e.ev("iniciarTarefaFesta('manjerico')");
+    ok(e.json('festaCenaAtual.cena').opcoes.length === 3, 'Santos: o Manjerico mostra uma cena de 3 opções');
+    e.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+    ok(e.ev('state.reputacao') === 377, 'Santos: Manjerico certo dá +5');
+    e.ev("iniciarTarefaFesta('arraial')"); e.ev('festaResponderCenaDoDia((festaCenaAtual.cena.correta + 1) % 3)');
+    ok(e.ev('state.reputacao') === 377 && e.ev('state.gotas') === 100 && e.ev('DIALOGO') === e.ev('FESTAS_STRINGS.santos.pt.arraialDerrota'), 'Santos: errar o Arraial não custa nada (Reputação e Gotas iguais) e mostra a derrota');
+    e.ev("iniciarTarefaFesta('sardinhada')");
+    ok(e.ev('state.reputacao') === 389 && e.ev('state.gotas') === 70 && e.ev('state.uvas') === 7 && e.ev('state.adega.aguardente') === 2, 'Santos: a Sardinhada gasta 30 Gotas, dá +12 e não toca nas Uvas nem na aguardente');
+    const salvos = e.ev('SAVES');
+    ['manjerico', 'arraial', 'sardinhada'].forEach(function (id) {
+      e.ev("iniciarTarefaFesta('" + id + "')");
+      ok(e.ev('festaCenaAtual') === null && e.ev('state.reputacao') === 389 && e.ev('state.gotas') === 70 && (id !== 'sardinhada' || e.ev('festaMensagemAtual') === e.ev('FESTAS_STRINGS.santos.pt.sardinhadaJaFeitaHoje')), 'Santos: ' + id + ' não se repete no mesmo dia');
+      ok(new RegExp('data-acao="' + id + '" disabled').test(e.ev('caixa.innerHTML')), 'Santos: o botão de ' + id + ' fica desativado («já feita hoje»)');
+    });
+    ok(e.ev('SAVES') === salvos && e.json('OBJETIVOS').join() === 'festa_tarefa,festa_tarefa,festa_tarefa', 'Santos: cada tarefa conta para o objetivo do dia «festa_tarefa», uma gravação cada');
+    ok(e.json('Object.keys(state.festas.tarefasDia)').join() === 'santos_manjerico,santos_arraial,santos_sardinhada', 'Santos: o «uma vez por dia» guarda-se em state.festas.tarefasDia, sem campos novos');
+    e.ev('state.gotas = 10; state.festas.tarefasDia.santos_sardinhada = null;'); e.ev("iniciarTarefaFesta('sardinhada')");
+    ok(e.ev('state.gotas') === 10 && e.ev('state.reputacao') === 389 && e.ev('festaMensagemAtual') === e.ev('FESTAS_STRINGS.santos.pt.sardinhadaFalta'), 'Santos: sem Gotas a Sardinhada avisa e não gasta nem marca o dia');
+    // amanhã tudo volta
+    e.ir(jun(16)); e.ev("iniciarTarefaFesta('manjerico')");
+    ok(e.ev('festaCenaAtual !== null'), 'Santos: no dia seguinte as tarefas voltam');
+
+    // L3. Os 3 dias grandes: aviso próprio, prémios a dobrar, imagem do dia grande; os dias vizinhos não dobram
+    const SANTO = { 13: 'Santo António', 24: 'São João', 29: 'São Pedro' }, SANTO_EN = { 13: 'Saint Anthony', 24: 'Saint John', 29: 'Saint Peter' }, SANTO_ES = { 13: 'San Antonio', 24: 'San Juan', 29: 'San Pedro' };
+    [13, 24, 29].forEach(function (dia) {
+      const gd = abrir(jun(dia));
+      gd.ev('state.reputacao = 10; state.gotas = 100; renderFestaHub();');
+      const avisos = gd.json('FESTAS_STRINGS.santos');
+      ok(gd.ev('caixa.innerHTML').indexOf(avisos.pt.diaGrandeAvisos[dia]) !== -1 && avisos.pt.diaGrandeAvisos[dia].indexOf(SANTO[dia]) !== -1, 'Santos: a ' + dia + '/6 o menu avisa «Hoje é dia de ' + SANTO[dia] + '»');
+      [13, 24, 29].filter(function (o) { return o !== dia; }).forEach(function (o) { ok(gd.ev('caixa.innerHTML').indexOf(avisos.pt.diaGrandeAvisos[o]) === -1, 'Santos: a ' + dia + '/6 o menu não mostra o aviso do dia ' + o); });
+      ok(avisos.en.diaGrandeAvisos[dia].indexOf(SANTO_EN[dia]) !== -1 && avisos.es.diaGrandeAvisos[dia].indexOf(SANTO_ES[dia]) !== -1 && new Set([13, 24, 29].map(function (n) { return avisos.pt.diaGrandeAvisos[n]; })).size === 3, 'Santos: o aviso de ' + dia + '/6 está certo em EN e ES e os 3 avisos são diferentes');
+      gd.ev("iniciarTarefaFesta('manjerico')"); gd.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+      gd.ev("iniciarTarefaFesta('arraial')"); gd.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+      gd.ev("iniciarTarefaFesta('sardinhada')");
+      ok(gd.ev('state.reputacao') === 10 + 10 + 12 + 24 && gd.ev('state.gotas') === 70, 'Santos: a ' + dia + '/6 o Manjerico dá +10, o Arraial +12 e a Sardinhada +24 (o custo fica nas 30 Gotas), deu ' + gd.ev('state.reputacao'));
+      const im = abrir(jun(dia));
+      im.ev('var IMGS = []; Image = function () { IMGS.push(this); }; renderFestaHub();');
+      ok(im.ev('FUNDO') === 'assets/ecras/natal_festa.jpg' && im.ev('IMGS[0].src') === 'assets/ecras/santos_dia_grande.jpg', 'Santos: a ' + dia + '/6 o menu pede santos_dia_grande.jpg, com a reserva até lá');
+      im.ev('IMGS[0].onload()'); ok(im.ev('FUNDO') === 'assets/ecras/santos_dia_grande.jpg', 'Santos: a ' + dia + '/6 santos_dia_grande.jpg carregou: passa a ser o fundo do menu');
+    });
+    [12, 14, 23, 25, 28].forEach(function (dia) {
+      const gn = abrir(jun(dia));
+      gn.ev('state.reputacao = 10; renderFestaHub(); iniciarTarefaFesta(\'manjerico\'); festaResponderCenaDoDia(festaCenaAtual.cena.correta);');
+      ok(gn.ev('state.reputacao') === 15 && [13, 24, 29].every(function (n) { return gn.ev('caixa.innerHTML').indexOf(gn.ev('FESTAS_STRINGS.santos.pt.diaGrandeAvisos[' + n + ']')) === -1; }), 'Santos: a ' + dia + '/6 (dia normal) o Manjerico dá só +5 e não há aviso de dia grande');
+    });
+    ok(abrir(lis(12, 25)).ev('renderFestaHub(), caixa.innerHTML').indexOf('Hoje é dia de Natal') !== -1, 'Natal: o aviso do dia grande continua a ser o diaGrandeAviso de sempre (festas sem diaGrandeAvisos não mudam)');
+    ok(abrir(lis(12, 25)).ev('festaAvisoDiaGrande(festaAtual(), fStr("natal"))') === abrir(lis(12, 25)).ev('FESTAS_STRINGS.natal.pt.diaGrandeAviso'), 'Natal: festaAvisoDiaGrande dá o diaGrandeAviso');
+
+    // L4. Objetivo do dia e sinal da Quinta apanham a festa nova sem mais mudanças (js/objetivos.js real)
+    {
+      const extra = ['estacoes.js', 'vinha.js', 'alambique.js', 'garrafa.js', 'ronda.js', 'explorar.js'];
+      const o = abrir(jun(15));
+      o.ev("function mostrarFalas() {} function tocarSomDaAcao() {} function reposicionarFlutuantes() {} function atualizarCartaoObjetivosQuinta() {} function faseRealAtual() { return 'repouso'; } function jaFezTarefaTempoHoje() { return true; } function entradasBloqueadas() { return []; } function caveReservaAberta() { return true; } function garrafaQueMaisDescansou() { return 2; }");
+      extra.forEach(function (f) { vm.runInContext(fs.readFileSync(path.join(RAIZ, 'js', f), 'utf8'), o.cx, { filename: f }); });
+      o.ev('function vitoriasProtegerComPremioRestantesHoje() { return 1; } desbloquearEntradaEnciclopedia = function () { return null; };');
+      vm.runInContext(fontes['objetivos.js'], o.cx, { filename: 'objetivos.js' });
+      o.ev('state.reputacao = 500;');
+      ok(o.ev("festaAtual().id") === 'santos' && o.ev("candidatosGrupoC().indexOf('festa_tarefa') !== -1") && o.json('quintaPendentes()').indexOf('festa') !== -1, 'Santos: a 15/6, no nível 4 ou mais, o objetivo «festa_tarefa» é candidato e a Quinta mostra o sinal «festa»');
+      o.ev("['manjerico', 'sardinhada'].forEach(function (x) { festaRegistarTarefaHoje('santos', x); });");
+      ok(o.ev("candidatosGrupoC().indexOf('festa_tarefa')") !== -1 && o.json('quintaPendentes()').indexOf('festa') !== -1, 'Santos: com 2 de 3 feitas ainda há objetivo e sinal');
+      o.ev("festaRegistarTarefaHoje('santos', 'arraial');");
+      ok(o.ev("candidatosGrupoC().indexOf('festa_tarefa')") === -1 && o.json('quintaPendentes()').indexOf('festa') === -1, 'Santos: com as 3 feitas, já não há objetivo nem sinal da festa');
+      o.ev('state.reputacao = 0; state.acesso.jogadorAntigo = false; state.festas.tarefasDia = {};');
+      ok(o.ev("candidatosGrupoC().indexOf('festa_tarefa')") === -1 && o.json('quintaPendentes()').indexOf('festa') === -1, 'Santos: abaixo do nível 4 não há objetivo nem sinal da festa');
+      const fora = abrir(Date.parse('2027-07-02T12:00:00Z'));
+      ok(fora.ev('festaAtual()') === null, 'Santos: a 2/7 já não há festa');
+    }
+
+    // L5. Cenas: nunca a mesma em dois dias seguidos, as 5 aparecem em 5 dias seguidos
+    ['manjerico', 'arraial'].forEach(function (id) {
+      let seguidas = 0, incompleto = 0;
+      for (let t = Date.UTC(2026, 0, 1); t <= Date.UTC(2036, 11, 31); t += 86400000) {
+        if (g.ev("festaCenaIndice(SANTOS, TS('" + id + "'), " + JSON.stringify(fmt(t)) + ', 5)') === g.ev("festaCenaIndice(SANTOS, TS('" + id + "'), " + JSON.stringify(fmt(t + 86400000)) + ', 5)')) seguidas++;
+      }
+      for (let y = 2026; y <= 2036; y++) {
+        const vistas = [12, 13, 14, 15, 16].map(function (d) { return g.ev("festaCenaIndice(SANTOS, TS('" + id + "'), '" + y + "-06-" + d + "', 5)"); });
+        if (new Set(vistas).size !== 5) incompleto++;
+      }
+      ok(seguidas === 0, 'Santos ' + id + ': nunca a mesma cena em dois dias seguidos, de 2026 a 2036 (' + seguidas + ')');
+      ok(incompleto === 0, 'Santos ' + id + ': em 5 dias seguidos aparecem as 5 cenas, todos os anos de 2026 a 2036');
+      ok(g.ev("festaCenaIndice(SANTOS, TS('" + id + "'), '2027-06-20', 5)") === g.ev("festaCenaIndice(SANTOS, TS('" + id + "'), '2027-06-20', 5)"), 'Santos ' + id + ': a cena é a mesma o dia todo (vem do dia, sem sorteio)');
+    });
+    {
+      const dd = abrir(jun(12));
+      let ontem = {}, repetiu = 0;
+      for (let d = 12; d <= 29; d++) {
+        dd.ir(jun(d));
+        ['manjerico', 'arraial'].forEach(function (id) {
+          dd.ev("iniciarTarefaFesta('" + id + "')");
+          const sit = dd.ev('festaCenaAtual.cena.situacao');
+          if (sit === ontem[id]) repetiu++;
+          ontem[id] = sit;
+          dd.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+        });
+      }
+      ok(repetiu === 0, 'Santos: no ecrã, de 12 a 29/6, o Manjerico e o Arraial nunca mostram a cena de ontem');
+    }
+    ok(!/Math\.random/.test(fontes['festas.js'].slice(fontes['festas.js'].indexOf('function festaCenaIndice'), fontes['festas.js'].indexOf('function festaResolverTarefa'))), 'Santos: a escolha da cena não usa Math.random');
+
+    // L6. Textos nas 3 línguas
+    const TXT = g.json('FESTAS_STRINGS.santos');
+    const ESCALARES = ['faixa', 'titulo', 'subtitulo', 'diaGrandeAviso', 'tarefaFeitaHoje', 'modoTesteAviso', 'btnManjerico', 'btnSardinhada', 'btnArraial', 'btnVoltar',
+      'manjericoTitulo', 'manjericoSubtitulo', 'manjericoJaFeitaHoje', 'manjericoVitoria', 'manjericoDerrota', 'sardinhadaTitulo', 'sardinhadaJaFeitaHoje', 'sardinhadaFalta', 'sardinhadaSucesso',
+      'arraialTitulo', 'arraialSubtitulo', 'arraialJaFeitaHoje', 'arraialVitoria', 'arraialDerrota'];
+    const textos = function (x) { return typeof x === 'string' ? [x] : Array.isArray(x) ? x.reduce(function (t, y) { return t.concat(textos(y)); }, []) : x && typeof x === 'object' ? Object.keys(x).reduce(function (t, k) { return t.concat(k === 'correta' ? [] : textos(x[k])); }, []) : []; };
+    ['pt', 'en', 'es'].forEach(function (l) {
+      const S = TXT && TXT[l];
+      ok(!!S, 'Santos: faltam textos em ' + l);
+      if (!S) return;
+      ok(Object.keys(S).sort().join() === ESCALARES.concat(['manjericoCenas', 'arraialCenas', 'diaGrandeAvisos']).sort().join(), 'Santos ' + l + ': as chaves de texto certas, nem mais nem menos');
+      ESCALARES.forEach(function (k) { ok(typeof S[k] === 'string' && S[k].trim() !== '', 'Santos ' + l + ': falta o texto ' + k); });
+      ok(Object.keys(S.diaGrandeAvisos || {}).join() === '13,24,29' && [13, 24, 29].every(function (n) { return typeof S.diaGrandeAvisos[n] === 'string' && S.diaGrandeAvisos[n].trim() !== ''; }), 'Santos ' + l + ': um aviso «Hoje é...» para cada um dos 3 dias grandes');
+      ['manjericoCenas', 'arraialCenas'].forEach(function (chave) {
+        ok(Array.isArray(S[chave]) && S[chave].length === 5, 'Santos ' + l + ': 5 cenas em ' + chave);
+        (S[chave] || []).forEach(function (c, i) {
+          ok(c.opcoes.length === 3 && new Set(c.opcoes).size === 3 && c.correta === TXT.pt[chave][i].correta, 'Santos ' + l + ' ' + chave + ' ' + (i + 1) + ': 3 opções diferentes e a mesma certa que em PT');
+          ok(c.situacao.length <= 143 && c.opcoes.every(function (o) { return o.length <= 63; }), 'Santos ' + l + ' ' + chave + ' ' + (i + 1) + ': curta, como as do Natal');
+        });
+      });
+      const junto = textos(S).join(' ');
+      ok(!/[0-9]/.test(junto) && junto.indexOf('undefined') === -1, 'Santos ' + l + ': textos sem números');
+      ok(!/Fygmo ?2/.test(junto) && /Fygmo II/.test(junto), 'Santos ' + l + ': sempre «Fygmo II»');
+      ok(!/setúbal|setubal|sesimbra|palmela|azeitão|arrábida|natal|christmas|navidad|carnaval|carnival|páscoa|pascua|easter|martinho|martin|reis\b|kings|reyes|janeiras/i.test(junto), 'Santos ' + l + ': sem factos de Setúbal nem restos de outras festas');
+      ok(!/uva|grape|aguardente|brandy|dinheiro|money|euro|token/i.test(junto), 'Santos ' + l + ': sem Uvas, aguardente, dinheiro nem tokens');
+    });
+    const ptT = textos(TXT.pt).join(' ');
+    ok(/manjerico/.test(ptT) && /quadra/.test(ptT) && /sardinhas/.test(ptT) && /fogueira/.test(ptT) && /arraial/.test(ptT), 'Santos PT: fala do manjerico, da quadra, das sardinhas, da fogueira e do arraial');
+    ok(!/\b(você|vocês|fixe|bué)\b/i.test(ptT), 'Santos PT de Portugal: sem "você" nem brasileirismos óbvios');
+    ok(!/matar|morrer|sangue|bater|pancada|murro|pontapé|violên/i.test(ptT), 'Santos PT: porcos traquinas, nunca violentos');
+
+    // L7. Imagens: em falta fica a reserva (também na faixa e no dia grande), nunca erro nem ecrã vazio
+    const RES = 'assets/ecras/natal_festa.jpg';
+    const im = abrir(jun(15));
+    im.ev('state.gotas = 100; var IMGS = []; Image = function () { IMGS.push(this); };');
+    im.ev('renderFestaHub()');
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS[0].src') === 'assets/ecras/santos_festa.jpg', 'Santos: o menu mostra a reserva e pede a santos_festa.jpg');
+    im.ev('IMGS[0].onerror()'); ok(im.ev('FUNDO') === RES, 'Santos: santos_festa.jpg em falta: o menu fica com a natal_festa.jpg');
+    im.ev("iniciarTarefaFesta('manjerico')");
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS[1].src') === 'assets/ecras/santos_manjerico.jpg', 'Santos: o Manjerico pede santos_manjerico.jpg, com a reserva até lá');
+    im.ev('IMGS[1].onload()'); ok(im.ev('FUNDO') === 'assets/ecras/santos_manjerico.jpg', 'Santos: santos_manjerico.jpg carregou: passa a ser o fundo');
+    im.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)'); im.ev("iniciarTarefaFesta('arraial')");
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS[2].src') === 'assets/ecras/santos_arraial.jpg', 'Santos: o Arraial pede santos_arraial.jpg');
+    im.ev('IMGS[2].onerror()'); im.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS.length') === 3, 'Santos: santos_arraial.jpg em falta: fica a reserva, sem pedir outra vez');
+    im.ev("iniciarTarefaFesta('sardinhada')");
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS[3].src') === 'assets/ecras/santos_sardinhada.jpg' && im.ev('state.reputacao') >= 12, 'Santos: a Sardinhada pede santos_sardinhada.jpg, com a reserva até lá');
+    im.ev('IMGS[3].onerror()'); im.ev('renderFestaHub()');
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS.length') === 4, 'Santos: santos_sardinhada.jpg em falta: o menu fica com a reserva e nada se pede outra vez');
+    const ir = abrir(jun(15));
+    ir.ev("Image = function () { throw new Error('sem Image'); }; renderFestaHub(); iniciarTarefaFesta('manjerico');");
+    ok(ir.ev('FUNDO') === RES && ir.ev('festaCenaAtual !== null'), 'Santos: sem Image (ou a rebentar) fica a reserva e a cena abre');
+    const sem = abrir(jun(15));
+    sem.ev('var IMGS = []; Image = undefined; renderFestaHub(); iniciarTarefaFesta("arraial");');
+    ok(sem.ev('FUNDO') === RES && sem.ev('festaCenaAtual !== null'), 'Santos: sem Image nenhuma fica a reserva e a cena abre');
+    ['santos_festa.jpg', 'santos_dia_grande.jpg', 'santos_manjerico.jpg', 'santos_sardinhada.jpg', 'santos_arraial.jpg'].forEach(function (f) {
+      const c = path.join(RAIZ, 'assets', 'ecras', f);
+      if (fs.existsSync(c)) ok(fs.statSync(c).size <= LIMITE_IMAGEM && fs.readFileSync(c).slice(0, 2).equals(Buffer.from([0xFF, 0xD8])), f + ': JPEG até 250 KB');
+    });
+
+    // L8. Modo de teste (?festa=santos e ?festa=santos&dia=13, 24 ou 29): mostra tudo, nunca grava
+    [['?festa=santos', 5, 6, 12, null], ['?festa=santos&dia=13', 10, 12, 24, 13], ['?festa=santos&dia=24', 10, 12, 24, 24], ['?festa=santos&dia=29', 10, 12, 24, 29], ['?festa=santos&dia=14', 5, 6, 12, null]].forEach(function (c) {
+      const t = abrir(lis(10, 10), c[0]);
+      t.ev("state.reputacao = 372; state.gotas = 100; state.festas.tarefasDia = { santos_manjerico: diaLisboaDeHoje() };");
+      const antes = t.ev('JSON.stringify(state)'), AV = t.ev('FESTAS_STRINGS.santos.pt.modoTesteAviso');
+      t.ev('enterFesta()');
+      const hubT = t.ev('caixa.innerHTML'), avisosT = t.json('FESTAS_STRINGS.santos.pt.diaGrandeAvisos');
+      ok(c[4] === null ? [13, 24, 29].every(function (n) { return hubT.indexOf(avisosT[n]) === -1; }) : hubT.indexOf(avisosT[c[4]]) !== -1 && [13, 24, 29].filter(function (n) { return n !== c[4]; }).every(function (n) { return hubT.indexOf(avisosT[n]) === -1; }), c[0] + ': o menu mostra ' + (c[4] === null ? 'nenhum aviso de dia grande' : 'só o aviso do dia ' + c[4]));
+      t.ev("iniciarTarefaFesta('manjerico')"); t.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+      ok(t.ev('DIALOGO').indexOf('+' + c[1] + ' ') !== -1 && t.ev('DIALOGO').slice(-AV.length) === AV, c[0] + ': o Manjerico mostra +' + c[1] + ' e o aviso de teste, mesmo já feito hoje');
+      t.ev("iniciarTarefaFesta('arraial')"); t.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+      ok(t.ev('DIALOGO').indexOf('+' + c[2] + ' ') !== -1, c[0] + ': o Arraial mostra +' + c[2]);
+      t.ev("iniciarTarefaFesta('sardinhada')");
+      ok(t.ev('DIALOGO').indexOf('-30 ') !== -1 && t.ev('DIALOGO').indexOf('+' + c[3] + ' ') !== -1, c[0] + ': a Sardinhada mostra -30 Gotas e +' + c[3]);
+      ok(t.ev('SAVES') === 0 && t.json('OBJETIVOS').length === 0 && t.json('ENTRADAS').length === 0 && t.ev('JSON.stringify(state)') === antes, c[0] + ': nada gravado, nada mudado, sem objetivo do dia nem entrada da Enciclopédia');
+      ok(t.ev('estaNoDiaGrandeFesta(festaAtual())') === (c[4] !== null && c[4] !== 14), c[0] + ': o dia grande só com &dia=13, 24 ou 29');
+    });
+
+    // L9. As outras festas ficam exatamente iguais (configuração, textos e janela de datas)
+    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', natal: '298fd87419769ae3b7cdb8738acbcd5f5579963f09eb2bbae8c95fe918bf59d8', carnaval: '609899f969d707c4cce7c543406eec2d500ee2bb92eb712bac6013ba36afe84f', pascoa: '33c3d22cac7624738ef9667c738d2ed28e7b25235e62ab21ec5296eb637299f1', reis: '4fd59d9157a7d121ef485018c1b0ed963ad4c05c106085a92b27b53885e0ef36' };
+    Object.keys(IGUAIS).forEach(function (id) {
+      const j = g.ev('JSON.stringify([FESTAS_CONFIG.filter(function (f) { return f.id === ' + JSON.stringify(id) + '; })[0], FESTAS_STRINGS[' + JSON.stringify(id) + ']])');
+      ok(crypto.createHash('sha256').update(j).digest('hex') === IGUAIS[id], 'Santos: ' + id + ' fica exatamente igual (configuração e textos)');
+      ok(g.ev('FESTAS_CONFIG.filter(function (f) { return f.id === ' + JSON.stringify(id) + '; })[0].diasGrandes') === undefined, 'Santos: ' + id + ' não tem diasGrandes (continua com o seu diaGrande)');
+      ok(g.ev('FESTAS_STRINGS[' + JSON.stringify(id) + '].pt.diaGrandeAvisos') === undefined, 'Santos: ' + id + ' não tem avisos por dia (continua com o diaGrandeAviso)');
+      const jan = g.json('festaJanela(FESTAS_CONFIG.filter(function (f) { return f.id === ' + JSON.stringify(id) + '; })[0], 2027)');
+      ok(Object.keys(jan).join() === 'inicio,fim,diaGrande', 'Santos: a janela de ' + id + ' tem só inicio, fim e diaGrande, como antes');
+    });
+    ok(g.json('Object.keys(defaultState().festas)').join() === 'tarefasDia', 'Santos: nenhum campo novo no estado');
+    // estado antigo ou de nuvem estranho: o reparo que já existe apanha a festa nova
+    [null, 5, [], 'x'].forEach(function (lixo) {
+      const r = abrir(jun(15));
+      r.ev('state.festas = ' + JSON.stringify(lixo) + ';');
+      ok(r.ev("festaJaFezTarefaHoje('santos', 'manjerico')") === false && r.json('state.festas').tarefasDia !== undefined, 'Santos: um state.festas estranho (' + JSON.stringify(lixo) + ') é reparado sem campos novos');
+    });
+    {
+      const r = abrir(jun(15));
+      r.ev('state.festas = { tarefasDia: { santos_manjerico: "2027-06-15", santos_arraial: 7 } };');
+      ok(r.ev("festaJaFezTarefaHoje('santos', 'manjerico')") === true && r.ev("festaJaFezTarefaHoje('santos', 'arraial')") === false && r.ev("festaJaFezTarefaHoje('santos', 'sardinhada')") === false, 'Santos: um state.festas antigo com datas boas e más funciona (a data má conta como não feita)');
+    }
+  }
+
   return falhas;
 }
 
@@ -1480,7 +1727,40 @@ const MUTACOES = [
   ['Reis fecham a 5/1', 'festas.js', 'fim: { mes: 0, dia: 6 },', 'fim: { mes: 0, dia: 5 },'],
   ['Reis abertos todo o janeiro', 'festas.js', 'fim: { mes: 0, dia: 6 },', 'fim: { mes: 0, dia: 31 },'],
   ['dia grande dos Reis a 5/1', 'festas.js', 'diaGrande: { mes: 0, dia: 6 },', 'diaGrande: { mes: 0, dia: 5 },'],
-  ['Reis sem dia grande a dobrar', 'festas.js', "        premio: { custoGotas: 30, reputacao: 12 } }\n    ],\n    recompensas: {\n      multiplicadorDiaGrande: 2\n    }\n  }\n];", "        premio: { custoGotas: 30, reputacao: 12 } }\n    ],\n    recompensas: {\n      multiplicadorDiaGrande: 1\n    }\n  }\n];"],
+  ['Reis sem dia grande a dobrar', 'festas.js', "btn: 'btnBoloReis',\n        premio: { custoGotas: 30, reputacao: 12 } }\n    ],\n    recompensas: {\n      multiplicadorDiaGrande: 2\n    }", "btn: 'btnBoloReis',\n        premio: { custoGotas: 30, reputacao: 12 } }\n    ],\n    recompensas: {\n      multiplicadorDiaGrande: 1\n    }"],
+  ['Santos: abrem a 13', 'festas.js', 'inicio: { mes: 5, dia: 12 },', 'inicio: { mes: 5, dia: 13 },'],
+  ['Santos: fecham a 28', 'festas.js', 'fim: { mes: 5, dia: 29 },', 'fim: { mes: 5, dia: 28 },'],
+  ['Santos: deixa de ser dia grande o 24', 'festas.js', 'diasGrandes: [{ mes: 5, dia: 13 }, { mes: 5, dia: 24 }, { mes: 5, dia: 29 }]', 'diasGrandes: [{ mes: 5, dia: 13 }, { mes: 5, dia: 29 }]'],
+  ['Santos: o 25 passa a ser dia grande em vez do 24', 'festas.js', 'diasGrandes: [{ mes: 5, dia: 13 }, { mes: 5, dia: 24 }, { mes: 5, dia: 29 }]', 'diasGrandes: [{ mes: 5, dia: 13 }, { mes: 5, dia: 25 }, { mes: 5, dia: 29 }]'],
+  ['Santos: diasGrandes ignorado pela janela', 'festas.js', 'if (Array.isArray(festa.diasGrandes)) {', 'if (false) {'],
+  ['Santos: só o primeiro dia grande conta (festaDiaGrandeNoDia)', 'festas.js', 'return j !== null && festaDiasGrandesDaJanela(j).indexOf(dia) !== -1;', 'return j !== null && dia === j.diaGrande;'],
+  ['Santos: só o primeiro dia grande conta (?dia=)', 'festas.js', 'return diaForcado !== null && festaDiasGrandesDaJanela(j).some(', 'return diaForcado !== null && [festaDiasGrandesDaJanela(j)[0]].some('],
+  ['Santos: diasGrandes com um dia inexistente aceite', 'festas.js', "lista.some(function (d) { return diaLisboaPartes(d) === null; })", 'false'],
+  ['Santos: o mesmo aviso nos 3 dias grandes', 'festas.js', "  const porDia = S.diaGrandeAvisos;\n  if (!porDia || typeof porDia !== 'object') return S.diaGrandeAviso;", '  return S.diaGrandeAviso;'],
+  ['Santos: o aviso ignora o ?dia= do endereço', 'festas.js', 'if (festaForcadaNoEndereco()) numero = diaForcadoNoEndereco();', 'if (false) numero = 13;'],
+  ['Santos: o aviso é sempre o do dia 13', 'festas.js', "return (numero !== null && porDia[numero]) || S.diaGrandeAviso;", "return porDia[13];"],
+  ['Santos: falta o aviso de São Pedro em EN', 'festas.js', "29: \"Today is Saint Peter's Day! Prizes count double.\"", "29: ''"],
+  ['Santos: Santo António escrito mal no aviso PT', 'festas.js', "13: 'Hoje é dia de Santo António! Os prémios contam a dobrar.'", "13: 'Hoje é dia de São João! Os prémios contam a dobrar.'"],
+  ['Santos: a sardinhada passa a custar 40 Gotas', 'festas.js', "btn: 'btnSardinhada',\n        premio: { custoGotas: 30, reputacao: 12 }", "btn: 'btnSardinhada',\n        premio: { custoGotas: 40, reputacao: 12 }"],
+  ['Santos: o manjerico passa a dar +6', 'festas.js', "btn: 'btnManjerico', cenasSemRepetir: true,\n        premio: { reputacao: 5 }", "btn: 'btnManjerico', cenasSemRepetir: true,\n        premio: { reputacao: 6 }"],
+  ['Santos: o arraial passa a dar +5', 'festas.js', "btn: 'btnArraial', cenasSemRepetir: true,\n        premio: { reputacao: 6 }", "btn: 'btnArraial', cenasSemRepetir: true,\n        premio: { reputacao: 5 }"],
+  ['Santos: o manjerico deixa de evitar repetições', 'festas.js', "btn: 'btnManjerico', cenasSemRepetir: true,", "btn: 'btnManjerico',"],
+  ['Santos: o arraial deixa de evitar repetições', 'festas.js', "btn: 'btnArraial', cenasSemRepetir: true,", "btn: 'btnArraial',"],
+  ['Santos: a sardinhada gasta Uvas', 'festas.js', "btn: 'btnSardinhada',\n        premio: { custoGotas: 30, reputacao: 12 }", "btn: 'btnSardinhada',\n        premio: { custoGotas: 30, custoUvas: 5, reputacao: 12 }"],
+  ['Santos: sem imagem de reserva', 'festas.js', "      reserva: 'assets/ecras/natal_festa.jpg',\n      manjerico:", '      manjerico:'],
+  ['Santos: a reserva passa a ser uma imagem que não existe', 'festas.js', "      reserva: 'assets/ecras/natal_festa.jpg',\n      manjerico:", "      reserva: 'assets/ecras/santos_reserva.jpg',\n      manjerico:"],
+  ['Santos: o menu deixa de esperar pela imagem (sem menuComReserva)', 'festas.js', "    menuComReserva: true,\n    imagens: {\n      diaGrande: 'assets/ecras/santos_dia_grande.jpg',", "    imagens: {\n      diaGrande: 'assets/ecras/santos_dia_grande.jpg',"],
+  ['Santos: o modo de teste passa a gravar', 'festas.js', "    // Com ?festa=santos (ou outro parâmetro de teste) no endereço, mostra tudo mas não muda nem grava nada.\n    modoTesteSemGravar: true,", '    modoTesteSemGravar: false,'],
+  ['Santos: deixam de abrir a santosPopulares', 'festas.js', "    entradaEnciclopedia: 'santosPopulares',\n", ''],
+  ['Santos: o arraial passa a abrir uma entrada', 'festas.js', "btn: 'btnArraial',", "btn: 'btnArraial', entradaEnciclopedia: 'santosPopulares',"],
+  ['Santos: Fygmo 2 no arraial (PT, cena 3)', 'festas.js', "'Começa a música e o Fygmo II dança", "'Começa a música e o Fygmo 2 dança"],
+  ['Santos: a certa no arraial passa a ser a mais comprida (PT, cena 1)', 'festas.js', "'Pedir-lhe que espere por umas brasas mais baixas'", "'Pedir-lhe que espere, com paciência, por umas brasas bem mais baixas'"],
+  ['Santos: uma cena do manjerico a menos (PT)', 'festas.js', ",\n        { situacao: 'O Fygmo II acha que o manjerico precisa de companhia e já lhe trouxe uma cebola e um chapéu.'", ",\n        { situacao: 'O Fygmo II acha que o manjerico precisa de companhia e já lhe trouxe uma cebola e um chapéu.', opcoes: ['a', 'b', 'c'], correta: 2 },\n        { situacao: 'X'"],
+  ['Santos: o texto da vitória do arraial fala de Natal', 'festas.js', "arraialVitoria: 'A fogueira arde sem sustos", "arraialVitoria: 'Feliz Natal! A fogueira arde sem sustos"],
+  ['Santos: as festas de antes passam a ter diasGrandes (Reis)', 'festas.js', "    diaGrande: { mes: 0, dia: 6 },    // 6 de janeiro, Dia de Reis", "    diaGrande: { mes: 0, dia: 6 },    // 6 de janeiro, Dia de Reis\n    diasGrandes: [{ mes: 0, dia: 6 }],"],
+  ['Santos: o Natal muda de aviso', 'festas.js', "diaGrandeAviso: 'Hoje é dia de Natal! Os prémios contam a dobrar.'", "diaGrandeAviso: 'Hoje é Natal! Os prémios contam a dobrar.'"],
+  ['Santos: a janela dos Reis ganha uma chave nova', 'festas.js', "    j = { inicio: fixo(festa.inicio), fim: fixo(festa.fim), diaGrande: fixo(festa.diaGrande) };", "    j = { inicio: fixo(festa.inicio), fim: fixo(festa.fim), diaGrande: fixo(festa.diaGrande), diasGrandes: [fixo(festa.diaGrande)] };"],
+  ['Santos Populares sem dia grande a dobrar', 'festas.js', "        premio: { reputacao: 6 } }\n    ],\n    recompensas: {\n      multiplicadorDiaGrande: 2\n    }\n  }\n];", "        premio: { reputacao: 6 } }\n    ],\n    recompensas: {\n      multiplicadorDiaGrande: 1\n    }\n  }\n];"],
   ['Reis deixam de abrir a janeiras', 'festas.js', "    entradaEnciclopedia: 'janeiras',\n", ''],
   ['Janeiras dão mais', 'festas.js', "btn: 'btnJaneiras', cenasSemRepetir: true,\n        premio: { reputacao: 5 } },", "btn: 'btnJaneiras', cenasSemRepetir: true,\n        premio: { reputacao: 8 } },"],
   ['Janeiras sem cenas pela ordem do dia', 'festas.js', "btn: 'btnJaneiras', cenasSemRepetir: true,", "btn: 'btnJaneiras',"],
@@ -1541,15 +1821,15 @@ const MUTACOES = [
   ['festa aberta: fim exclusivo', 'festas.js', 'return j !== null && dia >= j.inicio && dia <= j.fim;', 'return j !== null && dia >= j.inicio && dia < j.fim;'],
   ['festa aberta: início exclusivo', 'festas.js', 'return j !== null && dia >= j.inicio && dia <= j.fim;', 'return j !== null && dia > j.inicio && dia <= j.fim;'],
   ['festa aberta: dia inválido aceite', 'festas.js', 'if (p === null) return false;\n  const j = festaJanela(festa, p.ano);\n  return j !== null && dia >= j.inicio', 'const j = festaJanela(festa, p ? p.ano : 2026);\n  return j !== null && dia >= j.inicio'],
-  ['dia grande: qualquer dia da janela', 'festas.js', 'return j !== null && dia === j.diaGrande;', 'return j !== null && dia >= j.inicio && dia <= j.fim;'],
+  ['dia grande: qualquer dia da janela', 'festas.js', 'return j !== null && festaDiasGrandesDaJanela(j).indexOf(dia) !== -1;', 'return j !== null && dia >= j.inicio && dia <= j.fim;'],
   ['festa aberta pelo ano errado', 'festas.js', 'const j = festaJanela(festa, p.ano);\n  return j !== null && dia >= j.inicio', 'const j = festaJanela(festa, p.ano + 1);\n  return j !== null && dia >= j.inicio'],
   ['hoje pelo dia do aparelho (festaDiaDeHoje)', 'festas.js', 'function festaDiaDeHoje() {\n  return diaLisboaDeHoje();', "function festaDiaDeHoje() {\n  return (function () { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); })();"],
   ['festaAtivaPelaDataReal ignora o dia que recebe', 'festas.js', 'const d = dia === undefined ? festaDiaDeHoje() : dia;', 'const d = festaDiaDeHoje();'],
   ['festaAtual ignora o dia que recebe', 'festas.js', 'return festaForcadaNoEndereco() || festaAtivaPelaDataReal(dia);', 'return festaForcadaNoEndereco() || festaAtivaPelaDataReal();'],
   ['estaNoDiaGrandeFesta ignora o dia que recebe', 'festas.js', 'const hoje = dia === undefined ? festaDiaDeHoje() : dia;\n  if (festaForcadaNoEndereco()) {', 'const hoje = festaDiaDeHoje();\n  if (festaForcadaNoEndereco()) {'],
   ['atalho ?dia= compara com o dia errado', 'festas.js', 'diaForcado === grande.dia;', 'diaForcado === grande.dia + 1;'],
-  ['atalho ?festa= sem ?dia= dá dia grande', 'festas.js', 'return diaForcado !== null && grande !== null && diaForcado === grande.dia;', 'return grande !== null && (diaForcado === null || diaForcado === grande.dia);'],
-  ['festaDiaGrandeNoDia usa o mês só', 'festas.js', 'return j !== null && dia === j.diaGrande;', 'return j !== null && dia.slice(5, 7) === j.diaGrande.slice(5, 7);'],
+  ['atalho ?festa= sem ?dia= dá dia grande', 'festas.js', "return diaForcado !== null && festaDiasGrandesDaJanela(j).some(function (d) {\n      const grande = diaLisboaPartes(d);\n      return grande !== null && diaForcado === grande.dia;", "return festaDiasGrandesDaJanela(j).some(function (d) {\n      const grande = diaLisboaPartes(d);\n      return grande !== null && (diaForcado === null || diaForcado === grande.dia);"],
+  ['festaDiaGrandeNoDia usa o mês só', 'festas.js', 'return j !== null && festaDiasGrandesDaJanela(j).indexOf(dia) !== -1;', 'return j !== null && dia.slice(5, 7) === j.diaGrande.slice(5, 7);'],
   ['Natal passa a abrir a 19', 'festas.js', 'inicio: { mes: 11, dia: 20 }', 'inicio: { mes: 11, dia: 19 }'],
   ['São Martinho fecha a 15', 'festas.js', 'fim: { mes: 10, dia: 14 }', 'fim: { mes: 10, dia: 15 }'],
   ['São Martinho com dia grande a 12', 'festas.js', 'diaGrande: { mes: 10, dia: 11 }', 'diaGrande: { mes: 10, dia: 12 }'],

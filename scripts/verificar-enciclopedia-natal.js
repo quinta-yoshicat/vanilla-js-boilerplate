@@ -1,14 +1,14 @@
 #!/usr/bin/env node
-// Verifica as entradas de festas da Enciclopédia (js/explorar.js, ENCYCLOPEDIA_ENTRIES): 'consoada' e 'boloRei' (Natal), 'entrudo' e 'caretos' (Carnaval), 'folar' e 'ovosAmendoas' (Páscoa), 'janeiras' (Reis e Janeiras).
+// Verifica as entradas de festas da Enciclopédia (js/explorar.js, ENCYCLOPEDIA_ENTRIES): 'consoada' e 'boloRei' (Natal), 'entrudo' e 'caretos' (Carnaval), 'folar' e 'ovosAmendoas' (Páscoa), 'janeiras' (Reis e Janeiras), 'santosPopulares' (Santos Populares).
 // Só LÊ js/, corre-os num ambiente simulado (vm): nunca toca em browser, Telegram nem conta real.
 //
-//   (a) as 3 línguas (pt, en, es) têm exatamente as mesmas entradas, pela mesma ordem, sem ids repetidos (33 hoje)
+//   (a) as 3 línguas (pt, en, es) têm exatamente as mesmas entradas, pela mesma ordem, sem ids repetidos (34 hoje)
 //   (b) as duas entradas existem nas 3 línguas, com o título e o texto pedidos palavra por palavra (os textos estão escritos
 //       à mão neste ficheiro, de propósito, para não dependerem do código que se verifica)
 //   (c) são manuais (o Explorar nunca as oferece), sem imagem, sem meses e sem estação
 //   (d) o Explorar não as oferece (entradasBloqueadas() nunca as devolve) e desbloquear-se uma só vez conta 1 de conhecimento
-//   (e) o «Sábio» (js/conquistas.js) e a medalha do Perfil (tituloEspecialDesbloqueado()) passam a exigir as 33 entradas
-//   (f) os desbloqueios (festas do Natal, do Carnaval, da Páscoa e dos Reis e as tarefas do bolo-rei, do quem está mascarado e dos ovos) estão ligados em js/festas.js (a prova de comportamento está em verificar-festas.js)
+//   (e) o «Sábio» (js/conquistas.js) e a medalha do Perfil (tituloEspecialDesbloqueado()) passam a exigir as 34 entradas
+//   (f) os desbloqueios (festas do Natal, do Carnaval, da Páscoa dos Reis e dos Santos Populares e as tarefas do bolo-rei, do quem está mascarado e dos ovos) estão ligados em js/festas.js (a prova de comportamento está em verificar-festas.js)
 // No fim corre mutações: estraga js/explorar.js de propósito e confirma que este teste dá por isso.
 //
 // Uso: node scripts/verificar-enciclopedia-natal.js
@@ -22,7 +22,7 @@ const RAIZ = path.join(__dirname, '..');
 const EXPLORAR_JS = fs.readFileSync(path.join(RAIZ, 'js', 'explorar.js'), 'utf8');
 const CONQUISTAS_JS = fs.readFileSync(path.join(RAIZ, 'js', 'conquistas.js'), 'utf8');
 const FESTAS_JS = fs.readFileSync(path.join(RAIZ, 'js', 'festas.js'), 'utf8');
-const TOTAL = 33;
+const TOTAL = 34;
 
 const PEDIDO = {
   pt: {
@@ -32,7 +32,8 @@ const PEDIDO = {
     caretos: ['Os Caretos de Podence', 'Em Podence, em Trás-os-Montes, os caretos saem à rua no Entrudo com fatos de franjas de lã coloridas, máscaras de metal e chocalhos à cintura. Correm e saltam pela aldeia e «chocalham» quem apanham. É uma festa de despedida do inverno, e a UNESCO reconheceu-a como Património Cultural Imaterial da Humanidade em 2019. As máscaras do Fygmo e do Fygmo II são só de brincadeira, e nem sempre convencem.'],
     folar: ['O Folar', 'O folar é o pão da Páscoa em Portugal e a oferta tradicional dos padrinhos aos afilhados. Marca a fartura depois do jejum da Quaresma e muda de terra para terra: em Trás-os-Montes é de carne, com porco, presunto e enchidos; em Olhão é doce, de folhas, com canela e limão; há quem lhe junte um ovo cozido. É um símbolo de amizade e de reconciliação. O Chizo espera sempre pela sua fatia.'],
     ovosAmendoas: ['O Ovo e as Amêndoas', 'O ovo é o símbolo da Páscoa porque lembra a vida nova: a casca fechada que se abre. Na Europa medieval ofereciam-se ovos cozidos e pintados, e os de chocolate só surgiram no século XIX, em França e na Alemanha. As amêndoas de Páscoa, doces e cobertas de açúcar, são um dos costumes mais antigos da época e homenageiam esse ovo. Em Ponta Delgada, nos Açores, ainda se fazem à mão em tachos de cobre, durante cerca de dez horas. O Fygmo II jura que não provou nenhuma.'],
-    janeiras: ['As Janeiras e o Dia de Reis', 'As Janeiras cantam-se no início do ano: um grupo vai de porta em porta, canta aos vizinhos e deseja-lhes um bom ano novo, e quem abre a porta costuma oferecer-lhes alguma coisa. Cantam-se sobretudo entre o Ano Novo e o Dia de Reis, a 6 de janeiro, o dia que lembra a visita dos Reis Magos ao Menino Jesus. É também até ao Dia de Reis que se come o bolo-rei. O Chizo acompanha o canto à sua maneira.']
+    janeiras: ['As Janeiras e o Dia de Reis', 'As Janeiras cantam-se no início do ano: um grupo vai de porta em porta, canta aos vizinhos e deseja-lhes um bom ano novo, e quem abre a porta costuma oferecer-lhes alguma coisa. Cantam-se sobretudo entre o Ano Novo e o Dia de Reis, a 6 de janeiro, o dia que lembra a visita dos Reis Magos ao Menino Jesus. É também até ao Dia de Reis que se come o bolo-rei. O Chizo acompanha o canto à sua maneira.'],
+    santosPopulares: ['Os Santos Populares', 'Os Santos Populares são as festas de junho: Santo António a 13, São João a 24 e São Pedro a 29. Em Santo António há marchas, manjericos com quadra e sardinhas assadas; no São João acendem-se fogueiras e fazem-se arraiais. O Fygmo e o Fygmo II juram que só vão pelas sardinhas.']
   },
   en: {
     consoada: ['The Consoada', 'The consoada is the family supper on the night of 24 December. The word comes from the Latin consolata, "consoled". The most traditional dish is boiled salt cod with potatoes and cabbage (in some parts of the north, octopus), and dessert means rabanadas (a Portuguese take on French toast), filhós (fried dough) and aletria (sweet vermicelli pudding). Afterwards, some go to the Missa do Galo, the midnight mass. Chizo settles under the table, waiting for whatever falls.'],
@@ -41,7 +42,8 @@ const PEDIDO = {
     caretos: ['The Caretos of Podence', 'In Podence, in Trás-os-Montes, the caretos take to the streets at the Entrudo in suits with colourful wool fringes, metal masks and bells at the waist. They run and leap through the village and "shake their bells" at whoever they catch. It is a farewell to winter, and UNESCO recognised it as Intangible Cultural Heritage of Humanity in 2019. The masks of Fygmo and Fygmo II are only for fun, and they don\'t always fool anyone.'],
     folar: ['The Folar', "The folar is Portugal's Easter bread and the traditional gift from godparents to their godchildren. It marks the plenty after the fast of Lent and changes from place to place: in Trás-os-Montes it is a meat bread, with pork, ham and smoked sausages; in Olhão it is sweet and flaky, with cinnamon and lemon; some add a boiled egg. It is a symbol of friendship and reconciliation. Chizo always waits for his slice."],
     ovosAmendoas: ['The Egg and the Easter Almonds', "The egg is a symbol of Easter because it stands for new life: the closed shell that opens. In medieval Europe, people gave each other painted boiled eggs, and chocolate ones only appeared in the 19th century, in France and Germany. Easter almonds, sweet and sugar-coated, are one of the oldest customs of the season and pay tribute to that egg. In Ponta Delgada, in the Azores, they are still made by hand in copper pots, over about ten hours. Fygmo II swears he didn't taste a single one."],
-    janeiras: ['The Janeiras and Three Kings Day', 'The Janeiras are sung at the start of the year: a group goes from door to door, sings to the neighbours and wishes them a happy new year, and whoever opens the door usually offers them something. They are sung mainly between New Year and Three Kings Day (Epiphany), on 6 January, the day that remembers the visit of the Three Wise Men to the Baby Jesus. The bolo-rei is also eaten up to Three Kings Day. Chizo joins in the singing in his own way.']
+    janeiras: ['The Janeiras and Three Kings Day', 'The Janeiras are sung at the start of the year: a group goes from door to door, sings to the neighbours and wishes them a happy new year, and whoever opens the door usually offers them something. They are sung mainly between New Year and Three Kings Day (Epiphany), on 6 January, the day that remembers the visit of the Three Wise Men to the Baby Jesus. The bolo-rei is also eaten up to Three Kings Day. Chizo joins in the singing in his own way.'],
+    santosPopulares: ['The Popular Saints', "The Popular Saints are the June festivities: Saint Anthony on the 13th, Saint John on the 24th and Saint Peter on the 29th. At Saint Anthony's there are marchas (parades), manjericos (small potted basil plants) with a verse, and grilled sardines; at Saint John's bonfires are lit and arraiais (open-air village parties) are held. Fygmo and Fygmo II swear they only go for the sardines."]
   },
   es: {
     consoada: ['La Consoada', 'La consoada es la cena de la noche del 24 de diciembre, en la que la familia se reúne a la mesa. El nombre viene del latín consolata, «consolada». El plato más típico es el bacalao cocido con patatas y col (en algunas zonas del norte, el pulpo), y de postre hay rabanadas, filhós (masa frita) y aletria (pudin dulce de fideos). Después, algunos van a la Misa del Gallo. Chizo se acomoda debajo de la mesa, esperando lo que caiga.'],
@@ -50,11 +52,12 @@ const PEDIDO = {
     caretos: ['Los Caretos de Podence', 'En Podence, en Trás-os-Montes, los caretos salen a la calle en el Entrudo con trajes de flecos de lana de colores, máscaras de metal y cascabeles en la cintura. Corren y saltan por el pueblo y «hacen sonar los cascabeles» a quien atrapan. Es una fiesta de despedida del invierno, y la UNESCO la reconoció como Patrimonio Cultural Inmaterial de la Humanidad en 2019. Las máscaras de Fygmo y Fygmo II son solo de broma, y no siempre convencen.'],
     folar: ['El Folar', 'El folar es el pan de Pascua de Portugal y el regalo tradicional de los padrinos a sus ahijados. Marca la abundancia después del ayuno de la Cuaresma y cambia de un lugar a otro: en Trás-os-Montes es de carne, con cerdo, jamón y embutidos; en Olhão es dulce y de hojaldre, con canela y limón; hay quien le añade un huevo cocido. Es un símbolo de amistad y de reconciliación. Chizo siempre espera su porción.'],
     ovosAmendoas: ['El Huevo y las Almendras de Pascua', 'El huevo es un símbolo de la Pascua porque representa la vida nueva: la cáscara cerrada que se abre. En la Europa medieval se regalaban huevos cocidos y pintados, y los de chocolate solo aparecieron en el siglo XIX, en Francia y Alemania. Las almendras de Pascua, dulces y cubiertas de azúcar, son una de las costumbres más antiguas de la época y rinden homenaje a ese huevo. En Ponta Delgada, en las Azores, todavía se hacen a mano en calderos de cobre, durante unas diez horas. Fygmo II jura que no probó ni una.'],
-    janeiras: ['Las Janeiras y el Día de Reyes', 'Las Janeiras se cantan al comienzo del año: un grupo va de puerta en puerta, canta a los vecinos y les desea un feliz año nuevo, y quien abre la puerta suele ofrecerles algo. Se cantan sobre todo entre el Año Nuevo y el Día de Reyes, el 6 de enero, el día que recuerda la visita de los Reyes Magos al Niño Jesús. También es hasta el Día de Reyes cuando se come el bolo-rei. El Chizo acompaña el canto a su manera.']
+    janeiras: ['Las Janeiras y el Día de Reyes', 'Las Janeiras se cantan al comienzo del año: un grupo va de puerta en puerta, canta a los vecinos y les desea un feliz año nuevo, y quien abre la puerta suele ofrecerles algo. Se cantan sobre todo entre el Año Nuevo y el Día de Reyes, el 6 de enero, el día que recuerda la visita de los Reyes Magos al Niño Jesús. También es hasta el Día de Reyes cuando se come el bolo-rei. El Chizo acompaña el canto a su manera.'],
+    santosPopulares: ['Los Santos Populares', 'Los Santos Populares son las fiestas de junio: San Antonio el 13, San Juan el 24 y San Pedro el 29. En San Antonio hay marchas (desfiles), manjericos (pequeñas macetas de albahaca) con cuarteta y sardinas asadas; en San Juan se encienden hogueras y se hacen arraiales (fiestas populares al aire libre). El Fygmo y el Fygmo II juran que solo van por las sardinas.']
   }
 };
 const LINGUAS = ['pt', 'en', 'es'];
-const IDS_NATAL = ['consoada', 'boloRei', 'entrudo', 'caretos', 'folar', 'ovosAmendoas', 'janeiras']; // as 7 entradas de festas (Natal, Carnaval, Páscoa e Reis)
+const IDS_NATAL = ['consoada', 'boloRei', 'entrudo', 'caretos', 'folar', 'ovosAmendoas', 'janeiras', 'santosPopulares']; // as 8 entradas de festas (Natal, Carnaval, Páscoa, Reis e Santos Populares)
 
 function J(x) { return JSON.stringify(x); }
 
@@ -102,10 +105,12 @@ function correr(explorarJs, festasJs) {
     });
   });
 
-  // a entrada das Janeiras nunca fala de dinheiro nem de tokens
+  // as entradas das Janeiras e dos Santos Populares nunca falam de dinheiro nem de tokens
   LINGUAS.forEach(function (l) {
-    const e = g.json('ENCYCLOPEDIA_ENTRIES.' + l + '.filter(function (x) { return x.id === "janeiras"; })')[0];
-    ok(e && !/dinheiro|moeda|euro|token|pag[ao]|money|coin|pay|dinero|moneda|cripto|crypto/i.test(e.titulo + ' ' + e.texto), '(b) ' + l + '/janeiras: não devia falar de dinheiro nem de tokens');
+    ['janeiras', 'santosPopulares'].forEach(function (id) {
+      const e = g.json('ENCYCLOPEDIA_ENTRIES.' + l + '.filter(function (x) { return x.id === "' + id + '"; })')[0];
+      ok(e && !/dinheiro|moeda|euro|token|pag[ao]|money|coin|pay|dinero|moneda|cripto|crypto/i.test(e.titulo + ' ' + e.texto), '(b) ' + l + '/' + id + ': não devia falar de dinheiro nem de tokens');
+    });
   });
 
   // (d) o Explorar nunca as oferece; desbloquear conta uma vez
@@ -131,9 +136,11 @@ function correr(explorarJs, festasJs) {
   g.ev('state.encyclopedia.unlocked = ' + J(antigas));
   ok(antigas.length === TOTAL - IDS_NATAL.length && sabio() === false && g.ev('tituloEspecialDesbloqueado()') === false, '(e) com as ' + (TOTAL - IDS_NATAL.length) + ' de antes já não chega para o «Sábio» nem para a medalha');
   g.ev('state.encyclopedia.unlocked = ' + J(antigas.concat(['consoada', 'boloRei', 'entrudo', 'caretos', 'folar'])));
-  ok(sabio() === false && g.ev('tituloEspecialDesbloqueado()') === false, '(e) com ' + (TOTAL - 2) + ' ainda não chega');
+  ok(sabio() === false && g.ev('tituloEspecialDesbloqueado()') === false, '(e) com ' + (TOTAL - 3) + ' ainda não chega');
   g.ev('state.encyclopedia.unlocked = ' + J(antigas.concat(['consoada', 'boloRei', 'entrudo', 'caretos', 'folar', 'ovosAmendoas'])));
-  ok(sabio() === false && g.ev('tituloEspecialDesbloqueado()') === false, '(e) com todas menos a janeiras (' + (TOTAL - 1) + ') ainda não chega');
+  ok(sabio() === false && g.ev('tituloEspecialDesbloqueado()') === false, '(e) com todas menos a janeiras e a santosPopulares (' + (TOTAL - 2) + ') ainda não chega');
+  g.ev('state.encyclopedia.unlocked = ' + J(antigas.concat(['consoada', 'boloRei', 'entrudo', 'caretos', 'folar', 'ovosAmendoas', 'janeiras'])));
+  ok(sabio() === false && g.ev('tituloEspecialDesbloqueado()') === false, '(e) com todas menos a santosPopulares (' + (TOTAL - 1) + ') ainda não chega');
   g.ev('state.encyclopedia.unlocked = ' + J(todas));
   ok(sabio() === true && g.ev('tituloEspecialDesbloqueado()') === true, '(e) com as ' + TOTAL + ' o «Sábio» e a medalha voltam');
 
@@ -144,15 +151,16 @@ function correr(explorarJs, festasJs) {
     const cfg = f.__cfg || [];
     const festa = function (id) { return cfg.filter(function (x) { return x.id === id; })[0]; };
     const tarefa = function (f, id) { return f && f.tarefas.filter(function (t) { return t.id === id; })[0]; };
-    const natal = festa('natal'), carnaval = festa('carnaval'), pascoa = festa('pascoa'), reis = festa('reis');
+    const natal = festa('natal'), carnaval = festa('carnaval'), pascoa = festa('pascoa'), reis = festa('reis'), santos = festa('santos');
     ok(reis && reis.entradaEnciclopedia === 'janeiras', '(f) a festa dos Reis devia abrir a janeiras ao entrar');
+    ok(santos && santos.entradaEnciclopedia === 'santosPopulares', '(f) a festa dos Santos Populares devia abrir a santosPopulares ao entrar');
     ok(natal && natal.entradaEnciclopedia === 'consoada', '(f) a festa do Natal devia abrir a consoada ao entrar');
     ok(tarefa(natal, 'boloRei') && tarefa(natal, 'boloRei').entradaEnciclopedia === 'boloRei', '(f) a tarefa do bolo-rei devia abrir o boloRei');
     ok(carnaval && carnaval.entradaEnciclopedia === 'entrudo', '(f) a festa do Carnaval devia abrir o entrudo ao entrar');
     ok(tarefa(carnaval, 'quemEstaMascarado') && tarefa(carnaval, 'quemEstaMascarado').entradaEnciclopedia === 'caretos', '(f) a tarefa quemEstaMascarado devia abrir os caretos');
     ok(pascoa && pascoa.entradaEnciclopedia === 'folar', '(f) a festa da Páscoa devia abrir o folar ao entrar');
     ok(tarefa(pascoa, 'ovos') && tarefa(pascoa, 'ovos').entradaEnciclopedia === 'ovosAmendoas', '(f) a tarefa dos ovos devia abrir o ovosAmendoas');
-    ok(cfg.filter(function (x) { return x.id !== 'saomartinho' && x.id !== 'natal' && x.id !== 'carnaval' && x.id !== 'pascoa' && x.id !== 'reis' && x.entradaEnciclopedia; }).length === 0, '(f) não há outras festas a abrir entradas');
+    ok(cfg.filter(function (x) { return x.id !== 'saomartinho' && x.id !== 'natal' && x.id !== 'carnaval' && x.id !== 'pascoa' && x.id !== 'reis' && x.id !== 'santos' && x.entradaEnciclopedia; }).length === 0, '(f) não há outras festas a abrir entradas');
     ok(cfg.every(function (x) { return x.tarefas.every(function (t) { return !t.entradaEnciclopedia || (x.id === 'natal' && t.id === 'boloRei') || (x.id === 'carnaval' && t.id === 'quemEstaMascarado') || (x.id === 'pascoa' && t.id === 'ovos'); }); }), '(f) só o bolo-rei, o quem está mascarado e os ovos abrem uma entrada (a consoada, os doces, o corso, as fantasias, a tarefa do folar, as amêndoas e as 3 tarefas dos Reis não)');
   } catch (e) { ok(false, '(f) FESTAS_CONFIG não carrega: ' + e.message); }
   return falhas;
@@ -201,7 +209,7 @@ LINGUAS.forEach(function (l) {
     mutacoes.push(['a entrada ' + id + ' em ' + l + ' ganha meses', noBloco(l, function (b) { return trocar(b, "{ id: '" + id + "', manual: true,", "{ id: '" + id + "', manual: true, meses: [12],"); }), FESTAS_JS]);
   });
   // ids trocados entre línguas (a ordem deixa de bater)
-  [['consoada', 'boloRei'], ['entrudo', 'caretos'], ['boloRei', 'entrudo'], ['caretos', 'folar'], ['folar', 'ovosAmendoas'], ['ovosAmendoas', 'janeiras']].forEach(function (par) {
+  [['consoada', 'boloRei'], ['entrudo', 'caretos'], ['boloRei', 'entrudo'], ['caretos', 'folar'], ['folar', 'ovosAmendoas'], ['ovosAmendoas', 'janeiras'], ['janeiras', 'santosPopulares']].forEach(function (par) {
     // duas entradas vizinhas trocam de ordem (os ids deixam de bater com as outras línguas)
     mutacoes.push(['as entradas ' + par.join(' e ') + ' trocam de ordem em ' + l, noBloco(l, function (b) {
       const linhas = b.split('\n');
@@ -231,6 +239,9 @@ mutacoes.push(['as amêndoas passam a abrir uma entrada (festas.js)', EXPLORAR_J
 mutacoes.push(['o Carnaval passa a abrir uma entrada de Páscoa (festas.js)', EXPLORAR_JS, trocar(FESTAS_JS, "    entradaEnciclopedia: 'entrudo',\n", "    entradaEnciclopedia: 'folar',\n")]);
 mutacoes.push(['os Reis deixam de abrir a janeiras (festas.js)', EXPLORAR_JS, trocar(FESTAS_JS, "    entradaEnciclopedia: 'janeiras',\n", '')]);
 mutacoes.push(['os Reis abrem a entrada errada ao entrar (festas.js)', EXPLORAR_JS, trocar(FESTAS_JS, "    entradaEnciclopedia: 'janeiras',\n", "    entradaEnciclopedia: 'boloRei',\n")]);
+mutacoes.push(['os Santos Populares deixam de abrir a santosPopulares (festas.js)', EXPLORAR_JS, trocar(FESTAS_JS, "    entradaEnciclopedia: 'santosPopulares',\n", '')]);
+mutacoes.push(['os Santos Populares abrem a entrada errada ao entrar (festas.js)', EXPLORAR_JS, trocar(FESTAS_JS, "    entradaEnciclopedia: 'santosPopulares',\n", "    entradaEnciclopedia: 'janeiras',\n")]);
+mutacoes.push(['o manjerico passa a abrir uma entrada (festas.js)', EXPLORAR_JS, trocar(FESTAS_JS, "btn: 'btnManjerico',", "btn: 'btnManjerico', entradaEnciclopedia: 'santosPopulares',")]);
 mutacoes.push(['as Janeiras passam a abrir uma entrada (festas.js)', EXPLORAR_JS, trocar(FESTAS_JS, "btn: 'btnJaneiras',", "btn: 'btnJaneiras', entradaEnciclopedia: 'janeiras',")]);
 mutacoes.push(['o corso passa a abrir uma entrada (festas.js)', EXPLORAR_JS, trocar(FESTAS_JS, "btn: 'btnCorso',", "btn: 'btnCorso', entradaEnciclopedia: 'caretos',")]);
 

@@ -233,7 +233,7 @@ function semente(g, s) {
     ok(html(g, 'explorar-container').indexOf(esc(g.ev("t('explorar.nadaNestaEstacao')"))) !== -1, '(b) nível 11: sem mais nada para sortear diz que não há mais nesta época');
     abrirTodas(g);
     g.ev('enterExplorar();');
-    ok(html(g, 'explorar-container').indexOf(esc(g.ev("t('explorar.tudoDesbloqueado')"))) !== -1 && html(g, 'explorar-container').indexOf('36 / 36') !== -1, '(b) nível 11: com tudo aberto diz «todo o conhecimento» (36 / 36, com a «janeiras» dos Reis)');
+    ok(html(g, 'explorar-container').indexOf(esc(g.ev("t('explorar.tudoDesbloqueado')"))) !== -1 && html(g, 'explorar-container').indexOf('37 / 37') !== -1, '(b) nível 11: com tudo aberto diz «todo o conhecimento» (37 / 37, com a «janeiras» dos Reis e a «santosPopulares»)');
   }
   // Fora da época: uma entrada nova de inverno não bloqueia o sorteio das outras; em inverno tem prioridade.
   {

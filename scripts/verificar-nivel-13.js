@@ -15,7 +15,7 @@
 //  (f) no nível 12 com o capítulo 12 cumprido o cartão aponta para o capítulo do nível 13;
 //  (g) nenhum NaN, undefined ou null; ecrãs trancados e jogador antigo certos com 13 níveis; o modo de teste ?capitulo=13;
 //  (h) o estado guardado só tem ids e o jogo carrega bem se o pacote do nível 13 deixasse de existir (e não repete nada se voltar);
-//  (i) o jogo até ao nível 12 (níveis 1 a 12, capítulos 1 a 12, histórias 2 a 12, as 33 de origem, as 6 dos níveis 5 e 6, a Arrábida e o Sado) fica igual.
+//  (i) o jogo até ao nível 12 (níveis 1 a 12, capítulos 1 a 12, histórias 2 a 12, as 34 de origem, as 6 dos níveis 5 e 6, a Arrábida e o Sado) fica igual.
 //
 // Uso: node scripts/verificar-nivel-13.js
 // JS_DIR=pasta  DADOS_DIR=pasta  correm sobre outra versão dos js/ ou dos dados/ (para provar que o teste apanha o que se estraga).
@@ -63,9 +63,9 @@ const FALAS = [
 const IDS = ['palmela_castelo', 'palmela_capelo', 'palmela_castelao'];
 const IDS_11 = ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'];
 const IDS_12 = ['sado_reserva', 'sado_golfinhos', 'sado_troia'];
-// As 6 histórias dos níveis 5 e 6 (a seguir às 33 de origem e antes das da Arrábida): também têm nivelMinimo, por isso entram na prioridade do Explorar.
+// As 6 histórias dos níveis 5 e 6 (a seguir às 34 de origem e antes das da Arrábida): também têm nivelMinimo, por isso entram na prioridade do Explorar.
 const IDS_5_6 = ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa', 'colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos'];
-const ATE_10 = 33 + IDS_5_6.length; // entradas visíveis até ao nível 10
+const ATE_10 = 34 + IDS_5_6.length; // entradas visíveis até ao nível 10
 const ATE_11 = ATE_10 + IDS_11.length;
 const ATE_12 = ATE_11 + IDS_12.length;
 const ATE_13 = ATE_12 + 3;
@@ -176,9 +176,9 @@ function dadosSem(desde) {
   ok(g.ev('JSON.stringify(CAPITULOS_CONFIG.slice(0, 12))') === sem13.ev('JSON.stringify(CAPITULOS_CONFIG)'), '(i) os capítulos 1 a 12 ficam iguais');
   ok(g.ev('JSON.stringify([2,3,4,5,6,7,8,9,10,11,12].map(function (n) { return HISTORIA_NIVEIS[n]; }))') === sem13.ev('JSON.stringify([2,3,4,5,6,7,8,9,10,11,12].map(function (n) { return HISTORIA_NIVEIS[n]; }))'), '(i) as histórias dos níveis 2 a 12 ficam iguais');
   LINGUAS.forEach(function (l) {
-    ok(g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES.' + l + '.slice(0, ' + ATE_12 + '))') === sem13.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES.' + l + ')'), '(i) as 33 entradas de hoje, as 6 dos níveis 5 e 6, a Arrábida e o Sado ficam iguais (' + l + ')');
+    ok(g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES.' + l + '.slice(0, ' + ATE_12 + '))') === sem13.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES.' + l + ')'), '(i) as 34 entradas de hoje, as 6 dos níveis 5 e 6, a Arrábida e o Sado ficam iguais (' + l + ')');
   });
-  ok(g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES.pt.slice(0, 33))') === base.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES.pt)'), '(i) as 33 entradas de origem ficam iguais ao jogo sem dados/');
+  ok(g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES.pt.slice(0, 34))') === base.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES.pt)'), '(i) as 34 entradas de origem ficam iguais ao jogo sem dados/');
   ok(g.ev('Math.max.apply(null, Object.keys(NIVEL_NECESSARIO_POR_ECRA).map(function (k) { return NIVEL_NECESSARIO_POR_ECRA[k]; }))') === 10, '(i) nenhum ecrã novo: o mais alto continua a abrir no nível 10');
   ok(g.ev('NIVEIS_CONFIG[12].id') === 'nivel_13' && g.ev('NIVEIS_CONFIG[12].min') === 5500 && g.ev('CAPITULOS_CONFIG[12].id') === 'cap13' && g.ev('CAPITULOS_CONFIG[12].nivel') === 13, '(i) nivel_13 (5500) e cap13 (nível 13)');
   ok(JSON.stringify(g.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; })').slice(IDS_5_6.length + 6, IDS_5_6.length + 9)) === JSON.stringify(IDS) && JSON.stringify(g.ev('ENCYCLOPEDIA_ENTRIES.pt.slice(' + ATE_12 + ', ' + ATE_13 + ').map(function (e) { return e.id; })')) === JSON.stringify(IDS), '(i) as 3 entradas de Palmela, por esta ordem, logo a seguir às da Arrábida e do Sado: ' + IDS);
@@ -232,7 +232,7 @@ LINGUAS.forEach(function (l) {
   {
     const g = abrir(); lingua(g, l);
     preparar(g, REP_12, 12);
-    ok(g.ev('encyclopediaEntries().length') === ATE_12 && IDS.every(function (id) { return g.ev('encyclopediaEntries().some(function (e) { return e.id === ' + js(id) + '; })') === false; }), '(d) no nível 12 só há as 33 de hoje, as 6 dos níveis 5 e 6, a Arrábida e o Sado (' + ATE_12 + ')' + L);
+    ok(g.ev('encyclopediaEntries().length') === ATE_12 && IDS.every(function (id) { return g.ev('encyclopediaEntries().some(function (e) { return e.id === ' + js(id) + '; })') === false; }), '(d) no nível 12 só há as 34 de hoje, as 6 dos níveis 5 e 6, a Arrábida e o Sado (' + ATE_12 + ')' + L);
     g.ev('renderEnciclopedia();');
     let h = html(g, 'enciclopedia-container');
     ok((h.match(/encyclopedia-card/g) || []).length === ATE_12 && h.indexOf('0 / ' + ATE_12) !== -1, '(d) nível 12: a Enciclopédia tem ' + ATE_12 + ' cartões, nenhum de Palmela' + L);
@@ -379,7 +379,7 @@ LINGUAS.forEach(function (l) {
       g.ev('state.acesso.jogadorAntigo = true;');
       ecras.forEach(function (e) { ok(g.ev("ecraDesbloqueado('" + e + "')") === true, '(g) jogador antigo: o ecrã ' + e + ' aberto com ' + onde); });
       // O jogador antigo não salta o nível mínimo das histórias novas.
-      if (n < 13) ok(g.ev('encyclopediaEntries().length') === (33 + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 11 ? 3 : 0) + (n >= 12 ? 3 : 0)), '(g) jogador antigo abaixo do 13: continua sem as 3 de Palmela com ' + onde);
+      if (n < 13) ok(g.ev('encyclopediaEntries().length') === (34 + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 11 ? 3 : 0) + (n >= 12 ? 3 : 0)), '(g) jogador antigo abaixo do 13: continua sem as 3 de Palmela com ' + onde);
       g.ev('state.acesso.jogadorAntigo = false;');
     });
     // O modo de teste ?capitulo=13 mostra a celebração do cap13 (e continua a aceitar 1 a 12).
