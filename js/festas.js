@@ -13,7 +13,10 @@
 // por dia", dia grande a dobrar os prémios, objetivo do dia) lê só isto.
 //
 // Datas: uma festa tem datas FIXAS (inicio, fim, diaGrande como { mes, dia },
-// mês 0 = janeiro) OU uma data MÓVEL, no lugar das três:
+// mês 0 = janeiro) OU uma data MÓVEL, no lugar das três. Só nas datas fixas, uma festa com VÁRIOS dias grandes
+// (os Santos Populares) traz, no lugar de diaGrande, o campo opcional diasGrandes: uma lista de { mes, dia }
+// (o primeiro serve de diaGrande à janela). As outras festas não o têm e ficam exatamente como eram.
+// Data móvel:
 //   movel: { base: 'pascoa', inicioDias, fimDias, diaGrandeDias }
 // são deslocamentos em dias contados a partir do Domingo de Páscoa do ano
 // (negativos = antes). O motor resolve-os para o ano do dia que recebe
@@ -21,8 +24,8 @@
 //
 // Para testar: acrescenta ?festa=saomartinho (ou ?festa=natal) ao endereço
 // para simular estar dentro da festa, e ?festa=saomartinho&dia=11 (ou
-// ?festa=natal&dia=25, ou ?festa=reis&dia=6) para simular o dia grande. Funciona junto com
-// ?estacao= e ?tempo=. Numa festa com modoTesteSemGravar (o Natal), o modo de
+// ?festa=natal&dia=25, ou ?festa=reis&dia=6; nos Santos Populares ?festa=santos&dia=13, 24 ou 29) para simular o dia grande. Funciona junto com
+// ?estacao= e ?tempo=. Numa festa com modoTesteSemGravar (o Natal, os Reis e os Santos Populares), o modo de
 // teste mostra tudo mas não grava nem muda nada (ver festaModoTesteSemGravar).
 // ---------------------------------------------------------------------
 
@@ -191,6 +194,41 @@ const FESTAS_CONFIG = [
     recompensas: {
       multiplicadorDiaGrande: 2
     }
+  },
+  {
+    id: 'santos',
+    // Datas fixas pelo calendário de Portugal (mês 0 = janeiro): de 12 a 29 de junho, sem atravessar o fim do ano.
+    inicio: { mes: 5, dia: 12 },      // 12 de junho
+    fim: { mes: 5, dia: 29 },         // 29 de junho
+    // Três dias grandes (Santo António, São João e São Pedro): só esta festa usa diasGrandes, em vez de diaGrande.
+    diasGrandes: [{ mes: 5, dia: 13 }, { mes: 5, dia: 24 }, { mes: 5, dia: 29 }],
+    // Entrada da Enciclopédia que abre ao entrar na festa.
+    entradaEnciclopedia: 'santosPopulares',
+    // Como nos Reis: cada imagem (também a da faixa e a do dia grande, menuComReserva) só aparece depois de se saber
+    // que existe; até lá, e se faltar, fica a de reserva (ver festaFundoTarefa). O dia grande usa a mesma imagem nos 3 dias.
+    menuComReserva: true,
+    imagens: {
+      diaGrande: 'assets/ecras/santos_dia_grande.jpg',
+      faixa: 'assets/ecras/santos_festa.jpg',
+      reserva: 'assets/ecras/natal_festa.jpg',
+      manjerico: 'assets/ecras/santos_manjerico.jpg',
+      sardinhada: 'assets/ecras/santos_sardinhada.jpg',
+      arraial: 'assets/ecras/santos_arraial.jpg'
+    },
+    // Com ?festa=santos (ou outro parâmetro de teste) no endereço, mostra tudo mas não muda nem grava nada.
+    modoTesteSemGravar: true,
+    // Os mesmos valores do Natal e dos Reis: só Reputação, só gasta Gotas, nunca Uvas nem aguardente.
+    tarefas: [
+      { id: 'manjerico', onde: 'festa', regra: 'cena_do_dia', btn: 'btnManjerico', cenasSemRepetir: true,
+        premio: { reputacao: 5 } },
+      { id: 'sardinhada', onde: 'festa', regra: 'gastar_gotas', btn: 'btnSardinhada',
+        premio: { custoGotas: 30, reputacao: 12 } },
+      { id: 'arraial', onde: 'festa', regra: 'cena_do_dia', btn: 'btnArraial', cenasSemRepetir: true,
+        premio: { reputacao: 6 } }
+    ],
+    recompensas: {
+      multiplicadorDiaGrande: 2
+    }
   }
 ];
 
@@ -251,6 +289,13 @@ function festaJanela(festa, ano) {
   } else {
     const fixo = function (o) { return o ? festaFormatarDia(ano, o.mes + 1, o.dia) : null; };
     j = { inicio: fixo(festa.inicio), fim: fixo(festa.fim), diaGrande: fixo(festa.diaGrande) };
+    // diasGrandes (opcional, vários dias grandes): todos têm de existir; senão a festa não abre.
+    if (Array.isArray(festa.diasGrandes)) {
+      const lista = festa.diasGrandes.map(fixo);
+      if (lista.length === 0 || lista.some(function (d) { return diaLisboaPartes(d) === null; })) return null;
+      j.diasGrandes = lista;
+      j.diaGrande = lista[0];
+    }
     // Datas que não existem (ex.: 30 de fevereiro) não abrem a festa.
     ['inicio', 'fim', 'diaGrande'].forEach(function (k) { if (diaLisboaPartes(j[k]) === null) j[k] = null; });
   }
@@ -265,12 +310,17 @@ function festaAbertaNoDia(festa, dia) {
   return j !== null && dia >= j.inicio && dia <= j.fim;
 }
 
+// Os dias grandes de uma janela: a lista diasGrandes (se a festa a tem) ou só o diaGrande.
+function festaDiasGrandesDaJanela(j) {
+  return j === null ? [] : Array.isArray(j.diasGrandes) ? j.diasGrandes : [j.diaGrande];
+}
+
 // É o dia grande da festa neste dia?
 function festaDiaGrandeNoDia(festa, dia) {
   const p = diaLisboaPartes(dia);
   if (p === null) return false;
   const j = festaJanela(festa, p.ano);
-  return j !== null && dia === j.diaGrande;
+  return j !== null && festaDiasGrandesDaJanela(j).indexOf(dia) !== -1;
 }
 
 // -----------------------------------------------------------------
@@ -315,10 +365,23 @@ function estaNoDiaGrandeFesta(festa, dia) {
     const diaForcado = diaForcadoNoEndereco();
     const p = diaLisboaPartes(hoje);
     const j = p === null ? null : festaJanela(festa, p.ano);
-    const grande = j === null ? null : diaLisboaPartes(j.diaGrande);
-    return diaForcado !== null && grande !== null && diaForcado === grande.dia;
+    return diaForcado !== null && festaDiasGrandesDaJanela(j).some(function (d) {
+      const grande = diaLisboaPartes(d);
+      return grande !== null && diaForcado === grande.dia;
+    });
   }
   return festaDiaGrandeNoDia(festa, hoje);
+}
+
+// O aviso «Hoje é...» do dia grande. Uma festa com texto por dia (diaGrandeAvisos, chaveado pelo número do dia:
+// os Santos Populares) mostra o do dia certo (o de hoje, ou o do ?dia= em modo de teste); as outras, o diaGrandeAviso de sempre.
+function festaAvisoDiaGrande(festa, S, dia) {
+  const porDia = S.diaGrandeAvisos;
+  if (!porDia || typeof porDia !== 'object') return S.diaGrandeAviso;
+  let numero = null;
+  if (festaForcadaNoEndereco()) numero = diaForcadoNoEndereco();
+  else { const p = diaLisboaPartes(dia === undefined ? festaDiaDeHoje() : dia); numero = p === null ? null : p.dia; }
+  return (numero !== null && porDia[numero]) || S.diaGrandeAviso;
 }
 
 // -----------------------------------------------------------------
@@ -1008,6 +1071,143 @@ const FESTAS_STRINGS = {
       boloReisFalta: 'Todavía faltan Gotas para el bolo-rei. Junta más y vuelve.',
       boloReisSucesso: 'Sale del horno un bolo-rei redondo, lleno de fruta confitada, y la cocina de la Quinta huele a Día de Reyes. El Fygmo y el Fygmo II se ofrecen a probarlo primero, por seguridad.'
     }
+  },
+  santos: {
+    pt: {
+      faixa: 'Há Santos Populares na Quinta!',
+      titulo: 'Santos Populares na Quinta',
+      subtitulo: 'Santo António, São João e São Pedro: três dias grandes, com os prémios a dobrar.',
+      diaGrandeAviso: 'Hoje é dia grande! Os prémios contam a dobrar.',
+      // Um aviso «Hoje é...» por dia grande (a chave é o número do dia; ver festaAvisoDiaGrande).
+      diaGrandeAvisos: { 13: 'Hoje é dia de Santo António! Os prémios contam a dobrar.', 24: 'Hoje é dia de São João! Os prémios contam a dobrar.', 29: 'Hoje é dia de São Pedro! Os prémios contam a dobrar.' },
+      tarefaFeitaHoje: 'já feita hoje',
+      modoTesteAviso: '(Modo de teste: nada ficou gravado.)',
+      btnManjerico: 'O Manjerico',
+      btnSardinhada: 'A Sardinhada',
+      btnArraial: 'O Arraial',
+      btnVoltar: 'Voltar',
+
+      manjericoTitulo: 'O Manjerico',
+      manjericoSubtitulo: 'O Fygmo e o Fygmo II querem ajudar com a quadra',
+      manjericoJaFeitaHoje: 'Já cuidaste do manjerico hoje. Amanhã há outro vaso.',
+      manjericoCenas: [
+        { situacao: 'O Fygmo lê a quadra do manjerico em voz alta e troca a última rima por "bolota". Os vizinhos aplaudem, sem perceber.', opcoes: ['Aplaudir também, que a bolota é rima de ocasião', 'Pedir-lhe que leia a quadra como está escrita', 'Esconder o papelinho e inventar outra quadra'], correta: 1 },
+        { situacao: 'O Fygmo II cheira o manjerico com tanto entusiasmo que o vaso fica meio vazio. Jura que só quis confirmar o cheiro.', opcoes: ['Deixá-lo cheirar à vontade, que a planta aguenta', 'Dar-lhe o vaso a guardar, que ele é de confiança', 'Pôr o vaso no parapeito, longe do focinho dele'], correta: 2 },
+        { situacao: 'Um vizinho vem pedir um manjerico para oferecer. O Fygmo já chegou com uma dúzia, todos sem quadra e todos meio mordidos.', opcoes: ['Escolher um só manjerico e pôr-lhe uma quadra', 'Dar a dúzia toda e pedir ao vizinho que não volte', 'Dar-lhe os mordidos e guardar os melhores para nós'], correta: 0 },
+        { situacao: 'O Fygmo promete escrever a quadra do manjerico. Passada uma hora, tem uma linha: "Ó manjerico, ó bolota".', opcoes: ['Elogiar a rima e pendurar o papel no vaso', 'Ajudá-lo a acabar a quadra, verso a verso', 'Dizer-lhe que as quadras são para os outros'], correta: 1 },
+        { situacao: 'O Fygmo II acha que o manjerico precisa de companhia e já lhe trouxe uma cebola e um chapéu.', opcoes: ['Pôr-lhe o chapéu, que o manjerico fica engraçado', 'Plantar a cebola ao lado, para fazer companhia', 'Agradecer e deixar o manjerico sossegado'], correta: 2 }
+      ],
+      manjericoVitoria: 'O manjerico fica no vaso, com a quadra certa e o cheiro todo. O Fygmo e o Fygmo II suspiram e prometem tratá-lo com muito respeito.',
+      manjericoDerrota: 'Desta vez o manjerico ficou com a quadra do Fygmo, toda sobre bolotas. Ninguém levou a mal: amanhã há outro vaso. Nada se perdeu.',
+
+      sardinhadaTitulo: 'A Sardinhada',
+      sardinhadaJaFeitaHoje: 'Já assaste sardinhas hoje. As de amanhã ficam para amanhã.',
+      sardinhadaFalta: 'Ainda faltam Gotas para a sardinhada. Junta mais e volta cá.',
+      sardinhadaSucesso: 'O cheiro das sardinhas assadas sobe pela Quinta e junta toda a gente à mesa. O Fygmo e o Fygmo II juram que só vieram contar as espinhas.',
+
+      arraialTitulo: 'O Arraial e a Fogueira',
+      arraialSubtitulo: 'O Fygmo e o Fygmo II querem um lugar junto à fogueira',
+      arraialJaFeitaHoje: 'Já cuidaste do arraial hoje. Amanhã há outra noite.',
+      arraialCenas: [
+        { situacao: 'O Fygmo quer saltar a fogueira a correr, desde a ponta do terreiro. A lenha ainda mal pegou.', opcoes: ['Pedir-lhe que espere por umas brasas mais baixas', 'Dar-lhe balanço e contar até três, em voz alta', 'Dizer-lhe que a fogueira salta primeiro, por cortesia'], correta: 0 },
+        { situacao: 'O Fygmo II oferece-se para atiçar a fogueira. Chega com um braçado de ramos e a caixa de fósforos, muito sério.', opcoes: ['Deixá-lo atiçar, que ele nunca fez asneira nenhuma', 'Dar-lhe os fósforos e ficar a ver, bem longe', 'Guardar os fósforos e deixá-lo empilhar os ramos'], correta: 2 },
+        { situacao: 'Começa a música e o Fygmo II dança com tanto entusiasmo que pisa tudo o que se mexe.', opcoes: ['Dançar com ele e pedir ao Chizo que fique de reserva', 'Ensinar-lhe o passo, devagar, ao canto do terreiro', 'Pedir-lhe que dance só quando ninguém estiver perto'], correta: 1 },
+        { situacao: 'O Fygmo monta uma banca no arraial e cobra uma bolota por pessoa, sem dizer a quê.', opcoes: ['Perguntar-lhe o que vende e só então pagar', 'Dar-lhe duas bolotas, para ele ficar contente', 'Pagar a bolota e esperar para ver o que sai'], correta: 0 },
+        { situacao: 'Já é tarde. O Fygmo e o Fygmo II adormecem ao lado da fogueira, encostados um ao outro, com o arraial ainda a meio.', opcoes: ['Deixá-los dormir junto às brasas, sem ninguém por perto', 'Pôr-lhes uma manta e levá-los para longe do lume', 'Acordá-los para ver quem aguenta mais tempo acordado'], correta: 1 }
+      ],
+      arraialVitoria: 'A fogueira arde sem sustos e o arraial anima-se. O Fygmo e o Fygmo II dançam no seu canto, o Chizo vigia as brasas e ninguém sai chamuscado.',
+      arraialDerrota: 'Desta vez a fogueira ficou entregue aos Fygmos e o cesto das bolotas cheira um pouco a chamuscado. O arraial continua. Nada se perdeu.'
+    },
+    en: {
+      faixa: 'Popular Saints on the Quinta!',
+      titulo: 'Popular Saints on the Quinta',
+      subtitulo: 'Saint Anthony, Saint John and Saint Peter: three big days, with prizes counting double.',
+      diaGrandeAviso: 'Today is a big day! Prizes count double.',
+      // Um aviso «Hoje é...» por dia grande (a chave é o número do dia; ver festaAvisoDiaGrande).
+      diaGrandeAvisos: { 13: "Today is Saint Anthony's Day! Prizes count double.", 24: "Today is Saint John's Day! Prizes count double.", 29: "Today is Saint Peter's Day! Prizes count double." },
+      tarefaFeitaHoje: 'already done today',
+      modoTesteAviso: '(Test mode: nothing was saved.)',
+      btnManjerico: 'The Manjerico',
+      btnSardinhada: 'The Sardine Grill',
+      btnArraial: 'The Arraial',
+      btnVoltar: 'Back',
+
+      manjericoTitulo: 'The Manjerico',
+      manjericoSubtitulo: 'Fygmo and Fygmo II want to help with the verse',
+      manjericoJaFeitaHoje: 'You have already looked after the manjerico today. Tomorrow there is another pot.',
+      manjericoCenas: [
+        { situacao: 'Fygmo reads the manjerico verse aloud and swaps the last rhyme for "acorn". The neighbours applaud without noticing.', opcoes: ['Applaud too, since acorn rhymes on special occasions', 'Ask him to read the verse as it is written', 'Hide the paper and make up a different verse'], correta: 1 },
+        { situacao: 'Fygmo II sniffs the manjerico so keenly that the pot ends up half empty. He swears he only wanted to check the smell.', opcoes: ['Let him sniff away, the plant can take it', 'Hand him the pot to guard, he is trustworthy', 'Put the pot on the sill, far from his snout'], correta: 2 },
+        { situacao: 'A neighbour comes to ask for a manjerico to give as a gift. Fygmo has already arrived with a dozen, all without a verse and all half chewed.', opcoes: ['Pick a single manjerico and give it a verse', 'Hand over the whole dozen and ask him not to return', 'Give him the chewed ones and keep the best for us'], correta: 0 },
+        { situacao: 'Fygmo promises to write the manjerico verse. An hour later he has one line: "Oh manjerico, oh acorn".', opcoes: ['Praise the rhyme and pin the paper to the pot', 'Help him finish the verse, line by line', 'Tell him verses are for other people'], correta: 1 },
+        { situacao: 'Fygmo II thinks the manjerico needs company and has brought it an onion and a hat.', opcoes: ['Put the hat on, the manjerico looks cute in it', 'Plant the onion beside it, for company', 'Say thanks and leave the manjerico in peace'], correta: 2 }
+      ],
+      manjericoVitoria: 'The manjerico stays in its pot, with the right verse and all its scent. Fygmo and Fygmo II sigh and promise to treat it with great respect.',
+      manjericoDerrota: 'This time the manjerico ended up with the verse by Fygmo, all about acorns. Nobody minded: there is another pot tomorrow. Nothing was lost.',
+
+      sardinhadaTitulo: 'The Sardine Grill',
+      sardinhadaJaFeitaHoje: "You have already grilled sardines today. Tomorrow's will wait until tomorrow.",
+      sardinhadaFalta: 'You still need more Drops for the sardine grill. Gather some more and come back.',
+      sardinhadaSucesso: 'The smell of grilled sardines drifts over the Quinta and brings everyone to the table. Fygmo and Fygmo II swear they only came to count the fish bones.',
+
+      arraialTitulo: 'The Arraial and the Bonfire',
+      arraialSubtitulo: 'Fygmo and Fygmo II want a spot by the bonfire',
+      arraialJaFeitaHoje: 'You have already looked after the arraial today. Tomorrow there is another night.',
+      arraialCenas: [
+        { situacao: 'Fygmo wants to jump the bonfire at a run, from the far end of the yard. The wood has barely caught.', opcoes: ['Ask him to wait until the embers are lower', 'Give him a run-up and count to three aloud', 'Tell him the bonfire jumps first, out of courtesy'], correta: 0 },
+        { situacao: 'Fygmo II offers to stoke the bonfire. He arrives with an armful of branches and the matchbox, very solemn.', opcoes: ['Let him stoke it, he has never caused any trouble', 'Give him the matches and watch from afar', 'Keep the matches and let him stack the branches'], correta: 2 },
+        { situacao: 'The music starts and Fygmo II dances so eagerly that he treads on everything that moves.', opcoes: ['Dance with him and ask Chizo to stand by', 'Teach him the steps in a quiet corner', 'Ask him to dance only when nobody is nearby'], correta: 1 },
+        { situacao: 'Fygmo sets up a stall at the arraial and charges one acorn per person, without saying for what.', opcoes: ['Ask him what he is selling before paying', 'Give him two acorns, to keep him happy', 'Pay the acorn and wait to see what happens'], correta: 0 },
+        { situacao: 'It is late. Fygmo and Fygmo II fall asleep by the bonfire, leaning on each other, with the arraial only half over.', opcoes: ['Let them sleep by the embers, with nobody around', 'Cover them up and move them away from the fire', 'Wake them to see who stays awake the longest'], correta: 1 }
+      ],
+      arraialVitoria: 'The bonfire burns without a scare and the arraial cheers up. Fygmo and Fygmo II dance in their own corner, Chizo watches the embers and nobody gets singed.',
+      arraialDerrota: 'This time the bonfire was left to the Fygmos and the acorn basket now smells slightly scorched. The arraial goes on. Nothing was lost.'
+    },
+    es: {
+      faixa: '¡Hay Santos Populares en la Quinta!',
+      titulo: 'Santos Populares en la Quinta',
+      subtitulo: 'San Antonio, San Juan y San Pedro: tres días grandes, con los premios al doble.',
+      diaGrandeAviso: '¡Hoy es un día grande! Los premios cuentan el doble.',
+      // Um aviso «Hoje é...» por dia grande (a chave é o número do dia; ver festaAvisoDiaGrande).
+      diaGrandeAvisos: { 13: '¡Hoy es el día de San Antonio! Los premios cuentan el doble.', 24: '¡Hoy es el día de San Juan! Los premios cuentan el doble.', 29: '¡Hoy es el día de San Pedro! Los premios cuentan el doble.' },
+      tarefaFeitaHoje: 'ya hecha hoy',
+      modoTesteAviso: '(Modo de prueba: no se ha guardado nada.)',
+      btnManjerico: 'El Manjerico',
+      btnSardinhada: 'La Sardinada',
+      btnArraial: 'El Arraial',
+      btnVoltar: 'Volver',
+
+      manjericoTitulo: 'El Manjerico',
+      manjericoSubtitulo: 'El Fygmo y el Fygmo II quieren ayudar con la cuarteta',
+      manjericoJaFeitaHoje: 'Hoy ya has cuidado del manjerico. Mañana hay otra maceta.',
+      manjericoCenas: [
+        { situacao: 'El Fygmo lee en voz alta la cuarteta del manjerico y cambia la última rima por "bellota". Los vecinos aplauden sin darse cuenta.', opcoes: ['Aplaudir también, que la bellota rima de ocasión', 'Pedirle que lea la cuarteta como está escrita', 'Esconder el papelito e inventar otra cuarteta'], correta: 1 },
+        { situacao: 'El Fygmo II huele el manjerico con tanto entusiasmo que la maceta queda medio vacía. Jura que solo quería comprobar el olor.', opcoes: ['Dejarle oler a gusto, que la planta aguanta bien', 'Darle la maceta a guardar, que es de total confianza', 'Poner la maceta en el alféizar, lejos del hocico'], correta: 2 },
+        { situacao: 'Un vecino viene a pedir un manjerico para regalar. El Fygmo ya ha llegado con una docena, todos sin cuarteta y todos medio mordidos.', opcoes: ['Elegir un manjerico y ponerle una cuarteta', 'Dar la docena entera y pedirle que no vuelva', 'Darle los mordidos y quedarnos con los mejores'], correta: 0 },
+        { situacao: 'El Fygmo promete escribir la cuarteta del manjerico. Pasada una hora, tiene una línea: "Oh manjerico, oh bellota".', opcoes: ['Elogiar la rima y colgar el papel en la maceta', 'Ayudarle a acabar la cuarteta, verso a verso', 'Decirle que las cuartetas son para los demás'], correta: 1 },
+        { situacao: 'El Fygmo II cree que el manjerico necesita compañía y le ha traído una cebolla y un sombrero.', opcoes: ['Ponerle el sombrero, que el manjerico queda gracioso', 'Plantar la cebolla al lado, para hacerle compañía', 'Dar las gracias y dejar el manjerico en paz'], correta: 2 }
+      ],
+      manjericoVitoria: 'El manjerico se queda en su maceta, con la cuarteta correcta y todo su olor. El Fygmo y el Fygmo II suspiran y prometen tratarlo con mucho respeto.',
+      manjericoDerrota: 'Esta vez el manjerico se quedó con la cuarteta del Fygmo, toda sobre bellotas. Nadie se lo tomó a mal: mañana hay otra maceta. No se perdió nada.',
+
+      sardinhadaTitulo: 'La Sardinada',
+      sardinhadaJaFeitaHoje: 'Hoy ya has asado sardinas. Las de mañana, para mañana.',
+      sardinhadaFalta: 'Todavía faltan Gotas para la sardinada. Junta más y vuelve.',
+      sardinhadaSucesso: 'El olor de las sardinas asadas sube por la Quinta y reúne a todos en la mesa. El Fygmo y el Fygmo II juran que solo vinieron a contar las espinas.',
+
+      arraialTitulo: 'El Arraial y la Hoguera',
+      arraialSubtitulo: 'El Fygmo y el Fygmo II quieren un sitio junto a la hoguera',
+      arraialJaFeitaHoje: 'Hoy ya has cuidado del arraial. Mañana hay otra noche.',
+      arraialCenas: [
+        { situacao: 'El Fygmo quiere saltar la hoguera corriendo, desde el fondo del patio. La leña apenas ha prendido.', opcoes: ['Pedirle que espere a que las brasas bajen', 'Darle impulso y contar hasta tres en voz alta', 'Decirle que la hoguera salta primero, por cortesía'], correta: 0 },
+        { situacao: 'El Fygmo II se ofrece a avivar la hoguera. Llega con un brazado de ramas y la caja de cerillas, muy serio.', opcoes: ['Dejarle avivarla, que nunca ha hecho una travesura', 'Darle las cerillas y mirar desde bien lejos', 'Guardar las cerillas y dejarle apilar las ramas'], correta: 2 },
+        { situacao: 'Empieza la música y el Fygmo II baila con tanto entusiasmo que pisa todo lo que se mueve.', opcoes: ['Bailar con él y pedirle al Chizo que esté de reserva', 'Enseñarle el paso, despacio, en un rincón del patio', 'Pedirle que baile solo cuando no haya nadie cerca'], correta: 1 },
+        { situacao: 'El Fygmo monta un puesto en el arraial y cobra una bellota por persona, sin decir por qué.', opcoes: ['Preguntarle qué vende antes de pagar', 'Darle dos bellotas para que esté contento', 'Pagar la bellota y esperar a ver qué sale'], correta: 0 },
+        { situacao: 'Ya es tarde. El Fygmo y el Fygmo II se duermen junto a la hoguera, apoyados el uno en el otro, con el arraial aún a medias.', opcoes: ['Dejarles dormir junto a las brasas, sin nadie cerca', 'Ponerles una manta y llevarlos lejos del fuego', 'Despertarlos para ver quién aguanta más despierto'], correta: 1 }
+      ],
+      arraialVitoria: 'La hoguera arde sin sustos y el arraial se anima. El Fygmo y el Fygmo II bailan en su rincón, el Chizo vigila las brasas y nadie se chamusca.',
+      arraialDerrota: 'Esta vez la hoguera quedó en manos de los Fygmos y el cesto de las bellotas huele un poco a chamuscado. El arraial continúa. No se perdió nada.'
+    }
   }
 };
 
@@ -1158,7 +1358,7 @@ function renderFestaHub() {
   const ehVerao = tempo.disponivel && tempo.ceu === 'sol';
 
   let avisos = '';
-  if (diaGrande) avisos += '<p class="mini-sub">' + S.diaGrandeAviso + '</p>';
+  if (diaGrande) avisos += '<p class="mini-sub">' + festaAvisoDiaGrande(festa, S) + '</p>';
   if (ehVerao && S.veraoAviso) avisos += '<p class="mini-sub">' + S.veraoAviso + '</p>';
 
   const botoesHtml = festaTarefas(festa).map(function (tarefa) {

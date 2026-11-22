@@ -138,7 +138,7 @@ Seis histórias da Enciclopédia sobre a idade e o envelhecimento do Moscatel de
 - Nível mínimo **6**: `colecao_cores_do_tempo` («As cores do tempo»), `colecao_colheitas_antigas` («A coleção de colheitas») e `colecao_cem_anos` («Garrafas com mais de cem anos»).
 - **Prioridade no Explorar.** Como têm `nivelMinimo`, entram no grupo prioritário (ver «Prioridade no Explorar» abaixo): quem chega ao nível 5 (ou 6) tem estas entradas a sair antes de todas as de hoje, misturadas ao acaso com as de outros níveis que ainda estejam por abrir. Quem já passou por estes níveis tem-nas por abrir assim que o jogo as traz, e o total da Enciclopédia (o «x / y» e o «Sábio») sobe 6.
 - Não há capítulo nem nível novo: o `temIds` dos capítulos 11 a 20 não as pede.
-- Testes: `scripts/verificar-enciclopedia-dados.js` (textos exatos nas 3 línguas, só os campos combinados), `scripts/verificar-dados-carregar.js` (os ids por ordem, 68 entradas) e os `verificar-nivel-11/12/13.js` e `_pacote-nivel.js` (14 a 20), que contam estas 6 como entradas anteriores.
+- Testes: `scripts/verificar-enciclopedia-dados.js` (textos exatos nas 3 línguas, só os campos combinados), `scripts/verificar-dados-carregar.js` (os ids por ordem, 70 entradas: 34 de origem e 36 de `dados/`) e os `verificar-nivel-11/12/13.js` e `_pacote-nivel.js` (14 a 20), que contam estas 6 como entradas anteriores.
 
 ## Histórias da Enciclopédia (`dados/enciclopedia.js`)
 

@@ -38,8 +38,8 @@ const RAIZ = path.join(__dirname, '..');
 const JS_DIR = process.env.JS_DIR || path.join(RAIZ, 'js');
 const DADOS_DIR = process.env.DADOS_DIR || path.join(RAIZ, 'dados');
 const LINGUAS = ['pt', 'en', 'es'];
-const ENTRADAS_ORIGEM = 33; // as histórias da Enciclopédia de origem (em js/explorar.js; a 33.ª é a «janeiras», da festa dos Reis)
-// As 6 histórias dos níveis 5 e 6 (dados/enciclopedia.js, a seguir às 33 de origem e antes das do nível 11): 3 de nivelMinimo 5 e 3 de nivelMinimo 6.
+const ENTRADAS_ORIGEM = 34; // as histórias da Enciclopédia de origem (em js/explorar.js; a 33.ª é a «janeiras», dos Reis, e a 34.ª a «santosPopulares»)
+// As 6 histórias dos níveis 5 e 6 (dados/enciclopedia.js, a seguir às 34 de origem e antes das do nível 11): 3 de nivelMinimo 5 e 3 de nivelMinimo 6.
 const GRUPOS_NIVEIS_5_6 = [
   ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa'],
   ['colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos']
