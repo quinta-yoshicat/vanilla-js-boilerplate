@@ -96,7 +96,7 @@ const ESPERADO_EM_DADOS = {
   ok(idsDe('palavras') === IDS_PALAVRAS.join(), 'de dados/ só deviam vir as 20 palavras do glossário: ' + idsDe('palavras'));
   ok(real.ev('PALAVRAS_DA_QUINTA.map(function (p) { return p.id; }).join()') === IDS_PALAVRAS.join() && real.ev('palavrasTotal()') === 20, 'com dados/ as 20 palavras deviam ficar em PALAVRAS_DA_QUINTA (por ordem de entrada) e palavrasTotal() devia ser 20');
   ok(real.ev('VISITAS.length') === 14 && real.ev('NIVEIS_CONFIG.length') === 20 && real.ev('CAPITULOS_CONFIG.length') === 20 && real.ev('OBJETIVOS_GRUPO_C.length') === 5, 'com dados/ devia haver 14 visitas, 20 níveis, 20 capítulos e os 5 do Grupo C');
-  ok(Object.keys(real.ev('HISTORIA_NIVEIS')).join() === '2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20' && real.ev('ENCYCLOPEDIA_ENTRIES.pt.length') === 68, 'com dados/ devia haver histórias dos níveis 2 a 20 e 68 entradas da Enciclopédia');
+  ok(Object.keys(real.ev('HISTORIA_NIVEIS')).join() === '2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20' && real.ev('ENCYCLOPEDIA_ENTRIES.pt.length') === 69, 'com dados/ devia haver histórias dos níveis 2 a 20 e 69 entradas da Enciclopédia (33 de origem + 36 de dados/)');
   ok(real.ev('JSON.stringify(VISITAS.slice(0, 12))') === ev('JSON.stringify(VISITAS)'), 'as 12 visitas de origem (e a sua ordem) deviam ficar iguais com dados/');
   ok(real.ev('JSON.stringify(NIVEIS_CONFIG.slice(0, 10))') === ev('JSON.stringify(NIVEIS_CONFIG)'), 'os 10 níveis de origem deviam ficar iguais com dados/');
   ok(real.ev('JSON.stringify(CAPITULOS_CONFIG.slice(0, 10))') === ev('JSON.stringify(CAPITULOS_CONFIG)'), 'os 10 capítulos de origem deviam ficar iguais com dados/');
