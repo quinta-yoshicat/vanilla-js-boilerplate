@@ -21,7 +21,7 @@
 //
 // Para testar: acrescenta ?festa=saomartinho (ou ?festa=natal) ao endereço
 // para simular estar dentro da festa, e ?festa=saomartinho&dia=11 (ou
-// ?festa=natal&dia=25) para simular o dia grande. Funciona junto com
+// ?festa=natal&dia=25, ou ?festa=reis&dia=6) para simular o dia grande. Funciona junto com
 // ?estacao= e ?tempo=. Numa festa com modoTesteSemGravar (o Natal), o modo de
 // teste mostra tudo mas não grava nem muda nada (ver festaModoTesteSemGravar).
 // ---------------------------------------------------------------------
@@ -153,6 +153,40 @@ const FESTAS_CONFIG = [
       // entradaEnciclopedia (opcional, numa tarefa): abre ao responder à cena, ganhe ou perca.
       { id: 'ovos', onde: 'festa', regra: 'cena_do_dia', btn: 'btnOvos', entradaEnciclopedia: 'ovosAmendoas',
         premio: { reputacao: 6 } }
+    ],
+    recompensas: {
+      multiplicadorDiaGrande: 2
+    }
+  },
+  {
+    id: 'reis',
+    // Datas sempre pelo calendário de Portugal (mês 0 = janeiro): do Ano Novo ao Dia de Reis, sem atravessar o fim do ano.
+    inicio: { mes: 0, dia: 1 },       // 1 de janeiro
+    fim: { mes: 0, dia: 6 },          // 6 de janeiro
+    diaGrande: { mes: 0, dia: 6 },    // 6 de janeiro, Dia de Reis
+    // Entrada da Enciclopédia que abre ao entrar na festa.
+    entradaEnciclopedia: 'janeiras',
+    // Como no Natal: cada imagem (também a da faixa e a do dia grande, menuComReserva) só aparece depois de se saber
+    // que existe; até lá, e se faltar, fica a de reserva (ver festaFundoTarefa).
+    menuComReserva: true,
+    imagens: {
+      diaGrande: 'assets/ecras/reis_dia_grande.jpg',
+      faixa: 'assets/ecras/reis_festa.jpg',
+      reserva: 'assets/ecras/natal_festa.jpg',
+      janeiras: 'assets/ecras/reis_janeiras.jpg',
+      fava: 'assets/ecras/reis_fava.jpg',
+      boloReis: 'assets/ecras/reis_festa.jpg'
+    },
+    // Com ?festa=reis (ou outro parâmetro de teste) no endereço, mostra tudo mas não muda nem grava nada.
+    modoTesteSemGravar: true,
+    // Os mesmos valores do Natal: só Reputação, só gasta Gotas, nunca Uvas nem aguardente.
+    tarefas: [
+      { id: 'janeiras', onde: 'festa', regra: 'cena_do_dia', btn: 'btnJaneiras', cenasSemRepetir: true,
+        premio: { reputacao: 5 } },
+      { id: 'fava', onde: 'festa', regra: 'cena_do_dia', btn: 'btnFava', cenasSemRepetir: true,
+        premio: { reputacao: 6 } },
+      { id: 'boloReis', onde: 'festa', regra: 'gastar_gotas', btn: 'btnBoloReis',
+        premio: { custoGotas: 30, reputacao: 12 } }
     ],
     recompensas: {
       multiplicadorDiaGrande: 2
@@ -849,6 +883,131 @@ const FESTAS_STRINGS = {
       ovosVitoria: 'Huevo encontrado. El Fygmo y el Fygmo II suspiran, juran que solo pasaban por allí y el huevo vuelve a la mesa, junto al folar.',
       ovosDerrota: 'Esta vez te has equivocado y el huevo cambió de dueño. No se perdió nada: mañana hay otro escondite.'
     }
+  },
+  reis: {
+    pt: {
+      faixa: 'Há Janeiras na Quinta!',
+      titulo: 'Reis e Janeiras na Quinta',
+      subtitulo: 'Do Ano Novo ao Dia de Reis, com o dia grande no Dia de Reis.',
+      diaGrandeAviso: 'Hoje é Dia de Reis! Os prémios contam a dobrar.',
+      tarefaFeitaHoje: 'já feita hoje',
+      modoTesteAviso: '(Modo de teste: nada ficou gravado.)',
+      btnJaneiras: 'Cantar as Janeiras',
+      btnFava: 'A Fava',
+      btnBoloReis: 'Bolo-Rei de Reis',
+      btnVoltar: 'Voltar',
+
+      janeirasTitulo: 'As Janeiras',
+      janeirasSubtitulo: 'O Fygmo e o Fygmo II juntam-se ao grupo',
+      janeirasJaFeitaHoje: 'Já cantaste as Janeiras hoje. Amanhã há mais portas.',
+      janeirasCenas: [
+        { situacao: 'À primeira porta, o Fygmo junta-se ao grupo e canta tão alto e tão desafinado que os vizinhos fecham as janelas.', opcoes: ['Cantar ainda mais alto, só para o abafar', 'Pedir-lhe que faça só o coro, baixinho', 'Mudar de rua e deixá-lo lá sozinho a cantar'], correta: 1 },
+        { situacao: 'O Fygmo II corre à frente e bate a todas as portas antes de o grupo chegar, para ficar com o que os vizinhos oferecem.', opcoes: ['Pô-lo no fim do grupo, ao lado do Chizo', 'Deixá-lo ir, que poupa trabalho ao grupo', 'Bater também às portas, mas mais depressa'], correta: 0 },
+        { situacao: 'A meio da cantiga, o YoshiCat esquece-se da letra. O Fygmo sopra-lhe uma versão nova, toda sobre bolotas.', opcoes: ['Cantar a versão das bolotas até ao fim, sem medo', 'Fazer de conta que a cantiga acabou ali', 'Voltar ao início e cantar a letra certa'], correta: 2 },
+        { situacao: 'Uma vizinha oferece um tabuleiro de filhós ao grupo. Os dois porcos já têm o focinho a meio do tabuleiro.', opcoes: ['Agradecer e dividir as filhós por todos', 'Deixar o tabuleiro aos porcos, por bondade', 'Esconder o tabuleiro atrás do Chizo'], correta: 0 }
+      ],
+      janeirasVitoria: 'A cantiga acaba certa e afinada. Os vizinhos desejam bom ano ao grupo, o Chizo abana a cauda a cada porta e o Fygmo e o Fygmo II juram que também cantaram.',
+      janeirasDerrota: 'Desta vez a cantiga desafinou e houve uma porta que não chegou a abrir. Ninguém leva a mal: há mais portas amanhã. Nada se perdeu.',
+
+      favaTitulo: 'A Fava',
+      favaSubtitulo: 'Quem tem a fava? Os Fygmos sabem',
+      favaJaFeitaHoje: 'Hoje a fava já foi tirada a limpo. Amanhã há outra fatia.',
+      favaCenas: [
+        { situacao: 'O bolo-rei chega à mesa. O Fygmo corta a fatia dele com todo o cuidado à volta da fava e deixa-a ficar no prato.', opcoes: ['Dar-lhe os parabéns pela pontaria', 'Lembrar-lhe que a fava é da fatia dele', 'Tirar a fava e escondê-la no guardanapo'], correta: 1 },
+        { situacao: 'O Fygmo II encontrou a fava e jura que foi o Chizo que a pôs na fatia dele, de propósito.', opcoes: ['Acreditar nele, que o Chizo tem ar culpado', 'Pedir ao Chizo que pague o próximo bolo', 'Lembrar-lhe: quem tem a fava paga o bolo'], correta: 2 },
+        { situacao: 'Os dois porcos propõem procurar a fava com o focinho antes de se cortar o bolo, para poupar tempo.', opcoes: ['Cortar fatias e deixar a sorte decidir', 'Deixá-los procurar, mas só com uma pata', 'Partir o bolo ao meio e dar-lhes metade'], correta: 0 },
+        { situacao: 'O bolo-rei acabou e ninguém encontrou a fava. O Fygmo assobia baixinho e olha para o teto.', opcoes: ['Contar as migalhas todas da mesa, uma a uma', 'Concluir que este bolo veio mesmo sem fava', 'Perguntar ao Fygmo, com calma, pela fava'], correta: 2 }
+      ],
+      favaVitoria: 'A fava aparece e a regra cumpre-se: quem a encontrou paga o próximo bolo-rei. O Fygmo e o Fygmo II suspiram e prometem tratar disso.',
+      favaDerrota: 'Desta vez a fava ficou por explicar e os Fygmos saíram a assobiar. Não custou nada: amanhã há outra fatia.',
+
+      boloReisTitulo: 'O Bolo-Rei de Reis',
+      boloReisJaFeitaHoje: 'Já fizeste o bolo-rei hoje. O de amanhã fica para amanhã.',
+      boloReisFalta: 'Ainda faltam Gotas para o bolo-rei. Junta mais e volta cá.',
+      boloReisSucesso: 'Sai do forno um bolo-rei redondo, cheio de frutas cristalizadas, e a cozinha da Quinta cheira a Dia de Reis. O Fygmo e o Fygmo II oferecem-se para o provar primeiro, por segurança.'
+    },
+    en: {
+      faixa: 'Janeiras on the Quinta!',
+      titulo: 'Kings and Janeiras on the Quinta',
+      subtitulo: 'From New Year to Three Kings Day, with the big day on Three Kings Day.',
+      diaGrandeAviso: 'Today is Three Kings Day! Prizes count double.',
+      tarefaFeitaHoje: 'already done today',
+      modoTesteAviso: '(Test mode: nothing was saved.)',
+      btnJaneiras: 'Sing the Janeiras',
+      btnFava: 'The Fava',
+      btnBoloReis: 'Three Kings Day Bolo-Rei',
+      btnVoltar: 'Back',
+
+      janeirasTitulo: 'The Janeiras',
+      janeirasSubtitulo: 'Fygmo and Fygmo II join the group',
+      janeirasJaFeitaHoje: 'You have already sung the Janeiras today. Tomorrow there are more doors.',
+      janeirasCenas: [
+        { situacao: 'At the first door, Fygmo joins the group and sings so loudly and so out of tune that the neighbours close their windows.', opcoes: ['Sing even louder, to drown him out', 'Ask him to just hum the chorus, softly', 'Change streets and leave him there singing'], correta: 1 },
+        { situacao: 'Fygmo II runs ahead and knocks on every door before the group arrives, to keep whatever the neighbours offer.', opcoes: ['Put him at the back, next to Chizo', 'Let him go, it saves the group some work', 'Knock on the doors too, only faster'], correta: 0 },
+        { situacao: 'Halfway through the song, YoshiCat forgets the words. Fygmo whispers him a new version, all about acorns.', opcoes: ['Sing the acorn version right to the end', 'Pretend the song simply ended there', 'Start again and sing the proper words'], correta: 2 },
+        { situacao: 'A neighbour offers the group a tray of filhós. The two pigs already have their snouts halfway across the tray.', opcoes: ['Say thank you and share the filhós out', 'Leave the tray to the pigs, out of kindness', 'Hide the whole tray behind Chizo, quickly'], correta: 0 }
+      ],
+      janeirasVitoria: 'The song ends right and in tune. The neighbours wish the group a happy new year, Chizo wags his tail at every door, and Fygmo and Fygmo II swear they sang too.',
+      janeirasDerrota: 'This time the song went out of tune and one door never opened. Nobody minds: there are more doors tomorrow. Nothing was lost.',
+
+      favaTitulo: 'The Fava',
+      favaSubtitulo: 'Who has the fava? The Fygmos know',
+      favaJaFeitaHoje: 'Today the fava mystery is already solved. Tomorrow there is another slice.',
+      favaCenas: [
+        { situacao: 'The bolo-rei reaches the table. Fygmo carefully cuts his slice around the fava and leaves it on the plate.', opcoes: ['Congratulate him on his very fine aim', 'Remind him the fava is part of his slice', 'Take the fava out and hide it in a napkin'], correta: 1 },
+        { situacao: 'Fygmo II has found the fava and swears Chizo put it in his slice on purpose.', opcoes: ['Believe him, Chizo does look rather guilty', 'Ask Chizo to pay for the next cake', 'Remind him: whoever finds the fava pays'], correta: 2 },
+        { situacao: 'The two pigs suggest searching for the fava with their snouts before the cake is cut, to save time.', opcoes: ['Cut the slices and let luck decide', 'Let them search, but with one trotter only', 'Split the cake in two and give them half'], correta: 0 },
+        { situacao: 'The bolo-rei is gone and nobody found the fava. Fygmo whistles softly and stares at the ceiling.', opcoes: ['Count the crumbs on the table, one by one', 'Decide the cake came without a fava', 'Ask Fygmo, very calmly, about the fava'], correta: 2 }
+      ],
+      favaVitoria: 'The fava turns up and the rule is kept: whoever found it pays for the next bolo-rei. Fygmo and Fygmo II sigh and promise to see to it.',
+      favaDerrota: 'This time the fava went unexplained and the Fygmos left whistling. It cost nothing: tomorrow there is another slice.',
+
+      boloReisTitulo: 'The Three Kings Day Bolo-Rei',
+      boloReisJaFeitaHoje: "You have already baked the bolo-rei today. Tomorrow's will wait until tomorrow.",
+      boloReisFalta: 'You still need more Drops for the bolo-rei. Gather some more and come back.',
+      boloReisSucesso: 'A round bolo-rei full of candied fruit comes out of the oven, and the Quinta kitchen smells of Three Kings Day. Fygmo and Fygmo II offer to taste it first, for safety.'
+    },
+    es: {
+      faixa: '¡Hay Janeiras en la Quinta!',
+      titulo: 'Reyes y Janeiras en la Quinta',
+      subtitulo: 'Del Año Nuevo al Día de Reyes, con el día grande el Día de Reyes.',
+      diaGrandeAviso: '¡Hoy es el Día de Reyes! Los premios cuentan el doble.',
+      tarefaFeitaHoje: 'ya hecha hoy',
+      modoTesteAviso: '(Modo de prueba: no se ha guardado nada.)',
+      btnJaneiras: 'Cantar las Janeiras',
+      btnFava: 'El Haba',
+      btnBoloReis: 'Bolo-Rei de Reyes',
+      btnVoltar: 'Volver',
+
+      janeirasTitulo: 'Las Janeiras',
+      janeirasSubtitulo: 'El Fygmo y el Fygmo II se unen al grupo',
+      janeirasJaFeitaHoje: 'Ya has cantado las Janeiras hoy. Mañana hay más puertas.',
+      janeirasCenas: [
+        { situacao: 'En la primera puerta, el Fygmo se une al grupo y canta tan alto y tan desafinado que los vecinos cierran las ventanas.', opcoes: ['Cantar todavía más alto, para taparlo', 'Pedirle que haga solo el coro, bajito', 'Cambiar de calle y dejarlo allí cantando'], correta: 1 },
+        { situacao: 'El Fygmo II corre delante y llama a todas las puertas antes de que llegue el grupo, para quedarse con lo que ofrecen los vecinos.', opcoes: ['Ponerlo al final del grupo, junto al Chizo', 'Dejarle ir, que así ahorra trabajo al grupo', 'Llamar también a las puertas, más deprisa'], correta: 0 },
+        { situacao: 'A mitad de la canción, el YoshiCat olvida la letra. El Fygmo le sopla una versión nueva, toda sobre bellotas.', opcoes: ['Cantar la versión de las bellotas entera', 'Hacer como que la canción acaba justo ahí', 'Volver al principio con la letra buena'], correta: 2 },
+        { situacao: 'Una vecina ofrece al grupo una bandeja de filhós. Los dos cerdos ya tienen el hocico a mitad de la bandeja.', opcoes: ['Dar las gracias y repartir los filhós', 'Dejar la bandeja a los cerdos, por bondad', 'Esconder la bandeja detrás del Chizo'], correta: 0 }
+      ],
+      janeirasVitoria: 'La canción termina bien y afinada. Los vecinos desean un buen año al grupo, el Chizo mueve la cola en cada puerta y el Fygmo y el Fygmo II juran que también cantaron.',
+      janeirasDerrota: 'Esta vez la canción desafinó y hubo una puerta que no llegó a abrirse. Nadie se lo toma a mal: mañana hay más puertas. No se perdió nada.',
+
+      favaTitulo: 'El Haba',
+      favaSubtitulo: '¿Quién tiene el haba? Los Fygmos lo saben',
+      favaJaFeitaHoje: 'Hoy el misterio del haba ya está resuelto. Mañana hay otra porción.',
+      favaCenas: [
+        { situacao: 'El bolo-rei llega a la mesa. El Fygmo corta su porción con mucho cuidado alrededor del haba y la deja en el plato.', opcoes: ['Felicitarle por su muy buena puntería', 'Recordarle que el haba es de su porción', 'Sacar el haba y esconderla en la servilleta'], correta: 1 },
+        { situacao: 'El Fygmo II ha encontrado el haba y jura que fue el Chizo quien la puso en su porción, a propósito.', opcoes: ['Creerle, que el Chizo tiene cara de culpable', 'Pedirle al Chizo que pague el próximo bolo', 'Recordarle que quien tiene el haba paga'], correta: 2 },
+        { situacao: 'Los dos cerdos proponen buscar el haba con el hocico antes de cortar el bolo, para ahorrar tiempo.', opcoes: ['Cortar porciones y que decida la suerte', 'Dejarles buscar, pero solo con una pata', 'Partir el bolo por la mitad y darles una'], correta: 0 },
+        { situacao: 'El bolo-rei se ha acabado y nadie encontró el haba. El Fygmo silba bajito y mira al techo.', opcoes: ['Contar todas las migas de la mesa, una a una', 'Concluir que este bolo vino de verdad sin haba', 'Preguntar al Fygmo, con calma, por el haba'], correta: 2 }
+      ],
+      favaVitoria: 'El haba aparece y se cumple la regla: quien la encontró paga el próximo bolo-rei. El Fygmo y el Fygmo II suspiran y prometen ocuparse.',
+      favaDerrota: 'Esta vez el haba quedó sin explicar y los Fygmos se fueron silbando. No costó nada: mañana hay otra porción.',
+
+      boloReisTitulo: 'El Bolo-Rei de Reyes',
+      boloReisJaFeitaHoje: 'Ya has hecho el bolo-rei hoy. El de mañana, para mañana.',
+      boloReisFalta: 'Todavía faltan Gotas para el bolo-rei. Junta más y vuelve.',
+      boloReisSucesso: 'Sale del horno un bolo-rei redondo, lleno de fruta confitada, y la cocina de la Quinta huele a Día de Reyes. El Fygmo y el Fygmo II se ofrecen a probarlo primero, por seguridad.'
+    }
   }
 };
 
@@ -1011,7 +1170,9 @@ function renderFestaHub() {
     construirFilaPastilhas('festa-pill-scroll', botoesHtml, 'vinha.verMaisTarefas');
 
   festaFundoQuer = null; // uma imagem de tarefa que acabe de carregar já não muda o fundo do menu (festaFundoTarefa)
-  definirFundo('foto', diaGrande ? festa.imagens.diaGrande : festa.imagens.faixa);
+  // Numa festa com menuComReserva (Reis), também a faixa e o dia grande esperam pela imagem e, se faltar, fica a de reserva.
+  if (festa.menuComReserva === true) festaFundoTarefa(festa, diaGrande ? 'diaGrande' : 'faixa');
+  else definirFundo('foto', diaGrande ? festa.imagens.diaGrande : festa.imagens.faixa);
 
   marcarPastilhaPrincipal(container);
   configurarFilaPastilhas('festa-pill-scroll');
