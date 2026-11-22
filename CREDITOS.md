@@ -37,6 +37,8 @@ Imagens geradas com IA (Grok/Gemini), sem marca de serviço, carregadas a 04/10/
 
 `imagens_JOGO_TELEGRAM/pascoa_festa.jpg` e `imagens_JOGO_TELEGRAM/pascoa_dia_grande.jpg` (carregadas a 11/10/2026): imagens geradas com IA pelo autor do jogo, sem marcas. São os originais da festa da Páscoa (antes estavam na raiz); o jogo usa as versões de `assets/ecras/` (714x1280).
 
+`assets/ecras/santos_festa.jpg`, `santos_dia_grande.jpg`, `santos_manjerico.jpg`, `santos_sardinhada.jpg` e `santos_arraial.jpg` (carregadas a 22/11/2026): imagens geradas com IA pelo autor do jogo, sem marcas. As três primeiras vieram do Grok (`grok_*.jpg`) e as duas últimas do Lumo (`Lumo_generated_*.png`); todas são dele. Foram convertidas para JPEG até 250 KB, na proporção original, sem cortar nem esticar.
+
 ## Imagens e sons que o jogo usa
 
 Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do código onde aparece). **Quem fez cada imagem ou som, e com que licença, não se vê nos ficheiros**; por isso a coluna "Origem" vem do que o Nuno confirmou a 13/10/2026: todos os sons vêm do BigSoundBank (CC0) e todas as imagens foram geradas com IA (Gemini, Grok ou ChatGPT). A única exceção é `assets/tapps.png`, o logo do modelo original. O que já se sabe está nas secções "Sons" e "Imagens novas" acima.
@@ -115,6 +117,11 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/reis_fava.jpg` | festa Reis e Janeiras, tarefa «A Fava» (cena e resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
 | `assets/ecras/reis_festa.jpg` | festa Reis e Janeiras, menu da festa (1 a 5 de janeiro) e tarefa «Bolo-Rei de Reis» (resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
 | `assets/ecras/reis_janeiras.jpg` | festa Reis e Janeiras, tarefa «Cantar as Janeiras» (cena e resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
+| `assets/ecras/santos_arraial.jpg` | festa Santos Populares, tarefa «O Arraial» (cena e resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; original `Lumo_generated_2026-11-22_22_25-1795386372690.png`, convertida para JPEG 720x1280, 201 KB, até 250 KB) |
+| `assets/ecras/santos_dia_grande.jpg` | festa Santos Populares, menu da festa nos dias grandes (13, 24 e 29 de junho) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; original `grok_1795385072617.jpg`, convertida para JPEG 784x1168, 240 KB, até 250 KB) |
+| `assets/ecras/santos_festa.jpg` | festa Santos Populares, menu da festa (12 a 29 de junho, fora dos dias grandes) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; original `grok_1795384930558.jpg`, convertida para JPEG 784x1168, 248 KB, até 250 KB) |
+| `assets/ecras/santos_manjerico.jpg` | festa Santos Populares, tarefa «O Manjerico» (cena e resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; original `grok_1795385425049.jpg`, convertida para JPEG 832x1248, 247 KB, até 250 KB) |
+| `assets/ecras/santos_sardinhada.jpg` | festa Santos Populares, tarefa «A Sardinhada» (resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; original `Lumo_generated_2026-11-22_22_19-1795385964921.png`, convertida para JPEG 720x1280, 232 KB, até 250 KB) |
 | `assets/ecras/sao_martinho_castanhas.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/sao_martinho_dia11.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/sao_martinho_festa.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
