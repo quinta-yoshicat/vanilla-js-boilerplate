@@ -22,7 +22,8 @@
 // Para testar: acrescenta ?festa=saomartinho (ou ?festa=natal) ao endereço
 // para simular estar dentro da festa, e ?festa=saomartinho&dia=11 (ou
 // ?festa=natal&dia=25) para simular o dia grande. Funciona junto com
-// ?estacao= e ?tempo=.
+// ?estacao= e ?tempo=. Numa festa com modoTesteSemGravar (o Natal), o modo de
+// teste mostra tudo mas não grava nem muda nada (ver festaModoTesteSemGravar).
 // ---------------------------------------------------------------------
 
 const FESTAS_CONFIG = [
@@ -69,24 +70,32 @@ const FESTAS_CONFIG = [
     diaGrande: { mes: 11, dia: 25 },  // 25 de dezembro
     // Entrada da Enciclopédia que abre ao entrar na festa.
     entradaEnciclopedia: 'consoada',
+    // Cada tarefa procura a sua imagem própria; enquanto ela não existir (ou não carregar), fica a de
+    // reserva, a mesma de sempre (ver festaFundoTarefa). Sem "reserva", a imagem da tarefa é usada tal e qual.
     imagens: {
       diaGrande: 'assets/ecras/natal_dia25.jpg',
       faixa: 'assets/ecras/natal_festa.jpg',
-      consoada: 'assets/ecras/natal_festa.jpg',
-      doces: 'assets/ecras/natal_festa.jpg',
-      boloRei: 'assets/ecras/natal_festa.jpg'
+      reserva: 'assets/ecras/natal_festa.jpg',
+      consoada: 'assets/ecras/natal_consoada.jpg',
+      doces: 'assets/ecras/natal_doces.jpg',
+      boloRei: 'assets/ecras/natal_bolorei.jpg'
     },
+    // Com ?festa= (ou outro parâmetro de teste) no endereço, as tarefas do Natal mostram o resultado mas
+    // não mudam nem gravam nada (ver festaModoTesteSemGravar).
+    modoTesteSemGravar: true,
     // O Natal só dá Reputação (que sobe o nível e nunca se gasta) e só gasta Gotas, nunca Uvas.
     // Valores da mesma ordem das tarefas do São Martinho: a prova (8, sem custo) e as castanhas
     // (3 a 6) para a consoada e o bolo-rei; a jeropiga (25 por 50 Gotas, Aguardente e garrafa)
     // para os doces (12 por 30 Gotas, sem Aguardente nem garrafa).
+    // cenasSemRepetir (opcional, numa cena_do_dia): a cena vem da ordem do dia (festaCenaIndice), por isso
+    // nunca se repete em dois dias seguidos; com 7 cenas, os 7 dias do Natal têm 7 cenas diferentes.
     tarefas: [
-      { id: 'consoada', onde: 'festa', regra: 'oferta', btn: 'btnConsoada',
+      { id: 'consoada', onde: 'festa', regra: 'cena_do_dia', btn: 'btnConsoada', cenasSemRepetir: true,
         premio: { reputacao: 5 } },
       { id: 'doces', onde: 'festa', regra: 'gastar_gotas', btn: 'btnDoces',
         premio: { custoGotas: 30, reputacao: 12 } },
       // entradaEnciclopedia (opcional, numa tarefa): abre ao responder à cena, ganhe ou perca (como o Magusto).
-      { id: 'boloRei', onde: 'festa', regra: 'cena_do_dia', btn: 'btnBoloRei', entradaEnciclopedia: 'boloRei',
+      { id: 'boloRei', onde: 'festa', regra: 'cena_do_dia', btn: 'btnBoloRei', entradaEnciclopedia: 'boloRei', cenasSemRepetir: true,
         premio: { reputacao: 6 } }
     ],
     recompensas: {
@@ -356,6 +365,18 @@ function festaCenaDoDia(festaId, tarefaId, dia, n) {
   return h % n;
 }
 
+// Que cena sai neste dia, para uma tarefa (0 a n - 1). Com tarefa.cenasSemRepetir, a cena vem do número do
+// dia (dias desde 1970-01-01, contados com Date.UTC): dois dias seguidos dão sempre cenas seguidas (nunca
+// a mesma, se n >= 2), e n dias seguidos dão as n cenas todas; como um ano não tem um número certo de
+// semanas, a ordem muda de ano para ano. Sem o campo, é a festaCenaDoDia de sempre (Carnaval e Páscoa).
+function festaCenaIndice(festa, tarefa, dia, n) {
+  if (!festa || !tarefa || !Number.isInteger(n) || n <= 0) return 0;
+  if (tarefa.cenasSemRepetir !== true) return festaCenaDoDia(festa.id, tarefa.id, dia, n);
+  const d = diasEntreDiasLisboa('1970-01-01', dia);
+  if (d === null) return 0;
+  return ((d % n) + n) % n;
+}
+
 // Devolve { ok, motivo, rep, gotasGastas, venceu }; motivo null | 'estado_invalido' | 'dia_invalido' |
 // 'tarefa_invalida' | 'ja_hoje' | 'faltam_gotas' | 'resultado_invalido'. Recusar nunca altera nada.
 // opcoes: { diaGrande: true/false, venceu: true/false (só na cena_do_dia) }.
@@ -503,6 +524,7 @@ const FESTAS_STRINGS = {
       subtitulo: 'Uma semana de Natal, com o dia grande no dia de Natal.',
       diaGrandeAviso: 'Hoje é dia de Natal! Os prémios contam a dobrar.',
       tarefaFeitaHoje: 'já feita hoje',
+      modoTesteAviso: '(Modo de teste: nada ficou gravado.)',
       btnConsoada: 'A Consoada',
       btnDoces: 'Doces da Quinta',
       btnBoloRei: 'O Bolo-Rei',
@@ -510,7 +532,18 @@ const FESTAS_STRINGS = {
 
       consoadaTitulo: 'A Consoada na Quinta',
       consoadaJaFeitaHoje: 'Já puseste a mesa hoje. A consoada de amanhã só amanhã.',
-      consoadaSucesso: 'A mesa da consoada está posta e ninguém se lembra de contar as cadeiras. O YoshiCat senta-se, o Chizo instala-se por baixo da mesa à espera do que cair, e a Quinta fica com mais calor.',
+      consoadaSubtitulo: 'O Fygmo e o Fygmo II querem ajudar na ceia',
+      consoadaCenas: [
+        { situacao: 'O bacalhau está de molho desde ontem. O Fygmo debruça-se sobre o alguidar e anuncia que a água precisa de ser provada, por segurança.', opcoes: ['Deixá-lo provar só um gole, por cortesia', 'Mudar a água e tapar bem o alguidar', 'Explicar-lhe a história do bacalhau seco'], correta: 1 },
+        { situacao: 'O Fygmo II conta as cadeiras da consoada três vezes e garante que falta uma. A dele, claro, e de preferência ao lado das rabanadas.', opcoes: ['Pôr-lhe um prato no fim da mesa, longe dos doces', 'Dar-lhe a cadeira junto às rabanadas, que é Natal', 'Contar as cadeiras com ele uma quarta vez'], correta: 0 },
+        { situacao: 'No presépio há um boi, uma vaca e um animal cor-de-rosa que não estava lá ontem. Respira devagar e está virado para a cozinha.', opcoes: ['Acrescentar-lhe uma estrela, que fica bonito', 'Mudar o presépio todo para longe da cozinha', 'Contar os bichos e mandar sair o que sobra'], correta: 2 },
+        { situacao: 'Os dois porcos oferecem-se para apanhar as couves da consoada. Voltam com seis folhas, todas mordidas na ponta, e um ar muito satisfeito.', opcoes: ['Ir à horta com o Chizo e escolher as couves', 'Agradecer muito e cozer as folhas assim mesmo', 'Mandá-los outra vez, agora com um cesto'], correta: 0 },
+        { situacao: 'A família sai para a Missa do Galo. O Fygmo e o Fygmo II ficam à porta e dizem, com muita solenidade, que tomam conta da casa.', opcoes: ['Aceitar e deixar-lhes as rabanadas à vista', 'Pedir-lhes que guardem a mesa até ao regresso', 'Fechar a cozinha e levar a chave no bolso'], correta: 2 },
+        { situacao: 'O Fygmo II oferece-se para descascar as batatas. Ao fim de um quarto de hora há uma batata descascada e três desaparecidas.', opcoes: ['Dar-lhe antes os guardanapos para dobrar', 'Deixá-lo continuar, que vai ganhando prática', 'Contar as batatas e esperar que voltem'], correta: 0 },
+        { situacao: 'As rabanadas arrefecem no parapeito da janela. Lá fora, o Fygmo encosta um caixote à parede e sobe com toda a calma do mundo.', opcoes: ['Abrir bem a janela para lhe dar as boas-noites', 'Pôr as rabanadas na mesa e o Chizo à janela', 'Mudar o caixote de sítio enquanto ele sobe'], correta: 1 }
+      ],
+      consoadaVitoria: 'A mesa da consoada fica posta e ninguém se lembra de contar as cadeiras. O YoshiCat senta-se, o Chizo instala-se por baixo da mesa à espera do que cair, e a Quinta fica com mais calor.',
+      consoadaDerrota: 'Desta vez os Fygmos foram mais rápidos e a cozinha ficou com menos qualquer coisa. A mesa põe-se na mesma. Nada se perdeu.',
 
       docesTitulo: 'Os Doces da Quinta',
       docesJaFeitaHoje: 'Já fizeste doces hoje. Os de amanhã ficam para amanhã.',
@@ -523,7 +556,11 @@ const FESTAS_STRINGS = {
       boloReiCenas: [
         { situacao: 'O bolo-rei arrefece na mesa da consoada. O Fygmo e o Fygmo II contemplam-no com o respeito de quem já escolheu a fatia.', opcoes: ['Pedir-lhes que esperem pela meia-noite, como manda a tradição', 'Cobrir o bolo com um pano e deixar o Chizo a vigiar', 'Servir já uma fatia grande a cada um, para encerrar o assunto'], correta: 1 },
         { situacao: 'O Fygmo II sobe para uma cadeira e estica o focinho para o bolo-rei, com o ar de quem só veio ver se está bem cozinhado.', opcoes: ['Pôr o bolo em cima do armário, onde a cadeira não chega', 'Explicar-lhe que o bolo-rei é só depois da Missa do Galo', 'Afastar a cadeira devagar, com ele ainda lá em cima'], correta: 0 },
-        { situacao: 'O Fygmo puxa conversa sobre o preço do bacalhau enquanto o Fygmo II contorna a mesa, pé ante pé, rumo ao bolo.', opcoes: ['Responder com paciência, que o bacalhau é assunto sério', 'Esconder o bolo debaixo do casaco e sair de fininho', 'Chamar o Chizo para tomar conta do bolo e da mesa toda'], correta: 2 }
+        { situacao: 'O Fygmo puxa conversa sobre o preço do bacalhau enquanto o Fygmo II contorna a mesa, pé ante pé, rumo ao bolo.', opcoes: ['Responder com paciência, que o bacalhau é assunto sério', 'Esconder o bolo debaixo do casaco e sair de fininho', 'Chamar o Chizo para tomar conta do bolo e da mesa toda'], correta: 2 },
+        { situacao: 'O Fygmo II aparece com a fava na pata e anuncia que, por isso, o próximo bolo-rei é todo dele.', opcoes: ['Dar-lhe os parabéns e o bolo-rei inteiro, claro', 'Lembrar-lhe que quem tem a fava paga o bolo', 'Esconder a fava dentro de uma fatia nova'], correta: 1 },
+        { situacao: 'O bolo-rei acabou de sair do forno e arrefece no parapeito. Cá em baixo, o Fygmo já encostou uma escada à parede.', opcoes: ['Trazer o bolo para dentro e fechar a janela', 'Tirar-lhe a escada e deixar o bolo onde está', 'Pedir ao Fygmo que segure bem firme a escada'], correta: 0 },
+        { situacao: 'O Fygmo propõe cortar o bolo-rei em três fatias: uma para ele, uma para o Fygmo II e uma para a família inteira.', opcoes: ['Aceitar, que a matemática dele é original', 'Cortar só duas fatias e dar-lhes uma a cada', 'Cortar fatias iguais para toda a gente'], correta: 2 },
+        { situacao: 'O bolo-rei chega à mesa sem uma única fruta cristalizada. O Fygmo e o Fygmo II têm os focinhos verdes e vermelhos.', opcoes: ['Perguntar ao Chizo se viu alguma coisa', 'Elogiar-lhes as cores e servir o bolo assim', 'Pedir-lhes as frutas de volta, uma a uma'], correta: 2 }
       ],
       boloReiVitoria: 'O bolo-rei fica a salvo. O Fygmo e o Fygmo II olham para as migalhas que não existem, suspiram e prometem portar-se bem até ao Dia de Reis.',
       boloReiDerrota: 'Tarde demais: o Fygmo e o Fygmo II já vão a caminho da mata, uma fatia cada. Quem encontrar a fava paga o próximo bolo-rei. Nada se perdeu.'
@@ -534,6 +571,7 @@ const FESTAS_STRINGS = {
       subtitulo: 'A week of Christmas, with the big day on Christmas Day.',
       diaGrandeAviso: 'Today is Christmas Day! Prizes count double.',
       tarefaFeitaHoje: 'already done today',
+      modoTesteAviso: '(Test mode: nothing was saved.)',
       btnConsoada: 'The Consoada',
       btnDoces: 'Quinta Sweets',
       btnBoloRei: 'The Bolo-Rei',
@@ -541,7 +579,18 @@ const FESTAS_STRINGS = {
 
       consoadaTitulo: 'The Consoada on the Quinta',
       consoadaJaFeitaHoje: "You've already set the table today. Tomorrow's consoada is for tomorrow.",
-      consoadaSucesso: 'The consoada table is set and nobody remembers to count the chairs. YoshiCat sits down, Chizo settles under the table waiting for whatever falls, and the Quinta feels warmer.',
+      consoadaSubtitulo: 'Fygmo and Fygmo II want to help with the supper',
+      consoadaCenas: [
+        { situacao: 'The salt cod has been soaking since yesterday. Fygmo leans over the basin and announces that the water needs tasting, for safety reasons.', opcoes: ['Let him have just one sip, out of courtesy', 'Change the water and cover the basin well', 'Explain to him the whole history of salt cod'], correta: 1 },
+        { situacao: 'Fygmo II counts the consoada chairs three times and insists one is missing. His, of course, and preferably next to the rabanadas.', opcoes: ['Set him a plate at the far end, away from sweets', 'Give him the seat by the rabanadas, it is Christmas', 'Count all the chairs with him for a fourth time'], correta: 0 },
+        { situacao: 'The nativity scene has an ox, a cow and a pink animal that was not there yesterday. It breathes slowly and faces the kitchen.', opcoes: ['Add a star right next to it, it looks rather nice', 'Move the whole nativity far from the kitchen', 'Count the animals and send the extra one out'], correta: 2 },
+        { situacao: 'The two pigs volunteer to pick the cabbage for the consoada. They come back with six leaves, each bitten at the tip, looking very pleased.', opcoes: ['Go to the garden with Chizo to pick cabbage', 'Thank them and boil the leaves just as they are', 'Send them out again, this time with a basket'], correta: 0 },
+        { situacao: 'The family leaves for Midnight Mass. Fygmo and Fygmo II stay at the door and declare, very solemnly, that they will look after the house.', opcoes: ['Agree, and leave the rabanadas in plain view', 'Ask them to guard the table until you return', 'Lock the kitchen and take the key with you'], correta: 2 },
+        { situacao: 'Fygmo II volunteers to peel the potatoes. A quarter of an hour later, one potato is peeled and three have vanished.', opcoes: ['Give him the napkins to fold instead', 'Let him carry on, he is getting practice', 'Count the potatoes and wait for them'], correta: 0 },
+        { situacao: 'The rabanadas are cooling on the windowsill. Outside, Fygmo pushes a crate against the wall and climbs up with all the calm in the world.', opcoes: ['Open the window wide to wish him a good evening', 'Move the rabanadas inside, Chizo to the window', 'Pull the crate away while he is still climbing'], correta: 1 }
+      ],
+      consoadaVitoria: 'The consoada table is set and nobody remembers to count the chairs. YoshiCat sits down, Chizo settles under the table waiting for whatever falls, and the Quinta feels warmer.',
+      consoadaDerrota: 'This time the Fygmos were quicker, and the kitchen is missing a little something. The table gets set all the same. Nothing was lost.',
 
       docesTitulo: 'The Quinta Sweets',
       docesJaFeitaHoje: "You've already made sweets today. Tomorrow's will wait until tomorrow.",
@@ -554,7 +603,11 @@ const FESTAS_STRINGS = {
       boloReiCenas: [
         { situacao: 'The bolo-rei is cooling on the consoada table. Fygmo and Fygmo II contemplate it with the respect of those who have already picked their slice.', opcoes: ['Ask them to wait until midnight, as tradition demands', 'Cover the cake with a cloth and leave Chizo on watch', 'Serve each of them a big slice right now, to close the matter'], correta: 1 },
         { situacao: 'Fygmo II climbs onto a chair and stretches his snout towards the bolo-rei, looking like he only came to check it is properly baked.', opcoes: ['Put the cake on the cupboard, where no chair reaches', 'Explain that bolo-rei is only for after Midnight Mass', 'Slowly pull the chair away, with him still up there'], correta: 0 },
-        { situacao: 'Fygmo strikes up a chat about the price of salt cod while Fygmo II circles the table, tiptoeing towards the cake.', opcoes: ['Answer patiently, since salt cod is serious business', 'Hide the cake under your coat and slip away quietly', 'Call Chizo to guard the cake and the whole table'], correta: 2 }
+        { situacao: 'Fygmo strikes up a chat about the price of salt cod while Fygmo II circles the table, tiptoeing towards the cake.', opcoes: ['Answer patiently, since salt cod is serious business', 'Hide the cake under your coat and slip away quietly', 'Call Chizo to guard the cake and the whole table'], correta: 2 },
+        { situacao: 'Fygmo II turns up with the fava in his paw and announces that, because of it, the next bolo-rei is all his.', opcoes: ['Congratulate him and hand over the whole cake', 'Remind him: whoever finds the fava pays', 'Hide the fava inside a brand new slice'], correta: 1 },
+        { situacao: 'The bolo-rei has just come out of the oven and is cooling on the windowsill. Down below, Fygmo has already set a ladder against the wall.', opcoes: ['Bring the cake inside and shut the window', 'Take the ladder away and leave the cake there', 'Ask Fygmo to hold the ladder nice and steady'], correta: 0 },
+        { situacao: 'Fygmo suggests cutting the bolo-rei into three slices: one for him, one for Fygmo II and one for the whole family.', opcoes: ['Agree, his arithmetic is rather original', 'Cut only two slices and give them one each', 'Cut equal slices for absolutely everyone'], correta: 2 },
+        { situacao: 'The bolo-rei reaches the table without a single piece of candied fruit. Fygmo and Fygmo II have green and red snouts.', opcoes: ['Ask Chizo whether he noticed anything', 'Praise their colours and serve the cake as is', 'Ask them for the fruit back, one by one'], correta: 2 }
       ],
       boloReiVitoria: 'The bolo-rei stays safe. Fygmo and Fygmo II look at the crumbs that do not exist, sigh and promise to behave until Three Kings Day.',
       boloReiDerrota: 'Too late: Fygmo and Fygmo II are already on their way to the woods, a slice each. Whoever finds the fava pays for the next bolo-rei. Nothing was lost.'
@@ -565,6 +618,7 @@ const FESTAS_STRINGS = {
       subtitulo: 'Una semana de Navidad, con el día grande el día de Navidad.',
       diaGrandeAviso: '¡Hoy es día de Navidad! Los premios cuentan el doble.',
       tarefaFeitaHoje: 'ya hecha hoy',
+      modoTesteAviso: '(Modo de prueba: no se ha guardado nada.)',
       btnConsoada: 'La Consoada',
       btnDoces: 'Dulces de la Quinta',
       btnBoloRei: 'El Bolo-Rei',
@@ -572,7 +626,18 @@ const FESTAS_STRINGS = {
 
       consoadaTitulo: 'La Consoada en la Quinta',
       consoadaJaFeitaHoje: 'Ya has puesto la mesa hoy. La consoada de mañana, mañana.',
-      consoadaSucesso: 'La mesa de la consoada está puesta y a nadie se le ocurre contar las sillas. El YoshiCat se sienta, el Chizo se acomoda debajo de la mesa esperando lo que caiga, y la Quinta se vuelve más cálida.',
+      consoadaSubtitulo: 'El Fygmo y el Fygmo II quieren ayudar con la cena',
+      consoadaCenas: [
+        { situacao: 'El bacalao está en remojo desde ayer. El Fygmo se asoma al barreño y anuncia que hay que probar el agua, por seguridad.', opcoes: ['Dejarle probar solo un sorbo, por cortesía', 'Cambiar el agua y tapar bien el barreño', 'Explicarle la historia del bacalao seco'], correta: 1 },
+        { situacao: 'El Fygmo II cuenta las sillas de la consoada tres veces y asegura que falta una. La suya, claro, y a ser posible junto a las rabanadas.', opcoes: ['Ponerle un plato al final, lejos de los dulces', 'Darle la silla junto a las rabanadas, que es Navidad', 'Contar todas las sillas con él por cuarta vez'], correta: 0 },
+        { situacao: 'En el belén hay un buey, una vaca y un animal rosa que ayer no estaba. Respira despacio y mira hacia la cocina.', opcoes: ['Ponerle una estrella al lado, que queda bonito', 'Llevar todo el belén lejos de la cocina', 'Contar los animales y sacar al que sobra'], correta: 2 },
+        { situacao: 'Los dos cerdos se ofrecen a coger las coles de la consoada. Vuelven con seis hojas, todas mordidas en la punta, y muy satisfechos.', opcoes: ['Ir a la huerta con el Chizo a por las coles', 'Darles las gracias y cocer las hojas tal cual', 'Mandarlos otra vez a la huerta, con una cesta'], correta: 0 },
+        { situacao: 'La familia sale hacia la Misa del Gallo. El Fygmo y el Fygmo II se quedan en la puerta y dicen, muy solemnes, que cuidarán la casa.', opcoes: ['Aceptar y dejar las rabanadas a la vista', 'Pedirles que vigilen la mesa hasta la vuelta', 'Cerrar la cocina y llevarse la llave'], correta: 2 },
+        { situacao: 'El Fygmo II se ofrece a pelar las patatas. Al cabo de un cuarto de hora hay una patata pelada y tres desaparecidas.', opcoes: ['Darle mejor las servilletas para doblar', 'Dejarle seguir, que así va cogiendo práctica', 'Contar las patatas y esperar que vuelvan'], correta: 0 },
+        { situacao: 'Las rabanadas se enfrían en el alféizar. Fuera, el Fygmo arrima un cajón a la pared y sube con toda la calma del mundo.', opcoes: ['Abrir bien la ventana para darle las buenas noches', 'Meter las rabanadas y poner al Chizo de guardia', 'Apartar el cajón mientras él todavía va subiendo'], correta: 1 }
+      ],
+      consoadaVitoria: 'La mesa de la consoada queda puesta y a nadie se le ocurre contar las sillas. El YoshiCat se sienta, el Chizo se acomoda debajo de la mesa esperando lo que caiga, y la Quinta se vuelve más cálida.',
+      consoadaDerrota: 'Esta vez los Fygmos fueron más rápidos y a la cocina le falta algo. La mesa se pone igual. No se perdió nada.',
 
       docesTitulo: 'Los Dulces de la Quinta',
       docesJaFeitaHoje: 'Ya has hecho dulces hoy. Los de mañana, para mañana.',
@@ -585,7 +650,11 @@ const FESTAS_STRINGS = {
       boloReiCenas: [
         { situacao: 'El bolo-rei se enfría en la mesa de la consoada. El Fygmo y el Fygmo II lo contemplan con el respeto de quien ya ha elegido su porción.', opcoes: ['Pedirles que esperen a la medianoche, como manda la tradición', 'Tapar el bolo con un paño y dejar al Chizo vigilando', 'Servir ya una porción grande a cada uno, para cerrar el asunto'], correta: 1 },
         { situacao: 'El Fygmo II se sube a una silla y estira el hocico hacia el bolo-rei, con aire de quien solo viene a ver si está bien cocido.', opcoes: ['Poner el bolo encima del armario, donde la silla no llega', 'Explicarle que el bolo-rei es solo después de la Misa del Gallo', 'Apartar la silla despacio, con él todavía allí arriba'], correta: 0 },
-        { situacao: 'El Fygmo da conversación sobre el precio del bacalao mientras el Fygmo II rodea la mesa de puntillas, rumbo al bolo.', opcoes: ['Responder con paciencia, que el bacalao es cosa seria', 'Esconder el bolo bajo el abrigo y marcharse con disimulo', 'Llamar al Chizo para que cuide del bolo y de la mesa'], correta: 2 }
+        { situacao: 'El Fygmo da conversación sobre el precio del bacalao mientras el Fygmo II rodea la mesa de puntillas, rumbo al bolo.', opcoes: ['Responder con paciencia, que el bacalao es cosa seria', 'Esconder el bolo bajo el abrigo y marcharse con disimulo', 'Llamar al Chizo para que cuide del bolo y de la mesa'], correta: 2 },
+        { situacao: 'El Fygmo II aparece con el haba en la pata y anuncia que, por eso, el próximo bolo-rei es todo suyo.', opcoes: ['Felicitarle y entregarle el bolo entero', 'Recordarle que quien tiene el haba paga', 'Esconder el haba dentro de otra porción nueva'], correta: 1 },
+        { situacao: 'El bolo-rei acaba de salir del horno y se enfría en el alféizar. Abajo, el Fygmo ya ha apoyado una escalera en la pared.', opcoes: ['Meter el bolo en casa y cerrar la ventana', 'Quitar la escalera y dejar el bolo donde está', 'Pedirle al Fygmo que sujete bien la escalera'], correta: 0 },
+        { situacao: 'El Fygmo propone cortar el bolo-rei en tres porciones: una para él, otra para el Fygmo II y otra para toda la familia.', opcoes: ['Aceptar, que sus cuentas son originales', 'Cortar solo dos porciones, una para cada uno', 'Cortar porciones iguales para todo el mundo'], correta: 2 },
+        { situacao: 'El bolo-rei llega a la mesa sin una sola fruta confitada. El Fygmo y el Fygmo II tienen el hocico verde y rojo.', opcoes: ['Preguntarle al Chizo si ha visto algo', 'Elogiarles los colores y servir el bolo así', 'Pedirles las frutas de vuelta, una a una'], correta: 2 }
       ],
       boloReiVitoria: 'El bolo-rei queda a salvo. El Fygmo y el Fygmo II miran las migas que no hay, suspiran y prometen portarse bien hasta el Día de Reyes.',
       boloReiDerrota: 'Demasiado tarde: el Fygmo y el Fygmo II ya van camino del monte, una porción cada uno. Quien encuentre el haba paga el próximo bolo-rei. No se perdió nada.'
@@ -877,8 +946,9 @@ function festaPreCarregarSons(festa) {
 // objetivo, se vai tocar, ou o da ação). Falhar uma cena (ok = false) cumpre o objetivo na mesma, mas sem som.
 // tocarAcao (opcional): o som próprio da ação (as castanhas ganhas, a Prova), em vez do "ding" genérico, mas nunca por cima do "ding"
 // do objetivo do dia, que tem prioridade.
-function festaSomTarefa(ok, tocarAcao) {
-  const ding = typeof marcarObjetivoCumprido === 'function' && marcarObjetivoCumprido('festa_tarefa', { semSom: !ok }) === true;
+// semObjetivo (opcional, o modo de teste sem gravar do Natal): só o som, sem marcar o objetivo do dia.
+function festaSomTarefa(ok, tocarAcao, semObjetivo) {
+  const ding = semObjetivo !== true && typeof marcarObjetivoCumprido === 'function' && marcarObjetivoCumprido('festa_tarefa', { semSom: !ok }) === true;
   if (!ok || ding) return;
   if (typeof tocarAcao === 'function') tocarAcao();
   else tocarSom('objetivoCumprido');
@@ -901,7 +971,7 @@ function enterFesta() {
   festaMensagemAtual = '';
   festaNovaEntrada = null;
   const festa = festaAtual();
-  if (festa) {
+  if (festa && !festaModoTesteSemGravar(festa)) {
     if (festa.entradaEnciclopedia) {
       festaNovaEntrada = desbloquearEntradaEnciclopedia(festa.entradaEnciclopedia);
       if (festaNovaEntrada) saveState(state);
@@ -940,6 +1010,7 @@ function renderFestaHub() {
     festaTopcardHtml(S, S.subtitulo, avisos) +
     construirFilaPastilhas('festa-pill-scroll', botoesHtml, 'vinha.verMaisTarefas');
 
+  festaFundoQuer = null; // uma imagem de tarefa que acabe de carregar já não muda o fundo do menu (festaFundoTarefa)
   definirFundo('foto', diaGrande ? festa.imagens.diaGrande : festa.imagens.faixa);
 
   marcarPastilhaPrincipal(container);
@@ -1156,37 +1227,96 @@ function festaMostrarResultado(festa, tarefa, mensagem, foto, novaEntrada) {
   container.innerHTML =
     '<div class="topcard"><p class="mini-title">' + S[tarefa.id + 'Titulo'] + '</p></div>' +
     '<div class="action-panel"><button type="button" class="btn-pill pill-main pill-grande" onclick="renderFestaHub()">' + S.btnVoltar + '</button></div>';
-  definirFundo('foto', foto);
+  if (foto) definirFundo('foto', foto);
   if (novaEntrada) mostrarNovaEntrada(novaEntrada); // mesmo aviso de entrada nova das outras festas
   atualizarDialogo(mensagem, 'YoshiCat');
 }
 
-// Consoada (oferta) e Doces (gastar_gotas): um toque, resolve e grava.
+// MODO DE TESTE SEM GRAVAR (só nas festas com modoTesteSemGravar: true, hoje o Natal): com ?festa= no
+// endereço, ou outro parâmetro de teste do jogo (visitaEmModoTeste, js/visitas.js), a tarefa resolve-se
+// numa CÓPIA do estado: mostra a cena, o resultado e o prémio, mas o state, a gravação, o objetivo do dia
+// e a Enciclopédia ficam como estavam (por isso a tarefa pode repetir-se). As outras festas não mudam.
+function festaModoTesteSemGravar(festa) {
+  if (!festa || festa.modoTesteSemGravar !== true) return false;
+  if (festaForcadaNoEndereco()) return true;
+  try { return typeof visitaEmModoTeste === 'function' && visitaEmModoTeste() === true; } catch (e) { return false; }
+}
+
+// O estado onde a tarefa se resolve: o verdadeiro, ou uma cópia em modo de teste sem gravar (na cópia, a
+// tarefa conta como ainda não feita hoje, para se poder ver outra vez).
+function festaEstadoDaTarefa(festa, tarefa) {
+  if (!festaModoTesteSemGravar(festa)) return state;
+  const copia = JSON.parse(JSON.stringify(state));
+  delete festasTarefasDia(copia)[chaveTarefaFesta(festa.id, tarefa.id)];
+  return copia;
+}
+
+// Depois de uma tarefa feita: grava, mostra os números e conta para o objetivo do dia (com o som). Em modo
+// de teste sem gravar, só o som da ação (sem objetivo nem gravação) e o aviso no fim da mensagem.
+function festaConcluirTarefa(festa, ok, mensagem) {
+  const S = fStr(festa.id);
+  const teste = festaModoTesteSemGravar(festa);
+  festaSomTarefa(ok, null, teste);
+  if (teste) return S.modoTesteAviso ? mensagem + ' ' + S.modoTesteAviso : mensagem;
+  saveState(state);
+  updateStatsDisplays();
+  return mensagem;
+}
+
+// IMAGEM DE CADA TAREFA. Com imagens.reserva, a imagem própria da tarefa (imagens[tarefaId]) só aparece
+// depois de se saber que existe: primeiro mostra-se a de reserva e pede-se a própria num Image; se carregar
+// (e o jogador ainda estiver no ecrã da festa, na mesma tarefa), passa a ser o fundo; se falhar (ficheiro em
+// falta), fica a de reserva. O resultado fica lembrado por caminho, para não piscar nem pedir outra vez.
+// Sem imagens.reserva (Carnaval, Páscoa), é a imagem da tarefa tal e qual, como sempre.
+const festaImagensVistas = {}; // caminho -> 'ok' | 'falta' | 'a_ver'
+let festaFundoQuer = null; // a imagem própria que o ecrã da festa quer agora (null no menu da festa)
+
+function festaFundoTarefa(festa, tarefaId) {
+  const imagens = (festa && festa.imagens) || {};
+  const propria = imagens[tarefaId];
+  const reserva = imagens.reserva;
+  festaFundoQuer = null;
+  if (!reserva || !propria || propria === reserva) { definirFundo('foto', propria || reserva || imagens.faixa); return; }
+  festaFundoQuer = propria;
+  if (festaImagensVistas[propria] === 'ok') { definirFundo('foto', propria); return; }
+  definirFundo('foto', reserva);
+  if (festaImagensVistas[propria]) return; // em falta, ou já a ser pedida
+  let img = null;
+  try { img = typeof Image === 'function' ? new Image() : null; } catch (e) { img = null; }
+  if (!img) return;
+  festaImagensVistas[propria] = 'a_ver';
+  img.onload = function () {
+    festaImagensVistas[propria] = 'ok';
+    if (festaFundoQuer === propria && festaEcraAtivo()) definirFundo('foto', propria);
+  };
+  img.onerror = function () { festaImagensVistas[propria] = 'falta'; };
+  img.src = propria;
+}
+
+// Consoada antiga e Doces (gastar_gotas, oferta): um toque, resolve e grava.
 function festaTarefaSimples(festa, tarefa) {
   const S = fStr(festa.id);
-  const r = festaResolverTarefa(state, festa, tarefa, diaLisboaDeHoje(), { diaGrande: estaNoDiaGrandeFesta(festa) });
+  const r = festaResolverTarefa(festaEstadoDaTarefa(festa, tarefa), festa, tarefa, diaLisboaDeHoje(), { diaGrande: estaNoDiaGrandeFesta(festa) });
   if (!r.ok) {
     if (r.motivo === 'ja_hoje') festaMensagemAtual = S[tarefa.id + 'JaFeitaHoje'];
     else if (r.motivo === 'faltam_gotas') festaMensagemAtual = S[tarefa.id + 'Falta'];
     renderFestaHub();
     return;
   }
-  festaSomTarefa(true);
-  saveState(state);
-  updateStatsDisplays();
-  festaMostrarResultado(festa, tarefa,
-    S[tarefa.id + 'Sucesso'] + ' (' + (r.gotasGastas ? '-' + r.gotasGastas + ' ' + t('stat.gotas') + ', ' : '') + '+' + r.rep + ' ' + t('stat.reputacao') + ')',
-    festa.imagens[tarefa.id]);
+  const mensagem = festaConcluirTarefa(festa, true,
+    S[tarefa.id + 'Sucesso'] + ' (' + (r.gotasGastas ? '-' + r.gotasGastas + ' ' + t('stat.gotas') + ', ' : '') + '+' + r.rep + ' ' + t('stat.reputacao') + ')');
+  festaMostrarResultado(festa, tarefa, mensagem, null);
+  festaFundoTarefa(festa, tarefa.id);
 }
 
-// Bolo-rei (cena_do_dia): a cena e a opção certa são fixas por dia (sem sorteio).
+// Consoada e bolo-rei (cena_do_dia): a cena e a opção certa são fixas por dia (sem sorteio, ver festaCenaIndice).
 let festaCenaAtual = null; // { festa, tarefa, cena } enquanto a cena espera resposta
 
 function festaIniciarCenaDoDia(festa, tarefa) {
-  if (festaJaFezTarefaHoje(festa.id, tarefa.id)) { renderFestaHub(); return; }
+  if (!festaModoTesteSemGravar(festa) && festaJaFezTarefaHoje(festa.id, tarefa.id)) { renderFestaHub(); return; }
   const S = fStr(festa.id);
   const cenas = S[tarefa.id + 'Cenas'];
-  const cena = cenas[festaCenaDoDia(festa.id, tarefa.id, diaLisboaDeHoje(), cenas.length)];
+  const cena = cenas[festaCenaIndice(festa, tarefa, diaLisboaDeHoje(), cenas.length)];
   festaCenaAtual = { festa: festa, tarefa: tarefa, cena: cena };
 
   const container = document.getElementById('festa-container');
@@ -1197,7 +1327,7 @@ function festaIniciarCenaDoDia(festa, tarefa) {
       return '<button type="button" class="btn-choice" onclick="festaResponderCenaDoDia(' + i + ')">' + op + '</button>';
     }).join('') +
     '</div></div>';
-  definirFundo('foto', festa.imagens[tarefa.id]);
+  festaFundoTarefa(festa, tarefa.id);
   atualizarDialogo(cena.situacao, 'YoshiCat');
 }
 
@@ -1208,13 +1338,12 @@ function festaResponderCenaDoDia(i) {
   const festa = atual.festa;
   const tarefa = atual.tarefa;
   const S = fStr(festa.id);
-  const r = festaResolverTarefa(state, festa, tarefa, diaLisboaDeHoje(), { diaGrande: estaNoDiaGrandeFesta(festa), venceu: i === atual.cena.correta });
+  const teste = festaModoTesteSemGravar(festa);
+  const r = festaResolverTarefa(festaEstadoDaTarefa(festa, tarefa), festa, tarefa, diaLisboaDeHoje(), { diaGrande: estaNoDiaGrandeFesta(festa), venceu: i === atual.cena.correta });
   if (!r.ok) { renderFestaHub(); return; }
-  festaSomTarefa(r.venceu);
-  const novaEntrada = tarefa.entradaEnciclopedia ? desbloquearEntradaEnciclopedia(tarefa.entradaEnciclopedia) : null;
-  saveState(state);
-  updateStatsDisplays();
-  festaMostrarResultado(festa, tarefa,
-    r.venceu ? S[tarefa.id + 'Vitoria'] + ' (+' + r.rep + ' ' + t('stat.reputacao') + ')' : S[tarefa.id + 'Derrota'],
-    festa.imagens[tarefa.id], novaEntrada);
+  const novaEntrada = !teste && tarefa.entradaEnciclopedia ? desbloquearEntradaEnciclopedia(tarefa.entradaEnciclopedia) : null;
+  const mensagem = festaConcluirTarefa(festa, r.venceu,
+    r.venceu ? S[tarefa.id + 'Vitoria'] + ' (+' + r.rep + ' ' + t('stat.reputacao') + ')' : S[tarefa.id + 'Derrota']);
+  festaMostrarResultado(festa, tarefa, mensagem, null, novaEntrada);
+  festaFundoTarefa(festa, tarefa.id);
 }

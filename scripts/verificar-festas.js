@@ -10,6 +10,9 @@
 // E. Textos em PT, EN e ES completos e sem números; objetivos.js lê a configuração; Enciclopédia só no São Martinho.
 // G. Carnaval: data móvel (sábado a terça), mesmas regras e valores do Natal, textos, imagens, 2026 a 2035.
 // I. Cenas de 3 opções (São Martinho, Natal, Carnaval e Páscoa): a certa nunca é a mais comprida, as 3 opções diferem no máximo 20% em PT, EN e ES e a posição da certa varia.
+// J. Natal melhorado: a consoada é uma cena de 3 opções (+5), 7 cenas da consoada e 7 do bolo-rei escolhidas pela
+//    ordem do dia (nunca a mesma em dois dias seguidos), imagem própria de cada tarefa com a natal_festa.jpg de
+//    reserva, modo de teste (?festa=natal) que nunca grava, e o Carnaval, a Páscoa e o São Martinho iguais.
 // H. Páscoa: data móvel (Sexta-feira Santa a Domingo de Páscoa), mesmas regras e valores do Carnaval, textos, cenas, imagens, 2026 a 2035.
 // F. Datas móveis: Páscoa (2 métodos independentes), somar dias, janela móvel (Carnaval de teste), e as festas
 //    de datas fixas iguais a antes em todos os dias de 13 anos.
@@ -27,6 +30,13 @@ const FONTES = {};
 FICHEIROS.forEach(function (f) { FONTES[f] = fs.readFileSync(path.join(RAIZ, 'js', f), 'utf8'); });
 const CREDITOS = fs.readFileSync(path.join(RAIZ, 'CREDITOS.md'), 'utf8');
 const LIMITE_IMAGEM = 250 * 1024;
+// O Natal antes de a consoada passar a cena: o Carnaval e a Páscoa foram feitos à imagem dele e têm de continuar iguais.
+const ANTIGO_NATAL_TAREFAS = 'oferta,{"reputacao":5}|gastar_gotas,{"custoGotas":30,"reputacao":12}|cena_do_dia,{"reputacao":6}';
+// As 3 cenas do bolo-rei de antes (PT), que ficam iguais e no início da lista.
+const ANTIGO_NATAL_PT_BOLOREI = [{"situacao":"O bolo-rei arrefece na mesa da consoada. O Fygmo e o Fygmo II contemplam-no com o respeito de quem já escolheu a fatia.","opcoes":["Pedir-lhes que esperem pela meia-noite, como manda a tradição","Cobrir o bolo com um pano e deixar o Chizo a vigiar","Servir já uma fatia grande a cada um, para encerrar o assunto"],"correta":1},{"situacao":"O Fygmo II sobe para uma cadeira e estica o focinho para o bolo-rei, com o ar de quem só veio ver se está bem cozinhado.","opcoes":["Pôr o bolo em cima do armário, onde a cadeira não chega","Explicar-lhe que o bolo-rei é só depois da Missa do Galo","Afastar a cadeira devagar, com ele ainda lá em cima"],"correta":0},{"situacao":"O Fygmo puxa conversa sobre o preço do bacalhau enquanto o Fygmo II contorna a mesa, pé ante pé, rumo ao bolo.","opcoes":["Responder com paciência, que o bacalhau é assunto sério","Esconder o bolo debaixo do casaco e sair de fininho","Chamar o Chizo para tomar conta do bolo e da mesa toda"],"correta":2}];
+const ANTIGO_NATAL_CHAVES = ['faixa', 'titulo', 'subtitulo', 'diaGrandeAviso', 'tarefaFeitaHoje', 'btnConsoada', 'btnDoces', 'btnBoloRei', 'btnVoltar',
+  'consoadaTitulo', 'consoadaJaFeitaHoje', 'consoadaSucesso', 'docesTitulo', 'docesJaFeitaHoje', 'docesFalta', 'docesSucesso',
+  'boloReiTitulo', 'boloReiSubtitulo', 'boloReiJaFeitaHoje', 'boloReiCenas', 'boloReiVitoria', 'boloReiDerrota'];
 
 // Lisboa em dezembro e novembro = UTC+0: a meia-noite de Lisboa é a meia-noite UTC.
 function lis(mes, dia, hhmm) { return Date.parse('2026-' + String(mes).padStart(2, '0') + '-' + String(dia).padStart(2, '0') + 'T' + (hhmm || '12:00') + ':00Z'); }
@@ -143,15 +153,20 @@ function suite(fontes) {
       ok(n.entradaEnciclopedia === 'consoada', 'Natal: abre a entrada consoada ao entrar na festa');
       ok(n.tarefas.map(function (x) { return x.entradaEnciclopedia; }).join() === ',,boloRei', 'Natal: só a tarefa do bolo-rei abre uma entrada (boloRei); consoada e doces não');
       ok(JSON.stringify(n.tarefas.map(function (x) { return x.id; })) === '["consoada","doces","boloRei"]' && n.tarefas.every(function (x) { return x.onde === 'festa'; }), 'Natal: consoada, doces e bolo-rei, todas no ecrã da festa');
-      ok(n.tarefas.map(function (x) { return x.regra; }).join() === 'oferta,gastar_gotas,cena_do_dia', 'Natal: regras oferta, gastar_gotas, cena_do_dia');
+      ok(n.tarefas.map(function (x) { return x.regra; }).join() === 'cena_do_dia,gastar_gotas,cena_do_dia', 'Natal: regras cena_do_dia (consoada, agora uma escolha), gastar_gotas, cena_do_dia');
+      ok(n.tarefas.map(function (x) { return x.cenasSemRepetir === true; }).join() === 'true,false,true', 'Natal: a consoada e o bolo-rei escolhem a cena pela ordem do dia (cenasSemRepetir)');
+      ok(n.modoTesteSemGravar === true, 'Natal: em modo de teste não grava (modoTesteSemGravar)');
       ok(JSON.stringify(n.tarefas[0].premio) === '{"reputacao":5}', 'Natal: consoada +5 Reputação, sem custo nem bem');
       ok(JSON.stringify(n.tarefas[1].premio) === '{"custoGotas":30,"reputacao":12}', 'Natal: doces gastam 30 Gotas e dão +12 Reputação');
       ok(JSON.stringify(n.tarefas[2].premio) === '{"reputacao":6}', 'Natal: bolo-rei +6 Reputação');
       ok(JSON.stringify(n.tarefas).indexOf('uvas') === -1 && JSON.stringify(n.tarefas).indexOf('Uvas') === -1, 'Natal: nenhuma tarefa tem custo nem prémio em Uvas');
       ok(n.imagens.faixa === 'assets/ecras/natal_festa.jpg' && n.imagens.diaGrande === 'assets/ecras/natal_dia25.jpg', 'Natal: imagem da festa e imagem do dia grande');
+      ok(n.imagens.reserva === 'assets/ecras/natal_festa.jpg' && n.imagens.consoada === 'assets/ecras/natal_consoada.jpg' && n.imagens.doces === 'assets/ecras/natal_doces.jpg' && n.imagens.boloRei === 'assets/ecras/natal_bolorei.jpg', 'Natal: cada tarefa procura a sua imagem (natal_consoada, natal_doces, natal_bolorei) e a reserva é a natal_festa de sempre');
+      const PROPRIAS_NATAL = ['consoada', 'doces', 'boloRei'];
       Object.keys(n.imagens).forEach(function (k) {
         const f = path.join(RAIZ, n.imagens[k]);
-        ok(fs.existsSync(f), 'Natal: a imagem ' + k + ' existe (' + n.imagens[k] + ')');
+        // as imagens próprias das tarefas podem ainda não existir (fica a de reserva); as outras têm de existir
+        if (PROPRIAS_NATAL.indexOf(k) === -1 || fs.existsSync(f)) ok(fs.existsSync(f), 'Natal: a imagem ' + k + ' existe (' + n.imagens[k] + ')');
         if (fs.existsSync(f)) ok(fs.statSync(f).size <= LIMITE_IMAGEM, 'Natal: ' + n.imagens[k] + ' não devia pesar mais de 250 KB (pesa ' + fs.statSync(f).size + ')');
       });
       ['natal_festa.jpg', 'natal_dia25.jpg'].forEach(function (f) { ok(CREDITOS.indexOf('assets/ecras/' + f) !== -1, 'CREDITOS.md devia listar ' + f); });
@@ -198,10 +213,18 @@ function suite(fontes) {
     const E = '{ gotas: 100, uvas: 7, reputacao: 372, festas: { tarefasDia: {} } }';
     const R = function (estadoJs, id, hoje, op) { return JSON.parse(r(estadoJs, id, hoje, op)); };
 
-    let o = R(E, 'consoada', '2026-12-22');
+    let o = R(E, 'consoada', '2026-12-22', { venceu: true });
     ok(o.x.ok && o.x.rep === 5 && o.e.reputacao === 377 && o.e.gotas === 100 && o.e.uvas === 7 && o.e.festas.tarefasDia.natal_consoada === '2026-12-22', 'consoada: +5, sem custo (Gotas e Uvas iguais), marca o dia');
-    o = R(E, 'consoada', '2026-12-25', { diaGrande: true });
+    o = R(E, 'consoada', '2026-12-25', { diaGrande: true, venceu: true });
     ok(o.x.rep === 10 && o.e.reputacao === 382, 'consoada no dia grande: a dobrar (+10)');
+    o = R(E, 'consoada', '2026-12-22', { venceu: false });
+    ok(o.x.ok && !o.x.venceu && o.x.rep === 0 && o.e.reputacao === 372 && o.e.gotas === 100 && o.e.uvas === 7 && o.e.festas.tarefasDia.natal_consoada === '2026-12-22', 'consoada errada: não custa nada e gasta a tentativa do dia (como o bolo-rei)');
+    o = R(E, 'consoada', '2026-12-22', { venceu: false, diaGrande: true });
+    ok(o.e.reputacao === 372, 'consoada errada no dia grande: continua sem custar nada');
+    ['x', 1, null, undefined].forEach(function (v) {
+      o = R(E, 'consoada', '2026-12-22', { venceu: v });
+      ok(!o.x.ok && o.x.motivo === 'resultado_invalido' && o.e.reputacao === 372 && !o.e.festas.tarefasDia.natal_consoada, 'consoada: resultado ' + JSON.stringify(v) + ' recusa sem mexer em nada');
+    });
     const FEITA = '{ gotas: 100, uvas: 7, reputacao: 372, festas: { tarefasDia: { natal_consoada: "2026-12-22", natal_doces: "2026-12-22", natal_boloRei: "2026-12-22" } } }';
     ['consoada', 'doces', 'boloRei'].forEach(function (id) {
       o = R(FEITA, id, '2026-12-22', { venceu: true });
@@ -211,7 +234,7 @@ function suite(fontes) {
     });
     // data do aparelho atrás
     ['2026-12-21', '2026-12-20'].forEach(function (d) { o = R(FEITA, 'consoada', d); ok(o.x.motivo === 'ja_hoje', 'data atrás (' + d + ', até 2 dias): a tarefa não se repete'); });
-    o = R(FEITA, 'consoada', '2026-12-19'); ok(o.x.ok, 'data atrás 3 dias (acima do teto): repõe');
+    o = R(FEITA, 'consoada', '2026-12-19', { venceu: true }); ok(o.x.ok, 'data atrás 3 dias (acima do teto): repõe');
 
     // doces: Gotas, nunca Uvas
     o = R(E, 'doces', '2026-12-22');
@@ -249,9 +272,9 @@ function suite(fontes) {
     ok(g.ev("festaResolverTarefa(" + E + ", NATAL, { id: 'x', regra: 'castanhas', premio: {} }, '2026-12-22', {}).motivo") === 'tarefa_invalida', 'uma regra do ecrã (não pura) recusa');
     ok(g.ev("festaResolverTarefa(" + E + ", NATAL, null, '2026-12-22', {}).motivo") === 'tarefa_invalida', 'tarefa em falta recusa');
     // estado reparado em memória (nuvem ou save estranho)
-    o = R('{ gotas: 100, reputacao: 372, festas: null }', 'consoada', '2026-12-22');
+    o = R('{ gotas: 100, reputacao: 372, festas: null }', 'consoada', '2026-12-22', { venceu: true });
     ok(o.x.ok && o.e.festas.tarefasDia.natal_consoada === '2026-12-22', 'state.festas a null repara-se em memória');
-    o = R('{ gotas: "abc", reputacao: "x", festas: { tarefasDia: [] } }', 'consoada', '2026-12-22');
+    o = R('{ gotas: "abc", reputacao: "x", festas: { tarefasDia: [] } }', 'consoada', '2026-12-22', { venceu: true });
     ok(o.x.ok && o.e.reputacao === 5, 'Reputação inválida conta como 0, sem rebentar');
 
     // objetivo do dia lê a configuração
@@ -266,14 +289,17 @@ function suite(fontes) {
     const objetivosJs = fontes['objetivos.js'];
     ok(/festaTemTarefaPorFazerHoje\(festa\)/.test(objetivosJs) && !/'castanhas'|'jeropiga'|'prova'/.test(objetivosJs.slice(objetivosJs.indexOf('function candidatosGrupoC'), objetivosJs.indexOf('function candidatosGrupoC') + 1200)), 'objetivos.js lê as tarefas da configuração, sem nomes escritos à mão');
 
-    // Fluxo no ecrã (Natal): um toque, uma gravação, uma vez por dia
-    const n = abrir(lis(12, 22), '?festa=natal');
+    // Fluxo no ecrã (Natal): um toque, uma gravação, uma vez por dia. No Natal a sério (22/12), sem ?festa=,
+    // porque com ?festa=natal o Natal não grava nada (ver a secção J, modo de teste).
+    const n = abrir(lis(12, 22));
     n.ev('state.reputacao = 372; state.gotas = 100; state.uvas = 7;');
     n.ev("iniciarTarefaFesta('doces')");
     ok(n.ev('state.gotas') === 70 && n.ev('state.uvas') === 7 && n.ev('state.reputacao') === 384 && n.ev('SAVES') === 1 && n.ev('FUNDO') === 'assets/ecras/natal_festa.jpg', 'ecrã: doces gastam 30 Gotas, dão +12, uma gravação, imagem da festa');
     n.ev("iniciarTarefaFesta('doces')");
     ok(n.ev('state.gotas') === 70 && n.ev('state.reputacao') === 384 && n.ev('SAVES') === 1 && n.ev('festaMensagemAtual') === n.ev('FESTAS_STRINGS.natal.pt.docesJaFeitaHoje'), 'ecrã: doces uma só vez por dia, com a mensagem de já feita');
     n.ev("iniciarTarefaFesta('consoada')");
+    ok(n.json('festaCenaAtual.cena').opcoes.length === 3 && n.ev('SAVES') === 1, 'ecrã: a consoada abre uma cena de 3 opções (sem gravar nada antes de responder)');
+    n.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
     ok(n.ev('state.reputacao') === 389 && n.ev('SAVES') === 2, 'ecrã: consoada +5');
     n.ev('state.gotas = 10;'); n.ev('state.festas.tarefasDia.natal_doces = null;');
     n.ev("iniciarTarefaFesta('doces')");
@@ -302,8 +328,8 @@ function suite(fontes) {
     ok(n.json('AVISOS').slice(-1)[0] === 'consoada', 'enterFesta no Natal mostra o aviso de entrada nova da consoada');
     {
       // acertar à primeira também abre o bolo-rei (ganhe ou perca); a consoada e os doces não abrem nada
-      const v = abrir(lis(12, 22), '?festa=natal');
-      v.ev("iniciarTarefaFesta('consoada')"); v.ev("iniciarTarefaFesta('doces')");
+      const v = abrir(lis(12, 22));
+      v.ev("iniciarTarefaFesta('consoada')"); v.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)'); v.ev("iniciarTarefaFesta('doces')");
       ok(v.json('ENTRADAS').length === 0, 'Natal: fazer a consoada e os doces não abre entradas');
       v.ev("iniciarTarefaFesta('boloRei')");
       ok(v.json('ENTRADAS').length === 0, 'Natal: abrir a cena do bolo-rei ainda não abre a entrada');
@@ -316,7 +342,7 @@ function suite(fontes) {
     const html = n.ev('caixa.innerHTML');
     ok(/iniciarTarefaFesta\('consoada'\)/.test(html) && /iniciarTarefaFesta\('doces'\)/.test(html) && /iniciarTarefaFesta\('boloRei'\)/.test(html) && !/castanhas|jeropiga|prova/.test(html), 'hub do Natal: os 3 botões do Natal e nenhum do São Martinho');
     ok(n.ev('FUNDO') === 'assets/ecras/natal_festa.jpg', 'hub do Natal: imagem da festa fora do dia grande');
-    const gd = abrir(lis(12, 25), '?festa=natal&dia=25');
+    const gd = abrir(lis(12, 25));
     gd.ev('state.reputacao = 372; state.gotas = 100;');
     gd.ev('renderFestaHub()');
     ok(gd.ev('FUNDO') === 'assets/ecras/natal_dia25.jpg' && gd.ev('caixa.innerHTML').indexOf(gd.ev('FESTAS_STRINGS.natal.pt.diaGrandeAviso')) !== -1, 'hub do Natal no dia grande: imagem do dia 25 e aviso');
@@ -503,21 +529,33 @@ function suite(fontes) {
     const g = abrir(lis(12, 22));
     const TXT = g.json('FESTAS_STRINGS');
     const chavesEscalares = ['faixa', 'titulo', 'subtitulo', 'diaGrandeAviso', 'tarefaFeitaHoje', 'btnConsoada', 'btnDoces', 'btnBoloRei', 'btnVoltar',
-      'consoadaTitulo', 'consoadaJaFeitaHoje', 'consoadaSucesso', 'docesTitulo', 'docesJaFeitaHoje', 'docesFalta', 'docesSucesso',
+      'consoadaTitulo', 'consoadaSubtitulo', 'consoadaJaFeitaHoje', 'consoadaVitoria', 'consoadaDerrota', 'modoTesteAviso', 'docesTitulo', 'docesJaFeitaHoje', 'docesFalta', 'docesSucesso',
       'boloReiTitulo', 'boloReiSubtitulo', 'boloReiJaFeitaHoje', 'boloReiVitoria', 'boloReiDerrota'];
     ['pt', 'en', 'es'].forEach(function (l) {
       const S = TXT.natal[l];
       ok(!!S, 'Natal: faltam textos em ' + l);
       if (!S) return;
       chavesEscalares.forEach(function (k) { ok(typeof S[k] === 'string' && S[k].trim() !== '', 'Natal ' + l + ': falta o texto ' + k); });
-      ok(Array.isArray(S.boloReiCenas) && S.boloReiCenas.length === 3, 'Natal ' + l + ': 3 cenas do bolo-rei');
-      (S.boloReiCenas || []).forEach(function (c, i) {
-        ok(typeof c.situacao === 'string' && c.situacao !== '' && c.opcoes.length === 3 && c.opcoes.every(function (o) { return typeof o === 'string' && o !== ''; }) && c.correta === TXT.natal.pt.boloReiCenas[i].correta && c.correta >= 0 && c.correta <= 2, 'Natal ' + l + ': cena ' + (i + 1) + ' completa e com a mesma opção certa em PT/EN/ES');
-        ok(new Set(c.opcoes).size === 3, 'Natal ' + l + ': cena ' + (i + 1) + ' tem 3 opções diferentes');
+      ok(Array.isArray(S.boloReiCenas) && S.boloReiCenas.length === 7, 'Natal ' + l + ': 7 cenas do bolo-rei (uma por dia do Natal)');
+      ok(Array.isArray(S.consoadaCenas) && S.consoadaCenas.length === 7, 'Natal ' + l + ': 7 cenas da consoada (uma por dia do Natal)');
+      ['boloReiCenas', 'consoadaCenas'].forEach(function (chave) {
+        (S[chave] || []).forEach(function (c, i) {
+          ok(typeof c.situacao === 'string' && c.situacao !== '' && c.opcoes.length === 3 && c.opcoes.every(function (o) { return typeof o === 'string' && o !== ''; }) && c.correta === TXT.natal.pt[chave][i].correta && c.correta >= 0 && c.correta <= 2, 'Natal ' + l + ' ' + chave + ': cena ' + (i + 1) + ' completa e com a mesma opção certa em PT/EN/ES');
+          ok(new Set(c.opcoes).size === 3, 'Natal ' + l + ' ' + chave + ': cena ' + (i + 1) + ' tem 3 opções diferentes');
+          // curtas, sem mais leitura do que as de antes (a situação mais comprida tinha 143 letras e a opção 63)
+          ok(c.situacao.length <= 143 && c.opcoes.every(function (o) { return o.length <= 63; }), 'Natal ' + l + ' ' + chave + ': cena ' + (i + 1) + ' curta (situação ' + c.situacao.length + ', opções ' + c.opcoes.map(function (o) { return o.length; }).join('/') + ')');
+        });
       });
+      // as 3 línguas completas: as mesmas chaves que em PT
+      ok(Object.keys(S).sort().join() === Object.keys(TXT.natal.pt).sort().join(), 'Natal ' + l + ': as mesmas chaves de texto que em PT');
+      ok(!/Fygmo ?2/.test(JSON.stringify(S)), 'Natal ' + l + ': sempre «Fygmo II» (nunca Fygmo 2 nem Fygmo2)');
       ok(JSON.stringify(S).indexOf('undefined') === -1 && !/[0-9]/.test(JSON.stringify(S).replace(/"correta":\d/g, '').replace(/Fygmo2/g, 'Fygmo')), 'Natal ' + l + ': textos sem números nem datas');
     });
     ok(new Set(TXT.natal.pt.boloReiCenas.map(function (c) { return c.correta; })).size === 3, 'bolo-rei: a opção certa não é sempre a mesma posição (1, 0 e 2)');
+    ok(new Set(TXT.natal.pt.consoadaCenas.map(function (c) { return c.correta; })).size === 3, 'consoada: a opção certa não é sempre a mesma posição');
+    ok(JSON.stringify(TXT.natal.pt.boloReiCenas.slice(0, 3)) === JSON.stringify(ANTIGO_NATAL_PT_BOLOREI), 'bolo-rei: as 3 cenas de antes ficam iguais e no início (as novas vêm a seguir)');
+    ok(/bacalhau/i.test(JSON.stringify(TXT.natal.pt.consoadaCenas)) && /presépio/i.test(JSON.stringify(TXT.natal.pt.consoadaCenas)) && /Missa do Galo/.test(JSON.stringify(TXT.natal.pt.consoadaCenas)) && /fava/.test(JSON.stringify(TXT.natal.pt.boloReiCenas)), 'PT: as cenas falam do bacalhau, do presépio, da Missa do Galo e da fava');
+    ok(!/setúbal|setubal|sesimbra|palmela|azeitão|arrábida/i.test(JSON.stringify(TXT.natal.pt.consoadaCenas.concat(TXT.natal.pt.boloReiCenas))), 'PT: as cenas novas não falam de Setúbal');
     ok(/consoada/i.test(JSON.stringify(TXT.natal.pt)) && /bolo-rei/i.test(JSON.stringify(TXT.natal.pt)) && /rabanadas/i.test(JSON.stringify(TXT.natal.pt)) && /filhós/i.test(JSON.stringify(TXT.natal.pt)), 'PT: fala da consoada, do bolo-rei, das rabanadas e das filhós');
     ok(!/\b(você|vocês|fixe|bué)\b/i.test(JSON.stringify(TXT.natal.pt)), 'PT de Portugal: sem "você" nem brasileirismos óbvios');
     // todos os botões da configuração têm texto nas 3 línguas
@@ -709,7 +747,8 @@ function suite(fontes) {
       ok(cv.tarefas.map(function (x) { return x.regra; }).join() === 'oferta,gastar_gotas,cena_do_dia', 'Carnaval: regras do Natal (oferta, gastar_gotas, cena_do_dia), nenhuma nova');
       ok(JSON.stringify(cv.tarefas[0].premio) === '{"reputacao":5}' && JSON.stringify(cv.tarefas[1].premio) === '{"custoGotas":30,"reputacao":12}' && JSON.stringify(cv.tarefas[2].premio) === '{"reputacao":6}', 'Carnaval: corso +5 (sem custo), fantasias 30 Gotas e +12, quem está mascarado +6');
       ok(JSON.stringify(cv.tarefas).indexOf('uvas') === -1 && JSON.stringify(cv.tarefas).indexOf('Uvas') === -1, 'Carnaval: nenhuma tarefa tem custo nem prémio em Uvas');
-      ok(g.json("FESTAS_CONFIG.filter(function (f) { return f.id === 'natal'; })[0].tarefas.map(function (x) { return [x.regra, JSON.stringify(x.premio)].join(); })").join('|') === cv.tarefas.map(function (x) { return [x.regra, JSON.stringify(x.premio)].join(); }).join('|'), 'Carnaval: as mesmas regras e valores do Natal');
+      ok(ANTIGO_NATAL_TAREFAS === cv.tarefas.map(function (x) { return [x.regra, JSON.stringify(x.premio)].join(); }).join('|'), 'Carnaval: as mesmas regras e valores de sempre (os do Natal antes de a consoada passar a cena)');
+      ok(cv.modoTesteSemGravar === undefined && cv.imagens.reserva === undefined && cv.tarefas.every(function (x) { return x.cenasSemRepetir === undefined; }), 'Carnaval: nada do Natal novo (grava em modo de teste, sem imagem de reserva, cena pelo sorteio do dia de sempre)');
       ok(cv.imagens.faixa === 'assets/ecras/carnaval_festa.jpg' && cv.imagens.diaGrande === 'assets/ecras/carnaval_dia_grande.jpg' && cv.imagens.corso === cv.imagens.faixa && cv.imagens.fantasias === cv.imagens.faixa && cv.imagens.quemEstaMascarado === cv.imagens.faixa, 'Carnaval: uma imagem para a faixa e as tarefas e outra (com gente) para o dia grande');
       const dim = function (f) { // largura e altura de um JPEG (marcador SOF)
         const b = fs.readFileSync(f); let i = 2;
@@ -783,7 +822,7 @@ function suite(fontes) {
     // textos: as mesmas chaves do Natal, em PT, EN e ES, sem restos de outras festas
     const TXT = g.json('FESTAS_STRINGS');
     const norm = function (k) { return k.replace(/consoada|corso/i, 'T1').replace(/doces|fantasias/i, 'T2').replace(/boloRei|quemEstaMascarado/i, 'T3'); };
-    const chavesNatal = Object.keys(TXT.natal.pt).map(norm).sort().join();
+    const chavesNatal = ANTIGO_NATAL_CHAVES.map(norm).sort().join(); // as chaves do Natal antes desta mudança
     ['pt', 'en', 'es'].forEach(function (l) {
       const S = TXT.carnaval && TXT.carnaval[l];
       ok(!!S, 'Carnaval: faltam textos em ' + l);
@@ -981,7 +1020,7 @@ function suite(fontes) {
     // textos: as mesmas chaves do Natal (com os nomes das tarefas trocados), em PT, EN e ES
     const TXT = g.json('FESTAS_STRINGS');
     const norm = function (k) { return k.replace(/consoada|folar/i, 'T1').replace(/doces|amendoas/i, 'T2').replace(/boloRei|ovos/i, 'T3'); };
-    const chavesNatal = Object.keys(TXT.natal.pt).map(norm).sort().join();
+    const chavesNatal = ANTIGO_NATAL_CHAVES.map(norm).sort().join(); // as chaves do Natal antes desta mudança
     ['pt', 'en', 'es'].forEach(function (l) {
       const S = TXT.pascoa && TXT.pascoa[l];
       ok(!!S, 'Páscoa: faltam textos em ' + l);
@@ -1035,6 +1074,147 @@ function suite(fontes) {
     });
   }
 
+  // ---------------- J. Natal melhorado: consoada em cena, cenas sem repetir, imagens, modo de teste ----------------
+  {
+    // J1. Modo de teste (?festa=natal e ?festa=natal&dia=25): mostra tudo, nunca grava nem muda o estado
+    [['?festa=natal', lis(10, 10), 5, 12, 6], ['?festa=natal&dia=25', lis(10, 10), 10, 24, 12], ['?festa=natal', lis(12, 22), 5, 12, 6]].forEach(function (c) {
+      const q = c[0], quem = q + ' (' + (c[1] === lis(12, 22) ? 'no Natal a sério' : 'fora do Natal') + ')';
+      const g = abrir(c[1], q);
+      g.ev("state.reputacao = 372; state.gotas = 100; state.uvas = 7; state.festas.tarefasDia = { natal_consoada: diaLisboaDeHoje() };");
+      const antes = g.ev('JSON.stringify(state)');
+      const AV = g.ev('FESTAS_STRINGS.natal.pt.modoTesteAviso');
+      g.ev('enterFesta()');
+      ok(g.json('ENTRADAS').length === 0 && g.json('AVISOS').length === 0, quem + ': entrar na festa não abre a entrada da consoada');
+      g.ev("iniciarTarefaFesta('consoada')");
+      ok(g.ev('festaCenaAtual !== null'), quem + ': a consoada abre a cena mesmo já feita hoje (no teste pode repetir-se)');
+      g.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+      ok(g.ev('DIALOGO').indexOf('+' + c[2] + ' ') !== -1 && g.ev('DIALOGO').slice(-AV.length) === AV, quem + ': a consoada certa mostra +' + c[2] + ' e o aviso de teste (' + g.ev('DIALOGO') + ')');
+      g.ev("iniciarTarefaFesta('consoada')"); g.ev('festaResponderCenaDoDia((festaCenaAtual.cena.correta + 1) % 3)');
+      ok(g.ev('DIALOGO').indexOf(g.ev('FESTAS_STRINGS.natal.pt.consoadaDerrota')) === 0, quem + ': errar a consoada mostra a derrota');
+      g.ev("iniciarTarefaFesta('doces')");
+      ok(g.ev('DIALOGO').indexOf('-30 ') !== -1 && g.ev('DIALOGO').indexOf('+' + c[3] + ' ') !== -1 && g.ev('DIALOGO').slice(-AV.length) === AV, quem + ': os doces mostram -30 Gotas e +' + c[3]);
+      g.ev("iniciarTarefaFesta('doces')");
+      ok(g.ev('DIALOGO').indexOf('+' + c[3] + ' ') !== -1, quem + ': os doces podem repetir-se no teste');
+      g.ev("iniciarTarefaFesta('boloRei')"); g.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+      ok(g.ev('DIALOGO').indexOf('+' + c[4] + ' ') !== -1 && g.json('ENTRADAS').length === 0 && g.json('AVISOS').length === 0, quem + ': o bolo-rei certo mostra +' + c[4] + ' e não abre a entrada');
+      ok(g.ev('SAVES') === 0 && g.json('OBJETIVOS').length === 0, quem + ': nenhuma gravação nem objetivo do dia (gravou ' + g.ev('SAVES') + ' vezes)');
+      ok(g.ev('JSON.stringify(state)') === antes, quem + ': o estado fica exatamente igual');
+      g.ev('state.gotas = 10;'); const antes10 = g.ev('JSON.stringify(state)');
+      g.ev("iniciarTarefaFesta('doces')");
+      ok(g.ev('festaMensagemAtual') === g.ev('FESTAS_STRINGS.natal.pt.docesFalta') && g.ev('JSON.stringify(state)') === antes10 && g.ev('SAVES') === 0, quem + ': sem Gotas avisa, como no jogo, sem mudar nada');
+    });
+    // o Carnaval e a Páscoa gravam em modo de teste, como sempre
+    [['?festa=carnaval', 'fantasias'], ['?festa=pascoa', 'amendoas']].forEach(function (c) {
+      const g = abrir(lis(10, 10), c[0]); g.ev('state.gotas = 100;');
+      g.ev("iniciarTarefaFesta('" + c[1] + "')");
+      ok(g.ev('SAVES') === 1 && g.ev('state.gotas') === 70, c[0] + ': ' + c[1] + ' continuam a gravar como antes');
+    });
+
+    // J2. Cenas da consoada e do bolo-rei: nunca a mesma em dois dias seguidos, as 7 no Natal
+    const g = abrir(lis(12, 22));
+    g.ev("var NATAL = FESTAS_CONFIG.filter(function (f) { return f.id === 'natal'; })[0]; var T = function (id) { return festaTarefa(NATAL, id); };");
+    const ind = function (festa, id, d, n) { return g.ev('festaCenaIndice(' + festa + ', festaTarefa(' + festa + ', ' + JSON.stringify(id) + '), ' + JSON.stringify(d) + ', ' + n + ')'); };
+    const fmt = function (t) { const d = new Date(t); return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0') + '-' + String(d.getUTCDate()).padStart(2, '0'); };
+    ['consoada', 'boloRei'].forEach(function (id) {
+      let seguidas = 0, natalIncompleto = 0, fora = 0;
+      for (let y = 2026; y <= 2035; y++) {
+        const dias = [20, 21, 22, 23, 24, 25, 26].map(function (d) { return ind('NATAL', id, y + '-12-' + d, 7); });
+        if (new Set(dias).size !== 7) natalIncompleto++;
+      }
+      for (let t = Date.UTC(2026, 0, 1); t <= Date.UTC(2036, 0, 1); t += 86400000) {
+        const a = ind('NATAL', id, fmt(t), 7), b = ind('NATAL', id, fmt(t + 86400000), 7);
+        if (a === b) seguidas++;
+        if (!(a >= 0 && a <= 6)) fora++;
+      }
+      ok(seguidas === 0, id + ': nunca a mesma cena em dois dias seguidos, de 2026 a 2036, viragens de mês e de ano incluídas (' + seguidas + ' repetições)');
+      ok(natalIncompleto === 0, id + ': nos 7 dias do Natal (20 a 26/12) saem as 7 cenas, de 2026 a 2035');
+      ok(fora === 0, id + ': a cena vem sempre de 0 a 6');
+      [2, 3, 5].forEach(function (n) { ok(ind('NATAL', id, '2026-12-22', n) !== ind('NATAL', id, '2026-12-23', n), id + ': com ' + n + ' cenas também não repete no dia seguinte'); });
+      ok(ind('NATAL', id, '2026-12-20', 7) !== ind('NATAL', id, '2027-12-20', 7), id + ': a ordem muda de ano para ano');
+    });
+    ok(g.ev("festaCenaIndice(NATAL, T('consoada'), 'lixo', 7)") === 0 && g.ev("festaCenaIndice(NATAL, T('consoada'), '2026-12-22', 0)") === 0 && g.ev("festaCenaIndice(NATAL, null, '2026-12-22', 7)") === 0 && g.ev("festaCenaIndice(null, T('consoada'), '2026-12-22', 7)") === 0, 'festaCenaIndice: dia, n, tarefa ou festa inválidos dão a cena 0, sem rebentar');
+    const cedo = abrir(lis(12, 22, '00:30')), tarde = abrir(lis(12, 22, '23:30'));
+    ok(cedo.ev("festaCenaIndice(FESTAS_CONFIG[1], festaTarefa(FESTAS_CONFIG[1], 'consoada'), diaLisboaDeHoje(), 7)") === tarde.ev("festaCenaIndice(FESTAS_CONFIG[1], festaTarefa(FESTAS_CONFIG[1], 'consoada'), diaLisboaDeHoje(), 7)"), 'a cena não depende da hora, só do dia de Lisboa');
+    // no ecrã, dia a dia: a cena de hoje é sempre diferente da de ontem, nas duas tarefas
+    {
+      const e = abrir(lis(12, 20));
+      let ontem = {}, repetiu = 0, vistas = { consoada: {}, boloRei: {} };
+      for (let d = 20; d <= 26; d++) {
+        e.ir(lis(12, d));
+        ['consoada', 'boloRei'].forEach(function (id) {
+          e.ev("iniciarTarefaFesta('" + id + "')");
+          const sit = e.ev('festaCenaAtual.cena.situacao');
+          if (sit === ontem[id]) repetiu++;
+          ontem[id] = sit; vistas[id][sit] = true;
+          e.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+        });
+      }
+      ok(repetiu === 0 && Object.keys(vistas.consoada).length === 7 && Object.keys(vistas.boloRei).length === 7, 'ecrã: de 20 a 26/12 a consoada e o bolo-rei mostram 7 cenas diferentes cada, nunca a de ontem');
+      ok(e.ev('state.reputacao') === 0 + 6 * (5 + 6) + 2 * (5 + 6), 'ecrã: 7 dias certos dão 7 × (5 + 6) com o dia 25 a dobrar (deu ' + e.ev('state.reputacao') + ')');
+    }
+    // o Carnaval e a Páscoa continuam com o sorteio do dia de sempre
+    let difere = 0;
+    for (let t = Date.UTC(2026, 0, 1); t <= Date.UTC(2027, 0, 1); t += 86400000) {
+      const d = JSON.stringify(fmt(t));
+      if (g.ev("festaCenaIndice(FESTAS_CONFIG[2], festaTarefa(FESTAS_CONFIG[2], 'quemEstaMascarado'), " + d + ', 3)') !== g.ev("festaCenaDoDia('carnaval', 'quemEstaMascarado', " + d + ', 3)')) difere++;
+      if (g.ev("festaCenaIndice(FESTAS_CONFIG[3], festaTarefa(FESTAS_CONFIG[3], 'ovos'), " + d + ', 3)') !== g.ev("festaCenaDoDia('pascoa', 'ovos', " + d + ', 3)')) difere++;
+    }
+    ok(difere === 0, 'Carnaval e Páscoa: a cena de cada dia é a mesma de antes, em todos os dias de 2026 (' + difere + ' diferenças)');
+
+    // J3. Imagem de cada tarefa: a própria só depois de carregar; em falta fica a de reserva (natal_festa.jpg)
+    const RES = 'assets/ecras/natal_festa.jpg';
+    const im = abrir(lis(12, 22));
+    im.ev('state.gotas = 100; var IMGS = []; Image = function () { IMGS.push(this); };');
+    im.ev("iniciarTarefaFesta('consoada')");
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS.length') === 1 && im.ev('IMGS[0].src') === 'assets/ecras/natal_consoada.jpg', 'imagens: a consoada mostra a reserva e pede natal_consoada.jpg');
+    im.ev('IMGS[0].onerror()');
+    ok(im.ev('FUNDO') === RES, 'imagens: natal_consoada.jpg em falta: fica a natal_festa.jpg (sem erro nem ecrã vazio)');
+    im.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS.length') === 1, 'imagens: no resultado continua a reserva, sem pedir outra vez a imagem em falta');
+    im.ev("iniciarTarefaFesta('doces')");
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS[1].src') === 'assets/ecras/natal_doces.jpg', 'imagens: os doces pedem natal_doces.jpg');
+    im.ev('IMGS[1].onload()');
+    ok(im.ev('FUNDO') === 'assets/ecras/natal_doces.jpg', 'imagens: natal_doces.jpg carregou: passa a ser o fundo');
+    im.ev("festaFundoTarefa(FESTAS_CONFIG[1], 'doces')");
+    ok(im.ev('FUNDO') === 'assets/ecras/natal_doces.jpg' && im.ev('IMGS.length') === 2, 'imagens: uma imagem que já carregou aparece logo, sem novo pedido');
+    im.ev("iniciarTarefaFesta('boloRei')"); im.ev('renderFestaHub()');
+    im.ev('IMGS[2].onload()');
+    ok(im.ev('IMGS[2].src') === 'assets/ecras/natal_bolorei.jpg' && im.ev('FUNDO') === RES, 'imagens: se o jogador já voltou ao menu, a imagem do bolo-rei que chega tarde não muda o fundo');
+    const depois = abrir(lis(12, 22));
+    depois.ev("var IMGS = []; Image = function () { IMGS.push(this); }; iniciarTarefaFesta('consoada'); festaResponderCenaDoDia(festaCenaAtual.cena.correta); IMGS[0].onload();");
+    ok(depois.ev('IMGS.length') === 1 && depois.ev('FUNDO') === 'assets/ecras/natal_consoada.jpg', 'imagens: a imagem da consoada que chega já depois de responder aparece no resultado (ainda é a mesma tarefa)');
+    const sai = abrir(lis(12, 22));
+    sai.ev("var IMGS = []; Image = function () { IMGS.push(this); }; iniciarTarefaFesta('consoada'); festaEcraAtivo = function () { return false; }; IMGS[0].onload();");
+    ok(sai.ev('FUNDO') === RES, 'imagens: fora do ecrã da festa, a imagem que chega não mexe no fundo');
+    const rebenta = abrir(lis(12, 22));
+    rebenta.ev("Image = function () { throw new Error('sem Image'); }; iniciarTarefaFesta('consoada');");
+    ok(rebenta.ev('FUNDO') === RES && rebenta.ev('festaCenaAtual !== null'), 'imagens: sem Image (ou a rebentar) fica a reserva e a cena abre');
+    const semImg = abrir(lis(12, 22));
+    semImg.ev("state.gotas = 100; state.reputacao = 0; Image = undefined; iniciarTarefaFesta('doces');");
+    ok(semImg.ev('FUNDO') === RES && semImg.ev('state.reputacao') === 12, 'imagens: sem Image os doces fazem-se na mesma, com a reserva');
+    ['carnaval', 'pascoa'].forEach(function (id, k) {
+      const c = abrir(lis(12, 22)); c.ev('var IMGS = []; Image = function () { IMGS.push(this); };');
+      const tarefas = c.json('FESTAS_CONFIG[' + (k + 2) + '].tarefas').map(function (x) { return x.id; });
+      tarefas.forEach(function (t) {
+        c.ev('festaFundoTarefa(FESTAS_CONFIG[' + (k + 2) + '], ' + JSON.stringify(t) + ')');
+        ok(c.ev('FUNDO') === 'assets/ecras/' + id + '_festa.jpg' && c.ev('IMGS.length') === 0, id + ' ' + t + ': a mesma imagem de sempre, sem pedido de imagem nova');
+      });
+    });
+    ['natal_consoada.jpg', 'natal_doces.jpg', 'natal_bolorei.jpg'].forEach(function (f) {
+      const caminho = path.join(RAIZ, 'assets', 'ecras', f);
+      if (fs.existsSync(caminho)) ok(fs.statSync(caminho).size <= LIMITE_IMAGEM && fs.readFileSync(caminho).slice(0, 2).equals(Buffer.from([0xFF, 0xD8])), f + ': JPEG até 250 KB');
+    });
+
+    // J4. O Carnaval, a Páscoa e o São Martinho ficam iguais (configuração e textos, nas 3 línguas)
+    const crypto = require('crypto');
+    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', carnaval: '609899f969d707c4cce7c543406eec2d500ee2bb92eb712bac6013ba36afe84f', pascoa: '33c3d22cac7624738ef9667c738d2ed28e7b25235e62ab21ec5296eb637299f1' };
+    Object.keys(IGUAIS).forEach(function (id) {
+      const j = g.ev('JSON.stringify([FESTAS_CONFIG.filter(function (f) { return f.id === ' + JSON.stringify(id) + '; })[0], FESTAS_STRINGS[' + JSON.stringify(id) + ']])');
+      ok(crypto.createHash('sha256').update(j).digest('hex') === IGUAIS[id], id + ': configuração e textos exatamente iguais aos de antes');
+    });
+    ok(g.json('Object.keys(defaultState().festas)').join() === 'tarefasDia', 'Natal: nenhum campo novo no estado (state.festas continua só com tarefasDia)');
+  }
+
   return falhas;
 }
 
@@ -1079,9 +1259,9 @@ const MUTACOES = [
   ['Natal abre a entrada errada ao entrar', 'festas.js', "    entradaEnciclopedia: 'consoada',\n", "    entradaEnciclopedia: 'boloRei',\n"],
   ['o bolo-rei deixa de abrir a sua entrada', 'festas.js', " entradaEnciclopedia: 'boloRei',", ''],
   ['o bolo-rei abre a entrada errada', 'festas.js', " entradaEnciclopedia: 'boloRei',", " entradaEnciclopedia: 'consoada',"],
-  ['o bolo-rei só abre a entrada se acertar', 'festas.js', 'const novaEntrada = tarefa.entradaEnciclopedia ? ', 'const novaEntrada = (tarefa.entradaEnciclopedia && r.venceu) ? '],
+  ['o bolo-rei só abre a entrada se acertar', 'festas.js', 'const novaEntrada = !teste && tarefa.entradaEnciclopedia ? ', 'const novaEntrada = !teste && (tarefa.entradaEnciclopedia && r.venceu) ? '],
   ['o bolo-rei não mostra o aviso de entrada nova', 'festas.js', 'if (novaEntrada) mostrarNovaEntrada(novaEntrada);', ''],
-  ['toda a cena do dia abre a entrada do bolo-rei', 'festas.js', 'const novaEntrada = tarefa.entradaEnciclopedia ? desbloquearEntradaEnciclopedia(tarefa.entradaEnciclopedia) : null;', "const novaEntrada = desbloquearEntradaEnciclopedia('boloRei');"],
+  ['toda a cena do dia abre a entrada do bolo-rei', 'festas.js', 'const novaEntrada = !teste && tarefa.entradaEnciclopedia ? desbloquearEntradaEnciclopedia(tarefa.entradaEnciclopedia) : null;', "const novaEntrada = !teste ? desbloquearEntradaEnciclopedia('boloRei') : null;"],
   ['o bolo-rei abre a entrada ao abrir a cena', 'festas.js', "  festaCenaAtual = { festa: festa, tarefa: tarefa, cena: cena };\n", "  festaCenaAtual = { festa: festa, tarefa: tarefa, cena: cena };\n  desbloquearEntradaEnciclopedia('boloRei');\n"],
   ['aviso do verão de São Martinho no Natal', 'festas.js', "if (ehVerao && S.veraoAviso)", 'if (ehVerao)'],
   ['objetivo do dia: basta uma tarefa feita para sair', 'festas.js', 'return festaTarefas(festa).some(function (x) { return !festaJaFezTarefaHoje(festa.id, x.id); });', 'return festaTarefas(festa).every(function (x) { return !festaJaFezTarefaHoje(festa.id, x.id); });'],
@@ -1090,7 +1270,29 @@ const MUTACOES = [
   ['Natal fecha a 25', 'festas.js', 'fim: { mes: 11, dia: 26 }', 'fim: { mes: 11, dia: 25 }'],
   ['Natal abre a 21', 'festas.js', 'inicio: { mes: 11, dia: 20 }', 'inicio: { mes: 11, dia: 21 }'],
   ['imagem do dia 25 trocada', 'festas.js', "diaGrande: 'assets/ecras/natal_dia25.jpg'", "diaGrande: 'assets/ecras/natal_festa.jpg'"],
-  ['consoada passa a custar Gotas', 'festas.js', "regra: 'oferta', btn: 'btnConsoada'", "regra: 'gastar_gotas', btn: 'btnConsoada'"],
+  ['consoada passa a custar Gotas', 'festas.js', "regra: 'cena_do_dia', btn: 'btnConsoada'", "regra: 'gastar_gotas', btn: 'btnConsoada'"],
+  ['consoada volta a ser um toque', 'festas.js', "regra: 'cena_do_dia', btn: 'btnConsoada'", "regra: 'oferta', btn: 'btnConsoada'"],
+  ['consoada sem cenas pela ordem do dia', 'festas.js', "btn: 'btnConsoada', cenasSemRepetir: true,", "btn: 'btnConsoada',"],
+  ['bolo-rei sem cenas pela ordem do dia', 'festas.js', "entradaEnciclopedia: 'boloRei', cenasSemRepetir: true,", "entradaEnciclopedia: 'boloRei',"],
+  ['cenasSemRepetir ignorado', 'festas.js', 'if (tarefa.cenasSemRepetir !== true) return festaCenaDoDia', 'if (true) return festaCenaDoDia'],
+  ['cenasSemRepetir para todas as festas', 'festas.js', 'if (tarefa.cenasSemRepetir !== true) return festaCenaDoDia', 'if (false) return festaCenaDoDia'],
+  ['a cena repete dois dias seguidos', 'festas.js', 'return ((d % n) + n) % n;', 'return ((Math.floor(d / 2) % n) + n) % n;'],
+  ['a cena do ecrã não usa a ordem do dia', 'festas.js', 'cenas[festaCenaIndice(festa, tarefa, diaLisboaDeHoje(), cenas.length)]', 'cenas[festaCenaDoDia(festa.id, tarefa.id, diaLisboaDeHoje(), cenas.length)]'],
+  ['modo de teste do Natal grava', 'festas.js', "  if (teste) return S.modoTesteAviso ?", "  if (false) return S.modoTesteAviso ?"],
+  ['modo de teste do Natal conta para o objetivo do dia', 'festas.js', '  festaSomTarefa(ok, null, teste);', '  festaSomTarefa(ok);'],
+  ['modo de teste muda o estado verdadeiro', 'festas.js', '  if (!festaModoTesteSemGravar(festa)) return state;', '  return state;'],
+  ['modo de teste abre a entrada ao entrar', 'festas.js', 'if (festa && !festaModoTesteSemGravar(festa)) {', 'if (festa) {'],
+  ['modo de teste abre a entrada do bolo-rei', 'festas.js', 'const novaEntrada = !teste && tarefa.entradaEnciclopedia', 'const novaEntrada = tarefa.entradaEnciclopedia'],
+  ['modo de teste sem gravar em todas as festas', 'festas.js', "if (!festa || festa.modoTesteSemGravar !== true) return false;", 'if (!festa) return false;'],
+  ['Natal deixa de ter o modo de teste sem gravar', 'festas.js', '    modoTesteSemGravar: true,\n', ''],
+  ['modo de teste não repete uma tarefa já feita', 'festas.js', '  delete festasTarefasDia(copia)[chaveTarefaFesta(festa.id, tarefa.id)];\n', ''],
+  ['a imagem própria aparece sem se saber se existe', 'festas.js', "  definirFundo('foto', reserva);\n  if (festaImagensVistas[propria]) return;", "  definirFundo('foto', propria);\n  if (festaImagensVistas[propria]) return;"],
+  ['imagem em falta conta como carregada', 'festas.js', "img.onerror = function () { festaImagensVistas[propria] = 'falta'; };", "img.onerror = function () { festaImagensVistas[propria] = 'ok'; definirFundo('foto', propria); };"],
+  ['imagem que chega tarde muda o fundo do menu', 'festas.js', 'if (festaFundoQuer === propria && festaEcraAtivo())', 'if (festaEcraAtivo())'],
+  ['imagem que chega tarde muda o fundo fora da festa', 'festas.js', 'if (festaFundoQuer === propria && festaEcraAtivo())', 'if (festaFundoQuer === propria)'],
+  ['imagem que chega depois de responder não aparece', 'festas.js', '  festaFundoQuer = propria;\n', ''],
+  ['Natal sem imagem de reserva', 'festas.js', "      reserva: 'assets/ecras/natal_festa.jpg',\n", ''],
+  ['Image a rebentar rebenta a tarefa', 'festas.js', "try { img = typeof Image === 'function' ? new Image() : null; } catch (e) { img = null; }", "img = new Image();"],
   ['castanhas sem o bónus do verão na configuração', 'festas.js', 'repMax: 6, bonusVerao: 1.5', 'repMax: 6, bonusVerao: 1'],
   ['castanhas lêem o prémio do sítio errado', 'festas.js', "const r = festaTarefa(festa, 'castanhas').premio;", "const r = festaTarefa(festa, 'prova').premio;"],
   ['prova paga outro valor', 'festas.js', "premio: { reputacao: 8 } }", "premio: { reputacao: 9 } }"],
