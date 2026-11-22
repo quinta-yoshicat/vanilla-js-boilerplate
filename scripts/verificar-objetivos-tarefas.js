@@ -14,7 +14,11 @@
 //  (d) o sorteio continua igual: com os objetivos novos fora (nível 4) dá exatamente o mesmo que a lista antiga, para os
 //      mesmos números sorteados; no mesmo dia não se volta a sortear;
 //  (e) o jogador antigo (save sem reserva, colecao nem prova, ou com uma lista de objetivos antiga) abre sem erro;
-//  (f) os textos nas 3 línguas.
+//  (f) os textos nas 3 línguas;
+//  (g) «Roda as garrafas na Cave.» (adega_rodar, na pool A): só entra com lote e podendo rodar agora (caveRodarEstado),
+//      nunca sem lote, já rodado neste escalão, depois do escalão 3, com a Adega fechada nem em modo de teste; conta uma
+//      só vez ao rodar de verdade (+2, um só som), nunca em teste nem sem pagar; leva ao botão «rodar»; vai no fim da
+//      pool A (sem lote o sorteio fica igual); um save antigo abre sem erro.
 //
 // Depois de passar, aplica "mutações" e confirma que o teste as apanha.
 // Uso: node scripts/verificar-objetivos-tarefas.js     Sai com 0 se estiver tudo OK e 1 se alguma verificação falhar.
@@ -57,7 +61,7 @@ function suite(fontes) {
         // O que o objetivos.js lê de ficheiros que aqui não se carregam (Vinha, Proteger, Explorar, Festas, tempo).
         vm.runInContext('var __grav = 0, __sons = [], __hoje = "' + DIA + '", __sorteio = null;' +
           ' saveState = function () { __grav++; }; updateStatsDisplays = function () {};' +
-          ' function tocarSom(n) { __sons.push(n); } function vibrar() {} function atualizarDialogo() {} function definirFundo() {} function mostrarFalas() {} function reposicionarFlutuantes() {}' +
+          ' function tocarSom(n) { __sons.push(n); } function formatarTempoVinha(ms) { return Math.ceil(ms / 60000) + " min"; } function tocarSomDaAcao(x) { __sons.push(typeof x === "string" ? x : "ficheiro"); } function vibrar() {} function atualizarDialogo() {} function definirFundo() {} function mostrarFalas() {} function reposicionarFlutuantes() {}' +
           ' function diaLisboaDeHoje() { return __hoje; } function renderAdega() {} function voltarEcraAnterior() {}' +
           ' randInt = function (a, b) { return __sorteio ? a + (__sorteio() % (b - a + 1)) : a; };' +
           ' function festaAtual() { return null; } function festaTemTarefaPorFazerHoje() { return false; } function tempoAtual() { return { disponivel: false }; }' +
@@ -183,17 +187,66 @@ function suite(fontes) {
     ok(g.ev('objetivoTemDados("prova_jogar")') === true && g.ev('objetivosComDados().length') === 1, '(e) um objetivo novo gravado aparece com o seu texto');
   }
 
+  // ---------------------------------------------------------------- (g) «Roda as garrafas na Cave.» (adega_rodar, pool A)
+  {
+    const H = 60 * 60 * 1000, E = 9 * H;
+    const eleg = function (g) { return g.json('OBJETIVOS_POOL_A.filter(function (o) { return o.elegivel(); }).map(function (o) { return o.id; })').indexOf('adega_rodar') !== -1; };
+    const comLote = function (g, inicioAtras, js) { g.nivel(5, { js: 'state.adega.lote = { iniciadoEm: Date.now() - ' + inicioAtras + ' }; state.adega.cooldowns = {};' + (js || '') }); };
+    const g = abrir();
+    g.nivel(5); ok(!eleg(g), '(g) sem lote: não entra');
+    comLote(g, H); ok(eleg(g), '(g) com lote e podendo rodar (escalão 0): entra');
+    comLote(g, H, 'state.adega.cooldowns.rodar = Date.now() - 1000;'); ok(!eleg(g), '(g) já rodado neste escalão: não entra');
+    comLote(g, E + H, 'state.adega.cooldowns.rodar = Date.now() - 2 * ' + H + ';'); ok(eleg(g), '(g) rodado no escalão anterior: entra outra vez');
+    comLote(g, 4 * E + H); ok(!eleg(g), '(g) depois do escalão 3: não entra');
+    g.nivel(1); g.ev('state.adega.lote = { iniciadoEm: Date.now() - ' + H + ' };'); ok(!eleg(g), '(g) com a Adega fechada (nível 1): não entra');
+    ['?visita=valentim_4', '?dias=2', '?prova=1'].forEach(function (q) { const t = abrir({ search: q }); comLote(t, H); ok(!eleg(t), '(g) modo de teste ' + q + ': não entra'); });
+    // conta uma só vez, ao rodar de verdade, com o som da ação (sem o «ding»)
+    const c = abrir(); comLote(c, H, 'state.objetivos.lista = [{ id: "adega_rodar", cumprido: false }, { id: "proteger_vencer", cumprido: false }];'); // 2 na lista: sem o bónus dos 3
+    const rep = c.ev('state.reputacao'), gotas = c.ev('state.gotas');
+    c.ev('caveRodarClique()');
+    ok(c.obj('adega_rodar').cumprido === true && c.ev('state.reputacao') === rep + 2 && c.ev('state.gotas') === gotas + 4 && J(c.json('__sons')) === J(['prensar']), '(g) rodar cumpre o objetivo: +2 de Reputação, +4 Gotas e um só som (o da ação): ' + J(c.json('__sons')));
+    c.ev('caveRodarClique()');
+    ok(c.ev('state.reputacao') === rep + 2 && c.ev('state.gotas') === gotas + 4, '(g) tocar outra vez (já rodou): não conta nem paga outra vez');
+    const tq = abrir({ search: '?dias=2' }); comLote(tq, H, 'state.objetivos.lista = [{ id: "adega_rodar", cumprido: false }];');
+    tq.ev('caveRodarClique()');
+    ok(tq.obj('adega_rodar').cumprido === false, '(g) em modo de teste rodar não conta');
+    const n = abrir(); comLote(n, H, 'state.adega.cooldowns.rodar = Date.now(); state.objetivos.lista = [{ id: "adega_rodar", cumprido: false }];');
+    n.ev('caveRodarClique()');
+    ok(n.obj('adega_rodar').cumprido === false, '(g) sem pagar (já tinha rodado neste escalão) não conta');
+    ok(g.json('OBJETIVO_BOTOES_POR_ECRA.garrafa.adega_rodar').join() === 'rodar', '(g) o objetivo leva ao botão data-acao="rodar"');
+    ok(g.json('OBJETIVOS_POOL_A.map(function (o) { return o.id; })').pop() === 'adega_rodar', '(g) vai no fim da pool A (o sorteio dos dias em que não entra fica igual)');
+    // o sorteio dos dias sem lote fica igual ao de antes (sem o objetivo novo na pool A)
+    let dif = 0;
+    for (let semente = 1; semente <= 40; semente++) {
+      const sortear = function (podar) {
+        g.nivel(5, { js: 'state.vinha.fase = "' + ['preparar', 'crescendo', 'pronta', 'preparada'][semente % 4] + '"; state.vinha.adubo = 1; state.vinha.residuos = 4;' });
+        g.ev('var __s = ' + semente + '; __sorteio = function () { __s = (__s * 1103515245 + 12345) % 2147483648; return __s; };');
+        if (podar) g.ev('var __pa = OBJETIVOS_POOL_A.slice(); OBJETIVOS_POOL_A.length = 0; __pa.filter(function (o) { return o.id !== "adega_rodar"; }).forEach(function (o) { OBJETIVOS_POOL_A.push(o); });');
+        g.ev('gerarObjetivosDoDia()');
+        const r = J(g.json('state.objetivos.lista'));
+        if (podar) g.ev('OBJETIVOS_POOL_A.length = 0; __pa.forEach(function (o) { OBJETIVOS_POOL_A.push(o); });');
+        return r;
+      };
+      if (sortear(false) !== sortear(true)) dif++;
+    }
+    g.ev('__sorteio = null;');
+    ok(dif === 0, '(g) sem lote, o sorteio dá o mesmo que antes do objetivo novo (' + dif + ' diferentes em 40)');
+    let rebentou = false;
+    try { g.ev('state = mergeDeep(defaultState(), { reputacao: 400, adega: { lote: { iniciadoEm: Date.now() - 1000 } }, objetivos: { dia: __hoje, lista: [{ id: "adega_rodar", cumprido: false }], selosTotal: 1 } }); delete state.adega.cooldowns; gerarObjetivosDoDia(); atualizarCartaoObjetivosQuinta(); caveRodarClique();'); } catch (e) { rebentou = String(e); }
+    ok(rebentou === false, '(g) save antigo (sem cooldowns) abre e roda sem erro ' + (rebentou || ''));
+  }
+
   // ---------------------------------------------------------------- (f) textos
   {
     const g = abrir();
-    const PT = { reserva_visitar: 'Visita a Reserva na Cave.', colecao_arrumar: 'Arruma a Coleção.', prova_jogar: 'Faz a Prova às cegas com o Dr. Henrique.' };
+    const PT = { reserva_visitar: 'Visita a Reserva na Cave.', colecao_arrumar: 'Arruma a Coleção.', prova_jogar: 'Faz a Prova às cegas com o Dr. Henrique.', adega_rodar: 'Roda as garrafas na Cave.' };
     ['pt', 'en', 'es'].forEach(function (l) {
-      NOVOS.forEach(function (id) {
+      NOVOS.concat(['adega_rodar']).forEach(function (id) {
         const v = g.ev('TRANSLATIONS.' + l + '["objetivo.' + id + '"]');
         ok(typeof v === 'string' && v.length >= 8 && v.length <= 50 && /\.$/.test(v) && !/Fygmo\s?2/i.test(v), '(f) ' + l + ': objetivo.' + id + ' curto, a acabar com ponto: ' + J(v));
       });
     });
-    NOVOS.forEach(function (id) { ok(g.ev('TRANSLATIONS.pt["objetivo.' + id + '"]') === PT[id], '(f) PT objetivo.' + id + ' = «' + PT[id] + '»'); });
+    NOVOS.concat(['adega_rodar']).forEach(function (id) { ok(g.ev('TRANSLATIONS.pt["objetivo.' + id + '"]') === PT[id], '(f) PT objetivo.' + id + ' = «' + PT[id] + '»'); });
   }
   return falhas;
 }
@@ -219,6 +272,13 @@ const MUTACOES = [
   ['a Coleção não marca', 'reserva.js', "marcarObjetivoCumprido('colecao_arrumar', { semSom: true });", 'void 0;'],
   ['a Prova não marca', 'prova-jogo.js', "    if (typeof marcarObjetivoCumprido === 'function') marcarObjetivoCumprido('prova_jogar');\n", ''],
   ['a Prova conta ao começar', 'prova-jogo.js', '      if (r.ok) {\n        saveState(state);\n', "      if (r.ok) {\n        if (typeof marcarObjetivoCumprido === 'function') marcarObjetivoCumprido('prova_jogar');\n        saveState(state);\n"],
+  ['rodar entra sem poder rodar', 'objetivos.js', '        caveRodarEstado(state, Date.now()).ok === true;', '        true;'],
+  ['rodar entra em modo de teste', 'objetivos.js', "      return objetivoForaDoTeste() && ecraDesbloqueado('garrafa') && !!state.adega.lote", "      return ecraDesbloqueado('garrafa') && !!state.adega.lote"],
+  ['rodar não vai no fim da pool A', 'objetivos.js', "        caveRodarEstado(state, Date.now()).ok === true;\n    }\n  }\n];", "        caveRodarEstado(state, Date.now()).ok === true;\n    }\n  },\n  { id: 'adega_x', elegivel: function () { return false; } }\n];"],
+  ['rodar não marca', 'garrafa.js', "      if (typeof marcarObjetivoCumprido === 'function') marcarObjetivoCumprido('adega_rodar', { semSom: true });\n", ''],
+  ['rodar marca com «ding» (dois sons)', 'garrafa.js', "marcarObjetivoCumprido('adega_rodar', { semSom: true });", "marcarObjetivoCumprido('adega_rodar');"],
+  ['rodar marca em modo de teste', 'garrafa.js', "    } else if (typeof visitaEmModoTeste === 'function' && visitaEmModoTeste()) {\n      adegaMensagemAtual = t('adega.rodarTeste');", "    } else if (typeof visitaEmModoTeste === 'function' && visitaEmModoTeste()) {\n      marcarObjetivoCumprido('adega_rodar', { semSom: true });\n      adegaMensagemAtual = t('adega.rodarTeste');"],
+  ['o mapa sem o botão rodar', 'objetivos.js', "adega_engarrafar: ['engarrafar'], adega_rodar: ['rodar']", "adega_engarrafar: ['engarrafar']"],
   ['um texto em falta (ES)', 'i18n.js', "    'objetivo.colecao_arrumar': 'Ordena la Colección.',\n", ''],
   ['o texto PT trocado', 'i18n.js', "    'objetivo.reserva_visitar': 'Visita a Reserva na Cave.',", "    'objetivo.reserva_visitar': 'Reserva.',"]
 ];
