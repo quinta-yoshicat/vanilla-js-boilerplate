@@ -228,6 +228,86 @@ function tempoRestanteAdega(acao) {
   return Math.max(0, cd - (agora - ultima));
 }
 
+// ---------------------------------------------------------------------
+// CUIDAR DA CAVE — «Rodar as garrafas»: enquanto um lote descansa, uma rotação por escalão de 9 h (escalões 0 a 3, no
+// máximo 4 por lote), cada uma dá CAVE_RODAR_GOTAS Gotas. Não muda o descanso, nem a cor, nem a Reputação do lote.
+// Guarda-se só a hora da última rotação, em state.adega.cooldowns.rodar (o mapa de sempre, que já vai para a nuvem):
+// já rodou neste escalão se rodar >= iniciadoEm + escalão × CAVE_ESCALAO_MS. Um lote novo tem outro iniciadoEm, por
+// isso a rotação do lote anterior não conta; sem a chave, conta como «nunca rodou» (saves antigos).
+// Relógio: as horas gravadas no futuro contam como «agora» (o mesmo cuidado de carimboCorrigirFuturo), por isso o
+// relógio atrasado nunca dá uma rotação extra. Em modo de teste (visitaEmModoTeste: ?dias=, ...) não grava nem paga.
+// ---------------------------------------------------------------------
+const CAVE_RODAR_GOTAS = 4;
+const CAVE_RODAR_ULTIMO_ESCALAO = 3;   // escalões 0, 1, 2 e 3: no máximo 4 rotações por lote
+
+// Pode rodar agora? Só lê (não corrige nem grava nada). { ok, motivo, escalao, msAteProximo },
+// motivo null | 'sem_lote' | 'ja_rodou' (msAteProximo: até ao escalão seguinte) | 'maximo'.
+function caveRodarEstado(estado, agora) {
+  const a = estado && estado.adega;
+  const lote = a && typeof a === 'object' ? a.lote : null;
+  const inicio = lote && typeof lote === 'object' ? Number(lote.iniciadoEm) : NaN;
+  if (!Number.isFinite(inicio) || !Number.isFinite(agora)) return { ok: false, motivo: 'sem_lote', escalao: null, msAteProximo: 0 };
+  const desde = Math.min(inicio, agora);
+  const escalao = Math.floor((agora - desde) / CAVE_ESCALAO_MS);
+  if (escalao > CAVE_RODAR_ULTIMO_ESCALAO) return { ok: false, motivo: 'maximo', escalao: escalao, msAteProximo: 0 };
+  const cd = a.cooldowns && typeof a.cooldowns === 'object' ? Number(a.cooldowns.rodar) : NaN;
+  const ultima = Number.isFinite(cd) ? Math.min(cd, agora) : null;
+  if (ultima !== null && ultima >= desde + escalao * CAVE_ESCALAO_MS) {
+    if (escalao >= CAVE_RODAR_ULTIMO_ESCALAO) return { ok: false, motivo: 'maximo', escalao: escalao, msAteProximo: 0 };
+    return { ok: false, motivo: 'ja_rodou', escalao: escalao, msAteProximo: Math.max(0, desde + (escalao + 1) * CAVE_ESCALAO_MS - agora) };
+  }
+  return { ok: true, motivo: null, escalao: escalao, msAteProximo: 0 };
+}
+
+// O botão (só com lote): apagado diz porquê ao lado, como os outros (o relógio e o tempo, ou «já não precisa»).
+function caveRodarBotaoHtml() {
+  const p = caveRodarEstado(state, Date.now());
+  if (p.motivo === 'sem_lote') return '';
+  let sufixo = '';
+  if (p.motivo === 'ja_rodou') sufixo = RELOGIO_PASTILHA_SVG + ' (' + formatarTempoVinha(p.msAteProximo) + ')';
+  else if (p.motivo === 'maximo') sufixo = ' (' + t('adega.rodarJaNaoPrecisa') + ')';
+  return botaoAdega('rodar', 'adega.btnRodar', !p.ok, sufixo, 'caveRodarClique()');
+}
+
+let caveRodarOcupado = false;
+
+// O ÚNICO sítio que roda e grava. Toque duplo: o 2.º já encontra 'ja_rodou' e não paga. Em modo de teste só diz.
+function caveRodarClique() {
+  if (caveRodarOcupado) return;
+  caveRodarOcupado = true;
+  try {
+    adegaFotoAtual = null;
+    adegaNovaEntrada = null;
+    adegaGarrafaFeita = null;
+    adegaEncomendaEntregue = null;
+    const agora = Date.now();
+    // As horas gravadas «no futuro» (relógio atrasado, ou de outro aparelho) passam a agora, como na Cave de sempre.
+    if (typeof carimboCorrigirFuturo === 'function' && state.adega) {
+      carimboCorrigirFuturo(state.adega.lote, 'iniciadoEm', agora);
+      carimboCorrigirFuturo(state.adega.cooldowns, 'rodar', agora);
+    }
+    const p = caveRodarEstado(state, agora);
+    if (!p.ok) {
+      adegaMensagemAtual = p.motivo === 'ja_rodou' ? t('adega.rodarJaRodou').replace('{tempo}', formatarTempoVinha(p.msAteProximo))
+        : (p.motivo === 'maximo' ? t('adega.rodarMaximo') : '');
+    } else if (typeof visitaEmModoTeste === 'function' && visitaEmModoTeste()) {
+      adegaMensagemAtual = t('adega.rodarTeste');
+    } else {
+      if (!state.adega.cooldowns || typeof state.adega.cooldowns !== 'object') state.adega.cooldowns = {};
+      state.adega.cooldowns.rodar = agora;
+      state.gotas = (typeof state.gotas === 'number' && Number.isFinite(state.gotas) ? state.gotas : 0) + CAVE_RODAR_GOTAS;
+      adegaMensagemAtual = t('adega.rodarOk').replace('{n}', CAVE_RODAR_GOTAS);
+      adegaFotoAtual = ADEGA_FOTOS.cave;
+      tocarSomDaAcao(SOM_ACAO_ADEGA.fortificar);
+      saveState(state);
+      updateStatsDisplays();
+    }
+  } finally {
+    caveRodarOcupado = false;
+  }
+  renderAdega();
+}
+
 function registarCooldownAdega(acao) {
   state.adega.cooldowns[acao] = Date.now();
 }
@@ -505,6 +585,8 @@ function renderAdega() {
     }
     // Sempre tocável: abre a página da garrafa (a espera trata-se lá).
     botoesHtml += botaoAdega('engarrafar', pronto ? 'adega.btnEngarrafar' : 'adega.btnVerLote', false, sufixoEngarrafar, "goTo('engarrafar')");
+    // Cuidar da Cave: «Rodar as garrafas» (só com lote; ver caveRodarEstado).
+    botoesHtml += caveRodarBotaoHtml();
   } else {
     if (adegaCartaoAberto) {
       corpoHtml = '<div class="cartao-corpo"><p class="phase-desc" data-i18n="garrafa.descricao"></p>' + reservaHtml() + '</div>';
