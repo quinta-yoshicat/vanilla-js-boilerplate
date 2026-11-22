@@ -276,7 +276,7 @@ function suite(fontes) {
     ok(igual(f.sons(), []), 'castanhas falhar com objetivo do dia: nem o "ding", tocou ' + JSON.stringify(f.sons()));
     ok(f.cumprido('festa_tarefa'), 'castanhas falhar: o objetivo do dia conta na mesma');
   }
-  [['natal', 'boloRei'], ['carnaval', 'quemEstaMascarado'], ['pascoa', 'ovos']].forEach(function (par) {
+  [['natal', 'consoada'], ['natal', 'boloRei'], ['carnaval', 'quemEstaMascarado'], ['pascoa', 'ovos']].forEach(function (par) {
     const ganha = function (obj) {
       const g = jogador({}, {}); festa(g, par[0]); g.objetivos(obj);
       tarefa(g, par[1]);
@@ -305,8 +305,8 @@ function suite(fontes) {
     ok(igual(h.sons(), []), par[1] + ' já feita hoje: silêncio');
   });
   {
-    // Tarefas simples: consoada/doces, folar/amêndoas, corso/fantasias, jeropiga e prova.
-    [['natal', 'consoada', ''], ['natal', 'doces', ''], ['carnaval', 'corso', ''], ['carnaval', 'fantasias', ''], ['pascoa', 'folar', ''], ['pascoa', 'amendoas', '']].forEach(function (c) {
+    // Tarefas simples: doces, folar/amêndoas, corso/fantasias, jeropiga e prova (a consoada é agora uma cena, testada com o bolo-rei acima).
+    [['natal', 'doces', ''], ['carnaval', 'corso', ''], ['carnaval', 'fantasias', ''], ['pascoa', 'folar', ''], ['pascoa', 'amendoas', '']].forEach(function (c) {
       const g = jogador({}, {}); festa(g, c[0]); tarefa(g, c[1]);
       ok(igual(g.sons(), ['objetivoCumprido']), c[1] + ': devia tocar objetivoCumprido, tocou ' + JSON.stringify(g.sons()));
       tarefa(g, c[1]);
@@ -561,7 +561,7 @@ const MUTANTES = [
   M('festas.js', "if (!ok || ding) return;", "if (!ok) return;", 'Festas tocam por cima do ding'),
   M('festas.js', "  else tocarSom('objetivoCumprido');", "", 'Festas sem som'),
   M('festas.js', "festaSomTarefa(venceu, venceu ? function () { festaSomCastanhasVitoria(castanhasCenaIndex); } : null);", "festaSomTarefa(true, function () { festaSomCastanhasVitoria(castanhasCenaIndex); });", 'Castanhas tocam ao falhar'),
-  M('festas.js', "  festaSomTarefa(r.venceu);", "  festaSomTarefa(true);", 'Cenas do dia tocam ao falhar'),
+  M('festas.js', "  const mensagem = festaConcluirTarefa(festa, r.venceu,", "  const mensagem = festaConcluirTarefa(festa, true,", 'Cenas do dia tocam ao falhar'),
   M('objetivos.js', "  return !semSom;\n}", "  return false;\n}", 'marcarObjetivoCumprido nunca avisa do ding'),
   M('objetivos.js', "if (!semSom) tocarSom('objetivoCumprido');", "tocarSom('objetivoCumprido');", 'ding mesmo com semSom'),
   M('som.js', "['pointerdown', 'pointerup', 'touchend', 'click']", "['pointerdown']", '1.º toque: só o pointerdown'),

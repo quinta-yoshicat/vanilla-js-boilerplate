@@ -217,8 +217,12 @@ function suite(fontes) {
   { const g = jogador(); g.objetivos(['festa_tarefa']); castanhasJogar(g, false); nada(g, 'Castanhas falhadas com objetivo'); ok(g.cumprido('festa_tarefa'), 'Castanhas falhadas: o objetivo conta na mesma'); }
   { const g = jogador(); g.ev('state.som = false;'); castanhasJogar(g, true); nada(g, 'Castanhas ganhas com o Som desligado'); }
   // As outras tarefas não ladram (o texto de sucesso não o diz): Consoada, Bolo-Rei, Ovos, Jeropiga.
-  { const g = jogador(); g.limpar(); g.ev('iniciarTarefaFesta("consoada")'.replace('iniciarTarefaFesta("consoada")', 'festaTarefaSimples(' + festa('natal') + ', festaTarefa(' + festa('natal') + ', "consoada"))'));
+  // A Consoada é uma cena de 3 opções (como o Bolo-Rei): acertar dá o ding, sem ladrar.
+  { const g = jogador(); g.ev('festaIniciarCenaDoDia(' + festa('natal') + ', festaTarefa(' + festa('natal') + ', "consoada"))');
+    g.limpar(); g.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
     so(g, ['objetivoCumprido'], [], 'Consoada (sem ladrar)'); }
+  { const g = jogador(); g.ev('state.gotas = 100;'); g.limpar(); g.ev('festaTarefaSimples(' + festa('natal') + ', festaTarefa(' + festa('natal') + ', "doces"))');
+    so(g, ['objetivoCumprido'], [], 'Doces (sem ladrar)'); }
   [['natal', 'boloRei'], ['pascoa', 'ovos'], ['carnaval', 'quemEstaMascarado']].forEach(function (c) {
     const g = jogador();
     g.ev('festaIniciarCenaDoDia(' + festa(c[0]) + ', festaTarefa(' + festa(c[0]) + ', "' + c[1] + '"))');
@@ -281,7 +285,7 @@ function suite(fontes) {
     ok(igual(g.ambiente(), [['par']]), 'voltar ao menu da festa devia parar a fogueira, fez ' + JSON.stringify(g.ambiente()));
     const f = jogador(); f.ev('iniciarCastanhas(' + SM + '); castanhasCenaIndex = 0; responderCastanha(0);'); f.limpar(); f.ev('iniciarCastanhas(' + SM + ')');
     ok(!f.ambiente().some(function (a) { return a[0] === 'ini'; }), 'castanhas já feitas hoje: a fogueira não devia ligar');
-    const c = jogador(); c.limpar(); c.ev('festaTarefaSimples(' + festa('natal') + ', festaTarefa(' + festa('natal') + ', "consoada"))');
+    const c = jogador(); c.limpar(); c.ev('festaIniciarCenaDoDia(' + festa('natal') + ', festaTarefa(' + festa('natal') + ', "consoada")); festaResponderCenaDoDia(festaCenaAtual.cena.correta);');
     ok(!c.ambiente().some(function (a) { return a[0] === 'ini'; }), 'a Consoada não devia ligar a fogueira');
     const j = jogador(); j.limpar(); j.ev('fazerJeropiga(' + SM + ')'); ok(!j.ambiente().some(function (a) { return a[0] === 'ini'; }), 'a Jeropiga não devia ligar a fogueira');
     // Não choca com o ambiente do tempo: este só liga na Quinta e na Vinha
@@ -392,8 +396,9 @@ const MUTANTES = [
   M('festas.js', "festaSomTarefa(venceu, venceu ? function () { festaSomCastanhasVitoria(castanhasCenaIndex); } : null);", "festaSomTarefa(venceu, null);", 'Castanhas ganhas só com o ding'),
   M('festas.js', "festaSomTarefa(venceu, venceu ? function () { festaSomCastanhasVitoria(castanhasCenaIndex); } : null);", "festaSomTarefa(true, function () { festaSomCastanhasVitoria(castanhasCenaIndex); });", 'Castanhas falhadas tocam'),
   M('festas.js', "  if (typeof tocarAcao === 'function') tocarAcao();\n  else tocarSom('objetivoCumprido');", "  if (typeof tocarAcao === 'function') tocarAcao();\n  tocarSom('objetivoCumprido');", 'O som da ação e o ding genérico juntos'),
-  M('festas.js', "  festaSomTarefa(true);\n  saveState(state);\n  updateStatsDisplays();\n  festaMostrarResultado(festa, tarefa,\n    S[tarefa.id + 'Sucesso']", "  festaSomTarefa(true, function () { tocarSomChizoLadrar(); });\n  saveState(state);\n  updateStatsDisplays();\n  festaMostrarResultado(festa, tarefa,\n    S[tarefa.id + 'Sucesso']", 'Consoada e doces ladram'),
-  M('festas.js', "  festaSomTarefa(r.venceu);", "  festaSomTarefa(r.venceu, function () { tocarSomChizoLadrar(); });", 'Bolo-Rei, Ovos e Mascarados ladram'),
+  // A consoada é agora uma cena (como o bolo-rei): os doces são a tarefa simples do Natal; o som das duas passa por festaConcluirTarefa.
+  M('festas.js', "  const mensagem = festaConcluirTarefa(festa, true,", "  tocarSomChizoLadrar();\n  const mensagem = festaConcluirTarefa(festa, true,", 'Doces, Folar e Corso ladram'),
+  M('festas.js', "  const mensagem = festaConcluirTarefa(festa, r.venceu,", "  if (r.venceu) tocarSomChizoLadrar();\n  const mensagem = festaConcluirTarefa(festa, r.venceu,", 'Consoada, Bolo-Rei, Ovos e Mascarados ladram'),
   M('festas.js', "  festaSomTarefa(true);\n\n  const novaEntrada = desbloquearEntradaEnciclopedia('jeropiga');", "  festaSomTarefa(true, function () { tocarSomChizoLadrar(); });\n\n  const novaEntrada = desbloquearEntradaEnciclopedia('jeropiga');", 'Jeropiga ladra'),
   M('festas.js', "  castanhasVitoria", "  tocarSomFicheiro('assets/sons/porco_grunhir.mp3', 0.7); castanhasVitoria", 'Festas com o porco a grunhir'),
   // Assobio e ladrar
@@ -413,7 +418,7 @@ const MUTANTES = [
   M('festas.js', "fogueira: { ficheiro: 'assets/sons/fogueira.mp3', volume: 0.35, fade: { entrarS: 1.5, sairS: 1.0 } }", "fogueira: { ficheiro: 'assets/sons/fogueira.mp3', volume: 0.35 }", 'Fogueira sem fade'),
   M('festas.js', "volume: 0.35, fade", "volume: 1, fade", 'Fogueira alta'),
   M('festas.js', "fogueira: { ficheiro: 'assets/sons/fogueira.mp3'", "fogueira: { ficheiro: 'assets/sons/cave_porta.mp3'", 'Fogueira com o ficheiro errado'),
-  M('festas.js', "  festaSomTarefa(true);\n  saveState(state);\n  updateStatsDisplays();\n  festaMostrarResultado(festa, tarefa,\n    S[tarefa.id + 'Sucesso']", "  festaIniciarFogueira();\n  festaSomTarefa(true);\n  saveState(state);\n  updateStatsDisplays();\n  festaMostrarResultado(festa, tarefa,\n    S[tarefa.id + 'Sucesso']", 'A fogueira liga na Consoada'),
+  M('festas.js', "  const mensagem = festaConcluirTarefa(festa, r.venceu,", "  festaIniciarFogueira();\n  const mensagem = festaConcluirTarefa(festa, r.venceu,", 'A fogueira liga na Consoada'),
   M('tempo.js', "['screen-quinta', 'screen-vinha']", "['screen-quinta', 'screen-vinha', 'screen-festa']", 'O ambiente do tempo liga na festa'),
   // Prova
   M('festas.js', "festaSomTarefa(true, festaSomProva);", "festaSomTarefa(true);", 'Prova só com o ding genérico'),

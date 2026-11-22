@@ -269,7 +269,9 @@ async function suite(fontes) {
   }
   { // Festas
     const g = jogador(); g.ev("festaAtual = function () { return FESTAS_CONFIG.filter(function (f) { return f.id === 'natal'; })[0]; };");
-    const r = g.tocar(botao(), function () { g.ev("iniciarTarefaFesta('consoada')"); });
+    // A Consoada é agora uma cena de 3 opções (como o Bolo-Rei): abrir a cena é silencioso (só o clique) e acertar dá só o ding.
+    ok(igual(g.tocar(botao(), function () { g.ev("iniciarTarefaFesta('consoada')"); }).sons, CLIQUE), 'Festa, Consoada, abrir a cena (silenciosa): clique');
+    const r = g.tocar(botao(['btn-choice']), function () { g.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)'); });
     ok(igual(r.sons, ['objetivoCumprido']), 'Festa, Consoada: só o ding, deu ' + JSON.stringify(r.sons));
     const c = jogador(); c.ev("festaAtual = function () { return FESTAS_CONFIG.filter(function (f) { return f.id === 'saomartinho'; })[0]; };");
     ok(igual(c.tocar(botao(), function () { c.ev("iniciarTarefaFesta('castanhas')"); }).sons, CLIQUE), 'Castanhas, abrir a cena (silenciosa): clique');
