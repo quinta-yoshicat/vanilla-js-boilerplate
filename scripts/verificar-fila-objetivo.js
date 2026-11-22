@@ -41,7 +41,9 @@ const LAYOUTS = {
   vinhaCrescendoFrio: { acoes: ['regar', 'adubar', 'ervas', 'compostagem', 'protegerFrio'], larguras: [79, 89, 77, 111, 89] },
   vinhaCrescendoChuva: { acoes: ['regar', 'adubar', 'ervas', 'compostagem', 'vigiar'], larguras: [79, 89, 77, 111, 160] },
   festa: { acoes: ['castanhas', 'jeropiga', 'prova'], larguras: [140, 130, 172] },
-  adegaBotaoLargo: { acoes: ['prensar', 'fortificar'], larguras: [100, 285] }
+  adegaBotaoLargo: { acoes: ['prensar', 'fortificar'], larguras: [100, 285] },
+  // Com lote e o «Rodar as garrafas» no fim (largura estimada, não medida)
+  adegaLoteRodar: { acoes: ['prensar', 'destilarVinho', 'destilarBagaco', 'engarrafar', 'rodar'], larguras: [90, 130, 141, 109, 150] }
 };
 const ID_FILA = { vinha: 'vinha-pill-scroll', garrafa: 'adega-pill-scroll', festa: 'festa-pill-scroll' };
 
@@ -180,6 +182,9 @@ function suite(fontes) {
     // Adega com lote pronto, Engarrafar
     A = abrirAmbiente(); r = abrir(A, 'garrafa', LAYOUTS.adegaLotePronto, ['adega_engarrafar']);
     ok(r.desliza === 1 && r.fila.inteiro('engarrafar'), 'Adega com lote pronto + objetivo Engarrafar: desliza e o botão fica inteiro');
+    // Adega com lote, «Rodar as garrafas» (o último da fila)
+    A = abrirAmbiente(); r = abrir(A, 'garrafa', LAYOUTS.adegaLoteRodar, ['adega_rodar']);
+    ok(r.desliza === 1 && r.fila.inteiro('rodar') && r.fila.folgaDireita('rodar') >= 8, 'Adega com lote + objetivo Rodar as garrafas: desliza até ao fim e o botão fica inteiro à vista');
     // Prensar já visível: não mexe
     A = abrirAmbiente(); r = abrir(A, 'garrafa', LAYOUTS.adegaSemLote, ['adega_prensar']);
     ok(r.desliza === 0 && r.fila.scrollLeft === 0 && r.fila.oculto.esq === true, 'Adega + objetivo Prensar (já à vista): a fila não mexe');
@@ -333,7 +338,7 @@ function suite(fontes) {
     const mapa = A.json('OBJETIVO_BOTOES_POR_ECRA');
     const esperado = {
       vinha: { vinha_cavar: ['cavar'], vinha_plantar: ['plantar'], vinha_ervas: ['ervas'], vinha_regar: ['regar'], vinha_adubar: ['adubar'], vinha_compostagem: ['compostagem'], vinha_colher: ['colher'], tempo_chuva: ['regar'], tempo_vento: ['repararEstacas'], tempo_frio: ['protegerFrio'], tempo_vigiar: ['vigiar'] },
-      garrafa: { adega_prensar: ['prensar'], adega_alambique: ['destilarVinho', 'destilarBagaco'], adega_fortificar: ['fortificar'], adega_engarrafar: ['engarrafar'] },
+      garrafa: { adega_prensar: ['prensar'], adega_alambique: ['destilarVinho', 'destilarBagaco'], adega_fortificar: ['fortificar'], adega_engarrafar: ['engarrafar'], adega_rodar: ['rodar'] },
       festa: { festa_tarefa: ['*'] }
     };
     ok(JSON.stringify(mapa) === JSON.stringify(esperado), 'o mapa objetivo -> botão é o do estudo');

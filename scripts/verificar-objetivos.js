@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Texto dos objetivos diários "Hoje na Quinta" (js/objetivos.js) e defesa contra ids sem dados:
-// 1) os 21 objetivos (pools A e B, com as 3 tarefas dos níveis 5 e 6, e os 5 do Grupo C) têm texto nas 3 línguas, na própria entrada
+// 1) os 22 objetivos (pools A e B, com as 3 tarefas dos níveis 5 e 6, e os 5 do Grupo C) têm texto nas 3 línguas, na própria entrada
 //    ({ pt, en, es }) OU na chave 'objetivo.<id>' de js/i18n.js, e o texto mostrado é o mesmo de sempre;
 // 2) um id guardado em state.objetivos.lista que já não tem dados (nem texto na entrada nem chave no
 //    i18n.js) não aparece no cartão e não bloqueia o bónus dos 3 (nada é apagado do estado).
@@ -22,6 +22,8 @@ const LINGUAS = ['pt', 'en', 'es'];
 const IDS_ESPERADOS = [
   'vinha_cavar', 'vinha_plantar', 'vinha_ervas', 'vinha_regar', 'vinha_adubar', 'vinha_compostagem', 'vinha_colher',
   'adega_prensar', 'adega_alambique', 'adega_fortificar', 'adega_engarrafar',
+  // «Roda as garrafas na Cave.» (Cuidar da Cave), na pool A, desde a PR do objetivo de rodar.
+  'adega_rodar',
   'proteger_vencer', 'explorar_descobrir',
   // As tarefas do dia dos níveis 5 e 6 (Reserva, Coleção e Prova às cegas), desde a PR «objetivos com a Reserva...».
   'reserva_visitar', 'colecao_arrumar', 'prova_jogar',
@@ -89,7 +91,7 @@ const texto = function (l, id) { return g.ev("(function () { currentLang = '" + 
 {
   const ids = g.ev("OBJETIVOS_POOL_A.concat(OBJETIVOS_POOL_B).concat(OBJETIVOS_GRUPO_C).map(function (o) { return o.id; })");
   ok(ids.length === IDS_ESPERADOS.length && IDS_ESPERADOS.every(function (id) { return ids.indexOf(id) !== -1; }),
-    'os ids dos objetivos não são os ' + IDS_ESPERADOS.length + ' esperados (18 e, desde os níveis 5 e 6, 21): ' + ids);
+    'os ids dos objetivos não são os ' + IDS_ESPERADOS.length + ' esperados (18; desde os níveis 5 e 6, 21; com o de rodar as garrafas, 22): ' + ids);
   IDS_ESPERADOS.forEach(function (id) {
     LINGUAS.forEach(function (l) {
       const naEntrada = g.ev("(function () { var e = objetivoEntrada('" + id + "'); return e && e.texto ? e.texto['" + l + "'] : null; })()");

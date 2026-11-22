@@ -298,6 +298,8 @@ function caveRodarClique() {
       state.gotas = (typeof state.gotas === 'number' && Number.isFinite(state.gotas) ? state.gotas : 0) + CAVE_RODAR_GOTAS;
       adegaMensagemAtual = t('adega.rodarOk').replace('{n}', CAVE_RODAR_GOTAS);
       adegaFotoAtual = ADEGA_FOTOS.cave;
+      // O objetivo do dia «Roda as garrafas na Cave.» (js/objetivos.js), se for de hoje: sem o «ding» (fica o som da ação).
+      if (typeof marcarObjetivoCumprido === 'function') marcarObjetivoCumprido('adega_rodar', { semSom: true });
       tocarSomDaAcao(SOM_ACAO_ADEGA.fortificar);
       saveState(state);
       updateStatsDisplays();

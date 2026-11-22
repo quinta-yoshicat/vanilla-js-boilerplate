@@ -43,6 +43,15 @@ const OBJETIVOS_POOL_A = [
     elegivel: function () {
       return ecraDesbloqueado('garrafa') && !!state.adega.lote && Math.floor(diasDescansadosNaCave()) >= REGRAS_DESCANSO_CAVE.diasMinimos;
     }
+  },
+  // Cuidar da Cave (js/garrafa.js): com lote e podendo rodar AGORA (caveRodarEstado: uma vez por escalão de 9 h,
+  // escalões 0 a 3); nunca em modo de teste. Conta em caveRodarClique(), só quando roda e paga de verdade.
+  {
+    id: 'adega_rodar',
+    elegivel: function () {
+      return objetivoForaDoTeste() && ecraDesbloqueado('garrafa') && !!state.adega.lote && typeof caveRodarEstado === 'function' &&
+        caveRodarEstado(state, Date.now()).ok === true;
+    }
   }
 ];
 
@@ -437,7 +446,7 @@ const OBJETIVO_BOTOES_POR_ECRA = {
   },
   garrafa: {
     adega_prensar: ['prensar'], adega_alambique: ['destilarVinho', 'destilarBagaco'], adega_fortificar: ['fortificar'],
-    adega_engarrafar: ['engarrafar']
+    adega_engarrafar: ['engarrafar'], adega_rodar: ['rodar']
   },
   festa: { festa_tarefa: ['*'] }
 };
