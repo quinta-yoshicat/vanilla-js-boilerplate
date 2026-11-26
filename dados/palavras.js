@@ -10,6 +10,16 @@
 // Os textos EN e ES foram escritos a partir do PT e NÃO foram revistos por um falante nativo.
 
 dadosAcrescentar('palavras', {
+  id: 'agua_ruca',
+  palavra: 'água ruça',
+  explicacao: {
+    pt: 'Líquido aguado que sai da prensa junto com o azeite e depois se separa dele.',
+    en: 'Watery liquid that runs from the press with the oil and is later separated from it.',
+    es: 'Líquido acuoso que sale de la prensa junto al aceite y luego se separa de él.'
+  }
+});
+
+dadosAcrescentar('palavras', {
   id: 'aguardente_vinica',
   palavra: 'aguardente vínica',
   explicacao: {
@@ -56,6 +66,16 @@ dadosAcrescentar('palavras', {
     pt: 'o que sobra das uvas depois de prensadas: as cascas e as grainhas.',
     en: 'what is left of the grapes after pressing: the skins and the seeds.',
     es: 'lo que queda de las uvas después de prensarlas: los hollejos y las pepitas.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'caldeacao',
+  palavra: 'caldeação',
+  explicacao: {
+    pt: 'Água quente juntada à pasta antes de uma segunda prensagem.',
+    en: 'Hot water added to the paste before a second pressing.',
+    es: 'Agua caliente añadida a la pasta antes de un segundo prensado.'
   }
 });
 
@@ -110,6 +130,16 @@ dadosAcrescentar('palavras', {
 });
 
 dadosAcrescentar('palavras', {
+  id: 'galga',
+  palavra: 'galga',
+  explicacao: {
+    pt: 'Mó de pedra que esmaga a azeitona no lagar.',
+    en: 'Stone wheel that crushes the olives in the mill.',
+    es: 'Rueda de piedra que machaca la aceituna en la almazara.'
+  }
+});
+
+dadosAcrescentar('palavras', {
   id: 'jeropiga',
   palavra: 'jeropiga',
   explicacao: {
@@ -126,6 +156,16 @@ dadosAcrescentar('palavras', {
     pt: 'o sítio onde se pisam e espremem as uvas.',
     en: 'the place where grapes are trodden and pressed.',
     es: 'el lugar donde se pisan y se exprimen las uvas.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'maquia',
+  palavra: 'maquia',
+  explicacao: {
+    pt: 'Pagamento em azeite que se dava ao lagar pelo trabalho.',
+    en: 'Payment in olive oil given to the mill for its work.',
+    es: 'Pago en aceite que se daba a la almazara por su trabajo.'
   }
 });
 
@@ -186,6 +226,16 @@ dadosAcrescentar('palavras', {
     pt: 'a colheita do sal nas salinas.',
     en: 'the salt harvest in the salt pans.',
     es: 'la cosecha de la sal en las salinas.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'seira',
+  palavra: 'seira',
+  explicacao: {
+    pt: 'Cesto redondo, de esparto, onde se põe a pasta da azeitona para a prensa.',
+    en: 'Round esparto basket that holds the olive paste for the press.',
+    es: 'Cesto redondo de esparto que sostiene la pasta de aceituna en la prensa.'
   }
 });
 

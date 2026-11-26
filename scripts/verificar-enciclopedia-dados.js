@@ -115,7 +115,9 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     { nome: 'Alcácer', nivel: 17, ids: ['sal_alcacer', 'sal_setubal', 'sal_redura'] },
     { nome: 'Comporta', nivel: 18, ids: ['arroz_arrozais', 'arroz_carolino', 'arroz_consumo'] },
     { nome: 'Montado', nivel: 19, ids: ['sobreiro_cortica', 'sobreiro_assobiador', 'sobreiro_rolha'] },
-    { nome: 'Bocage', nivel: 20, ids: ['bocage_poeta', 'bocage_casa', 'bocage_dia'] }
+    { nome: 'Bocage', nivel: 20, ids: ['bocage_poeta', 'bocage_casa', 'bocage_dia'] },
+    // Pacote «Cultura da Azeitona» (PR 1): uma só entrada, de nível mínimo 7 (o da Estrada).
+    { nome: 'Azeitona', nivel: 7, ids: ['azeite_do_olival_ao_lagar'] }
   ];
   const TODOS = GRUPOS.reduce(function (t, g) { return t.concat(g.ids); }, []);
   ok(real.avisos.length === 0, '(f) carregar o jogo com dados/ não devia avisar nada: ' + real.avisos);
@@ -126,9 +128,11 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
   LINGUAS.forEach(function (l) {
     const fim = real.ev('ENCYCLOPEDIA_ENTRIES.' + l + '.slice(34)');
     ok(fim.length === TODOS.length && fim.map(function (e) { return e.id; }).join() === TODOS.join(), '(f) ' + l + ': depois das 34 de hoje vêm só as ' + TODOS.length + ' de dados/, por ordem');
-    GRUPOS.forEach(function (gr, i) {
-      const grupo = fim.slice(i * 3, i * 3 + 3);
-      ok(grupo.length === 3 && grupo.every(function (e) { return e.nivelMinimo === gr.nivel && e.imagem === undefined && !e.manual && e.estacao === undefined && e.meses === undefined && typeof e.titulo === 'string' && typeof e.texto === 'string'; }), '(f) ' + l + ': as 3 do ' + gr.nome + ' são de nível ' + gr.nivel + ', sem imagem, manual, estação nem meses');
+    let desde = 0;
+    GRUPOS.forEach(function (gr) {
+      const grupo = fim.slice(desde, desde + gr.ids.length);
+      desde += gr.ids.length;
+      ok(grupo.length === gr.ids.length && grupo.every(function (e) { return e.nivelMinimo === gr.nivel && e.imagem === undefined && !e.manual && e.estacao === undefined && e.meses === undefined && typeof e.titulo === 'string' && typeof e.texto === 'string'; }), '(f) ' + l + ': as 3 do ' + gr.nome + ' são de nível ' + gr.nivel + ', sem imagem, manual, estação nem meses');
     });
   });
   // As 6 dos níveis 5 e 6: título e texto exatos nas 3 línguas, nível mínimo certo, só os campos pedidos, nada de < > & nem de bots ou IA.
