@@ -7,7 +7,7 @@
 // Prova:
 //  (a) a chave: com id inteiro > 0 é 'yoshicat_quinta_state_v2_u<ID>'; sem id (fora do Telegram, sem "user", id
 //      que não é inteiro > 0) fica 'yoshicat_quinta_state_v2', e tudo corre como antes;
-//  (b) jogador antigo, telemóvel novo, nuvem com save (o caso da mãe do Nuno): recupera tudo pela nuvem;
+//  (b) jogador antigo, telemóvel novo, nuvem com save (o caso da segunda conta de teste): recupera tudo pela nuvem;
 //  (c) conta nova com nuvem vazia num telemóvel com o save de OUTRA conta na chave antiga: começa do zero e nada da
 //      outra conta chega à nuvem dela; o save antigo nunca se apaga nem se reescreve;
 //  (d) duas contas no mesmo telemóvel, cada uma com a sua chave: cada uma lê e grava só a sua (e só a sua nuvem);
@@ -144,7 +144,7 @@ function estadoDaNuvem(n) { return n.dados.yc_state_parte_0 ? JSON.parse(n.dados
 }
 
 // =====================================================================
-// (b) Jogador antigo, telemóvel novo, nuvem com save (o caso da mãe do Nuno)
+// (b) Jogador antigo, telemóvel novo, nuvem com save (o caso da segunda conta de teste)
 // =====================================================================
 {
   const ls = {};

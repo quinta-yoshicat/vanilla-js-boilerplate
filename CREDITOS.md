@@ -5,22 +5,22 @@ Os sons reais do jogo (Chizo a ladrar, porco a grunhir, chuva normal e forte, tr
 
 O vertido de vinho, o tilintar de copos e o borbulhar de fermentação da página do lote vêm também do BigSoundBank (Joseph Sardin, CC0); foram cortados, convertidos e normalizados.
 
-Os sons dos gestos da Vinha (a pá a cavar, as folhas secas a mexer, a água a regar, a tesoura a podar e a rolha a sair de uma garrafa de vinho) vêm também do BigSoundBank (CC0); a autoria de cada um está por confirmar pelo Nuno. Os originais (mono, 48 kHz, 320 kbps; 71 s, 3,3 s, 32 s, 13 s e 1,5 s) foram carregados na pasta principal a 11/10/2026 como `cavar_usar_uma_pa.mp3`, `folhas_secas_a_mexer.mp3`, `regar.mp3`, `tesoura_podar_curtar.mp3` e `rolha_sair_ware_Wine.mp3`, e já saíram de lá. Em `assets/sons/` ficam pedaços cortados (com fade), convertidos a MP3 mono de 64 kbps e normalizados para um nível parecido com os outros sons: `cavar_pa.mp3` (1,25 s, de 16,24 s a 17,49 s do original), `folhas_secas.mp3` (2,7 s, de 0,30 s a 3,00 s), `rega.mp3` (2,8 s, de 14,70 s a 17,50 s), `tesoura_podar.mp3` (0,8 s, de 7,68 s a 8,48 s) e `rolha.mp3` (de 0,72 s ao fim do original, 0,78 s: sem o silêncio do início, fica a rolha a deslizar e o «pop»; fades de 5 ms e 50 ms), que é o brinde da Cepa Roxa.
+Os sons dos gestos da Vinha (a pá a cavar, as folhas secas a mexer, a água a regar, a tesoura a podar e a rolha a sair de uma garrafa de vinho) vêm também do BigSoundBank (CC0); a autoria de cada um está por confirmar pelo Yoshi_Cat. Os originais (mono, 48 kHz, 320 kbps; 71 s, 3,3 s, 32 s, 13 s e 1,5 s) foram carregados na pasta principal a 11/10/2026 como `cavar_usar_uma_pa.mp3`, `folhas_secas_a_mexer.mp3`, `regar.mp3`, `tesoura_podar_curtar.mp3` e `rolha_sair_ware_Wine.mp3`, e já saíram de lá. Em `assets/sons/` ficam pedaços cortados (com fade), convertidos a MP3 mono de 64 kbps e normalizados para um nível parecido com os outros sons: `cavar_pa.mp3` (1,25 s, de 16,24 s a 17,49 s do original), `folhas_secas.mp3` (2,7 s, de 0,30 s a 3,00 s), `rega.mp3` (2,8 s, de 14,70 s a 17,50 s), `tesoura_podar.mp3` (0,8 s, de 7,68 s a 8,48 s) e `rolha.mp3` (de 0,72 s ao fim do original, 0,78 s: sem o silêncio do início, fica a rolha a deslizar e o «pop»; fades de 5 ms e 50 ms), que é o brinde da Cepa Roxa.
 
-O som da prensa da Adega (`assets/sons/prensa.mp3`) foi enviado pelo Nuno (18 s, mono, 48 kHz, 320 kbps, com cerca de 12 ranger curtos); vem também do BigSoundBank (CC0), confirmado pelo Nuno a 13/10/2026. Foi cortado a um só ranger (~1 s), mono 64 kbps e normalizado; o original saiu da pasta principal.
+O som da prensa da Adega (`assets/sons/prensa.mp3`) foi enviado pelo Yoshi_Cat (18 s, mono, 48 kHz, 320 kbps, com cerca de 12 ranger curtos); vem também do BigSoundBank (CC0), confirmado pelo Yoshi_Cat a 13/10/2026. Foi cortado a um só ranger (~1 s), mono 64 kbps e normalizado; o original saiu da pasta principal.
 
-Os sons de São Martinho (a fogueira a crepitar e o assobio para chamar o Chizo) vêm também do BigSoundBank (CC0), com autoria por confirmar pelo Nuno. Os originais (mono, 48 kHz, 320 kbps) foram carregados na pasta principal a 12/10/2026 como `big_branching_fire.mp3` (38 s, com silêncio e estalos fortes) e `assobiar_chamar_chizo.mp3` (4,2 s, com três assobios), e já saíram de lá. Em `assets/sons/` ficam: `fogueira.mp3` (ciclo de 24 s feito com o pedaço de 8,0 s a 35,0 s do original, o fim cruzado 3 s com o início para não haver salto, com os estalos comprimidos e o nível baixado e nivelado; MP3 mono 64 kbps), `assobio_chizo.mp3` (0,68 s, o 3.º assobio, de 3,27 s a 3,95 s do original, fades de 5 ms e 80 ms, normalizado) e `tilintar_copos.mp3` (0,77 s, o tilintar de copos que fecha `garrafa_engarrafar.mp3`, de 2,13 s a 2,90 s dessa gravação, fades de 5 ms e 50 ms, normalizado).
+Os sons de São Martinho (a fogueira a crepitar e o assobio para chamar o Chizo) vêm também do BigSoundBank (CC0), com autoria por confirmar pelo Yoshi_Cat. Os originais (mono, 48 kHz, 320 kbps) foram carregados na pasta principal a 12/10/2026 como `big_branching_fire.mp3` (38 s, com silêncio e estalos fortes) e `assobiar_chamar_chizo.mp3` (4,2 s, com três assobios), e já saíram de lá. Em `assets/sons/` ficam: `fogueira.mp3` (ciclo de 24 s feito com o pedaço de 8,0 s a 35,0 s do original, o fim cruzado 3 s com o início para não haver salto, com os estalos comprimidos e o nível baixado e nivelado; MP3 mono 64 kbps), `assobio_chizo.mp3` (0,68 s, o 3.º assobio, de 3,27 s a 3,95 s do original, fades de 5 ms e 80 ms, normalizado) e `tilintar_copos.mp3` (0,77 s, o tilintar de copos que fecha `garrafa_engarrafar.mp3`, de 2,13 s a 2,90 s dessa gravação, fades de 5 ms e 50 ms, normalizado).
 
-O passo "Escutar à porta" da Cave usa os passos e o ranger de uma porta, também do BigSoundBank (CC0): a porta tem autoria de Joseph Sardin & Axeline T.; para os passos, origem confirmada pelo Nuno a 13/10/2026. Foram cortados, convertidos para mono e normalizados.
+O passo "Escutar à porta" da Cave usa os passos e o ranger de uma porta, também do BigSoundBank (CC0): a porta tem autoria de Joseph Sardin & Axeline T.; para os passos, origem confirmada pelo Yoshi_Cat a 13/10/2026. Foram cortados, convertidos para mono e normalizados.
 
 ## Tipos de letra
 Fraunces e Nunito, com a licença SIL Open Font License 1.1. As licenças estão em assets/fontes/.
 
 ## Imagens
-As imagens do jogo foram geradas com ferramentas de IA (Gemini, Grok e ChatGPT), usadas pelo Nuno. Segundo os termos dessas ferramentas, o utilizador fica com os direitos sobre o que gera, mas as imagens podem ser parecidas com as de outros utilizadores e, sendo geradas por IA, podem não ter proteção de direitos de autor. Os termos deverão ser revistos se o jogo vier a ter fins comerciais.
+As imagens do jogo foram geradas com ferramentas de IA (Gemini, Grok e ChatGPT), usadas pelo Yoshi_Cat. Segundo os termos dessas ferramentas, o utilizador fica com os direitos sobre o que gera, mas as imagens podem ser parecidas com as de outros utilizadores e, sendo geradas por IA, podem não ter proteção de direitos de autor. Os termos deverão ser revistos se o jogo vier a ter fins comerciais.
 
 ## Como o jogo foi feito
-Este jogo foi criado por Nuno Fernandes com a ajuda de ferramentas de inteligência artificial: Claude.ai (planeamento, pesquisa de factos com fontes e revisão do trabalho), Claude Code (escrita do código) e, para as imagens, Gemini, Grok e ChatGPT. As decisões, a história, a aprovação de cada alteração e a escolha das imagens são do Nuno.
+Este jogo foi criado por Yoshi_Cat com a ajuda de ferramentas de inteligência artificial: Claude.ai (planeamento, pesquisa de factos com fontes e revisão do trabalho), Claude Code (escrita do código) e, para as imagens, Gemini, Grok e ChatGPT. As decisões, a história, a aprovação de cada alteração e a escolha das imagens são do Yoshi_Cat.
 
 ## Base do projeto
 O projeto nasceu do modelo vanilla-js-boilerplate (Telegram Mini Apps), com licença MIT. O resto do projeto está sob «todos os direitos reservados» (ver `LICENSE`), e a licença MIT do modelo está em `LICENSE-MIT-TON`.
@@ -41,79 +41,79 @@ Imagens geradas com IA (Grok/Gemini), sem marca de serviço, carregadas a 04/10/
 
 ## Imagens e sons que o jogo usa
 
-Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do código onde aparece). **Quem fez cada imagem ou som, e com que licença, não se vê nos ficheiros**; por isso a coluna "Origem" vem do que o Nuno confirmou a 13/10/2026: todos os sons vêm do BigSoundBank (CC0) e todas as imagens foram geradas com IA (Gemini, Grok ou ChatGPT). A única exceção é `assets/tapps.png`, o logo do modelo original. O que já se sabe está nas secções "Sons" e "Imagens novas" acima.
+Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do código onde aparece). **Quem fez cada imagem ou som, e com que licença, não se vê nos ficheiros**; por isso a coluna "Origem" vem do que o Yoshi_Cat confirmou a 13/10/2026: todos os sons vêm do BigSoundBank (CC0) e todas as imagens foram geradas com IA (Gemini, Grok ou ChatGPT). A única exceção é `assets/tapps.png`, o logo do modelo original. O que já se sabe está nas secções "Sons" e "Imagens novas" acima.
 
 ### Capa
 | Ficheiro | Onde se usa | Origem |
 |---|---|---|
-| `Yoshi_Cat.jpg` (na raiz) | capa | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
+| `Yoshi_Cat.jpg` (na raiz) | capa | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 
 ### Imagens de ecrã e de cena (`assets/ecras/`)
 
 | Ficheiro | Onde se usa | Origem |
 |---|---|---|
-| `assets/ecras/adega_abandonada.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/adega_juntos.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/adega_prensa.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/alambique.jpg` | Adega (Destilar vinho) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/apontar_esquerda.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/arco_iris.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/azeite_do_olival_ao_lagar.jpg` | Enciclopédia, entrada «Do olival ao lagar» (pacote Cultura da Azeitona; lagar de varas: galga, seiras e talhas; JPEG 720x1280, até 250 KB, na proporção original) | imagem gerada com IA pelo autor do jogo, sem marcas (carregada a 26/11/2026); ferramenta por confirmar pelo Nuno |
-| `assets/ecras/bagaco.jpg` | Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/calor.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
+| `assets/ecras/adega_abandonada.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/adega_juntos.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/adega_prensa.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/alambique.jpg` | Adega (Destilar vinho) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/apontar_esquerda.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/arco_iris.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/azeite_do_olival_ao_lagar.jpg` | Enciclopédia, entrada «Do olival ao lagar» (pacote Cultura da Azeitona; lagar de varas: galga, seiras e talhas; JPEG 720x1280, até 250 KB, na proporção original) | imagem gerada com IA (Gemini, Grok ou ChatGPT) pelo autor do jogo, sem marcas (carregada a 26/11/2026) |
+| `assets/ecras/bagaco.jpg` | Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/calor.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/barril_simples.jpg` | ainda sem uso direto no código (original; a versão pequena é `assets/vinha/barril_botao.jpg`, os barris do "Seguir o barril") | imagem gerada com IA pelo autor do jogo, sem marcas |
 | `assets/ecras/camera_.jpg` | ainda sem uso no código (original; a versão pequena é o cartão da Câmara no Explorar) | imagem gerada com IA pelo autor do jogo, sem marcas |
 | `assets/ecras/cepa_roxa.jpg` | ainda sem uso no código (original; a versão pequena é o cartão da Cepa Roxa no Explorar) | imagem gerada com IA pelo autor do jogo, sem marcas |
-| `assets/ecras/carnaval_dia_grande.jpg` | festa de Carnaval, dia grande (cópia comprimida de `imagens_JOGO_TELEGRAM/carnaval_patio_vindimas_2_personagens.jpg`, a mesma imagem, 714x1280) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/carnaval_festa.jpg` | festa de Carnaval, ecrã da festa e tarefas (cópia exata de `imagens_JOGO_TELEGRAM/carnaval_patio_vindima_1.jpg`) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/casa_loja_meio_da_vinha_4.jpg` | A Loja da Quinta (fundo com sol) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/cave_de_inverno.jpg` | Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/chizo_lenco.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/chizo_porta_casa.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/chizo_vinha.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/cimo_da_colina_apontar.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/derrota.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/enciclopedia_magusto.jpg` | Enciclopédia | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/enciclopedia_yoshi_cat_2.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/estrada_amelia.jpg` | A Estrada (cena do vizinho) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/estrada_armindo.jpg` | A Estrada (cena do vizinho) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/estrada_joaquim.jpg` | A Estrada (cena do vizinho) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/estrada_tomas.jpg` | A Estrada (cena do vizinho) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/estrada_dona_natalia.jpg` | A Estrada (cena da Dona Natália; recorte do topo da imagem original, 640x347) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/estrada_sr_albano.jpg` | A Estrada (cena do Sr. Albano; a imagem toda, sem recorte, reduzida a 640x953) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/estrada_dona_fernanda.jpg` | A Estrada (cena da Dona Fernanda; recorte do topo da imagem original, 640x751) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/estrada_sr_anselmo.jpg` | A Estrada (cena do Sr. Anselmo; recorte do topo da imagem original, 640x513) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/estrada_dona_rosa.jpg` | A Estrada (cena da Dona Rosa; recorte da imagem original, 640x702) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
-| `assets/ecras/estrada_sr_alvaro.jpg` | A Estrada (cena do Sr. Álvaro; recorte do topo da imagem original, 640x566) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
-| `assets/ecras/estrada_dona_lurdes.jpg` | A Estrada (cena da Dona Lurdes; recorte da imagem original, 640x777) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
-| `assets/ecras/estrada_sr_zeferino.jpg` | A Estrada (cena do Sr. Zeferino; recorte da imagem original, 640x779) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
-| `assets/ecras/estrada_dona_maria.jpg` | A Estrada (cena da Dona Maria; recorte da imagem original, 640x793) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
-| `assets/ecras/explorar_trator.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/festa_vindima_todos_juntos.jpg` | fundo de um ecrã, história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/festa_vindima_pessoas.jpg` | O Lagar (fundo depois de pôr a mesa da vindima; versão comprimida a ≤ 250 KB do original em imagens_JOGO_TELEGRAM) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/fygmos_fazem_das_suas.jpg` | O Lagar, fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/fygmos_quinta_passear.jpg` | O Lagar | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/doencas_e_pragas.jpg` | Vigiar a vinha (sinal de míldio, com chuva) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/doencas_e_pragas_2.jpg` | Vigiar a vinha (depois de vigiar, míldio) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/granizo.jpg` | tempo real de Setúbal (fundo da Vinha com granizo) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/inverno_poda.jpg` | Vinha | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/livro_cabecalho.jpg` | Livro de Conquistas | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/livro_conquistas.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/lojas_casas.jpg` | A Loja da Quinta (fundo à chuva) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/lojas_casas_janelas_abertas_2.jpg` | A Loja da Quinta (fundo com trovoada ou granizo) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/menu_quinta.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
+| `assets/ecras/carnaval_dia_grande.jpg` | festa de Carnaval, dia grande (cópia comprimida de `imagens_JOGO_TELEGRAM/carnaval_patio_vindimas_2_personagens.jpg`, a mesma imagem, 714x1280) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/carnaval_festa.jpg` | festa de Carnaval, ecrã da festa e tarefas (cópia exata de `imagens_JOGO_TELEGRAM/carnaval_patio_vindima_1.jpg`) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/casa_loja_meio_da_vinha_4.jpg` | A Loja da Quinta (fundo com sol) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/cave_de_inverno.jpg` | Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/chizo_lenco.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/chizo_porta_casa.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/chizo_vinha.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/cimo_da_colina_apontar.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/derrota.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/enciclopedia_magusto.jpg` | Enciclopédia | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/enciclopedia_yoshi_cat_2.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/estrada_amelia.jpg` | A Estrada (cena do vizinho) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/estrada_armindo.jpg` | A Estrada (cena do vizinho) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/estrada_joaquim.jpg` | A Estrada (cena do vizinho) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/estrada_tomas.jpg` | A Estrada (cena do vizinho) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/estrada_dona_natalia.jpg` | A Estrada (cena da Dona Natália; recorte do topo da imagem original, 640x347) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/estrada_sr_albano.jpg` | A Estrada (cena do Sr. Albano; a imagem toda, sem recorte, reduzida a 640x953) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/estrada_dona_fernanda.jpg` | A Estrada (cena da Dona Fernanda; recorte do topo da imagem original, 640x751) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/estrada_sr_anselmo.jpg` | A Estrada (cena do Sr. Anselmo; recorte do topo da imagem original, 640x513) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/estrada_dona_rosa.jpg` | A Estrada (cena da Dona Rosa; recorte da imagem original, 640x702) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 19/10/2026 |
+| `assets/ecras/estrada_sr_alvaro.jpg` | A Estrada (cena do Sr. Álvaro; recorte do topo da imagem original, 640x566) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 19/10/2026 |
+| `assets/ecras/estrada_dona_lurdes.jpg` | A Estrada (cena da Dona Lurdes; recorte da imagem original, 640x777) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 19/10/2026 |
+| `assets/ecras/estrada_sr_zeferino.jpg` | A Estrada (cena do Sr. Zeferino; recorte da imagem original, 640x779) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 19/10/2026 |
+| `assets/ecras/estrada_dona_maria.jpg` | A Estrada (cena da Dona Maria; recorte da imagem original, 640x793) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 19/10/2026 |
+| `assets/ecras/explorar_trator.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/festa_vindima_todos_juntos.jpg` | fundo de um ecrã, história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/festa_vindima_pessoas.jpg` | O Lagar (fundo depois de pôr a mesa da vindima; versão comprimida a ≤ 250 KB do original em imagens_JOGO_TELEGRAM) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/fygmos_fazem_das_suas.jpg` | O Lagar, fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/fygmos_quinta_passear.jpg` | O Lagar | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/doencas_e_pragas.jpg` | Vigiar a vinha (sinal de míldio, com chuva) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/doencas_e_pragas_2.jpg` | Vigiar a vinha (depois de vigiar, míldio) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/granizo.jpg` | tempo real de Setúbal (fundo da Vinha com granizo) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/inverno_poda.jpg` | Vinha | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/livro_cabecalho.jpg` | Livro de Conquistas | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/livro_conquistas.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/lojas_casas.jpg` | A Loja da Quinta (fundo à chuva) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/lojas_casas_janelas_abertas_2.jpg` | A Loja da Quinta (fundo com trovoada ou granizo) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/menu_quinta.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/moscatel_roxo_com_uvas.jpg` | ainda sem uso direto no código (original; a versão pequena é `assets/garrafas/garrafa_roxo_uvas.jpg`, o brinde da Cepa Roxa) | imagem gerada com IA pelo autor do jogo, sem marcas |
 | `assets/ecras/natal_bolorei.jpg` | festa de Natal, tarefa «O Bolo-Rei» (cena e resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
 | `assets/ecras/natal_consoada.jpg` | festa de Natal, tarefa «A Consoada» (cena e resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
-| `assets/ecras/natal_dia25.jpg` | festa de Natal, dia 25 (cópia de `imagens_JOGO_TELEGRAM/natal_patio_de_vindima.jpg`) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
+| `assets/ecras/natal_dia25.jpg` | festa de Natal, dia 25 (cópia de `imagens_JOGO_TELEGRAM/natal_patio_de_vindima.jpg`) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/natal_doces.jpg` | festa de Natal, tarefa «Doces da Quinta» (resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
-| `assets/ecras/natal_festa.jpg` | festa de Natal, ecrã da festa; e imagem de reserva das tarefas do Natal e da festa dos Reis (quando falta a imagem própria) (cópia de `imagens_JOGO_TELEGRAM/natal_patio_vindimas_2.jpg`) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/nevoeiro_1.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/pascoa_dia_grande.jpg` | festa da Páscoa, dia grande (versão cortada e comprimida de `imagens_JOGO_TELEGRAM/pascoa_dia_grande.jpg`, 714x1280) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/pascoa_festa.jpg` | festa da Páscoa, ecrã da festa e tarefas (versão redimensionada de `imagens_JOGO_TELEGRAM/pascoa_festa.jpg`, 714x1280) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/perfil_yoshi_cat_e_chizo.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/pragas_sol.jpg` | Vigiar a vinha (sinal de oídio, com calor) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/pragas_sol_2.jpg` | Vigiar a vinha (depois de vigiar, oídio) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
+| `assets/ecras/natal_festa.jpg` | festa de Natal, ecrã da festa; e imagem de reserva das tarefas do Natal e da festa dos Reis (quando falta a imagem própria) (cópia de `imagens_JOGO_TELEGRAM/natal_patio_vindimas_2.jpg`) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/nevoeiro_1.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/pascoa_dia_grande.jpg` | festa da Páscoa, dia grande (versão cortada e comprimida de `imagens_JOGO_TELEGRAM/pascoa_dia_grande.jpg`, 714x1280) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/pascoa_festa.jpg` | festa da Páscoa, ecrã da festa e tarefas (versão redimensionada de `imagens_JOGO_TELEGRAM/pascoa_festa.jpg`, 714x1280) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/perfil_yoshi_cat_e_chizo.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/pragas_sol.jpg` | Vigiar a vinha (sinal de oídio, com calor) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/pragas_sol_2.jpg` | Vigiar a vinha (depois de vigiar, oídio) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/reis_dia_grande.jpg` | festa Reis e Janeiras, menu da festa no Dia de Reis (6 de janeiro) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
 | `assets/ecras/reis_fava.jpg` | festa Reis e Janeiras, tarefa «A Fava» (cena e resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
 | `assets/ecras/reis_festa.jpg` | festa Reis e Janeiras, menu da festa (1 a 5 de janeiro) e tarefa «Bolo-Rei de Reis» (resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
@@ -123,44 +123,44 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/santos_festa.jpg` | festa Santos Populares, menu da festa (12 a 29 de junho, fora dos dias grandes) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; original `grok_1795384930558.jpg`, convertida para JPEG 784x1168, 248 KB, até 250 KB) |
 | `assets/ecras/santos_manjerico.jpg` | festa Santos Populares, tarefa «O Manjerico» (cena e resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; original `grok_1795385425049.jpg`, convertida para JPEG 832x1248, 247 KB, até 250 KB) |
 | `assets/ecras/santos_sardinhada.jpg` | festa Santos Populares, tarefa «A Sardinhada» (resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; original `Lumo_generated_2026-11-22_22_19-1795385964921.png`, convertida para JPEG 720x1280, 232 KB, até 250 KB) |
-| `assets/ecras/sao_martinho_castanhas.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/sao_martinho_dia11.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/sao_martinho_festa.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/sao_martinho_fuga.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/sao_martinho_jeropiga.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/sao_martinho_prova.jpg` | festa de São Martinho, história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/sao_martinho_roubo.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/sao_martinho_verao.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/tempestade.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/tempo_chuva.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/trovoada_chizo.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/varios_talhoes_da_vinha.jpg` | história do nível 4 (cópia exata do original) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/vento.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/yoshi_cat_adega_balde.jpg` | Reserva (resultado da tarefa) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/yoshi_cat_cruzados_derrota_3.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/yoshi_cat_e_chizo_geada.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/yoshi_cat_fala_das_uvas.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/yoshi_cat_festa.jpg` | O Lagar (já sem uso: o fundo depois de pôr a mesa passou a ser festa_vindima_pessoas.jpg; não se apagou) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/yoshi_cat_festa_vindima.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/yoshi_cat_festejar_vitoria.jpg` | O Lagar, Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/yoshi_cat_geada.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/yoshi_cat_varanda.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/ecras/arrabida_colina.jpg` | história do nível 11 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/sado_estuario.jpg` | história do nível 12 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/palmela_castelo.jpg` | história do nível 13 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/azeitao_vila.jpg` | história do nível 14 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/sesimbra_vila.jpg` | história do nível 15 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/sesimbra_porto.jpg` | história do nível 15 (fala 3) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/yoshicat_sado_mirar.jpg` | história do nível 16 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/yoshicat_binoculos_sado.jpg` | história do nível 16 (fala 3) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/sado_por_do_sol.jpg` | história do nível 17 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/sado_navio.jpg` | história do nível 17 (fala 3) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/yoshi_nos_arrozais.jpg` | história do nível 18 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/yoshi_a_mesa.jpg` | história do nível 18 (fala 3) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/yoshi_no_montado.jpg` | história do nível 19 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/yoshi_sobreiro.jpg` | história do nível 19 (fala 3) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/casa_bocage.jpg` | história do nível 20 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/ecras/yoshicat_chizo_no_cais_de_setubal.jpg` | história do nível 20 (fala 3) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
+| `assets/ecras/sao_martinho_castanhas.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/sao_martinho_dia11.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/sao_martinho_festa.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/sao_martinho_fuga.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/sao_martinho_jeropiga.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/sao_martinho_prova.jpg` | festa de São Martinho, história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/sao_martinho_roubo.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/sao_martinho_verao.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/tempestade.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/tempo_chuva.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/trovoada_chizo.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/varios_talhoes_da_vinha.jpg` | história do nível 4 (cópia exata do original) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/vento.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/yoshi_cat_adega_balde.jpg` | Reserva (resultado da tarefa) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/yoshi_cat_cruzados_derrota_3.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/yoshi_cat_e_chizo_geada.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/yoshi_cat_fala_das_uvas.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/yoshi_cat_festa.jpg` | O Lagar (já sem uso: o fundo depois de pôr a mesa passou a ser festa_vindima_pessoas.jpg; não se apagou) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/yoshi_cat_festa_vindima.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/yoshi_cat_festejar_vitoria.jpg` | O Lagar, Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/yoshi_cat_geada.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/yoshi_cat_varanda.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/arrabida_colina.jpg` | história do nível 11 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/sado_estuario.jpg` | história do nível 12 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/palmela_castelo.jpg` | história do nível 13 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/azeitao_vila.jpg` | história do nível 14 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/sesimbra_vila.jpg` | história do nível 15 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/sesimbra_porto.jpg` | história do nível 15 (fala 3) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/yoshicat_sado_mirar.jpg` | história do nível 16 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/yoshicat_binoculos_sado.jpg` | história do nível 16 (fala 3) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/sado_por_do_sol.jpg` | história do nível 17 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/sado_navio.jpg` | história do nível 17 (fala 3) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/yoshi_nos_arrozais.jpg` | história do nível 18 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/yoshi_a_mesa.jpg` | história do nível 18 (fala 3) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/yoshi_no_montado.jpg` | história do nível 19 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/yoshi_sobreiro.jpg` | história do nível 19 (fala 3) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/casa_bocage.jpg` | história do nível 20 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/yoshicat_chizo_no_cais_de_setubal.jpg` | história do nível 20 (fala 3) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
 
 ### Cartões do Explorar (`assets/explorar/`)
 Versões pequenas (JPEG 640x340, até 60 KB cada) feitas só para os cartões do Explorar (`js/explorar.js`). São recortes dos originais, que não se apagaram; a origem é a dos originais.
@@ -178,95 +178,95 @@ Versões pequenas (JPEG 640x340, até 60 KB cada) feitas só para os cartões do
 
 | Ficheiro | Onde se usa | Origem |
 |---|---|---|
-| `assets/vinha/adubar_2.jpg` | Vinha | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/vinha/barril.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
+| `assets/vinha/adubar_2.jpg` | Vinha | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/vinha/barril.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/vinha/barril_botao.jpg` | Proteger, "Seguir o barril": os 3 barris (300x300, recorte de `assets/ecras/barril_simples.jpg`) | imagem gerada com IA pelo autor do jogo, sem marcas |
-| `assets/vinha/barril_dourado.jpg` | Adega / Cave / Coleção, fundo de um ecrã, história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/vinha/cavar_2.jpg` | Vinha | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/vinha/colher.jpg` | Vinha | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/vinha/compostagem_1.jpg` | Vinha | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/vinha/eliminarervasdaninhas_2.jpg` | Vinha | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/vinha/engarrafar.jpg` | Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/vinha/mexer_mosto.jpg` | Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/vinha/plantar.jpg` | Vinha | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/vinha/prensar.jpg` | Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/vinha/regar.jpg` | Vinha | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
+| `assets/vinha/barril_dourado.jpg` | Adega / Cave / Coleção, fundo de um ecrã, história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/vinha/cavar_2.jpg` | Vinha | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/vinha/colher.jpg` | Vinha | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/vinha/compostagem_1.jpg` | Vinha | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/vinha/eliminarervasdaninhas_2.jpg` | Vinha | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/vinha/engarrafar.jpg` | Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/vinha/mexer_mosto.jpg` | Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/vinha/plantar.jpg` | Vinha | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/vinha/prensar.jpg` | Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/vinha/regar.jpg` | Vinha | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 
 ### Garrafas (`assets/garrafas/`)
 
 | Ficheiro | Onde se usa | Origem |
 |---|---|---|
-| `assets/garrafas/garrafa_1_jovem.jpg` | Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/garrafas/garrafa_2_dourado.jpg` | Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/garrafas/garrafa_3_ambar.jpg` | Adega / Cave / Coleção, A Câmara (já não é a da Cepa Roxa) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
+| `assets/garrafas/garrafa_1_jovem.jpg` | Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/garrafas/garrafa_2_dourado.jpg` | Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/garrafas/garrafa_3_ambar.jpg` | Adega / Cave / Coleção, A Câmara (já não é a da Cepa Roxa) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/garrafas/garrafa_roxo_uvas.jpg` | A Cepa Roxa (resultado do brinde); versão 512x512 de `assets/ecras/moscatel_roxo_com_uvas.jpg` | imagem gerada com IA pelo autor do jogo, sem marcas |
-| `assets/garrafas/garrafa_4_cobre.jpg` | A Câmara, Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
+| `assets/garrafas/garrafa_4_cobre.jpg` | A Câmara, Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 
 ### Mapa (`assets/mapa/`)
 
 | Ficheiro | Onde se usa | Origem |
 |---|---|---|
-| `assets/mapa/mapa_quinta.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
+| `assets/mapa/mapa_quinta.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 
 ### Caras das personagens (`assets/personagens/`)
 
 | Ficheiro | Onde se usa | Origem |
 |---|---|---|
-| `assets/personagens/azeitoneiro.jpg` | cara do azeitoneiro (pacote Cultura da Azeitona; ainda sem visita a usá-la; recorte do rosto do retrato, 128x128) | imagem gerada com IA pelo autor do jogo, sem marcas (carregada a 26/11/2026); ferramenta por confirmar pelo Nuno |
-| `assets/personagens/chizo.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/personagens/fygmo.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/personagens/fygmo2.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/personagens/henrique.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/personagens/marisa.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/personagens/valentim.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/personagens/vizinha_amelia.jpg` | cara dos vizinhos (A Estrada) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/personagens/vizinho_armindo.jpg` | cara dos vizinhos (A Estrada) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/personagens/vizinho_joaquim.jpg` | cara dos vizinhos (A Estrada) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/personagens/vizinho_tomas.jpg` | cara dos vizinhos (A Estrada) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
-| `assets/personagens/vizinha_natalia.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/personagens/vizinho_albano.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/personagens/vizinha_fernanda.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/personagens/vizinho_anselmo.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 17/10/2026 |
-| `assets/personagens/vizinha_rosa.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
-| `assets/personagens/vizinho_alvaro.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
-| `assets/personagens/vizinha_lurdes.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
-| `assets/personagens/vizinho_zeferino.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
-| `assets/personagens/vizinha_maria.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 19/10/2026 |
-| `assets/personagens/yoshicat.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
+| `assets/personagens/azeitoneiro.jpg` | cara do azeitoneiro (pacote Cultura da Azeitona; ainda sem visita a usá-la; recorte do rosto do retrato, 128x128) | imagem gerada com IA (Gemini, Grok ou ChatGPT) pelo autor do jogo, sem marcas (carregada a 26/11/2026) |
+| `assets/personagens/chizo.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/personagens/fygmo.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/personagens/fygmo2.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/personagens/henrique.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/personagens/marisa.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/personagens/valentim.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/personagens/vizinha_amelia.jpg` | cara dos vizinhos (A Estrada) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/personagens/vizinho_armindo.jpg` | cara dos vizinhos (A Estrada) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/personagens/vizinho_joaquim.jpg` | cara dos vizinhos (A Estrada) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/personagens/vizinho_tomas.jpg` | cara dos vizinhos (A Estrada) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/personagens/vizinha_natalia.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/personagens/vizinho_albano.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/personagens/vizinha_fernanda.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/personagens/vizinho_anselmo.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/personagens/vizinha_rosa.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 19/10/2026 |
+| `assets/personagens/vizinho_alvaro.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 19/10/2026 |
+| `assets/personagens/vizinha_lurdes.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 19/10/2026 |
+| `assets/personagens/vizinho_zeferino.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 19/10/2026 |
+| `assets/personagens/vizinha_maria.jpg` | cara dos vizinhos (A Estrada; recorte do rosto da mesma imagem, 128x128) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 19/10/2026 |
+| `assets/personagens/yoshicat.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 
 ### Sons usados (`assets/sons/`)
 
 | Ficheiro | Onde se usa | Origem |
 |---|---|---|
-| `assets/sons/assobio_chizo.mp3` | As Castanhas de São Martinho (cenas em que se assobia ao Chizo) | BigSoundBank, CC0; autoria por confirmar pelo Nuno; cortado, mono 64 kbps e normalizado |
-| `assets/sons/cavar_pa.mp3` | Vinha (Cavar, Plantar, Adubar) | BigSoundBank, CC0; autoria por confirmar pelo Nuno; cortado, mono 64 kbps e normalizado |
-| `assets/sons/folhas_secas.mp3` | Vinha (Compostar) | BigSoundBank, CC0; autoria por confirmar pelo Nuno; cortado, mono 64 kbps e normalizado |
-| `assets/sons/rega.mp3` | Vinha (Regar) | BigSoundBank, CC0; autoria por confirmar pelo Nuno; cortado, mono 64 kbps e normalizado |
-| `assets/sons/tesoura_podar.mp3` | Vinha (Colher, Podar) | BigSoundBank, CC0; autoria por confirmar pelo Nuno; cortado, mono 64 kbps e normalizado |
-| `assets/sons/cave_passos.mp3` | Proteger (Escutar à porta) | BigSoundBank, CC0 (confirmado pelo Nuno a 13/10/2026) |
+| `assets/sons/assobio_chizo.mp3` | As Castanhas de São Martinho (cenas em que se assobia ao Chizo) | BigSoundBank, CC0; autoria por confirmar pelo Yoshi_Cat; cortado, mono 64 kbps e normalizado |
+| `assets/sons/cavar_pa.mp3` | Vinha (Cavar, Plantar, Adubar) | BigSoundBank, CC0; autoria por confirmar pelo Yoshi_Cat; cortado, mono 64 kbps e normalizado |
+| `assets/sons/folhas_secas.mp3` | Vinha (Compostar) | BigSoundBank, CC0; autoria por confirmar pelo Yoshi_Cat; cortado, mono 64 kbps e normalizado |
+| `assets/sons/rega.mp3` | Vinha (Regar) | BigSoundBank, CC0; autoria por confirmar pelo Yoshi_Cat; cortado, mono 64 kbps e normalizado |
+| `assets/sons/tesoura_podar.mp3` | Vinha (Colher, Podar) | BigSoundBank, CC0; autoria por confirmar pelo Yoshi_Cat; cortado, mono 64 kbps e normalizado |
+| `assets/sons/cave_passos.mp3` | Proteger (Escutar à porta) | BigSoundBank, CC0 (confirmado pelo Yoshi_Cat a 13/10/2026) |
 | `assets/sons/cave_porta.mp3` | Proteger (Escutar à porta) | BigSoundBank, CC0 (Joseph Sardin & Axeline T.) |
-| `assets/sons/chizo_ladrar.mp3` | Proteger, história dos níveis | BigSoundBank, CC0 (confirmado pelo Nuno a 13/10/2026) |
-| `assets/sons/chuva.mp3` | tempo real de Setúbal | BigSoundBank, CC0 (confirmado pelo Nuno a 13/10/2026) |
-| `assets/sons/chuva_sempreritmo.mp3` | tempo real de Setúbal | BigSoundBank, CC0 (confirmado pelo Nuno a 13/10/2026) |
-| `assets/sons/fogueira.mp3` | As Castanhas de São Martinho (ambiente em ciclo durante a cena) | BigSoundBank, CC0; autoria por confirmar pelo Nuno; cortado num ciclo de 24 s sem salto, mono 64 kbps e nivelado |
-| `assets/sons/garrafa_ambiente.mp3` | Adega / Cave / Coleção | BigSoundBank, CC0 (confirmado pelo Nuno a 13/10/2026) |
-| `assets/sons/garrafa_engarrafar.mp3` | Adega / Cave / Coleção | BigSoundBank, CC0 (confirmado pelo Nuno a 13/10/2026) |
-| `assets/sons/rolha.mp3` | A Cepa Roxa (botão «Brindar com o Moscatel Roxo»: toca em vez do «ding») | BigSoundBank, CC0; autoria por confirmar pelo Nuno; cortado (sem o silêncio do início), mono 64 kbps e normalizado |
-| `assets/sons/prensa.mp3` | A Adega (botão «Prensar»: esmaga as uvas; «Fortificar» não a usa) | Ficheiro enviado pelo Nuno; BigSoundBank, CC0 (confirmado pelo Nuno a 13/10/2026); cortado (um só ranger, ~1 s), mono 64 kbps e normalizado |
-| `assets/sons/prado_grilos_ras.mp3` | Quinta e Vinha, noite de verão (ambiente) | BigSoundBank, CC0 (confirmado pelo Nuno a 13/10/2026); comprimido para MP3 mono a 64 kbps e cortado num ciclo de 70 s sem salto (fim cruzado com o início) |
-| `assets/sons/vento_arvores_passaros.mp3` | Quinta e Vinha, dia calmo (ambiente) | BigSoundBank, CC0 (confirmado pelo Nuno a 13/10/2026); comprimido para MP3 mono a 64 kbps |
-| `assets/sons/vento_grama_alta.mp3` | Quinta e Vinha, vento forte (ambiente) | BigSoundBank, CC0 (confirmado pelo Nuno a 13/10/2026); comprimido para MP3 mono a 64 kbps |
-| `assets/sons/porco_grunhir.mp3` | Proteger | BigSoundBank, CC0 (confirmado pelo Nuno a 13/10/2026) |
-| `assets/sons/tilintar_copos.mp3` | A Prova do Vinho Novo (São Martinho) | BigSoundBank, CC0 (corte de `garrafa_engarrafar.mp3`, confirmado pelo Nuno a 13/10/2026); cortado, mono 64 kbps e normalizado |
-| `assets/sons/trovao_1.mp3` | tempo real de Setúbal | BigSoundBank, CC0 (confirmado pelo Nuno a 13/10/2026) |
-| `assets/sons/trovao_2_forte.mp3` | tempo real de Setúbal | BigSoundBank, CC0 (confirmado pelo Nuno a 13/10/2026) |
+| `assets/sons/chizo_ladrar.mp3` | Proteger, história dos níveis | BigSoundBank, CC0 (confirmado pelo Yoshi_Cat a 13/10/2026) |
+| `assets/sons/chuva.mp3` | tempo real de Setúbal | BigSoundBank, CC0 (confirmado pelo Yoshi_Cat a 13/10/2026) |
+| `assets/sons/chuva_sempreritmo.mp3` | tempo real de Setúbal | BigSoundBank, CC0 (confirmado pelo Yoshi_Cat a 13/10/2026) |
+| `assets/sons/fogueira.mp3` | As Castanhas de São Martinho (ambiente em ciclo durante a cena) | BigSoundBank, CC0; autoria por confirmar pelo Yoshi_Cat; cortado num ciclo de 24 s sem salto, mono 64 kbps e nivelado |
+| `assets/sons/garrafa_ambiente.mp3` | Adega / Cave / Coleção | BigSoundBank, CC0 (confirmado pelo Yoshi_Cat a 13/10/2026) |
+| `assets/sons/garrafa_engarrafar.mp3` | Adega / Cave / Coleção | BigSoundBank, CC0 (confirmado pelo Yoshi_Cat a 13/10/2026) |
+| `assets/sons/rolha.mp3` | A Cepa Roxa (botão «Brindar com o Moscatel Roxo»: toca em vez do «ding») | BigSoundBank, CC0; autoria por confirmar pelo Yoshi_Cat; cortado (sem o silêncio do início), mono 64 kbps e normalizado |
+| `assets/sons/prensa.mp3` | A Adega (botão «Prensar»: esmaga as uvas; «Fortificar» não a usa) | Ficheiro enviado pelo Yoshi_Cat; BigSoundBank, CC0 (confirmado pelo Yoshi_Cat a 13/10/2026); cortado (um só ranger, ~1 s), mono 64 kbps e normalizado |
+| `assets/sons/prado_grilos_ras.mp3` | Quinta e Vinha, noite de verão (ambiente) | BigSoundBank, CC0 (confirmado pelo Yoshi_Cat a 13/10/2026); comprimido para MP3 mono a 64 kbps e cortado num ciclo de 70 s sem salto (fim cruzado com o início) |
+| `assets/sons/vento_arvores_passaros.mp3` | Quinta e Vinha, dia calmo (ambiente) | BigSoundBank, CC0 (confirmado pelo Yoshi_Cat a 13/10/2026); comprimido para MP3 mono a 64 kbps |
+| `assets/sons/vento_grama_alta.mp3` | Quinta e Vinha, vento forte (ambiente) | BigSoundBank, CC0 (confirmado pelo Yoshi_Cat a 13/10/2026); comprimido para MP3 mono a 64 kbps |
+| `assets/sons/porco_grunhir.mp3` | Proteger | BigSoundBank, CC0 (confirmado pelo Yoshi_Cat a 13/10/2026) |
+| `assets/sons/tilintar_copos.mp3` | A Prova do Vinho Novo (São Martinho) | BigSoundBank, CC0 (corte de `garrafa_engarrafar.mp3`, confirmado pelo Yoshi_Cat a 13/10/2026); cortado, mono 64 kbps e normalizado |
+| `assets/sons/trovao_1.mp3` | tempo real de Setúbal | BigSoundBank, CC0 (confirmado pelo Yoshi_Cat a 13/10/2026) |
+| `assets/sons/trovao_2_forte.mp3` | tempo real de Setúbal | BigSoundBank, CC0 (confirmado pelo Yoshi_Cat a 13/10/2026) |
 
 ### Ficheiros que estão em `assets/` mas que não encontrei usados no código
 
-Podem ser sobras ou podem ter outro uso; confirmar antes de apagar. Origem: as imagens foram geradas com IA (Gemini, Grok ou ChatGPT) e o som vem do BigSoundBank (CC0), confirmado pelo Nuno a 13/10/2026.
+Podem ser sobras ou podem ter outro uso; confirmar antes de apagar. Origem: as imagens foram geradas com IA (Gemini, Grok ou ChatGPT) e o som vem do BigSoundBank (CC0), confirmado pelo Yoshi_Cat a 13/10/2026.
 
 - Imagens: `assets/ecras/barril_simples.jpg`, `assets/ecras/moscatel_roxo_com_uvas.jpg`, `assets/ecras/camera_.jpg`, `assets/ecras/cepa_roxa.jpg`, `assets/ecras/arranjar_estacas_sol.jpg`, `assets/ecras/arranjar_estacas_sol_2.jpg`, `assets/ecras/derrota_2.jpg`, `assets/ecras/enciclopedia.jpg`, `assets/ecras/enciclopedia_yoshi_cat.jpg`, `assets/ecras/explorar.jpg`, `assets/ecras/inverno_poda_2.jpg`, `assets/ecras/livro_de_conquistas.jpg`, `assets/ecras/livro_de_conquistas_perfil.jpg`, `assets/ecras/nevoeiro_2.jpg`, `assets/ecras/perfil.jpg`, `assets/ecras/poda_vinha.jpg`, `assets/ecras/proteger.jpg`, `assets/ecras/proteger_2.jpg`, `assets/ecras/proteger_3.jpg`, `assets/ecras/sao_martinho_pensar_festa.jpg`, `assets/ecras/sol_calor.jpg`, `assets/ecras/trovoada_porcos_mini.jpg`, `assets/ecras/yoshi_cat_em_festa_vindima.jpg`, `assets/ecras/yoshi_cat_encarar.jpg`, `assets/ecras/yoshi_cat_festa_bracoscrusados.jpg`, `assets/ecras/yoshi_cat_meio_tempestade.jpg`, `assets/ecras/yoshi_cat_meio_tempestade_2.jpg`, `assets/ecras/yoshi_cat_pronto_accao.jpg`, `assets/ecras/yoshi_cat_trabalhar_quinta.jpg`, `assets/vinha/adubar_1.jpg`, `assets/vinha/cavar_1.jpg`, `assets/vinha/compostagem_2.jpg`, `assets/vinha/eliminarervasdaninhas_1.jpg`
-- Imagens originais de `imagens_JOGO_TELEGRAM/` (o código não lê esta pasta; o jogo usa as cópias de `assets/ecras/` e `assets/explorar/` quando existem, ver as tabelas acima; geradas com IA, confirmado pelo Nuno a 17/10/2026): `imagens_JOGO_TELEGRAM/arrozal_2.jpg`, `imagens_JOGO_TELEGRAM/arrozal_personagens.jpg`, `imagens_JOGO_TELEGRAM/caminho_lojas_casa_trabalhadores_3.jpg`, `imagens_JOGO_TELEGRAM/carnaval_patio_vindima_1.jpg`, `imagens_JOGO_TELEGRAM/carnaval_patio_vindimas_2_personagens.jpg`, `imagens_JOGO_TELEGRAM/casa_loja_meio_da_vinha_4.jpg`, `imagens_JOGO_TELEGRAM/cortica.jpg`, `imagens_JOGO_TELEGRAM/doencas_e_pragas.jpg`, `imagens_JOGO_TELEGRAM/doencas_e_pragas_2.jpg`, `imagens_JOGO_TELEGRAM/festa_vindima_pessoas.jpg`, `imagens_JOGO_TELEGRAM/granizo.jpg`, `imagens_JOGO_TELEGRAM/granizo_2.jpg`, `imagens_JOGO_TELEGRAM/granizo_3.jpg`, `imagens_JOGO_TELEGRAM/lojas_casas.jpg`, `imagens_JOGO_TELEGRAM/lojas_casas_janelas_abertas_2.jpg`, `imagens_JOGO_TELEGRAM/natal_patio_de_vindima.jpg`, `imagens_JOGO_TELEGRAM/natal_patio_vindimas_2.jpg`, `imagens_JOGO_TELEGRAM/pascoa_dia_grande.jpg`, `imagens_JOGO_TELEGRAM/pascoa_festa.jpg`, `imagens_JOGO_TELEGRAM/pragas_sol.jpg`, `imagens_JOGO_TELEGRAM/pragas_sol_2.jpg`, `imagens_JOGO_TELEGRAM/varios_talhoes_da_vinha.jpg`
+- Imagens originais de `imagens_JOGO_TELEGRAM/` (o código não lê esta pasta; o jogo usa as cópias de `assets/ecras/` e `assets/explorar/` quando existem, ver as tabelas acima; geradas com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026): `imagens_JOGO_TELEGRAM/arrozal_2.jpg`, `imagens_JOGO_TELEGRAM/arrozal_personagens.jpg`, `imagens_JOGO_TELEGRAM/caminho_lojas_casa_trabalhadores_3.jpg`, `imagens_JOGO_TELEGRAM/carnaval_patio_vindima_1.jpg`, `imagens_JOGO_TELEGRAM/carnaval_patio_vindimas_2_personagens.jpg`, `imagens_JOGO_TELEGRAM/casa_loja_meio_da_vinha_4.jpg`, `imagens_JOGO_TELEGRAM/cortica.jpg`, `imagens_JOGO_TELEGRAM/doencas_e_pragas.jpg`, `imagens_JOGO_TELEGRAM/doencas_e_pragas_2.jpg`, `imagens_JOGO_TELEGRAM/festa_vindima_pessoas.jpg`, `imagens_JOGO_TELEGRAM/granizo.jpg`, `imagens_JOGO_TELEGRAM/granizo_2.jpg`, `imagens_JOGO_TELEGRAM/granizo_3.jpg`, `imagens_JOGO_TELEGRAM/lojas_casas.jpg`, `imagens_JOGO_TELEGRAM/lojas_casas_janelas_abertas_2.jpg`, `imagens_JOGO_TELEGRAM/natal_patio_de_vindima.jpg`, `imagens_JOGO_TELEGRAM/natal_patio_vindimas_2.jpg`, `imagens_JOGO_TELEGRAM/pascoa_dia_grande.jpg`, `imagens_JOGO_TELEGRAM/pascoa_festa.jpg`, `imagens_JOGO_TELEGRAM/pragas_sol.jpg`, `imagens_JOGO_TELEGRAM/pragas_sol_2.jpg`, `imagens_JOGO_TELEGRAM/varios_talhoes_da_vinha.jpg`
 - Sons: `assets/sons/vento_feito_a_mao.mp3`
 
 ### Sons sem ficheiro
@@ -276,4 +276,4 @@ Os efeitos curtos de `js/som.js` (toques, avisos, prémios) são gerados no pró
 `assets/fontes/` (Fraunces e Nunito): ver a secção "Tipos de letra" acima.
 
 ### Logo do modelo
-`assets/tapps.png` é o logo do modelo original (ver "Base do projeto"); o `README.md` do jogo já não o usa. Origem: a confirmar pelo Nuno.
+`assets/tapps.png` é o logo do modelo original (ver "Base do projeto"); o `README.md` do jogo já não o usa. Origem: a confirmar pelo Yoshi_Cat.

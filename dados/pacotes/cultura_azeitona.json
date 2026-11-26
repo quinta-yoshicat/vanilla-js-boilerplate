@@ -21,7 +21,7 @@
     {
       "caminho": "assets/personagens/azeitoneiro.jpg",
       "uso": "Cara do azeitoneiro, de Moura (caminho proposto; a visita ainda não existe, falta o código da personagem)",
-      "descricao": "Retrato do azeitoneiro, homem do Alentejo com um cesto de azeitona, no mesmo formato das caras de assets/personagens.",
+      "descricao": "Retrato do azeitoneiro, homem do Alentejo com um ramo de oliveira com azeitonas, no mesmo formato das caras de assets/personagens.",
       "estado": "feita"
     }
   ],
