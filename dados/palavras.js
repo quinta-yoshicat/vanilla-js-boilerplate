@@ -40,6 +40,16 @@ dadosAcrescentar('palavras', {
 });
 
 dadosAcrescentar('palavras', {
+  id: 'apicultor',
+  palavra: 'apicultor',
+  explicacao: {
+    pt: 'Pessoa que cuida das colmeias e recolhe o mel das abelhas.',
+    en: 'Person who looks after the beehives and collects the honey from the bees.',
+    es: 'Persona que cuida de las colmenas y recoge la miel de las abejas.'
+  }
+});
+
+dadosAcrescentar('palavras', {
   id: 'bacelo',
   palavra: 'bacelo',
   explicacao: {
@@ -86,6 +96,16 @@ dadosAcrescentar('palavras', {
     pt: 'o tipo de uva, como o Moscatel ou o Castelão.',
     en: 'the type of grape, like Moscatel or Castelão.',
     es: 'el tipo de uva, como el Moscatel o el Castelão.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'colmeia',
+  palavra: 'colmeia',
+  explicacao: {
+    pt: 'Caixa onde vive uma colónia de abelhas e onde elas fazem o mel.',
+    en: 'Box where a colony of bees lives and makes its honey.',
+    es: 'Caja donde vive una colonia de abejas y donde hacen la miel.'
   }
 });
 
@@ -260,6 +280,16 @@ dadosAcrescentar('palavras', {
 });
 
 dadosAcrescentar('palavras', {
+  id: 'nectar',
+  palavra: 'néctar',
+  explicacao: {
+    pt: 'Líquido açucarado que as flores produzem e de que as abelhas fazem o mel.',
+    en: 'Sugary liquid that flowers produce and that bees turn into honey.',
+    es: 'Líquido azucarado que producen las flores y con el que las abejas hacen la miel.'
+  }
+});
+
+dadosAcrescentar('palavras', {
   id: 'oidio',
   palavra: 'oídio',
   explicacao: {
@@ -286,6 +316,16 @@ dadosAcrescentar('palavras', {
     pt: 'a colheita do sal nas salinas.',
     en: 'the salt harvest in the salt pans.',
     es: 'la cosecha de la sal en las salinas.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'rosmaninho',
+  palavra: 'rosmaninho',
+  explicacao: {
+    pt: 'Planta aromática de flores roxas, parecida com a lavanda, comum nas serras e boa para as abelhas.',
+    en: 'Aromatic plant with purple flowers, similar to lavender, common in the hills and good for bees.',
+    es: 'Planta aromática de flores moradas, parecida a la lavanda, común en las sierras y buena para las abejas.'
   }
 });
 
