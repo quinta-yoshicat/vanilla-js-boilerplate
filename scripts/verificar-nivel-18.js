@@ -11,6 +11,7 @@ const { correr } = require('./_pacote-nivel');
 
 correr({
   nivel: 18,
+  imagens: { arroz_arrozais: 'assets/ecras/arrozal_personagens.jpg', arroz_carolino: 'assets/ecras/arrozal_2.jpg' },
   limiares: [0, 15, 50, 120, 300, 600, 1000, 1500, 2100, 2800, 3650, 4550, 5500, 6500, 7550, 8650, 9850, 11050],
   nome: { pt: 'Moscatel da Comporta', en: 'Comporta Moscatel', es: 'Moscatel de Comporta' },
   nomeAnt: { pt: 'Moscatel de Alcácer', en: 'Alcácer Moscatel', es: 'Moscatel de Alcácer' },
