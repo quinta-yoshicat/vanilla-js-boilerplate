@@ -60,6 +60,8 @@ const FALAS = [
     es: 'Se abrió: nuevas historias del Sado en la Enciclopedia.'
   }
 ];
+// Imagem que já existia em assets/ecras e que mostra o tema: só uma das 3 entradas a leva.
+const IMG = { sado_reserva: 'assets/ecras/sado_estuario.jpg' };
 const IDS = ['sado_reserva', 'sado_golfinhos', 'sado_troia'];
 const IDS_11 = ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'];
 // As 6 histórias dos níveis 5 e 6 (a seguir às 34 de origem e antes das da Arrábida): também têm nivelMinimo, por isso entram na prioridade do Explorar.
@@ -246,7 +248,7 @@ LINGUAS.forEach(function (l) {
     ok(g.ev('encyclopediaEntries().length') === ATE_12, '(d) nível 12: ' + ATE_12 + ' entradas' + L);
     IDS.forEach(function (id) {
       const e = g.ev('encyclopediaEntries().filter(function (e) { return e.id === ' + js(id) + '; })[0]');
-      ok(e && e.titulo === ENC[id].titulo[l] && e.texto === ENC[id].texto[l] && e.nivelMinimo === 12 && e.imagem === undefined, '(d) ' + id + ': título e texto exatos, nível mínimo 12, sem imagem' + L);
+      ok(e && e.titulo === ENC[id].titulo[l] && e.texto === ENC[id].texto[l] && e.nivelMinimo === 12 && e.imagem === IMG[id], '(d) ' + id + ': título e texto exatos, nível mínimo 12, só a de sado_reserva com imagem' + L);
     });
     g.ev('renderEnciclopedia();');
     h = html(g, 'enciclopedia-container');
@@ -255,7 +257,7 @@ LINGUAS.forEach(function (l) {
     g.ev('renderEnciclopedia();');
     h = html(g, 'enciclopedia-container');
     ok(IDS.every(function (id) { return h.indexOf('<h3>' + esc(ENC[id].titulo[l]) + '</h3>') !== -1 && h.indexOf('<p>' + esc(ENC[id].texto[l]) + '</p>') !== -1; }), '(d) nível 12: abertas, mostram o título e o texto (escapados)' + L);
-    ok(h.indexOf('3 / ' + ATE_12) !== -1 && h.indexOf('<img') === -1, '(d) nível 12: 3 / ' + ATE_12 + ' e sem imagens' + L);
+    ok(h.indexOf('3 / ' + ATE_12) !== -1 && (h.match(/<img/g) || []).length === 1 && h.indexOf('<img src="' + IMG.sado_reserva + '" alt="">') !== -1, '(d) nível 12: 3 / ' + ATE_12 + ' e só uma imagem (a de sado_reserva)' + L);
     limpo(h, '(d) Enciclopédia' + L);
   }
   {

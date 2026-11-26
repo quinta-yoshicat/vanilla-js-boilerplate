@@ -12,6 +12,7 @@ const { correr } = require('./_pacote-nivel');
 
 correr({
   nivel: 14,
+  imagens: { azeitao_queijo: 'assets/ecras/azeitao_vila.jpg' },
   limiares: [0, 15, 50, 120, 300, 600, 1000, 1500, 2100, 2800, 3650, 4550, 5500, 6500],
   nome: { pt: 'Moscatel de Azeitão', en: 'Azeitão Moscatel', es: 'Moscatel de Azeitão' },
   nomeAnt: { pt: 'Moscatel de Palmela', en: 'Palmela Moscatel', es: 'Moscatel de Palmela' },
