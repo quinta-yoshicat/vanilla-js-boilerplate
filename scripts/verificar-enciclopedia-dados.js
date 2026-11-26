@@ -106,6 +106,8 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
   const GRUPOS = [
     { nome: 'Cave de Reserva', nivel: 5, ids: ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa'] },
     { nome: 'Coleção', nivel: 6, ids: ['colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos'] },
+    // Pacote «Cultura da Azeitona» (PR 1): uma só entrada, de nível mínimo 7 (o da Estrada), logo a seguir à Coleção.
+    { nome: 'Azeitona', nivel: 7, ids: ['azeite_do_olival_ao_lagar'] },
     { nome: 'Arrábida', nivel: 11, ids: ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'] },
     { nome: 'Sado', nivel: 12, ids: ['sado_reserva', 'sado_golfinhos', 'sado_troia'] },
     { nome: 'Palmela', nivel: 13, ids: ['palmela_castelo', 'palmela_capelo', 'palmela_castelao'] },
@@ -115,9 +117,7 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     { nome: 'Alcácer', nivel: 17, ids: ['sal_alcacer', 'sal_setubal', 'sal_redura'] },
     { nome: 'Comporta', nivel: 18, ids: ['arroz_arrozais', 'arroz_carolino', 'arroz_consumo'] },
     { nome: 'Montado', nivel: 19, ids: ['sobreiro_cortica', 'sobreiro_assobiador', 'sobreiro_rolha'] },
-    { nome: 'Bocage', nivel: 20, ids: ['bocage_poeta', 'bocage_casa', 'bocage_dia'] },
-    // Pacote «Cultura da Azeitona» (PR 1): uma só entrada, de nível mínimo 7 (o da Estrada).
-    { nome: 'Azeitona', nivel: 7, ids: ['azeite_do_olival_ao_lagar'] }
+    { nome: 'Bocage', nivel: 20, ids: ['bocage_poeta', 'bocage_casa', 'bocage_dia'] }
   ];
   const TODOS = GRUPOS.reduce(function (t, g) { return t.concat(g.ids); }, []);
   ok(real.avisos.length === 0, '(f) carregar o jogo com dados/ não devia avisar nada: ' + real.avisos);

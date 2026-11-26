@@ -174,6 +174,8 @@ Um pacote é o que uma PR acrescenta a `dados/` (ex.: «Cultura da Azeitona»), 
 
 Cada PR de um pacote: (1) cria `dados/pacotes/<id>.json` a partir do modelo; (2) acrescenta as entradas aos ficheiros de `dados/`; (3) atualiza `IDEIAS.md`; (4) atualiza os totais fixos dos testes (`ESPERADO_EM_DADOS` em `verificar-dados-carregar.js`, as contagens da Enciclopédia e das palavras); (5) sobe o `?v=` de cada ficheiro de `dados/` mudado; (6) corre `node scripts/verificar-pacote.js`.
 
+Efeito no jogo de uma entrada com `nivelMinimo` baixo (ex.: `azeite_do_olival_ao_lagar`, 7): o Explorar entrega-a primeiro a todos os jogadores desse nível ou superior, e por isso os capítulos `temIds` dos níveis seguintes podem pedir mais um clique. Os testes dos níveis 11 a 20 já a contam (`GRUPOS_NIVEIS_5_6` em `scripts/_pacote-nivel.js` e a lista `IDS_5_6` de `verificar-nivel-11/12/13.js`); a entrada fica no ficheiro logo a seguir às da Coleção, para manter a ordem por nível.
+
 Imagens e sons: enquanto não existem, ficam `por_criar` no pacote e a entrada **não** leva o campo `imagem` (nem `foto` ou `som`); quando o ficheiro entra em `assets/` e em `CREDITOS.md`, passam a `feita` e o campo acrescenta-se. Um som novo em `assets/sons` obriga a atualizar a contagem (23) de `verificar-ambiente-vento.js` e `verificar-barril.js`. Esta pasta é **pública** (o `static.yml` publica o repositório todo): só ideias e listas, nada de dados pessoais.
 
 ## Como se confere
