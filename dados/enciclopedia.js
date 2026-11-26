@@ -128,6 +128,18 @@ dadosAcrescentar('enciclopedia', {
   }
 });
 
+// Pacote «Pesca do choco e golfinhos»: sem imagem por agora (a imagem prevista, para sado_golfinhos, está «por_criar» em dados/pacotes/cultura_choco.json).
+dadosAcrescentar('enciclopedia', {
+  id: 'pesca_choco_sado',
+  nivelMinimo: 7,
+  titulo: { pt: 'O choco do Sado', en: 'The Sado cuttlefish', es: 'El choco del Sado' },
+  texto: {
+    pt: 'No estuário do Sado apanha-se choco com covos, que são armadilhas, e com redes. O choco também é uma das comidas preferidas dos golfinhos-roazes que vivem no estuário. Em 2023 nasceram seis crias, o maior número desde que esta comunidade começou a ser acompanhada, há cerca de 40 anos. Cientistas estudam como a água do estuário mudou nas últimas décadas, por causa do clima e de outros fatores.',
+    en: 'In the Sado estuary, cuttlefish are caught with covos, which are traps, and with nets. Cuttlefish are also one of the favorite foods of the bottlenose dolphins that live in the estuary. In 2023, six calves were born, the highest number since this community began to be monitored about 40 years ago. Scientists are studying how the water of the estuary has changed over recent decades, because of climate and other factors.',
+    es: 'En el estuario del Sado se pesca choco con covos, que son trampas, y con redes. El choco también es una de las comidas preferidas de los delfines mulares que viven en el estuario. En 2023 nacieron seis crías, el mayor número desde que se empezó a seguir a esta comunidad, hace unos 40 años. Los científicos estudian cómo ha cambiado el agua del estuario en las últimas décadas, por el clima y por otros factores.'
+  }
+});
+
 // Nível 11, "Moscatel da Arrábida": as 3 histórias que o capítulo 11 (dados/capitulos.js) pede. Sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'arrabida_biosfera',
