@@ -140,6 +140,30 @@ dadosAcrescentar('enciclopedia', {
   }
 });
 
+// Pacote «Cultura do Arroz»: arroz_agua leva uma imagem que já existia (yoshi_nos_arrozais, com linha no CREDITOS.md); arroz_aves fica sem imagem (a imagem está «por_criar» em dados/pacotes/cultura_arroz.json).
+dadosAcrescentar('enciclopedia', {
+  id: 'arroz_agua',
+  imagem: 'assets/ecras/yoshi_nos_arrozais.jpg',
+  nivelMinimo: 7,
+  titulo: { pt: 'Sem água não há arroz', en: 'No water, no rice', es: 'Sin agua no hay arroz' },
+  texto: {
+    pt: 'O arroz precisa de muita água. No Vale do Sado, os campos são regados a partir de albufeiras. Em 2022, a seca fez os produtores estimar que cerca de 2500 hectares não se poderiam cultivar. Hoje há formas de poupar: a sementeira enterrada gasta cerca de 20% menos água de rega.',
+    en: 'Rice needs a lot of water. In the Sado Valley, the fields are irrigated from reservoirs. In 2022, the drought led producers to estimate that about 2,500 hectares could not be cultivated. Today there are ways to save water: buried seeding uses about 20% less irrigation water.',
+    es: 'El arroz necesita mucha agua. En el Valle del Sado, los campos se riegan a partir de embalses. En 2022, la sequía hizo que los productores estimaran que unas 2500 hectáreas no se podrían cultivar. Hoy hay formas de ahorrar: la siembra enterrada gasta cerca de un 20 % menos de agua de riego.'
+  }
+});
+
+dadosAcrescentar('enciclopedia', {
+  id: 'arroz_aves',
+  nivelMinimo: 7,
+  titulo: { pt: 'As aves dos arrozais', en: 'The birds of the rice paddies', es: 'Las aves de los arrozales' },
+  texto: {
+    pt: 'Um arrozal é uma zona húmida feita pelo homem. Muitas aves aquáticas usam-nos como casa, porque as zonas húmidas naturais têm diminuído. Perto de Possanco, no estuário do Sado, veem-se no inverno bandos de centenas de aves, como íbis-pretas e colhereiros.',
+    en: 'A rice paddy is a wetland made by people. Many waterbirds use them as a home, because natural wetlands have been shrinking. Near Possanco, in the Sado estuary, flocks of hundreds of birds can be seen in winter, such as glossy ibises and spoonbills.',
+    es: 'Un arrozal es una zona húmeda creada por el ser humano. Muchas aves acuáticas los usan como casa, porque las zonas húmedas naturales han disminuido. Cerca de Possanco, en el estuario del Sado, se ven en invierno bandadas de cientos de aves, como moritos y espátulas.'
+  }
+});
+
 // Nível 11, "Moscatel da Arrábida": as 3 histórias que o capítulo 11 (dados/capitulos.js) pede. Sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'arrabida_biosfera',

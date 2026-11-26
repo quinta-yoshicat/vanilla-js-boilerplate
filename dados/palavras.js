@@ -50,6 +50,16 @@ dadosAcrescentar('palavras', {
 });
 
 dadosAcrescentar('palavras', {
+  id: 'arrozal',
+  palavra: 'arrozal',
+  explicacao: {
+    pt: 'Campo alagado onde se cultiva o arroz.',
+    en: 'Flooded field where rice is grown.',
+    es: 'Campo inundado donde se cultiva el arroz.'
+  }
+});
+
+dadosAcrescentar('palavras', {
   id: 'bacelo',
   palavra: 'bacelo',
   explicacao: {
@@ -106,6 +116,16 @@ dadosAcrescentar('palavras', {
     pt: 'Animal marinho de corpo mole, parente do polvo e da lula, muito pescado no estuário do Sado.',
     en: 'Soft-bodied sea animal, a relative of the octopus and the squid, widely fished in the Sado estuary.',
     es: 'Animal marino de cuerpo blando, pariente del pulpo y del calamar, muy pescado en el estuario del Sado.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'colhereiro',
+  palavra: 'colhereiro',
+  explicacao: {
+    pt: 'Ave de bico comprido e achatado na ponta, como uma colher, que procura comida na água pouco funda.',
+    en: 'Bird with a long bill, flattened at the tip like a spoon, that looks for food in shallow water.',
+    es: 'Ave de pico largo y aplanado en la punta, como una cuchara, que busca comida en el agua poco profunda.'
   }
 });
 
@@ -336,6 +356,16 @@ dadosAcrescentar('palavras', {
     pt: 'a colheita do sal nas salinas.',
     en: 'the salt harvest in the salt pans.',
     es: 'la cosecha de la sal en las salinas.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'regadio',
+  palavra: 'regadio',
+  explicacao: {
+    pt: 'Terreno que se rega com água de albufeiras ou canais, para as culturas crescerem no verão.',
+    en: 'Land that is watered from reservoirs or canals so that crops can grow in summer.',
+    es: 'Terreno que se riega con agua de embalses o canales para que los cultivos crezcan en verano.'
   }
 });
 
