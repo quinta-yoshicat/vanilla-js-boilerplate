@@ -124,7 +124,7 @@ dadosAcrescentar('palavras', {
   palavra: 'covo',
   explicacao: {
     pt: 'Armadilha de pesca, como uma gaiola, onde o choco ou o polvo entram e já não saem.',
-    en: 'Fishing trap, like a cage, that cuttlefish or octopus swim into and cannot get out of.',
+    en: 'Fishing trap, like a cage, that cuttlefish or octopus go into and cannot get out of.',
     es: 'Trampa de pesca, como una jaula, en la que el choco o el pulpo entran y ya no salen.'
   }
 });
@@ -344,7 +344,7 @@ dadosAcrescentar('palavras', {
   palavra: 'roaz',
   explicacao: {
     pt: 'Golfinho grande e robusto; no Sado vive uma comunidade que ali fica o ano inteiro.',
-    en: 'Large, robust dolphin; in the Sado there is a community that stays there all year round.',
+    en: 'Large, robust dolphin; in the Sado estuary there is a community that stays there all year round.',
     es: 'Delfín grande y robusto; en el Sado vive una comunidad que se queda allí todo el año.'
   }
 });
