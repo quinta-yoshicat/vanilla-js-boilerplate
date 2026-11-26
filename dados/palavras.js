@@ -90,6 +90,16 @@ dadosAcrescentar('palavras', {
 });
 
 dadosAcrescentar('palavras', {
+  id: 'cristalizador',
+  palavra: 'cristalizador',
+  explicacao: {
+    pt: 'Tanque raso onde o sal cristaliza no fim do circuito da salina.',
+    en: 'Shallow pond where the salt crystallizes at the end of the salina circuit.',
+    es: 'Estanque poco profundo donde cristaliza la sal al final del circuito de la salina.'
+  }
+});
+
+dadosAcrescentar('palavras', {
   id: 'curtimenta',
   palavra: 'curtimenta',
   explicacao: {
@@ -140,6 +150,16 @@ dadosAcrescentar('palavras', {
 });
 
 dadosAcrescentar('palavras', {
+  id: 'flor_de_sal',
+  palavra: 'flor de sal',
+  explicacao: {
+    pt: 'Película fina de cristais que se forma à superfície da água da salina quando há evaporação intensa e tempo estável.',
+    en: 'Thin film of crystals that forms on the surface of the salina water when evaporation is intense and the weather is stable.',
+    es: 'Fina película de cristales que se forma en la superficie del agua de la salina cuando hay evaporación intensa y tiempo estable.'
+  }
+});
+
+dadosAcrescentar('palavras', {
   id: 'fortificar',
   palavra: 'fortificar',
   explicacao: {
@@ -186,6 +206,16 @@ dadosAcrescentar('palavras', {
     pt: 'Pagamento em azeite que se dava ao lagar pelo trabalho.',
     en: 'Payment in olive oil given to the mill for its work.',
     es: 'Pago en aceite que se daba a la almazara por su trabajo.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'marnoto',
+  palavra: 'marnoto',
+  explicacao: {
+    pt: 'Salineiro que governa a água, a salinidade e a colheita numa salina.',
+    en: 'Salt worker who manages the water, the salinity and the harvest in a salina.',
+    es: 'Salinero que gobierna el agua, la salinidad y la cosecha en una salina.'
   }
 });
 
