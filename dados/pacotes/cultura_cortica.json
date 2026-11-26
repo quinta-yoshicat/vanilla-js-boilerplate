@@ -1,0 +1,31 @@
+{
+  "id": "cultura_cortica",
+  "nome": "Cultura da Cortiça",
+  "estado": "em PR",
+  "ids": {
+    "enciclopedia": [
+      "tirada_da_cortica"
+    ],
+    "palavras": [
+      "desboia",
+      "entrecasco",
+      "molheiro",
+      "tiradia"
+    ],
+    "visitas": [],
+    "niveis": [],
+    "historias": [],
+    "capitulos": [],
+    "provas": []
+  },
+  "imagens": [
+    {
+      "caminho": "assets/ecras/tirada_da_cortica.jpg",
+      "uso": "Entrada da Enciclopédia «tirada_da_cortica» (campo imagem; só se acrescenta quando o ficheiro existir)",
+      "descricao": "Um tirador de cortiça a descortiçar um sobreiro com o machado, com as pranchas de cortiça já tiradas e o tronco avermelhado à vista, num montado alentejano.",
+      "estado": "por_criar"
+    }
+  ],
+  "sons": [],
+  "excecoes": []
+}
