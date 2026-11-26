@@ -1,0 +1,30 @@
+{
+  "id": "cultura_sal",
+  "nome": "Cultura do Sal",
+  "estado": "em PR",
+  "ids": {
+    "enciclopedia": [
+      "salina_marnoto"
+    ],
+    "palavras": [
+      "cristalizador",
+      "flor_de_sal",
+      "marnoto"
+    ],
+    "visitas": [],
+    "niveis": [],
+    "historias": [],
+    "capitulos": [],
+    "provas": []
+  },
+  "imagens": [
+    {
+      "caminho": "assets/ecras/salina_marnoto.jpg",
+      "uso": "Entrada da Enciclopédia «salina_marnoto» (campo imagem; só se acrescenta quando o ficheiro existir)",
+      "descricao": "Close-up de um cristalizador com flor de sal à superfície da água, um monte de sal encostado a uma pá de madeira e uma casa branca ao fundo.",
+      "estado": "feita"
+    }
+  ],
+  "sons": [],
+  "excecoes": []
+}

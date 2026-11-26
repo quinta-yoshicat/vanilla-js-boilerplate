@@ -104,6 +104,18 @@ dadosAcrescentar('enciclopedia', {
   }
 });
 
+dadosAcrescentar('enciclopedia', {
+  id: 'salina_marnoto',
+  imagem: 'assets/ecras/salina_marnoto.jpg',
+  nivelMinimo: 7,
+  titulo: { pt: 'O marnoto e a salina', en: 'The marnoto and the salina', es: 'El marnoto y la salina' },
+  texto: {
+    pt: 'Numa salina, a água do mar corre por tanques rasos até ao cristalizador. O sol e o vento evaporam a água e o sal fica. Quem manda em tudo é o marnoto: regula a água, vigia a salinidade e escolhe o momento da colheita. À superfície aparece por vezes a flor de sal, uma película fina de cristais que rende sete a oito vezes mais do que o sal comum. Clima: o sal depende do sol e do vento; um projeto da Universidade do Algarve, em Castro Marim, mostrou que as salinas tradicionais também podem ajudar a combater as alterações climáticas.',
+    en: 'In a salina, sea water flows through shallow ponds to the crystallizer. The sun and the wind evaporate the water and the salt is left behind. The marnoto runs it all: he controls the water, watches the salinity and picks the moment to harvest. Sometimes the flor de sal appears on the surface, a thin film of crystals that earns seven to eight times more than ordinary salt. Climate: salt depends on sun and wind; a University of the Algarve project in Castro Marim showed that traditional salinas can also help fight climate change.',
+    es: 'En una salina, el agua del mar corre por estanques poco profundos hasta el cristalizador. El sol y el viento evaporan el agua y queda la sal. Quien lo gobierna todo es el marnoto: regula el agua, vigila la salinidad y elige el momento de la cosecha. En la superficie aparece a veces la flor de sal, una fina película de cristales que rinde de siete a ocho veces más que la sal común. Clima: la sal depende del sol y del viento; un proyecto de la Universidad del Algarve, en Castro Marim, mostró que las salinas tradicionales también pueden ayudar a combatir el cambio climático.'
+  }
+});
+
 // Nível 11, "Moscatel da Arrábida": as 3 histórias que o capítulo 11 (dados/capitulos.js) pede. Sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'arrabida_biosfera',
@@ -313,9 +325,10 @@ dadosAcrescentar('enciclopedia', {
   }
 });
 
-// Nível 17, «Moscatel de Alcácer» (o sal do Sado): as 3 histórias que o capítulo 17 (dados/capitulos.js) pede. Sem imagem.
+// Nível 17, «Moscatel de Alcácer» (o sal do Sado): as 3 histórias que o capítulo 17 (dados/capitulos.js) pede, cada uma com a sua imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'sal_alcacer',
+  imagem: 'assets/ecras/sal_alcacer.jpg',
   nivelMinimo: 17,
   titulo: { pt: 'Alcácer do Sal', en: 'Alcácer do Sal', es: 'Alcácer do Sal' },
   texto: {
@@ -327,6 +340,7 @@ dadosAcrescentar('enciclopedia', {
 
 dadosAcrescentar('enciclopedia', {
   id: 'sal_setubal',
+  imagem: 'assets/ecras/sal_setubal.jpg',
   nivelMinimo: 17,
   titulo: { pt: 'O sal de Setúbal', en: "Setúbal's Salt", es: 'La sal de Setúbal' },
   texto: {
@@ -338,6 +352,7 @@ dadosAcrescentar('enciclopedia', {
 
 dadosAcrescentar('enciclopedia', {
   id: 'sal_redura',
+  imagem: 'assets/ecras/sal_redura.jpg',
   nivelMinimo: 17,
   titulo: { pt: 'A redura', en: 'The Redura', es: 'La redura' },
   texto: {

@@ -110,6 +110,8 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     { nome: 'Azeitona', nivel: 7, ids: ['azeite_do_olival_ao_lagar'], imagem: 'assets/ecras/azeite_do_olival_ao_lagar.jpg' },
     // Pacote «Cultura da Cortiça» (PR 2): uma só entrada, de nível mínimo 7, a seguir à da azeitona, com imagem.
     { nome: 'Cortiça', nivel: 7, ids: ['tirada_da_cortica'], imagem: 'assets/ecras/tirada_da_cortica.jpg' },
+    // Pacote «Cultura do Sal» (PR 3): uma só entrada, de nível mínimo 7, a seguir à da cortiça, com imagem.
+    { nome: 'Sal', nivel: 7, ids: ['salina_marnoto'], imagem: 'assets/ecras/salina_marnoto.jpg' },
     // Imagens que já existiam em assets/ecras: uma por entrada (campo «imagens»: id -> caminho), só onde mostram mesmo o tema.
     { nome: 'Arrábida', nivel: 11, ids: ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'] },
     { nome: 'Sado', nivel: 12, ids: ['sado_reserva', 'sado_golfinhos', 'sado_troia'], imagens: { sado_reserva: 'assets/ecras/sado_estuario.jpg' } },
@@ -117,7 +119,7 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     { nome: 'Azeitão', nivel: 14, ids: ['azeitao_queijo', 'azeitao_adega', 'azeitao_palacio'], imagens: { azeitao_queijo: 'assets/ecras/azeitao_vila.jpg' } },
     { nome: 'Sesimbra', nivel: 15, ids: ['sesimbra_castelo', 'sesimbra_vila', 'sesimbra_espichel'], imagens: { sesimbra_vila: 'assets/ecras/sesimbra_vila.jpg' } },
     { nome: 'Setúbal', nivel: 16, ids: ['setubal_forte', 'setubal_roxo', 'setubal_familias'], imagens: { setubal_roxo: 'assets/ecras/moscatel_roxo_com_uvas.jpg' } },
-    { nome: 'Alcácer', nivel: 17, ids: ['sal_alcacer', 'sal_setubal', 'sal_redura'] },
+    { nome: 'Alcácer', nivel: 17, ids: ['sal_alcacer', 'sal_setubal', 'sal_redura'], imagens: { sal_alcacer: 'assets/ecras/sal_alcacer.jpg', sal_setubal: 'assets/ecras/sal_setubal.jpg', sal_redura: 'assets/ecras/sal_redura.jpg' } },
     { nome: 'Comporta', nivel: 18, ids: ['arroz_arrozais', 'arroz_carolino', 'arroz_consumo'], imagens: { arroz_arrozais: 'assets/ecras/arrozal_personagens.jpg', arroz_carolino: 'assets/ecras/arrozal_2.jpg' } },
     { nome: 'Montado', nivel: 19, ids: ['sobreiro_cortica', 'sobreiro_assobiador', 'sobreiro_rolha'], imagens: { sobreiro_rolha: 'assets/ecras/cortica.jpg' } },
     { nome: 'Bocage', nivel: 20, ids: ['bocage_poeta', 'bocage_casa', 'bocage_dia'], imagens: { bocage_casa: 'assets/ecras/casa_bocage.jpg' } }
