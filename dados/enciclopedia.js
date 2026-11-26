@@ -350,6 +350,7 @@ dadosAcrescentar('enciclopedia', {
 // Nível 18, «Moscatel da Comporta» (o arroz do Sado): as 3 histórias que o capítulo 18 (dados/capitulos.js) pede. Sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'arroz_arrozais',
+  imagem: 'assets/ecras/arrozal_personagens.jpg',
   nivelMinimo: 18,
   titulo: { pt: 'Os arrozais do Sado', en: "The Sado's Rice Paddies", es: 'Los arrozales del Sado' },
   texto: {
@@ -361,6 +362,7 @@ dadosAcrescentar('enciclopedia', {
 
 dadosAcrescentar('enciclopedia', {
   id: 'arroz_carolino',
+  imagem: 'assets/ecras/arrozal_2.jpg',
   nivelMinimo: 18,
   titulo: { pt: 'O arroz carolino', en: 'Carolino Rice', es: 'El arroz carolino' },
   texto: {
@@ -406,6 +408,7 @@ dadosAcrescentar('enciclopedia', {
 
 dadosAcrescentar('enciclopedia', {
   id: 'sobreiro_rolha',
+  imagem: 'assets/ecras/cortica.jpg',
   nivelMinimo: 19,
   titulo: { pt: 'A rolha', en: 'The Stopper', es: 'El tapón' },
   texto: {

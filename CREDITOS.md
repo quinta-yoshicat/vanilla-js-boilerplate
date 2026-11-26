@@ -58,6 +58,8 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/alambique.jpg` | Adega (Destilar vinho) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/apontar_esquerda.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/arco_iris.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/arrozal_2.jpg` | Enciclopédia, entrada «O arroz carolino» (pacote do nível 18; arrozal com os campos alagados e a mesa com grãos de arroz; cópia de `imagens_JOGO_TELEGRAM/arrozal_2.jpg`, JPEG 714x1280, até 250 KB) | imagem gerada com IA (Gemini, Grok ou ChatGPT) pelo autor do jogo, sem marcas (carregada a 26/11/2026) |
+| `assets/ecras/arrozal_personagens.jpg` | Enciclopédia, entrada «Os arrozais do Sado» (pacote do nível 18; arrozal com trabalhadores a plantar arroz; cópia de `imagens_JOGO_TELEGRAM/arrozal_personagens.jpg`, JPEG 714x1280, até 250 KB) | imagem gerada com IA (Gemini, Grok ou ChatGPT) pelo autor do jogo, sem marcas (carregada a 26/11/2026) |
 | `assets/ecras/azeite_do_olival_ao_lagar.jpg` | Enciclopédia, entrada «Do olival ao lagar» (pacote Cultura da Azeitona; lagar de varas: galga, seiras e talhas; JPEG 720x1280, até 250 KB, na proporção original) | imagem gerada com IA (Gemini, Grok ou ChatGPT) pelo autor do jogo, sem marcas (carregada a 26/11/2026) |
 | `assets/ecras/bagaco.jpg` | Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/calor.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
@@ -72,6 +74,7 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/chizo_porta_casa.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/chizo_vinha.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/cimo_da_colina_apontar.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/cortica.jpg` | Enciclopédia, entrada «A rolha» (pacote do nível 19; montado de sobreiros com mesas de objetos de cortiça; cópia de `imagens_JOGO_TELEGRAM/cortica.jpg`, JPEG 714x1280, até 250 KB) | imagem gerada com IA (Gemini, Grok ou ChatGPT) pelo autor do jogo, sem marcas (carregada a 26/11/2026) |
 | `assets/ecras/derrota.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/enciclopedia_magusto.jpg` | Enciclopédia | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/enciclopedia_yoshi_cat_2.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
