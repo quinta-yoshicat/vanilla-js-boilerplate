@@ -108,6 +108,8 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     { nome: 'Coleção', nivel: 6, ids: ['colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos'] },
     // Pacote «Cultura da Azeitona» (PR 1): uma só entrada, de nível mínimo 7 (o da Estrada), logo a seguir à Coleção.
     { nome: 'Azeitona', nivel: 7, ids: ['azeite_do_olival_ao_lagar'], imagem: 'assets/ecras/azeite_do_olival_ao_lagar.jpg' },
+    // Pacote «Cultura da Cortiça» (PR 2): uma só entrada, de nível mínimo 7, a seguir à da azeitona, com imagem.
+    { nome: 'Cortiça', nivel: 7, ids: ['tirada_da_cortica'], imagem: 'assets/ecras/tirada_da_cortica.jpg' },
     { nome: 'Arrábida', nivel: 11, ids: ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'] },
     { nome: 'Sado', nivel: 12, ids: ['sado_reserva', 'sado_golfinhos', 'sado_troia'] },
     { nome: 'Palmela', nivel: 13, ids: ['palmela_castelo', 'palmela_capelo', 'palmela_castelao'] },

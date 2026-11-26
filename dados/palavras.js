@@ -100,12 +100,32 @@ dadosAcrescentar('palavras', {
 });
 
 dadosAcrescentar('palavras', {
+  id: 'desboia',
+  palavra: 'desbóia',
+  explicacao: {
+    pt: 'Primeiro descortiçamento de um sobreiro.',
+    en: 'First stripping of a cork oak.',
+    es: 'Primer descorche de un alcornoque.'
+  }
+});
+
+dadosAcrescentar('palavras', {
   id: 'dop',
   palavra: 'DOP',
   explicacao: {
     pt: 'Denominação de Origem Protegida: um nome protegido por lei, que só se usa se o produto vier daquela região.',
     en: 'PDO (Protected Designation of Origin): a name protected by law, used only if the product comes from that region.',
     es: 'DOP (Denominación de Origen Protegida): un nombre protegido por ley, que solo se usa si el producto viene de esa región.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'entrecasco',
+  palavra: 'entrecasco',
+  explicacao: {
+    pt: 'Camada viva por baixo da cortiça, que o machado não pode ferir.',
+    en: 'Living layer under the cork that the axe must not hurt.',
+    es: 'Capa viva bajo el corcho que el hacha no debe dañar.'
   }
 });
 
@@ -180,6 +200,16 @@ dadosAcrescentar('palavras', {
 });
 
 dadosAcrescentar('palavras', {
+  id: 'molheiro',
+  palavra: 'molheiro',
+  explicacao: {
+    pt: 'Quem recolhe as pranchas de cortiça que se soltam do sobreiro.',
+    en: 'Worker who gathers the cork planks that come off the tree.',
+    es: 'Trabajador que recoge las planchas de corcho que se sueltan del árbol.'
+  }
+});
+
+dadosAcrescentar('palavras', {
   id: 'montado',
   palavra: 'montado',
   explicacao: {
@@ -236,6 +266,16 @@ dadosAcrescentar('palavras', {
     pt: 'Cesto redondo, de esparto, onde se põe a pasta da azeitona para a prensa.',
     en: 'Round esparto basket that holds the olive paste for the press.',
     es: 'Cesto redondo de esparto que sostiene la pasta de aceituna en la prensa.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'tiradia',
+  palavra: 'tiradia',
+  explicacao: {
+    pt: 'Campanha de extração da cortiça, de maio a agosto.',
+    en: 'The cork harvest season, from May to August.',
+    es: 'Campaña de extracción del corcho, de mayo a agosto.'
   }
 });
 

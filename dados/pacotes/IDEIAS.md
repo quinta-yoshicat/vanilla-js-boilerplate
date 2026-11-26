@@ -7,7 +7,7 @@ Estados: `ideia` → `aprovada` → `em PR` → `feita`. Quando uma ideia passa 
 | id | ideia | tipo | pacote | estado | PR |
 |---|---|---|---|---|---|
 | ideia_01 | Azeitona e azeite | cultura | cultura_azeitona | em PR | #233 |
-| ideia_02 | Cortiça (tirada de 9 em 9 anos) | cultura | | ideia | |
+| ideia_02 | Cortiça (tirada de 9 em 9 anos) | cultura | cultura_cortica | em PR | #236 |
 | ideia_03 | Sal do Sado e salineiro | cultura | | ideia | |
 | ideia_04 | Mel da Arrábida | cultura | | ideia | |
 | ideia_05 | Pesca do choco e golfinhos do Sado | cultura | | ideia | |

@@ -133,6 +133,7 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/sao_martinho_verao.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/tempestade.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/tempo_chuva.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/tirada_da_cortica.jpg` | Enciclopédia, entrada «A tirada da cortiça» (pacote Cultura da Cortiça; sobreiro descortiçado com um machado encostado e pranchas de cortiça empilhadas num montado; JPEG 720x1280, até 250 KB, na proporção original) | imagem gerada com IA (Gemini, Grok ou ChatGPT) pelo autor do jogo, sem marcas (carregada a 26/11/2026) |
 | `assets/ecras/trovoada_chizo.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/varios_talhoes_da_vinha.jpg` | história do nível 4 (cópia exata do original) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/vento.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |

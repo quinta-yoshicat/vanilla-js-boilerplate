@@ -92,6 +92,18 @@ dadosAcrescentar('enciclopedia', {
   }
 });
 
+dadosAcrescentar('enciclopedia', {
+  id: 'tirada_da_cortica',
+  imagem: 'assets/ecras/tirada_da_cortica.jpg',
+  nivelMinimo: 7,
+  titulo: { pt: 'A tirada da cortiça', en: 'Stripping the cork', es: 'El descorche' },
+  texto: {
+    pt: 'De nove em nove anos, entre o fim de maio e agosto, os tiradores sobem ao sobreiro com o machado e tiram a cortiça, sem cortar a árvore. O machado só pode ir até ao ponto em que não fere o entrecasco; por baixo, a casca volta a crescer. O primeiro descortiçamento, chama-se desbóia. Depois a cortiça repousa nos estaleiros pelo menos seis meses. Clima: em anos de seca o anel de crescimento da cortiça fica mais fino, e em alguns anos a tirada só pode começar em junho, em vez de meados de maio.',
+    en: 'Every nine years, between the end of May and August, the cork strippers climb the cork oak with an axe and take the bark without cutting down the tree. The axe may only go as deep as the point where it does not hurt the inner bark, so the cork can grow back. The first stripping, is called the desbóia. Then the cork rests in yards for at least six months. Climate: in drought years the growth ring of the cork is thinner, and in some years stripping can start only in June instead of mid-May.',
+    es: 'Cada nueve años, entre finales de mayo y agosto, los sacadores de corcho suben al alcornoque con el hacha y le quitan la corteza sin talar el árbol. El hacha solo puede llegar hasta donde no daña la capa interna, y así el corcho vuelve a crecer. El primer descorche, se llama desbóia. Después el corcho reposa en patios al menos seis meses. Clima: en años de sequía el anillo de crecimiento del corcho es más fino, y en algunos años el descorche solo puede empezar en junio y no a mediados de mayo.'
+  }
+});
+
 // Nível 11, "Moscatel da Arrábida": as 3 histórias que o capítulo 11 (dados/capitulos.js) pede. Sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'arrabida_biosfera',
