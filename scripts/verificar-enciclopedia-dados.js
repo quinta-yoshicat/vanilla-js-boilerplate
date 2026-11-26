@@ -25,7 +25,7 @@ const RAIZ = path.join(__dirname, '..');
 const JS_DIR = process.env.JS_DIR || path.join(RAIZ, 'js');
 const LINGUAS = ['pt', 'en', 'es'];
 // sha256 do JSON das 32 primeiras entradas de ENCYCLOPEDIA_ENTRIES (as de antes da festa dos Reis, nas 3 línguas), já com a frase de Ricardo II na forma cautelosa («Diz-se que ...») e o nome «Fygmo II»; a 33.ª é a «janeiras».
-const IMPRESSAO_DIGITAL_DE_HOJE = 'fdc8e60656f3860c16e957574768106a1bf71cd8abf7ce0e0374c9a61a03faf7'; // muda só com o campo imagem de «poda» e «mildio» (js/explorar.js)
+const IMPRESSAO_DIGITAL_DE_HOJE = '93f1ddfe676d6a6c5562a50d9e172035a27623112ca87eb1376acc6806902cf8'; // muda só com o campo imagem de «mildio» (js/explorar.js)
 // Os textos pedidos das 6 histórias dos níveis 5 e 6, palavra por palavra (escritos aqui, à parte; não lidos de dados/).
 const TEXTOS_5_6 = {
   cave_idade_rotulo: {"nivelMinimo":5,"titulo":{"pt":"Quantos anos tem o Moscatel?","en":"How old is the Moscatel?","es":"¿Cuántos años tiene el Moscatel?"},"texto":{"pt":"Num Moscatel de Setúbal, o rótulo pode dizer «5 anos», «10 anos», «20 anos», de 5 em 5 anos até «40 anos». Só se pode escrever esse número se os vinhos da garrafa tiverem, no mínimo, essa idade.","en":"On a Moscatel de Setúbal, the label may say \"5 years\", \"10 years\", \"20 years\", in steps of 5 up to \"40 years\". The number can only be written if the wines in the bottle are at least that old.","es":"En un Moscatel de Setúbal, la etiqueta puede decir «5 años», «10 años», «20 años», de 5 en 5 hasta «40 años». Solo se puede escribir ese número si los vinos de la botella tienen, como mínimo, esa edad."}},
