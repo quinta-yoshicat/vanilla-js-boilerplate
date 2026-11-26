@@ -80,6 +80,17 @@ dadosAcrescentar('enciclopedia', {
   }
 });
 
+dadosAcrescentar('enciclopedia', {
+  id: 'azeite_do_olival_ao_lagar',
+  nivelMinimo: 7,
+  titulo: { pt: 'Do olival ao lagar', en: 'From the grove to the mill', es: 'Del olivar a la almazara' },
+  texto: {
+    pt: 'A oliveira chegou à Península Ibérica com os fenícios e os gregos, e os romanos deram força ao azeite. No lagar, mós de pedra, a galga, esmagavam a azeitona. A pasta ia para as seiras e era prensada com varas; depois juntava-se água quente, prensava-se outra vez e deixava-se o azeite separar-se da água. Muitos lagares eram de família ou da aldeia, e o dono da azeitona pagava com parte do azeite: a maquia. Clima: uma onda de calor pode estragar a floração, a gordura do fruto ou a maturação, conforme a altura em que chega.',
+    en: 'The olive tree reached the Iberian Peninsula with the Phoenicians and the Greeks, and the Romans gave olive oil a strong boost. In the mill, stone wheels, the galga, crushed the olives. The paste went into seiras and was pressed with a lever press; then hot water was added, it was pressed again, and the oil was left to separate from the water. Many mills belonged to a family or a village, and the owner of the olives paid with part of the oil: the maquia. Climate: a heat wave can harm flowering, the fat in the fruit or ripening, depending on when it arrives.',
+    es: 'El olivo llegó a la Península Ibérica con los fenicios y los griegos, y los romanos dieron un gran impulso al aceite. En la almazara, ruedas de piedra, la galga, machacaban la aceituna. La pasta se ponía en seiras y se prensaba con varas; luego se añadía agua caliente, se prensaba otra vez y se dejaba que el aceite se separara del agua. Muchas almazaras eran de una familia o de una aldea, y el dueño de la aceituna pagaba con parte del aceite: la maquia. Clima: una ola de calor puede dañar la floración, la grasa del fruto o la maduración, según el momento en que llegue.'
+  }
+});
+
 // Nível 11, "Moscatel da Arrábida": as 3 histórias que o capítulo 11 (dados/capitulos.js) pede. Sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'arrabida_biosfera',

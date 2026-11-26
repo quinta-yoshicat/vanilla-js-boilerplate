@@ -39,10 +39,12 @@ const JS_DIR = process.env.JS_DIR || path.join(RAIZ, 'js');
 const DADOS_DIR = process.env.DADOS_DIR || path.join(RAIZ, 'dados');
 const LINGUAS = ['pt', 'en', 'es'];
 const ENTRADAS_ORIGEM = 34; // as histórias da Enciclopédia de origem (em js/explorar.js; a 33.ª é a «janeiras», dos Reis, e a 34.ª a «santosPopulares»)
-// As 6 histórias dos níveis 5 e 6 (dados/enciclopedia.js, a seguir às 34 de origem e antes das do nível 11): 3 de nivelMinimo 5 e 3 de nivelMinimo 6.
+// As 7 histórias dos níveis 5, 6 e 7 (dados/enciclopedia.js, a seguir às 34 de origem e antes das do nível 11): 3 de nivelMinimo 5, 3 de
+// nivelMinimo 6 e a 1 do pacote «Cultura da Azeitona» (nivelMinimo 7, o nível em que a Estrada abre).
 const GRUPOS_NIVEIS_5_6 = [
   ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa'],
-  ['colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos']
+  ['colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos'],
+  ['azeite_do_olival_ao_lagar']
 ];
 
 function correr(spec) {
@@ -55,7 +57,7 @@ function correr(spec) {
   const FOTOS_TODAS = [FOTO].concat(Object.keys(FOTOS_EXTRA).map(function (k) { return FOTOS_EXTRA[k]; }));
   const GRUPOS = GRUPOS_NIVEIS_5_6.concat(spec.grupos); // grupos anteriores de nivelMinimo (5, 6, 11, 12, ..., N - 1)
   const TODOS_ANT = GRUPOS.reduce(function (t, g) { return t.concat(g); }, []);
-  const ATE_M = ENTRADAS_ORIGEM + 3 * GRUPOS.length; // entradas visíveis no nível M
+  const ATE_M = ENTRADAS_ORIGEM + TODOS_ANT.length; // entradas visíveis no nível M
   const ATE_N = ATE_M + 3;
   const FALAS_ANT = 27 + 4 * (M - 10); // falas dos níveis 2 a M numa subida de 1 a M
   let falhas = 0;
@@ -64,7 +66,7 @@ function correr(spec) {
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
   function nivelEsperado(rep) { let n = 1; LIMIARES.forEach(function (m, i) { if (rep >= m) n = i + 1; }); return n; }
   // Quantas entradas da Enciclopédia vê um jogador do nível n (os níveis 5 e 6 juntam 3 cada e cada pacote de nível 11, 12, ... junta 3).
-  function entradasNoNivel(n) { return ENTRADAS_ORIGEM + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + 3 * Math.max(0, Math.min(n, M) - 10); }
+  function entradasNoNivel(n) { return ENTRADAS_ORIGEM + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 7 ? 1 : 0) + 3 * Math.max(0, Math.min(n, M) - 10); }
 
   // Abre o jogo REAL com a pasta dados/ (ou outra) e os ganchos de teste.
   function abrir(opcoes) {
