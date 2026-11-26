@@ -1,0 +1,36 @@
+{
+  "id": "cultura_mel",
+  "nome": "Cultura do Mel (Arrábida)",
+  "estado": "em PR",
+  "clima": "Em 2023, a seca da primavera afetou a floração e as estimativas apontavam para quebras de mais de 60% na produção de mel em Portugal.",
+  "fontes": [
+    "agroportal.pt, «Com quebra na produção de mel, vai ser criada bolsa de polinizadores» (15-07-2023)",
+    "Lonely Planet, Parque Natural da Arrábida"
+  ],
+  "ids": {
+    "enciclopedia": [
+      "mel_arrabida"
+    ],
+    "palavras": [
+      "apicultor",
+      "colmeia",
+      "nectar",
+      "rosmaninho"
+    ],
+    "visitas": [],
+    "niveis": [],
+    "historias": [],
+    "capitulos": [],
+    "provas": []
+  },
+  "imagens": [
+    {
+      "caminho": "assets/ecras/mel_arrabida.jpg",
+      "uso": "Entrada da Enciclopédia «mel_arrabida» (campo imagem; só se acrescenta quando o ficheiro existir)",
+      "descricao": "Colmeias de madeira entre alecrim e rosmaninho em flor, na serra da Arrábida, com o apicultor a cuidar delas e o mar ao fundo.",
+      "estado": "por_criar"
+    }
+  ],
+  "sons": [],
+  "excecoes": []
+}

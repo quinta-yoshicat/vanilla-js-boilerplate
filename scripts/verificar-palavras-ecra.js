@@ -5,9 +5,9 @@
 //
 // Prova:
 //  (a) o cartão: só a partir do nível 4 (jogador antigo vê-o logo); cartões no Perfil por nível: 6 (níveis 1 e 2), 7 (3), 8 (4 e 5) e 9 (6 em
-//      diante); ordem Conquistas, Caderno, Palavras, Coleção; mostra só o total («32»), o nome «Palavras» (Words, Palabras) e abre goTo('palavras');
+//      diante); ordem Conquistas, Caderno, Palavras, Coleção; mostra só o total («36»), o nome «Palavras» (Words, Palabras) e abre goTo('palavras');
 //      o ícone é um balão desenhado com traços (path, traço 1.6, 26 px, sem <text>);
-//  (b) o ecrã: um cartão por palavra (as 32), por ordem alfabética, com a palavra em título e a explicação por baixo com a 1.ª letra em maiúscula
+//  (b) o ecrã: um cartão por palavra (as 36), por ordem alfabética, com a palavra em título e a explicação por baixo com a 1.ª letra em maiúscula
 //      (nas 3 línguas), o título e o subtítulo do ecrã e o botão Voltar; os textos existem em PT, EN e ES;
 //  (c) a palavra e a explicação passam SEMPRE por escaparHtml(): «<b>x</b>&» sai escapado (e nunca como HTML);
 //  (d) só lê: abrir o Perfil e o ecrã não grava (nem localStorage, nem saveState), não muda o state e não fala com a nuvem;
@@ -29,8 +29,8 @@ let falhas = 0;
 function ok(cond, msg) { if (!cond) { falhas++; console.log('FALHA: ' + msg); } }
 function ler(f) { return fs.readFileSync(path.join(RAIZ, f), 'utf8'); }
 
-// Os 32 pela ordem alfabética (as palavras; os ids provam-se em scripts/verificar-palavras.js).
-const PALAVRAS = ['água ruça', 'aguardente vínica', 'alambique', 'bacelo', 'bagaceira', 'bagaço', 'caldeação', 'casta', 'cristalizador', 'curtimenta', 'desbóia', 'DOP', 'entrecasco', 'estuário', 'flor de sal', 'fortificar', 'galga', 'jeropiga', 'lagar', 'maquia', 'marnoto', 'míldio', 'molheiro', 'montado', 'mosto', 'oídio', 'pousio', 'redura', 'seira', 'tiradia', 'torna-viagem', 'vinho generoso'];
+// Os 36 pela ordem alfabética (as palavras; os ids provam-se em scripts/verificar-palavras.js).
+const PALAVRAS = ['água ruça', 'aguardente vínica', 'alambique', 'apicultor', 'bacelo', 'bagaceira', 'bagaço', 'caldeação', 'casta', 'colmeia', 'cristalizador', 'curtimenta', 'desbóia', 'DOP', 'entrecasco', 'estuário', 'flor de sal', 'fortificar', 'galga', 'jeropiga', 'lagar', 'maquia', 'marnoto', 'míldio', 'molheiro', 'montado', 'mosto', 'néctar', 'oídio', 'pousio', 'redura', 'rosmaninho', 'seira', 'tiradia', 'torna-viagem', 'vinho generoso'];
 
 // Abre o jogo e acrescenta-lhe o Perfil e o que ele desenha; "saves" conta as gravações (saveState) e "guardado" é o localStorage simulado.
 function abrir() {
@@ -72,7 +72,7 @@ function chaves(h) { return (h.match(/class="stat-label" data-i18n="[a-z.]+"/g) 
   ok(chaves(perfil(g)).join() === 'stat.uvas,stat.gotas,stat.reputacao,stat.garrafas,stat.conhecimento,perfil.conquistas,perfil.caderno,perfil.palavras,colecao.title', 'a ordem dos cartões devia ser Conquistas, Caderno, Palavras, Coleção: ' + chaves(perfil(g)).join());
   // O cartão: total, nome nas 3 línguas, abre o ecrã, ícone de traço.
   const card = g.ev('palavrasCartaoPerfil()');
-  ok(/<div class="stat-value">32<\/div>/.test(card), 'o cartão devia mostrar só o total («32»): ' + card.slice(0, 200));
+  ok(/<div class="stat-value">36<\/div>/.test(card), 'o cartão devia mostrar só o total («36»): ' + card.slice(0, 200));
   ok(!/\d+ \/ \d+/.test(card), 'o cartão não devia ter «n / total» (não há palavras descobertas)');
   ok(card.indexOf("onclick=\"goTo('palavras')\"") !== -1 && card.indexOf('role="button"') !== -1 && card.indexOf('tabindex="0"') !== -1 && card.indexOf("goTo('palavras')\"") !== -1, 'o cartão devia abrir goTo(\'palavras\') (com role e tabindex, como o Caderno)');
   ok(/onkeydown="if \(event\.key === 'Enter'\) goTo\('palavras'\)"/.test(card), 'o cartão devia abrir também com Enter');
@@ -101,11 +101,11 @@ function chaves(h) { return (h.match(/class="stat-label" data-i18n="[a-z.]+"/g) 
     const h = g.el('palavras-container').innerHTML;
     const titulos = (h.match(/<h3>[^<]*<\/h3>/g) || []).map(function (x) { return x.replace(/<\/?h3>/g, ''); });
     const textos = (h.match(/<h3>[^<]*<\/h3><p>[^<]*<\/p>/g) || []).map(function (x) { return /<p>([^<]*)<\/p>/.exec(x)[1]; });
-    ok((h.match(/class="encyclopedia-card"/g) || []).length === 32, l + ': devia haver um cartão por palavra (32)');
+    ok((h.match(/class="encyclopedia-card"/g) || []).length === 36, l + ': devia haver um cartão por palavra (36)');
     ok(titulos.join() === PALAVRAS.join(), l + ': as palavras deviam vir por ordem alfabética: ' + titulos.join());
-    ok(textos.length === 32 && textos.every(function (t) { return t.length > 10 && t.charAt(0) === t.charAt(0).toUpperCase() && t.charAt(0) !== t.charAt(0).toLowerCase(); }), l + ': cada explicação devia começar com letra maiúscula: ' + textos.map(function (t) { return t.charAt(0); }).join(''));
+    ok(textos.length === 36 && textos.every(function (t) { return t.length > 10 && t.charAt(0) === t.charAt(0).toUpperCase() && t.charAt(0) !== t.charAt(0).toLowerCase(); }), l + ': cada explicação devia começar com letra maiúscula: ' + textos.map(function (t) { return t.charAt(0); }).join(''));
     ok(h.indexOf('class="topcard"') !== -1 && h.indexOf('data-i18n="palavras.title"') !== -1, l + ': devia ter o topcard com o título');
-    ok(/class="mini-sub">32 · /.test(h), l + ': o subtítulo devia levar o total («32 · ...»)');
+    ok(/class="mini-sub">36 · /.test(h), l + ': o subtítulo devia levar o total («36 · ...»)');
     ok(h.indexOf('class="scroll-panel encyclopedia-grid"') !== -1, l + ': devia usar a lista que desliza do Caderno e da Enciclopédia');
     ok(h.indexOf('onclick="voltarEcraAnterior()"') !== -1 && h.indexOf('data-i18n="nav.voltar"') !== -1, l + ': devia ter o botão Voltar');
     ok(h.indexOf('<h3>' + 'DOP' + '</h3>') !== -1, l + ': «DOP» devia aparecer como palavra');
@@ -163,7 +163,7 @@ function chaves(h) { return (h.match(/class="stat-label" data-i18n="[a-z.]+"/g) 
   ok(JSON.stringify(g.guardado) === guardadoAntes, 'desenhar o ecrã das palavras e o cartão não devia escrever no localStorage');
   ok(g.ev('JSON.stringify(state)') === estadoAntes, 'desenhar o ecrã das palavras e o cartão não devia mudar o state');
   ok(g.ev("typeof nuvemGuardarEstado") === 'undefined' && g.ev("typeof nuvemGravarJa") === 'undefined', 'a nuvem nem está carregada neste teste (nada a chamar)');
-  ok(g.ev('JSON.stringify(PALAVRAS_DA_QUINTA.map(function (p) { return p.id; }))') === JSON.stringify(['agua_ruca', 'aguardente_vinica', 'alambique', 'bacelo', 'bagaceira', 'bagaco', 'caldeacao', 'casta', 'cristalizador', 'curtimenta', 'desboia', 'dop', 'entrecasco', 'estuario', 'flor_de_sal', 'fortificar', 'galga', 'jeropiga', 'lagar', 'maquia', 'marnoto', 'mildio', 'molheiro', 'montado', 'mosto', 'oidio', 'pousio', 'redura', 'seira', 'tiradia', 'torna_viagem', 'vinho_generoso']), 'desenhar não devia mexer na lista de palavras');
+  ok(g.ev('JSON.stringify(PALAVRAS_DA_QUINTA.map(function (p) { return p.id; }))') === JSON.stringify(['agua_ruca', 'aguardente_vinica', 'alambique', 'apicultor', 'bacelo', 'bagaceira', 'bagaco', 'caldeacao', 'casta', 'colmeia', 'cristalizador', 'curtimenta', 'desboia', 'dop', 'entrecasco', 'estuario', 'flor_de_sal', 'fortificar', 'galga', 'jeropiga', 'lagar', 'maquia', 'marnoto', 'mildio', 'molheiro', 'montado', 'mosto', 'nectar', 'oidio', 'pousio', 'redura', 'rosmaninho', 'seira', 'tiradia', 'torna_viagem', 'vinho_generoso']), 'desenhar não devia mexer na lista de palavras');
 }
 
 // (e) os sítios do costume

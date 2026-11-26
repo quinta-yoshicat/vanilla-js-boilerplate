@@ -4,7 +4,7 @@
 // (scripts/_jogo-vm.js). Nunca toca em browser, estado nem conta real.
 //
 // Prova:
-//  (a) as 32 palavras combinadas existem, por esta ordem (alfabética) e com estes ids; nem uma a mais nem uma a menos;
+//  (a) as 36 palavras combinadas existem, por esta ordem (alfabética) e com estes ids; nem uma a mais nem uma a menos;
 //  (b) ids únicos, só com a-z, 0-9 e _; palavras repetidas não há; a palavra é o termo em português e vem igual nas 3 línguas
 //      (a explicação não repete a palavra em inglês ou espanhol por outro nome: é só texto);
 //  (c) pt, en e es existem e não estão vazios (nem só espaços) em todas as explicações; «DOP» abre com «PDO (Protected Designation of Origin)»
@@ -13,8 +13,8 @@
 //  (e) o campo opcional «nivel», se existir, é um inteiro >= 1 (por agora nenhuma palavra o traz, e nenhuma entrada tem campos a mais);
 //  (f) nenhum texto tem < > & (os ecrãs montam HTML), links, emails nem fala de bots ou de IA;
 //  (g) o ficheiro só tem comentários e chamadas dadosAcrescentar('palavras', ...);
-//  (h) no jogo real as 32 entram em PALAVRAS_DA_QUINTA, sem nenhum aviso, tal e qual estão no ficheiro; palavrasTotal() é 32, palavrasResumo()
-//      é «32» e palavrasOrdenadas() dá a ordem alfabética sem mexer na lista; o index.html carrega js/palavras.js antes de js/dados.js e
+//  (h) no jogo real as 36 entram em PALAVRAS_DA_QUINTA, sem nenhum aviso, tal e qual estão no ficheiro; palavrasTotal() é 36, palavrasResumo()
+//      é «36» e palavrasOrdenadas() dá a ordem alfabética sem mexer na lista; o index.html carrega js/palavras.js antes de js/dados.js e
 //      dados/palavras.js a seguir a dados/enciclopedia.js;
 //  (i) SÓ LÊ: só js/palavras.js, js/dados.js, js/perfil.js (o cartão) e js/main.js (abre o ecrã) falam das palavras; nada no estado, na nuvem nem em
 //      js/state.js; js/palavras.js não toca em estado, armazenamento, nuvem nem rede (o ecrã e o cartão provam-se em scripts/verificar-palavras-ecra.js).
@@ -35,13 +35,13 @@ let falhas = 0;
 function ok(cond, msg) { if (!cond) { falhas++; console.log('FALHA: ' + msg); } }
 const temTexto = function (s) { return typeof s === 'string' && s.trim() !== ''; };
 
-// As 32 palavras combinadas (20 de origem, as 5 do pacote «Cultura da Azeitona», as 4 do pacote «Cultura da Cortiça» e as 3 do pacote «Cultura do Sal»), por ordem alfabética: id e palavra.
+// As 36 palavras combinadas (20 de origem, as 5 do pacote «Cultura da Azeitona», as 4 do pacote «Cultura da Cortiça», as 3 do pacote «Cultura do Sal» e as 4 do pacote «Cultura do Mel»), por ordem alfabética: id e palavra.
 const ESPERADAS = [
-  ['agua_ruca', 'água ruça'], ['aguardente_vinica', 'aguardente vínica'], ['alambique', 'alambique'], ['bacelo', 'bacelo'], ['bagaceira', 'bagaceira'],
-  ['bagaco', 'bagaço'], ['caldeacao', 'caldeação'], ['casta', 'casta'], ['cristalizador', 'cristalizador'], ['curtimenta', 'curtimenta'], ['desboia', 'desbóia'], ['dop', 'DOP'], ['entrecasco', 'entrecasco'],
+  ['agua_ruca', 'água ruça'], ['aguardente_vinica', 'aguardente vínica'], ['alambique', 'alambique'], ['apicultor', 'apicultor'], ['bacelo', 'bacelo'], ['bagaceira', 'bagaceira'],
+  ['bagaco', 'bagaço'], ['caldeacao', 'caldeação'], ['casta', 'casta'], ['colmeia', 'colmeia'], ['cristalizador', 'cristalizador'], ['curtimenta', 'curtimenta'], ['desboia', 'desbóia'], ['dop', 'DOP'], ['entrecasco', 'entrecasco'],
   ['estuario', 'estuário'], ['flor_de_sal', 'flor de sal'], ['fortificar', 'fortificar'], ['galga', 'galga'], ['jeropiga', 'jeropiga'], ['lagar', 'lagar'],
-  ['maquia', 'maquia'], ['marnoto', 'marnoto'], ['mildio', 'míldio'], ['molheiro', 'molheiro'], ['montado', 'montado'], ['mosto', 'mosto'], ['oidio', 'oídio'],
-  ['pousio', 'pousio'], ['redura', 'redura'], ['seira', 'seira'], ['tiradia', 'tiradia'], ['torna_viagem', 'torna-viagem'], ['vinho_generoso', 'vinho generoso']
+  ['maquia', 'maquia'], ['marnoto', 'marnoto'], ['mildio', 'míldio'], ['molheiro', 'molheiro'], ['montado', 'montado'], ['mosto', 'mosto'], ['nectar', 'néctar'], ['oidio', 'oídio'],
+  ['pousio', 'pousio'], ['redura', 'redura'], ['rosmaninho', 'rosmaninho'], ['seira', 'seira'], ['tiradia', 'tiradia'], ['torna_viagem', 'torna-viagem'], ['vinho_generoso', 'vinho generoso']
 ];
 
 const codigoFonte = fs.readFileSync(FICHEIRO, 'utf8');
@@ -52,8 +52,8 @@ vm.runInContext(codigoFonte, vm.createContext(sb), { filename: 'dados/palavras.j
 
 const chave = function (s) { return String(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase(); };
 
-// (a) as 32, por ordem, com estes ids
-ok(entradas.length === 32, 'devia haver 32 palavras, há ' + entradas.length);
+// (a) as 36, por ordem, com estes ids
+ok(entradas.length === 36, 'devia haver 36 palavras, há ' + entradas.length);
 ok(entradas.map(function (e) { return e && e.id; }).join() === ESPERADAS.map(function (x) { return x[0]; }).join(), 'os ids (e a ordem) não são os combinados: ' + entradas.map(function (e) { return e && e.id; }).join());
 ok(entradas.map(function (e) { return e && e.palavra; }).join() === ESPERADAS.map(function (x) { return x[1]; }).join(), 'as palavras não são as combinadas: ' + entradas.map(function (e) { return e && e.palavra; }).join());
 ok(chamadas.every(function (t) { return t === 'palavras'; }), 'todas as chamadas deviam ser dadosAcrescentar(\'palavras\', ...)');
@@ -108,21 +108,21 @@ for (let i = 1; i < entradas.length; i++) {
 {
   const codigo = codigoFonte.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').trim();
   ok(/^dadosAcrescentar\('palavras', \{/.test(codigo), 'o ficheiro devia começar numa chamada dadosAcrescentar(\'palavras\', ...)');
-  ok(codigo.split('dadosAcrescentar(').length - 1 === 32, 'o ficheiro devia ter 32 chamadas dadosAcrescentar');
+  ok(codigo.split('dadosAcrescentar(').length - 1 === 36, 'o ficheiro devia ter 36 chamadas dadosAcrescentar');
   ok(!/\b(localStorage|saveState|state\b|Math\.random|Date\.now|fetch|XMLHttpRequest|document|window)\b/.test(codigo), 'o ficheiro não devia tocar em estado, rede nem ecrã');
 }
 
 const html = fs.readFileSync(path.join(RAIZ, 'index.html'), 'utf8');
 
-// (h) o jogo real: as 32 entram, sem avisos, e o index.html carrega tudo pela ordem certa
+// (h) o jogo real: as 36 entram, sem avisos, e o index.html carrega tudo pela ordem certa
 if (!process.env.PALAVRAS_JS) {
   const avisos = [];
   const jogo = abrirJogo({ aoAvisar: function (m) { avisos.push(m); } });
   ok(avisos.filter(function (m) { return /palavras/.test(m); }).length === 0, 'nenhuma palavra devia gerar aviso ao entrar: ' + avisos.filter(function (m) { return /palavras/.test(m); }).join(' | '));
   const naLista = JSON.parse(jogo.ev('JSON.stringify(PALAVRAS_DA_QUINTA)'));
-  ok(naLista.length === 32, 'PALAVRAS_DA_QUINTA devia ter as 32 palavras, tem ' + naLista.length);
+  ok(naLista.length === 36, 'PALAVRAS_DA_QUINTA devia ter as 36 palavras, tem ' + naLista.length);
   ok(JSON.stringify(naLista) === JSON.stringify(entradas), 'as palavras da lista deviam ser exatamente as do ficheiro (mesmos campos, mesma ordem)');
-  ok(jogo.ev('palavrasTotal()') === 32 && jogo.ev('palavrasResumo()') === '32' && jogo.ev('DADOS_ACRESCENTADOS.palavras.length') === 32, 'palavrasTotal() devia ser 32 e palavrasResumo() «32»');
+  ok(jogo.ev('palavrasTotal()') === 36 && jogo.ev('palavrasResumo()') === '36' && jogo.ev('DADOS_ACRESCENTADOS.palavras.length') === 36, 'palavrasTotal() devia ser 36 e palavrasResumo() «36»');
   const antes = jogo.ev('JSON.stringify(PALAVRAS_DA_QUINTA)');
   ok(jogo.ev("palavrasOrdenadas().map(function (p) { return p.id; }).join()") === ESPERADAS.map(function (x) { return x[0]; }).join(), 'palavrasOrdenadas() devia dar a ordem alfabética combinada');
   ok(jogo.ev('JSON.stringify(PALAVRAS_DA_QUINTA)') === antes, 'palavrasOrdenadas() não devia mexer na lista');
@@ -146,4 +146,4 @@ if (!process.env.PALAVRAS_JS) {
 }
 
 if (falhas) { console.log(falhas + ' falha(s)'); process.exit(1); }
-console.log('OK (32 palavras)');
+console.log('OK (36 palavras)');

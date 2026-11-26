@@ -2,6 +2,8 @@
   "id": "nome_do_pacote",
   "nome": "Nome do pacote",
   "estado": "ideia",
+  "clima": "O fio condutor do clima, numa frase factual (opcional).",
+  "fontes": [],
   "ids": {
     "enciclopedia": [],
     "palavras": [],
