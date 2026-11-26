@@ -163,7 +163,7 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/yoshicat_binoculos_sado.jpg` | história do nível 16 (fala 3) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
 | `assets/ecras/sado_por_do_sol.jpg` | história do nível 17 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
 | `assets/ecras/sado_navio.jpg` | história do nível 17 (fala 3) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
-| `assets/ecras/yoshi_nos_arrozais.jpg` | história do nível 18 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/yoshi_nos_arrozais.jpg` | história do nível 18 (fala 1) e Enciclopédia (arroz_agua) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
 | `assets/ecras/yoshi_a_mesa.jpg` | história do nível 18 (fala 3) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
 | `assets/ecras/yoshi_no_montado.jpg` | história do nível 19 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
 | `assets/ecras/yoshi_sobreiro.jpg` | história do nível 19 (fala 3) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |

@@ -158,9 +158,9 @@ dadosAcrescentar('enciclopedia', {
   nivelMinimo: 7,
   titulo: { pt: 'As aves dos arrozais', en: 'The birds of the rice paddies', es: 'Las aves de los arrozales' },
   texto: {
-    pt: 'Um arrozal é uma zona húmida feita pelo homem. Muitas aves aquáticas usam-nos como casa, porque as zonas húmidas naturais têm diminuído. Perto de Possanco, no estuário do Sado, veem-se no inverno bandos de centenas de aves, como íbis-pretas e colhereiros.',
-    en: 'A rice paddy is a wetland made by people. Many waterbirds use them as a home, because natural wetlands have been shrinking. Near Possanco, in the Sado estuary, flocks of hundreds of birds can be seen in winter, such as glossy ibises and spoonbills.',
-    es: 'Un arrozal es una zona húmeda creada por el ser humano. Muchas aves acuáticas los usan como casa, porque las zonas húmedas naturales han disminuido. Cerca de Possanco, en el estuario del Sado, se ven en invierno bandadas de cientos de aves, como moritos y espátulas.'
+    pt: 'Um arrozal é uma zona húmida feita pelo homem. Muitas aves aquáticas usam os arrozais como casa, porque as zonas húmidas naturais têm diminuído. Perto de Possanco, no estuário do Sado, veem-se no inverno bandos de centenas de aves, como íbis-pretas e colhereiros.',
+    en: 'A rice paddy is a wetland made by people. Many waterbirds use rice paddies as a home, because natural wetlands have been shrinking. Near Possanco, in the Sado estuary, flocks of hundreds of birds can be seen in winter, such as glossy ibises and spoonbills.',
+    es: 'Un arrozal es una zona húmeda creada por el ser humano. Muchas aves acuáticas usan los arrozales como casa, porque las zonas húmedas naturales han disminuido. Cerca de Possanco, en el estuario del Sado, se ven en invierno bandadas de cientos de aves, como moritos y espátulas.'
   }
 });
 
