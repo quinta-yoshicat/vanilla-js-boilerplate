@@ -161,6 +161,21 @@ dadosAcrescentar('enciclopedia', {
 - **Os outros campos** (`meses`, `estacao`, `manual`) fazem o mesmo que nas entradas de hoje: `estacao` limita o Explorar a essa estação, `manual` tira a entrada do sorteio (só se desbloqueia por uma ação), `meses` só serve à Ronda do Chizo.
 - **Estado do jogador.** Só guarda o id. Se uma entrada deixar de existir o jogo carrega na mesma e o id solto não conta nos totais. **Nunca apagar um id publicado** (regra de ouro abaixo).
 
+## Pacotes de conteúdo (`dados/pacotes/`)
+
+Um pacote é o que uma PR acrescenta a `dados/` (ex.: «Cultura da Azeitona»), mais as imagens e os sons que ainda é preciso criar. A pasta tem **ficheiros que não são `.js`**, por isso o jogo, o `index.html` e o teste das pastas de `dados/` (que só olha para `.js`) não os veem.
+
+| Ficheiro | O que é |
+|---|---|
+| `dados/pacotes/IDEIAS.md` | a lista de ideias (id, ideia, tipo, pacote, estado `ideia`/`aprovada`/`em PR`/`feita`, PR). Cada PR de um pacote atualiza a sua linha |
+| `dados/pacotes/_modelo.json` | o modelo de um pacote: `id`, `nome`, `estado`, `ids` por tipo, `imagens` e `sons` (cada um com `caminho`, `uso`, `descricao`, `estado` `por_criar`/`feita`) e `excecoes` |
+| `dados/pacotes/_base.json` | os ids que já existiam antes dos pacotes (só serve para o validador saber o que não é «órfão») |
+| `dados/pacotes/<id>.json` | um pacote real: o nome do ficheiro é o `id` do pacote |
+
+Cada PR de um pacote: (1) cria `dados/pacotes/<id>.json` a partir do modelo; (2) acrescenta as entradas aos ficheiros de `dados/`; (3) atualiza `IDEIAS.md`; (4) atualiza os totais fixos dos testes (`ESPERADO_EM_DADOS` em `verificar-dados-carregar.js`, as contagens da Enciclopédia e das palavras); (5) sobe o `?v=` de cada ficheiro de `dados/` mudado; (6) corre `node scripts/verificar-pacote.js`.
+
+Imagens e sons: enquanto não existem, ficam `por_criar` no pacote e a entrada **não** leva o campo `imagem` (nem `foto` ou `som`); quando o ficheiro entra em `assets/` e em `CREDITOS.md`, passam a `feita` e o campo acrescenta-se. Um som novo em `assets/sons` obriga a atualizar a contagem (23) de `verificar-ambiente-vento.js` e `verificar-barril.js`. Esta pasta é **pública** (o `static.yml` publica o repositório todo): só ideias e listas, nada de dados pessoais.
+
 ## Como se confere
 
 ```

@@ -1,0 +1,9 @@
+{
+  "visitas": ["marisa_5","henrique_5"],
+  "niveis": ["nivel_11","nivel_12","nivel_13","nivel_14","nivel_15","nivel_16","nivel_17","nivel_18","nivel_19","nivel_20"],
+  "historias": ["historia_11","historia_12","historia_13","historia_14","historia_15","historia_16","historia_17","historia_18","historia_19","historia_20"],
+  "capitulos": ["cap11","cap12","cap13","cap14","cap15","cap16","cap17","cap18","cap19","cap20"],
+  "enciclopedia": ["cave_idade_rotulo","cave_varias_colheitas","cave_estufa","colecao_cores_do_tempo","colecao_colheitas_antigas","colecao_cem_anos","arrabida_biosfera","arrabida_plantas","arrabida_mar","sado_reserva","sado_golfinhos","sado_troia","palmela_castelo","palmela_capelo","palmela_castelao","azeitao_queijo","azeitao_adega","azeitao_palacio","sesimbra_castelo","sesimbra_vila","sesimbra_espichel","setubal_forte","setubal_roxo","setubal_familias","sal_alcacer","sal_setubal","sal_redura","arroz_arrozais","arroz_carolino","arroz_consumo","sobreiro_cortica","sobreiro_assobiador","sobreiro_rolha","bocage_poeta","bocage_casa","bocage_dia"],
+  "palavras": ["aguardente_vinica","alambique","bacelo","bagaceira","bagaco","casta","curtimenta","dop","estuario","fortificar","jeropiga","lagar","mildio","montado","mosto","oidio","pousio","redura","torna_viagem","vinho_generoso"],
+  "provas": ["prova_jovem_1","prova_jovem_2","prova_jovem_3","prova_jovem_4","prova_jovem_5","prova_ensino_jovem","prova_dourado_1","prova_dourado_2","prova_dourado_3","prova_dourado_4","prova_dourado_5","prova_ensino_dourado","prova_ambar_1","prova_ambar_2","prova_ambar_3","prova_ambar_4","prova_ambar_5","prova_ensino_ambar","prova_cobre_1","prova_cobre_2","prova_cobre_3","prova_cobre_4","prova_cobre_5","prova_ensino_cobre"]
+}

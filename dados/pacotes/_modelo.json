@@ -1,0 +1,31 @@
+{
+  "id": "nome_do_pacote",
+  "nome": "Nome do pacote",
+  "estado": "ideia",
+  "ids": {
+    "enciclopedia": [],
+    "palavras": [],
+    "visitas": [],
+    "niveis": [],
+    "historias": [],
+    "capitulos": [],
+    "provas": []
+  },
+  "imagens": [
+    {
+      "caminho": "assets/ecras/exemplo_imagem.jpg",
+      "uso": "Entrada da Enciclopédia «id_da_entrada» (campo imagem)",
+      "descricao": "O que a imagem mostra, em duas linhas, para quem a vai criar.",
+      "estado": "por_criar"
+    }
+  ],
+  "sons": [
+    {
+      "caminho": "assets/sons/exemplo_som.mp3",
+      "uso": "Fala 1 da história «id_da_historia» (campo som)",
+      "descricao": "O que se ouve, a duração aproximada e de onde pode vir.",
+      "estado": "por_criar"
+    }
+  ],
+  "excecoes": []
+}
