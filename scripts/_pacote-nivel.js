@@ -54,6 +54,7 @@ function correr(spec) {
   const MINIMO = LIMIARES[N - 1];
   const REP_M = MINIMO - 1, REP_N = MINIMO;
   const IDS = spec.ids, ENC = spec.enc, CAP = spec.cap, FALAS = spec.falas, NOME = spec.nome, NOME_ANT = spec.nomeAnt, FOTO = spec.foto;
+  const IMGS = spec.imagens || {}; // entradas deste nível com imagem que já existia em assets/ecras (id -> caminho); as outras ficam sem imagem
   const FOTOS_EXTRA = spec.fotosExtra || {}; // fala (1 a 4) -> foto, além da fala 1
   const FOTOS_TODAS = [FOTO].concat(Object.keys(FOTOS_EXTRA).map(function (k) { return FOTOS_EXTRA[k]; }));
   const GRUPOS = GRUPOS_NIVEIS_5_6.concat(spec.grupos); // grupos anteriores de nivelMinimo (5, 6, 11, 12, ..., N - 1)
@@ -224,7 +225,7 @@ function correr(spec) {
       ok(g.ev('encyclopediaEntries().length') === ATE_N, '(d) nível ' + N + ': ' + ATE_N + ' entradas' + L);
       IDS.forEach(function (id) {
         const e = g.ev('encyclopediaEntries().filter(function (e) { return e.id === ' + js(id) + '; })[0]');
-        ok(e && e.titulo === ENC[id].titulo[l] && e.texto === ENC[id].texto[l] && e.nivelMinimo === N && e.imagem === undefined, '(d) ' + id + ': título e texto exatos, nível mínimo ' + N + ', sem imagem' + L);
+        ok(e && e.titulo === ENC[id].titulo[l] && e.texto === ENC[id].texto[l] && e.nivelMinimo === N && e.imagem === IMGS[id], '(d) ' + id + ': título e texto exatos, nível mínimo ' + N + ', sem imagem (salvo as de spec.imagens)' + L);
       });
       g.ev('renderEnciclopedia();');
       h = html(g, 'enciclopedia-container');
@@ -233,7 +234,7 @@ function correr(spec) {
       g.ev('renderEnciclopedia();');
       h = html(g, 'enciclopedia-container');
       ok(IDS.every(function (id) { return h.indexOf('<h3>' + esc(ENC[id].titulo[l]) + '</h3>') !== -1 && h.indexOf('<p>' + esc(ENC[id].texto[l]) + '</p>') !== -1; }), '(d) nível ' + N + ': abertas, mostram o título e o texto (escapados)' + L);
-      ok(h.indexOf('3 / ' + ATE_N) !== -1 && h.indexOf('<img') === -1, '(d) nível ' + N + ': 3 / ' + ATE_N + ' e sem imagens' + L);
+      ok(h.indexOf('3 / ' + ATE_N) !== -1 && (h.match(/<img/g) || []).length === Object.keys(IMGS).length && Object.keys(IMGS).every(function (id) { return h.indexOf('<img src="' + IMGS[id] + '" alt="">') !== -1; }), '(d) nível ' + N + ': 3 / ' + ATE_N + ' e só as imagens de spec.imagens' + L);
       limpo(h, '(d) Enciclopédia' + L);
     }
     {

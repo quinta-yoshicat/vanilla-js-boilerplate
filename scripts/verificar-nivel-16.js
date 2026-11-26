@@ -11,6 +11,7 @@ const { correr } = require('./_pacote-nivel');
 
 correr({
   nivel: 16,
+  imagens: { setubal_roxo: 'assets/ecras/moscatel_roxo_com_uvas.jpg' },
   limiares: [0, 15, 50, 120, 300, 600, 1000, 1500, 2100, 2800, 3650, 4550, 5500, 6500, 7550, 8650],
   nome: { pt: 'Moscatel de Setúbal', en: 'Setúbal Moscatel', es: 'Moscatel de Setúbal' },
   nomeAnt: { pt: 'Moscatel de Sesimbra', en: 'Sesimbra Moscatel', es: 'Moscatel de Sesimbra' },

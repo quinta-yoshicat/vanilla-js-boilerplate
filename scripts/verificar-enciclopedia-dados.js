@@ -25,7 +25,7 @@ const RAIZ = path.join(__dirname, '..');
 const JS_DIR = process.env.JS_DIR || path.join(RAIZ, 'js');
 const LINGUAS = ['pt', 'en', 'es'];
 // sha256 do JSON das 32 primeiras entradas de ENCYCLOPEDIA_ENTRIES (as de antes da festa dos Reis, nas 3 línguas), já com a frase de Ricardo II na forma cautelosa («Diz-se que ...») e o nome «Fygmo II»; a 33.ª é a «janeiras».
-const IMPRESSAO_DIGITAL_DE_HOJE = '8b690433b841dc760fa6d9f7d492736273ff3a4d53dc65382123d90c9009b789';
+const IMPRESSAO_DIGITAL_DE_HOJE = '93f1ddfe676d6a6c5562a50d9e172035a27623112ca87eb1376acc6806902cf8'; // muda só com o campo imagem de «mildio» (js/explorar.js)
 // Os textos pedidos das 6 histórias dos níveis 5 e 6, palavra por palavra (escritos aqui, à parte; não lidos de dados/).
 const TEXTOS_5_6 = {
   cave_idade_rotulo: {"nivelMinimo":5,"titulo":{"pt":"Quantos anos tem o Moscatel?","en":"How old is the Moscatel?","es":"¿Cuántos años tiene el Moscatel?"},"texto":{"pt":"Num Moscatel de Setúbal, o rótulo pode dizer «5 anos», «10 anos», «20 anos», de 5 em 5 anos até «40 anos». Só se pode escrever esse número se os vinhos da garrafa tiverem, no mínimo, essa idade.","en":"On a Moscatel de Setúbal, the label may say \"5 years\", \"10 years\", \"20 years\", in steps of 5 up to \"40 years\". The number can only be written if the wines in the bottle are at least that old.","es":"En un Moscatel de Setúbal, la etiqueta puede decir «5 años», «10 años», «20 años», de 5 en 5 hasta «40 años». Solo se puede escribir ese número si los vinos de la botella tienen, como mínimo, esa edad."}},
@@ -110,16 +110,17 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     { nome: 'Azeitona', nivel: 7, ids: ['azeite_do_olival_ao_lagar'], imagem: 'assets/ecras/azeite_do_olival_ao_lagar.jpg' },
     // Pacote «Cultura da Cortiça» (PR 2): uma só entrada, de nível mínimo 7, a seguir à da azeitona, com imagem.
     { nome: 'Cortiça', nivel: 7, ids: ['tirada_da_cortica'], imagem: 'assets/ecras/tirada_da_cortica.jpg' },
+    // Imagens que já existiam em assets/ecras: uma por entrada (campo «imagens»: id -> caminho), só onde mostram mesmo o tema.
     { nome: 'Arrábida', nivel: 11, ids: ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'] },
-    { nome: 'Sado', nivel: 12, ids: ['sado_reserva', 'sado_golfinhos', 'sado_troia'] },
-    { nome: 'Palmela', nivel: 13, ids: ['palmela_castelo', 'palmela_capelo', 'palmela_castelao'] },
-    { nome: 'Azeitão', nivel: 14, ids: ['azeitao_queijo', 'azeitao_adega', 'azeitao_palacio'] },
-    { nome: 'Sesimbra', nivel: 15, ids: ['sesimbra_castelo', 'sesimbra_vila', 'sesimbra_espichel'] },
-    { nome: 'Setúbal', nivel: 16, ids: ['setubal_forte', 'setubal_roxo', 'setubal_familias'] },
+    { nome: 'Sado', nivel: 12, ids: ['sado_reserva', 'sado_golfinhos', 'sado_troia'], imagens: { sado_reserva: 'assets/ecras/sado_estuario.jpg' } },
+    { nome: 'Palmela', nivel: 13, ids: ['palmela_castelo', 'palmela_capelo', 'palmela_castelao'], imagens: { palmela_castelo: 'assets/ecras/palmela_castelo.jpg' } },
+    { nome: 'Azeitão', nivel: 14, ids: ['azeitao_queijo', 'azeitao_adega', 'azeitao_palacio'], imagens: { azeitao_queijo: 'assets/ecras/azeitao_vila.jpg' } },
+    { nome: 'Sesimbra', nivel: 15, ids: ['sesimbra_castelo', 'sesimbra_vila', 'sesimbra_espichel'], imagens: { sesimbra_vila: 'assets/ecras/sesimbra_vila.jpg' } },
+    { nome: 'Setúbal', nivel: 16, ids: ['setubal_forte', 'setubal_roxo', 'setubal_familias'], imagens: { setubal_roxo: 'assets/ecras/moscatel_roxo_com_uvas.jpg' } },
     { nome: 'Alcácer', nivel: 17, ids: ['sal_alcacer', 'sal_setubal', 'sal_redura'] },
     { nome: 'Comporta', nivel: 18, ids: ['arroz_arrozais', 'arroz_carolino', 'arroz_consumo'] },
     { nome: 'Montado', nivel: 19, ids: ['sobreiro_cortica', 'sobreiro_assobiador', 'sobreiro_rolha'] },
-    { nome: 'Bocage', nivel: 20, ids: ['bocage_poeta', 'bocage_casa', 'bocage_dia'] }
+    { nome: 'Bocage', nivel: 20, ids: ['bocage_poeta', 'bocage_casa', 'bocage_dia'], imagens: { bocage_casa: 'assets/ecras/casa_bocage.jpg' } }
   ];
   const TODOS = GRUPOS.reduce(function (t, g) { return t.concat(g.ids); }, []);
   ok(real.avisos.length === 0, '(f) carregar o jogo com dados/ não devia avisar nada: ' + real.avisos);
@@ -134,7 +135,7 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     GRUPOS.forEach(function (gr) {
       const grupo = fim.slice(desde, desde + gr.ids.length);
       desde += gr.ids.length;
-      ok(grupo.length === gr.ids.length && grupo.every(function (e) { return e.nivelMinimo === gr.nivel && e.imagem === gr.imagem && !e.manual && e.estacao === undefined && e.meses === undefined && typeof e.titulo === 'string' && typeof e.texto === 'string'; }), '(f) ' + l + ': as 3 do ' + gr.nome + ' são de nível ' + gr.nivel + ', sem manual, estação nem meses' + (gr.imagem ? ' e com a imagem ' + gr.imagem : ', sem imagem'));
+      ok(grupo.length === gr.ids.length && grupo.every(function (e) { return e.nivelMinimo === gr.nivel && e.imagem === (gr.imagens ? gr.imagens[e.id] : gr.imagem) && !e.manual && e.estacao === undefined && e.meses === undefined && typeof e.titulo === 'string' && typeof e.texto === 'string'; }), '(f) ' + l + ': as 3 do ' + gr.nome + ' são de nível ' + gr.nivel + ', sem manual, estação nem meses' + (gr.imagem ? ' e com a imagem ' + gr.imagem : ', sem imagem'));
     });
   });
   // As 6 dos níveis 5 e 6: título e texto exatos nas 3 línguas, nível mínimo certo, só os campos pedidos, nada de < > & nem de bots ou IA.

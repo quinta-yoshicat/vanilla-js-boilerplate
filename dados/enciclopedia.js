@@ -141,6 +141,7 @@ dadosAcrescentar('enciclopedia', {
 // Nível 12, «Moscatel do Sado»: as 3 histórias que o capítulo 12 (dados/capitulos.js) pede. Sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'sado_reserva',
+  imagem: 'assets/ecras/sado_estuario.jpg',
   nivelMinimo: 12,
   titulo: { pt: 'Uma Reserva Entre o Rio e o Mar', en: 'A Reserve Between River and Sea', es: 'Una Reserva Entre el Río y el Mar' },
   texto: {
@@ -175,6 +176,7 @@ dadosAcrescentar('enciclopedia', {
 // Nível 13, «Moscatel de Palmela»: as 3 histórias que o capítulo 13 (dados/capitulos.js) pede. Sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'palmela_castelo',
+  imagem: 'assets/ecras/palmela_castelo.jpg',
   nivelMinimo: 13,
   titulo: { pt: 'O Castelo de Palmela', en: 'Palmela Castle', es: 'El Castillo de Palmela' },
   texto: {
@@ -209,6 +211,7 @@ dadosAcrescentar('enciclopedia', {
 // Nível 14, «Moscatel de Azeitão»: as 3 histórias que o capítulo 14 (dados/capitulos.js) pede. Sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'azeitao_queijo',
+  imagem: 'assets/ecras/azeitao_vila.jpg',
   nivelMinimo: 14,
   titulo: { pt: 'O Queijo de Azeitão', en: 'Azeitão Cheese', es: 'El Queso de Azeitão' },
   texto: {
@@ -254,6 +257,7 @@ dadosAcrescentar('enciclopedia', {
 
 dadosAcrescentar('enciclopedia', {
   id: 'sesimbra_vila',
+  imagem: 'assets/ecras/sesimbra_vila.jpg',
   nivelMinimo: 15,
   titulo: { pt: 'A vila desce ao mar', en: 'The town comes down to the sea', es: 'La villa baja al mar' },
   texto: {
@@ -288,6 +292,7 @@ dadosAcrescentar('enciclopedia', {
 
 dadosAcrescentar('enciclopedia', {
   id: 'setubal_roxo',
+  imagem: 'assets/ecras/moscatel_roxo_com_uvas.jpg',
   nivelMinimo: 16,
   titulo: { pt: 'A uva que quase se perdeu', en: 'The Grape That Was Almost Lost', es: 'La uva que casi se perdió' },
   texto: {
@@ -424,6 +429,7 @@ dadosAcrescentar('enciclopedia', {
 
 dadosAcrescentar('enciclopedia', {
   id: 'bocage_casa',
+  imagem: 'assets/ecras/casa_bocage.jpg',
   nivelMinimo: 20,
   titulo: { pt: 'A Casa Bocage', en: 'Casa Bocage', es: 'La Casa Bocage' },
   texto: {
