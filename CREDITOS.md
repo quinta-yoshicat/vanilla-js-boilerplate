@@ -58,6 +58,7 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/alambique.jpg` | Adega (Destilar vinho) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/apontar_esquerda.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/arco_iris.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
+| `assets/ecras/azeite_do_olival_ao_lagar.jpg` | Enciclopédia, entrada «Do olival ao lagar» (pacote Cultura da Azeitona; lagar de varas: galga, seiras e talhas; JPEG 720x1280, até 250 KB, na proporção original) | imagem gerada com IA pelo autor do jogo, sem marcas (carregada a 26/11/2026); ferramenta por confirmar pelo Nuno |
 | `assets/ecras/bagaco.jpg` | Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/calor.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/ecras/barril_simples.jpg` | ainda sem uso direto no código (original; a versão pequena é `assets/vinha/barril_botao.jpg`, os barris do "Seguir o barril") | imagem gerada com IA pelo autor do jogo, sem marcas |
@@ -211,6 +212,7 @@ Versões pequenas (JPEG 640x340, até 60 KB cada) feitas só para os cartões do
 
 | Ficheiro | Onde se usa | Origem |
 |---|---|---|
+| `assets/personagens/azeitoneiro.jpg` | cara do azeitoneiro (pacote Cultura da Azeitona; ainda sem visita a usá-la; recorte do rosto do retrato, 128x128) | imagem gerada com IA pelo autor do jogo, sem marcas (carregada a 26/11/2026); ferramenta por confirmar pelo Nuno |
 | `assets/personagens/chizo.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/personagens/fygmo.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |
 | `assets/personagens/fygmo2.jpg` | cara de quem fala | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Nuno a 13/10/2026 |

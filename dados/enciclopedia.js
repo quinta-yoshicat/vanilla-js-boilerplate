@@ -82,6 +82,7 @@ dadosAcrescentar('enciclopedia', {
 
 dadosAcrescentar('enciclopedia', {
   id: 'azeite_do_olival_ao_lagar',
+  imagem: 'assets/ecras/azeite_do_olival_ao_lagar.jpg',
   nivelMinimo: 7,
   titulo: { pt: 'Do olival ao lagar', en: 'From the grove to the mill', es: 'Del olivar a la almazara' },
   texto: {

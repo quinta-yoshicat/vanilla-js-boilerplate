@@ -16,13 +16,13 @@
       "caminho": "assets/ecras/azeite_do_olival_ao_lagar.jpg",
       "uso": "Entrada da Enciclopédia «azeite_do_olival_ao_lagar» (campo imagem; só se acrescenta quando o ficheiro existir)",
       "descricao": "Um lagar de varas tradicional: a galga de pedra a esmagar a azeitona e as seiras de esparto empilhadas com a pasta, ao lado da prensa de varas.",
-      "estado": "por_criar"
+      "estado": "feita"
     },
     {
       "caminho": "assets/personagens/azeitoneiro.jpg",
       "uso": "Cara do azeitoneiro, de Moura (caminho proposto; a visita ainda não existe, falta o código da personagem)",
       "descricao": "Retrato do azeitoneiro, homem do Alentejo com um cesto de azeitona, no mesmo formato das caras de assets/personagens.",
-      "estado": "por_criar"
+      "estado": "feita"
     }
   ],
   "sons": [],
