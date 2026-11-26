@@ -107,7 +107,7 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     { nome: 'Cave de Reserva', nivel: 5, ids: ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa'] },
     { nome: 'Coleção', nivel: 6, ids: ['colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos'] },
     // Pacote «Cultura da Azeitona» (PR 1): uma só entrada, de nível mínimo 7 (o da Estrada), logo a seguir à Coleção.
-    { nome: 'Azeitona', nivel: 7, ids: ['azeite_do_olival_ao_lagar'] },
+    { nome: 'Azeitona', nivel: 7, ids: ['azeite_do_olival_ao_lagar'], imagem: 'assets/ecras/azeite_do_olival_ao_lagar.jpg' },
     { nome: 'Arrábida', nivel: 11, ids: ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'] },
     { nome: 'Sado', nivel: 12, ids: ['sado_reserva', 'sado_golfinhos', 'sado_troia'] },
     { nome: 'Palmela', nivel: 13, ids: ['palmela_castelo', 'palmela_capelo', 'palmela_castelao'] },
@@ -132,7 +132,7 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     GRUPOS.forEach(function (gr) {
       const grupo = fim.slice(desde, desde + gr.ids.length);
       desde += gr.ids.length;
-      ok(grupo.length === gr.ids.length && grupo.every(function (e) { return e.nivelMinimo === gr.nivel && e.imagem === undefined && !e.manual && e.estacao === undefined && e.meses === undefined && typeof e.titulo === 'string' && typeof e.texto === 'string'; }), '(f) ' + l + ': as 3 do ' + gr.nome + ' são de nível ' + gr.nivel + ', sem imagem, manual, estação nem meses');
+      ok(grupo.length === gr.ids.length && grupo.every(function (e) { return e.nivelMinimo === gr.nivel && e.imagem === gr.imagem && !e.manual && e.estacao === undefined && e.meses === undefined && typeof e.titulo === 'string' && typeof e.texto === 'string'; }), '(f) ' + l + ': as 3 do ' + gr.nome + ' são de nível ' + gr.nivel + ', sem manual, estação nem meses' + (gr.imagem ? ' e com a imagem ' + gr.imagem : ', sem imagem'));
     });
   });
   // As 6 dos níveis 5 e 6: título e texto exatos nas 3 línguas, nível mínimo certo, só os campos pedidos, nada de < > & nem de bots ou IA.
