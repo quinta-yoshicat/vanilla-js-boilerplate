@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// O JOGO NUNCA ACABA (decisão do Nuno): nenhum texto pode soar a despedida. Quem chega ao último nível definido
+// O JOGO NUNCA ACABA (decisão do Yoshi_Cat): nenhum texto pode soar a despedida. Quem chega ao último nível definido
 // (hoje o 20) não vê frases de fim, vê frases que prometem mais. Este teste fixa, em pt, en e es, os 3 textos que
 // aparecem quando já não há mais nada definido:
 //   · nivel.maximo               (cartão do Nível, sem nível seguinte; js/i18n.js)

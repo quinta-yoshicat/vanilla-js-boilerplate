@@ -76,7 +76,7 @@ Cada `<script src="js/...?v=N">` do `index.html` tem um número de versão que s
 
 ## Como foi feito
 
-Este jogo foi criado por Nuno Fernandes com a ajuda de ferramentas de inteligência artificial: Claude.ai (planeamento, pesquisa de factos com fontes e revisão do trabalho), Claude Code (escrita do código) e, para as imagens, Gemini, Grok e ChatGPT. As decisões, a história, a aprovação de cada alteração e a escolha das imagens são do Nuno. (Mais pormenores em `CREDITOS.md`.)
+Este jogo foi criado por Yoshi_Cat com a ajuda de ferramentas de inteligência artificial: Claude.ai (planeamento, pesquisa de factos com fontes e revisão do trabalho), Claude Code (escrita do código) e, para as imagens, Gemini, Grok e ChatGPT. As decisões, a história, a aprovação de cada alteração e a escolha das imagens são do Yoshi_Cat. (Mais pormenores em `CREDITOS.md`.)
 
 ## Origem
 

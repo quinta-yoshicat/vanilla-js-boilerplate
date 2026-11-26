@@ -52,7 +52,7 @@ function renderDefinicoes() {
 }
 
 // ---------------------------------------------------------------------
-// DIAGNÓSTICO ESCONDIDO (só para o Nuno ver): aparece com 5 toques seguidos, em
+// DIAGNÓSTICO ESCONDIDO (só para o Yoshi_Cat ver): aparece com 5 toques seguidos, em
 // menos de 3 segundos, no título «Definições» (e esconde-se com outros 5; antes era no título do Perfil). Só LÊ e mostra:
 //   - o id do utilizador do Telegram (tg.initDataUnsafe.user.id) é pessoal: fica só no
 //     texto do ecrã, em memória. Nunca vai para o state, localStorage, nuvem nem logs;

@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// O diagnóstico ESCONDIDO (só para o Nuno ver), que passou do Perfil para as Definições: perfilToqueTitulo(),
+// O diagnóstico ESCONDIDO (só para o Yoshi_Cat ver), que passou do Perfil para as Definições: perfilToqueTitulo(),
 // perfilAtualizarDiagnostico() e perfilDiagnosticoTexto() em js/definicoes.js, com nuvemDiag (js/nuvem.js). Só LÊ js/ e corre-os num ambiente simulado
 // (vm) com um utilizador do Telegram e uma nuvem falsa em memória (scripts/_jogo-vm.js): nunca toca em browser,
 // Telegram nem conta real.
