@@ -100,12 +100,32 @@ dadosAcrescentar('palavras', {
 });
 
 dadosAcrescentar('palavras', {
+  id: 'choco',
+  palavra: 'choco',
+  explicacao: {
+    pt: 'Animal marinho de corpo mole, parente do polvo e da lula, muito pescado no estuário do Sado.',
+    en: 'Soft-bodied sea animal, a relative of the octopus and the squid, widely fished in the Sado estuary.',
+    es: 'Animal marino de cuerpo blando, pariente del pulpo y del calamar, muy pescado en el estuario del Sado.'
+  }
+});
+
+dadosAcrescentar('palavras', {
   id: 'colmeia',
   palavra: 'colmeia',
   explicacao: {
     pt: 'Caixa onde vive uma colónia de abelhas e onde elas fazem o mel.',
     en: 'Box where a colony of bees lives and makes its honey.',
     es: 'Caja donde vive una colonia de abejas y donde hacen la miel.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'covo',
+  palavra: 'covo',
+  explicacao: {
+    pt: 'Armadilha de pesca, como uma gaiola, onde o choco ou o polvo entram e já não saem.',
+    en: 'Fishing trap, like a cage, that cuttlefish or octopus go into and cannot get out of.',
+    es: 'Trampa de pesca, como una jaula, en la que el choco o el pulpo entran y ya no salen.'
   }
 });
 
@@ -316,6 +336,16 @@ dadosAcrescentar('palavras', {
     pt: 'a colheita do sal nas salinas.',
     en: 'the salt harvest in the salt pans.',
     es: 'la cosecha de la sal en las salinas.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'roaz',
+  palavra: 'roaz',
+  explicacao: {
+    pt: 'Golfinho grande e robusto; no Sado vive uma comunidade que ali fica o ano inteiro.',
+    en: 'Large, robust dolphin; in the Sado estuary there is a community that stays there all year round.',
+    es: 'Delfín grande y robusto; en el Sado vive una comunidad que se queda allí todo el año.'
   }
 });
 

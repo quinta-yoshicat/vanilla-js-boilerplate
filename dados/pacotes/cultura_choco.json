@@ -1,0 +1,37 @@
+{
+  "id": "cultura_choco",
+  "nome": "Pesca do choco e golfinhos",
+  "estado": "em PR",
+  "clima": "Cientistas estudam como a água do estuário do Sado mudou nas últimas décadas, por causa do clima e de outros fatores.",
+  "fontes": [
+    "Ferreira (2012), «Avaliação de potenciais impactos da atividade da pesca na população de roazes do Estuário do Sado», Faculdade de Ciências da Universidade de Lisboa",
+    "Rádio Renascença, 20-12-2023, «Recorde de nascimentos: Sado tem seis novas crias de golfinhos» (dados do ICNF)",
+    "Confluências (UFF), artigo sobre a pesca artesanal na Carrasqueira, no estuário do Sado",
+    "Resumo ASLO 2023, «The influence of climate change on the physicochemical properties of Sado Estuary»"
+  ],
+  "ids": {
+    "enciclopedia": [
+      "pesca_choco_sado"
+    ],
+    "palavras": [
+      "choco",
+      "covo",
+      "roaz"
+    ],
+    "visitas": [],
+    "niveis": [],
+    "historias": [],
+    "capitulos": [],
+    "provas": []
+  },
+  "imagens": [
+    {
+      "caminho": "assets/ecras/golfinhos_sado.jpg",
+      "uso": "Entrada da Enciclopédia «sado_golfinhos» (campo imagem; só se acrescenta quando o ficheiro existir)",
+      "descricao": "Golfinhos-roazes a nadar no estuário do Sado, com uma barca de pesca e os covos à vista e a serra da Arrábida ao fundo.",
+      "estado": "por_criar"
+    }
+  ],
+  "sons": [],
+  "excecoes": []
+}

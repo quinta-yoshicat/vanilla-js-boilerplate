@@ -114,6 +114,8 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     { nome: 'Sal', nivel: 7, ids: ['salina_marnoto'], imagem: 'assets/ecras/salina_marnoto.jpg' },
     // Pacote «Cultura do Mel (Arrábida)» (PR 4): uma só entrada, de nível mínimo 7, a seguir à do sal, SEM imagem (por criar).
     { nome: 'Mel', nivel: 7, ids: ['mel_arrabida'] },
+    // Pacote «Pesca do choco e golfinhos» (PR 5): uma só entrada, de nível mínimo 7, a seguir à do mel, SEM imagem (por criar).
+    { nome: 'Choco', nivel: 7, ids: ['pesca_choco_sado'] },
     // Imagens que já existiam em assets/ecras: uma por entrada (campo «imagens»: id -> caminho), só onde mostram mesmo o tema.
     { nome: 'Arrábida', nivel: 11, ids: ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'] },
     { nome: 'Sado', nivel: 12, ids: ['sado_reserva', 'sado_golfinhos', 'sado_troia'], imagens: { sado_reserva: 'assets/ecras/sado_estuario.jpg' } },
