@@ -77,7 +77,7 @@ Observações do ensaio (não falham; o jogo não foi alterado por causa delas):
 
 - `dados/niveis.js`: `nivel_11`, a partir de **3650** de Reputação (o 10 acaba em 2800).
 - `dados/historias.js`: `historia_11`, 4 falas. A 1.ª leva a foto `assets/ecras/arrabida_colina.jpg`. **Nenhuma leva som**: o som pensado (`vento_arvores_passaros.mp3`) é um ambiente de cerca de 112 s que, numa fala, tocaria a volume 1 (as falas não têm volume) e sem parar com a história. Para ter som numa fala é preciso primeiro um campo de volume (e uma forma de o parar) em `js/main.js`.
-- `dados/enciclopedia.js`: `arrabida_biosfera`, `arrabida_plantas` e `arrabida_mar` (nível mínimo 11, sem imagem).
+- `dados/enciclopedia.js`: `arrabida_biosfera`, `arrabida_plantas` e `arrabida_mar` (nível mínimo 11; só a `arrabida_biosfera` leva imagem, `arrabida_colina.jpg`, a mesma da fala 1 da história).
 - `dados/capitulos.js`: `cap11` «A Serra e o Mar», critério `temIds` nessas 3 entradas (cumpre-se ao abri-las pelo Explorar, que as entrega primeiro).
 - Quem está abaixo do nível 11 não vê nada disto (nem as entradas, nem o capítulo); o modo de teste `?capitulo=11` mostra a celebração do capítulo.
 
@@ -262,7 +262,7 @@ Mesmo molde dos níveis 11 a 18:
 
 - `dados/niveis.js`: `nivel_19`, a partir de **12350** de Reputação.
 - `dados/historias.js`: `historia_19`, 4 falas. A 1.ª leva a foto `assets/ecras/yoshi_no_montado.jpg` e a 3.ª a foto `assets/ecras/yoshi_sobreiro.jpg` (as falas 2 e 4 não levam foto: o jogo mantém a anterior); nenhuma leva som.
-- `dados/enciclopedia.js`: `sobreiro_cortica`, `sobreiro_assobiador` e `sobreiro_rolha` (nível mínimo 19, sem imagem).
+- `dados/enciclopedia.js`: `sobreiro_cortica`, `sobreiro_assobiador` e `sobreiro_rolha` (nível mínimo 19; `sobreiro_assobiador` leva `sobreiro_assobiador.jpg` e `sobreiro_rolha` leva `cortica.jpg`; `sobreiro_cortica`, sem imagem).
 - `dados/capitulos.js`: `cap19` «A Casca que Volta», critério `temIds` nessas 3 entradas. A conclusão deixa a porta aberta (não é uma despedida).
 - **Nove grupos de `nivelMinimo` (11 a 19).** Continua a ser um só grupo de prioridade: no nível 19, os grupos anteriores ainda por abrir e o do Montado saem **todos** antes de qualquer entrada de hoje; quem já tem os anteriores abertos recebe só os que faltam. Abaixo do nível 19 o jogador não vê as do sobreiro.
 - O teste deste nível é `scripts/verificar-nivel-19.js` (só os textos e números; a prova está em `scripts/_pacote-nivel.js`).

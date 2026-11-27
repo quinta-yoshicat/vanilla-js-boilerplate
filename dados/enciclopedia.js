@@ -218,9 +218,10 @@ dadosAcrescentar('enciclopedia', {
   }
 });
 
-// Nível 11, "Moscatel da Arrábida": as 3 histórias que o capítulo 11 (dados/capitulos.js) pede. Sem imagem.
+// Nível 11, "Moscatel da Arrábida": as 3 histórias que o capítulo 11 (dados/capitulos.js) pede. Só a arrabida_biosfera leva imagem (arrabida_colina.jpg, que já existia como foto da história do nível 11); as outras duas, sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'arrabida_biosfera',
+  imagem: 'assets/ecras/arrabida_colina.jpg',
   nivelMinimo: 11,
   titulo: { pt: 'A Arrábida, Reserva da Biosfera', en: 'The Arrábida, a Biosphere Reserve', es: 'La Arrábida, Reserva de la Biosfera' },
   texto: {
@@ -501,7 +502,7 @@ dadosAcrescentar('enciclopedia', {
   }
 });
 
-// Nível 19, «Moscatel do Montado» (o sobreiro e a cortiça): as 3 histórias que o capítulo 19 (dados/capitulos.js) pede. Sem imagem.
+// Nível 19, «Moscatel do Montado» (o sobreiro e a cortiça): as 3 histórias que o capítulo 19 (dados/capitulos.js) pede. Levam imagem sobreiro_assobiador (sobreiro_assobiador.jpg) e sobreiro_rolha (cortica.jpg); sobreiro_cortica, sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'sobreiro_cortica',
   nivelMinimo: 19,
@@ -515,6 +516,7 @@ dadosAcrescentar('enciclopedia', {
 
 dadosAcrescentar('enciclopedia', {
   id: 'sobreiro_assobiador',
+  imagem: 'assets/ecras/sobreiro_assobiador.jpg',
   nivelMinimo: 19,
   titulo: { pt: 'O Assobiador', en: 'The Assobiador', es: 'El Assobiador' },
   texto: {

@@ -152,12 +152,14 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/sao_martinho_festa.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/sao_martinho_fuga.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/sao_martinho_jeropiga.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/sao_martinho_lenda.jpg` | Enciclopédia, entrada «A Lenda de São Martinho» (lendaSaoMartinho; cavaleiro de capa vermelha, a cavalo, a cortar a capa com a espada para a dar a um pobre sentado à beira de uma estrada de aldeia, em outono; JPEG 720x1290, 246 KB, até 250 KB, na proporção original) | imagem gerada com IA pelo Yoshi_Cat, sem marcas (carregada a 27/11/2026; original `1795788453926.jpg`) |
 | `assets/ecras/sao_martinho_prova.jpg` | festa de São Martinho, história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/sao_martinho_roubo.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/sao_martinho_verao.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/souto_castanheiros.jpg` | Enciclopédia, entrada «O souto» (souto; pacote Castanhas: castanheiros no outono, com ouriços abertos e castanhas num cesto no chão) | imagem gerada com IA pelo Yoshi_Cat, sem marcas (carregada a 27/11/2026; original `grok_1795773747460.jpg`, convertida para JPEG 720x1280, 238 KB, até 250 KB) |
 | `assets/ecras/tempestade.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/tempo_chuva.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/sobreiro_assobiador.jpg` | Enciclopédia, entrada «O Assobiador» (sobreiro_assobiador; sobreiro enorme de tronco avermelhado, com a cortiça tirada, pilhas de cortiça ao pé, aves nos ramos e uma capela ao fundo; JPEG 720x1290, 250 KB, até 250 KB, na proporção original) | imagem gerada com IA pelo Yoshi_Cat, sem marcas (carregada a 27/11/2026; original `1795789005834.jpg`) |
 | `assets/ecras/tirada_da_cortica.jpg` | Enciclopédia, entrada «A tirada da cortiça» (pacote Cultura da Cortiça; sobreiro descortiçado com um machado encostado e pranchas de cortiça empilhadas num montado; JPEG 720x1280, até 250 KB, na proporção original) | imagem gerada com IA (Gemini, Grok ou ChatGPT) pelo autor do jogo, sem marcas (carregada a 26/11/2026) |
 | `assets/ecras/sal_alcacer.jpg` | Enciclopédia, entrada «Alcácer do Sal» (pacote do nível 17; salinas ao pôr do sol com a vila e o rio ao fundo; JPEG 720x1280, até 250 KB, na proporção original) | imagem gerada com IA (Gemini, Grok ou ChatGPT) pelo autor do jogo, sem marcas (carregada a 26/11/2026) |
 | `assets/ecras/sal_redura.jpg` | Enciclopédia, entrada «A redura» (pacote do nível 17; monte de sal com um rodo de madeira e um carrinho, sol forte; JPEG 720x1280, até 250 KB, na proporção original) | imagem gerada com IA (Gemini, Grok ou ChatGPT) pelo autor do jogo, sem marcas (carregada a 26/11/2026) |
@@ -175,7 +177,7 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/yoshi_cat_festejar_vitoria.jpg` | O Lagar, Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/yoshi_cat_geada.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/yoshi_cat_varanda.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
-| `assets/ecras/arrabida_colina.jpg` | história do nível 11 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/arrabida_colina.jpg` | história do nível 11 (fala 1) e Enciclopédia (arrabida_biosfera) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
 | `assets/ecras/sado_estuario.jpg` | história do nível 12 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
 | `assets/ecras/palmela_castelo.jpg` | história do nível 13 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
 | `assets/ecras/azeitao_vila.jpg` | história do nível 14 (fala 1) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
