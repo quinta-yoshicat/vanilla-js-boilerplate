@@ -1207,7 +1207,9 @@ function suite(fontes) {
       const tarefas = c.json('FESTAS_CONFIG[' + (k + 2) + '].tarefas').map(function (x) { return x.id; });
       tarefas.forEach(function (t) {
         c.ev('festaFundoTarefa(FESTAS_CONFIG[' + (k + 2) + '], ' + JSON.stringify(t) + ')');
-        ok(c.ev('FUNDO') === 'assets/ecras/' + id + '_festa.jpg' && c.ev('IMGS.length') === 0, id + ' ' + t + ': a mesma imagem de sempre, sem pedido de imagem nova');
+        // Páscoa: a mesma imagem de sempre; Carnaval: a imagem própria de cada tarefa (sem reserva, por isso sem pedido de imagem nova)
+        const esperada = id === 'carnaval' ? 'assets/ecras/carnaval_' + { corso: 'corso', fantasias: 'fantasias', quemEstaMascarado: 'mascarado' }[t] + '.jpg' : 'assets/ecras/' + id + '_festa.jpg';
+        ok(c.ev('FUNDO') === esperada && c.ev('IMGS.length') === 0, id + ' ' + t + ': ' + (id === 'carnaval' ? 'a imagem própria da tarefa' : 'a mesma imagem de sempre') + ', sem pedido de imagem nova');
       });
     });
     ['natal_consoada.jpg', 'natal_doces.jpg', 'natal_bolorei.jpg'].forEach(function (f) {
@@ -1217,7 +1219,7 @@ function suite(fontes) {
 
     // J4. O Carnaval, a Páscoa e o São Martinho ficam iguais (configuração e textos, nas 3 línguas)
     const crypto = require('crypto');
-    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', carnaval: '609899f969d707c4cce7c543406eec2d500ee2bb92eb712bac6013ba36afe84f', pascoa: '33c3d22cac7624738ef9667c738d2ed28e7b25235e62ab21ec5296eb637299f1' };
+    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', carnaval: '33467497694dd7b37dbb156f108e1205a1075196433441e3a6a4836cbb62ad02', pascoa: '33c3d22cac7624738ef9667c738d2ed28e7b25235e62ab21ec5296eb637299f1' };
     Object.keys(IGUAIS).forEach(function (id) {
       const j = g.ev('JSON.stringify([FESTAS_CONFIG.filter(function (f) { return f.id === ' + JSON.stringify(id) + '; })[0], FESTAS_STRINGS[' + JSON.stringify(id) + ']])');
       ok(crypto.createHash('sha256').update(j).digest('hex') === IGUAIS[id], id + ': configuração e textos exatamente iguais aos de antes');
@@ -1419,7 +1421,7 @@ function suite(fontes) {
 
     // K8. As outras festas ficam iguais (configuração e textos)
     const crypto = require('crypto');
-    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', natal: '298fd87419769ae3b7cdb8738acbcd5f5579963f09eb2bbae8c95fe918bf59d8', carnaval: '609899f969d707c4cce7c543406eec2d500ee2bb92eb712bac6013ba36afe84f', pascoa: '33c3d22cac7624738ef9667c738d2ed28e7b25235e62ab21ec5296eb637299f1' };
+    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', natal: '298fd87419769ae3b7cdb8738acbcd5f5579963f09eb2bbae8c95fe918bf59d8', carnaval: '33467497694dd7b37dbb156f108e1205a1075196433441e3a6a4836cbb62ad02', pascoa: '33c3d22cac7624738ef9667c738d2ed28e7b25235e62ab21ec5296eb637299f1' };
     Object.keys(IGUAIS).forEach(function (id) {
       const j = g.ev('JSON.stringify([FESTAS_CONFIG.filter(function (f) { return f.id === ' + JSON.stringify(id) + '; })[0], FESTAS_STRINGS[' + JSON.stringify(id) + ']])');
       ok(crypto.createHash('sha256').update(j).digest('hex') === IGUAIS[id], 'Reis: ' + id + ' fica exatamente igual (configuração e textos)');
@@ -1651,7 +1653,7 @@ function suite(fontes) {
     });
 
     // L9. As outras festas ficam exatamente iguais (configuração, textos e janela de datas)
-    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', natal: '298fd87419769ae3b7cdb8738acbcd5f5579963f09eb2bbae8c95fe918bf59d8', carnaval: '609899f969d707c4cce7c543406eec2d500ee2bb92eb712bac6013ba36afe84f', pascoa: '33c3d22cac7624738ef9667c738d2ed28e7b25235e62ab21ec5296eb637299f1', reis: '4fd59d9157a7d121ef485018c1b0ed963ad4c05c106085a92b27b53885e0ef36' };
+    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', natal: '298fd87419769ae3b7cdb8738acbcd5f5579963f09eb2bbae8c95fe918bf59d8', carnaval: '33467497694dd7b37dbb156f108e1205a1075196433441e3a6a4836cbb62ad02', pascoa: '33c3d22cac7624738ef9667c738d2ed28e7b25235e62ab21ec5296eb637299f1', reis: '4fd59d9157a7d121ef485018c1b0ed963ad4c05c106085a92b27b53885e0ef36' };
     Object.keys(IGUAIS).forEach(function (id) {
       const j = g.ev('JSON.stringify([FESTAS_CONFIG.filter(function (f) { return f.id === ' + JSON.stringify(id) + '; })[0], FESTAS_STRINGS[' + JSON.stringify(id) + ']])');
       ok(crypto.createHash('sha256').update(j).digest('hex') === IGUAIS[id], 'Santos: ' + id + ' fica exatamente igual (configuração e textos)');
