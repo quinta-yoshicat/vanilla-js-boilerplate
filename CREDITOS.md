@@ -70,7 +70,7 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/calor.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/barril_simples.jpg` | ainda sem uso direto no código (original; a versão pequena é `assets/vinha/barril_botao.jpg`, os barris do "Seguir o barril") | imagem gerada com IA pelo autor do jogo, sem marcas |
 | `assets/ecras/camera_.jpg` | ainda sem uso no código (original; a versão pequena é o cartão da Câmara no Explorar) | imagem gerada com IA pelo autor do jogo, sem marcas |
-| `assets/ecras/cepa_roxa.jpg` | ainda sem uso no código (original; a versão pequena é o cartão da Cepa Roxa no Explorar) | imagem gerada com IA pelo autor do jogo, sem marcas |
+| `assets/ecras/cepa_roxa.jpg` | A Cepa Roxa, fundo do ecrã (a versão pequena é o cartão da Cepa Roxa no Explorar) | imagem gerada com IA pelo autor do jogo, sem marcas |
 | `assets/ecras/carnaval_dia_grande.jpg` | festa de Carnaval, dia grande (cópia comprimida de `imagens_JOGO_TELEGRAM/carnaval_patio_vindimas_2_personagens.jpg`, a mesma imagem, 714x1280) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/carnaval_festa.jpg` | festa de Carnaval, ecrã da festa e tarefas (cópia exata de `imagens_JOGO_TELEGRAM/carnaval_patio_vindima_1.jpg`) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/casa_loja_meio_da_vinha_4.jpg` | A Loja da Quinta (fundo com sol) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
@@ -79,6 +79,7 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/chizo_porta_casa.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/chizo_vinha.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/cimo_da_colina_apontar.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/colecao.jpg` | A Coleção, fundo do ecrã (adega antiga de pedra, com barricas, prateleiras de garrafas e um candeeiro aceso; JPEG 720x1290, 157 KB, até 250 KB, na proporção original) | imagem gerada com IA pelo Yoshi_Cat, sem marcas (carregada a 27/11/2026; original `1795778065476.jpg`) |
 | `assets/ecras/cortica.jpg` | Enciclopédia, entrada «A rolha» (pacote do nível 19; montado de sobreiros com mesas de objetos de cortiça; cópia de `imagens_JOGO_TELEGRAM/cortica.jpg`, JPEG 714x1280, até 250 KB) | imagem gerada com IA (Gemini, Grok ou ChatGPT) pelo autor do jogo, sem marcas (carregada a 26/11/2026) |
 | `assets/ecras/derrota.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/enciclopedia_magusto.jpg` | Enciclopédia | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
@@ -119,6 +120,7 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/natal_doces.jpg` | festa de Natal, tarefa «Doces da Quinta» (resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
 | `assets/ecras/natal_festa.jpg` | festa de Natal, ecrã da festa; e imagem de reserva das tarefas do Natal e da festa dos Reis (quando falta a imagem própria) (cópia de `imagens_JOGO_TELEGRAM/natal_patio_vindimas_2.jpg`) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/nevoeiro_1.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/palavras.jpg` | Palavras da Quinta, fundo do ecrã (canto de escritório antigo, com livros velhos, cacho de uvas, candeeiro de petróleo, pena e tinteiro; JPEG 720x1290, 114 KB, até 250 KB, na proporção original) | imagem gerada com IA pelo Yoshi_Cat, sem marcas (carregada a 27/11/2026; original `1795778150172.jpg`) |
 | `assets/ecras/pascoa_dia_grande.jpg` | festa da Páscoa, dia grande (versão cortada e comprimida de `imagens_JOGO_TELEGRAM/pascoa_dia_grande.jpg`, 714x1280) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/pascoa_festa.jpg` | festa da Páscoa, ecrã da festa e tarefas (versão redimensionada de `imagens_JOGO_TELEGRAM/pascoa_festa.jpg`, 714x1280) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/perfil_yoshi_cat_e_chizo.jpg` | história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |

@@ -175,7 +175,7 @@ function chaves(h) { return (h.match(/class="stat-label" data-i18n="[a-z.]+"/g) 
   ok(/NAV_ATIVO_POR_ECRA = \{[^}]*\bpalavras: 'explorar'/.test(main), "palavras: 'explorar' em NAV_ATIVO_POR_ECRA (js/main.js)");
   const bloco = /FUNDO_DOS_ECRAS = \{[\s\S]*?\n\};/.exec(main);
   const fundo = bloco && /\bpalavras: \{ src: '([^']+)' \}/.exec(bloco[0]);
-  ok(fundo && fundo[1] === 'assets/ecras/enciclopedia_yoshi_cat_2.jpg' && fs.existsSync(path.join(RAIZ, fundo[1])), 'palavras em FUNDO_DOS_ECRAS com assets/ecras/enciclopedia_yoshi_cat_2.jpg (que existe)');
+  ok(fundo && fundo[1] === 'assets/ecras/palavras.jpg' && fs.existsSync(path.join(RAIZ, fundo[1])), 'palavras em FUNDO_DOS_ECRAS com assets/ecras/palavras.jpg (que existe)');
   ok(/if \(screen === 'palavras'\) renderPalavras\(\);/.test(main), 'goTo (js/main.js) devia chamar renderPalavras()');
   ok(/NIVEL_NECESSARIO_POR_ECRA = \{[^}]*\bpalavras: 4\b/.test(ler('js/niveis.js')), 'palavras: 4 em NIVEL_NECESSARIO_POR_ECRA (js/niveis.js)');
   const perfilJs = ler('js/perfil.js');
