@@ -305,7 +305,7 @@ const MUTACOES = [
   ['o prémio não conta para o nível 6 da Coleção', 'garrafa.js', '        if (nivelPelaReputacao(state.reputacao) >= 6) carimbarGarrafasAoNivel6(a.historico.length - 1);\n', ''],
   ['a página soma o prémio à garrafa', 'garrafa.js', 'rep: state.reputacao - repAntes - repEncomenda,', 'rep: state.reputacao - repAntes,'],
   ['sem agradecimento na mensagem', 'garrafa.js', "      (adegaEncomendaEntregue ? ' ' + encomendaEntregueTexto(adegaEncomendaEntregue) : '');", "      '';"],
-  ['o bloco só com visita', 'visitas.js', '  if (!r.visita) { container.innerHTML = encomendaBloco(); return; }', "  if (!r.visita) { container.innerHTML = ''; return; }"],
+  ['o bloco só com visita', 'visitas.js', '  if (!r.visita) { container.innerHTML = ofertaBloco() + encomendaBloco(); return; }', "  if (!r.visita) { container.innerHTML = ''; return; }"],
   ['o bloco sai da Quinta', 'visitas.js', "    (function () { try { return visitaBagaceiraHtml(); } catch (e) { return ''; } })() +\n    // A encomenda da visita (nível 5): por baixo do copo.\n    encomendaBloco();", "    (function () { try { return visitaBagaceiraHtml(); } catch (e) { return ''; } })();"],
   ['o prémio mostra zeros', 'encomendas.js', '  if (premio.uvas > 0) partes.push', '  partes.push'],
   ['o dia do prazo em duração', 'encomendas.js', ".replace('{dia}', encomendaDiaTexto(prazo))", ".replace('{dia}', '2 dias')"],

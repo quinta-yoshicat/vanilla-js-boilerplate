@@ -134,7 +134,7 @@ function estadoAleatorio(rnd) {
   return {
     despensa: { recebidos: recebidos, entregues: entregues, primeiraTroca: primeiraTroca, hoje: { dia: diaDespensa, feitas: feitas } },
     visitas: { feitas: vFeitas, hoje: hoje },
-    lagar: { ultimoDia: dia(), dias: n(), mesaDia: dia(), assaltoDia: dia() },
+    lagar: { ultimoDia: dia(), dias: n(), mesaDia: dia(), mesaSadoDia: dia(), assaltoDia: dia() },
     camara: { provaDia: dia(), dias: n() },
     roxo: { brindeDia: dia(), dias: n() },
     loja: { dia: dia(), vendasHoje: n() },
@@ -164,7 +164,7 @@ function correr(fonteNuvem) {
     // forma: as mesmas áreas e chaves que o defaultState()
     ok(AREAS.every(function (k) { return Object.keys(R[k]).join() === Object.keys(defeito[k]).join(); }), q + 'a forma devia ser a do defaultState()');
     // (a) datas simples: a mais recente, nunca recuam
-    [['lagar', 'ultimoDia'], ['lagar', 'mesaDia'], ['lagar', 'assaltoDia'], ['camara', 'provaDia'], ['roxo', 'brindeDia'], ['reserva', 'visitaDia'], ['colecao', 'arrumouDia']].forEach(function (p) {
+    [['lagar', 'ultimoDia'], ['lagar', 'mesaDia'], ['lagar', 'mesaSadoDia'], ['lagar', 'assaltoDia'], ['camara', 'provaDia'], ['roxo', 'brindeDia'], ['reserva', 'visitaDia'], ['colecao', 'arrumouDia']].forEach(function (p) {
       ok(mais(R[p[0]][p[1]], A[p[0]][p[1]]) && mais(R[p[0]][p[1]], B[p[0]][p[1]]), q + p.join('.') + ' recuou');
       ok(R[p[0]][p[1]] === [A[p[0]][p[1]], B[p[0]][p[1]]].filter(function (x) { return x !== null; }).sort().pop() || (A[p[0]][p[1]] === null && B[p[0]][p[1]] === null && R[p[0]][p[1]] === null), q + p.join('.') + ' devia ser a mais recente');
     });
@@ -237,7 +237,7 @@ function correr(fonteNuvem) {
 
   // ---------------------------------------------------------------- (d) entradas estragadas
   const lixo = [null, undefined, 5, 'texto', [], [1, 2], true, {}, { despensa: 5, visitas: 'x', lagar: [], camara: null, roxo: 7, loja: 'x', reserva: [1], colecao: true },
-    { despensa: { recebidos: [1], entregues: 'x', primeiraTroca: 5, hoje: 'x' }, visitas: { feitas: [], hoje: 'x' }, lagar: { ultimoDia: 20261010, dias: '3', mesaDia: '2026-1-1', assaltoDia: {} }, camara: { provaDia: [], dias: -2 }, roxo: { brindeDia: 'ontem', dias: 1.5 }, loja: { dia: 7, vendasHoje: 'x' }, reserva: { visitaDia: null }, colecao: { arrumouDia: '2026-13-45x' } },
+    { despensa: { recebidos: [1], entregues: 'x', primeiraTroca: 5, hoje: 'x' }, visitas: { feitas: [], hoje: 'x' }, lagar: { ultimoDia: 20261010, dias: '3', mesaDia: '2026-1-1', mesaSadoDia: 5, assaltoDia: {} }, camara: { provaDia: [], dias: -2 }, roxo: { brindeDia: 'ontem', dias: 1.5 }, loja: { dia: 7, vendasHoje: 'x' }, reserva: { visitaDia: null }, colecao: { arrumouDia: '2026-13-45x' } },
     JSON.parse('{"despensa":{"recebidos":{"__proto__":{"x":1},"a":"y","b":-1,"c":1e999,"d":3},"entregues":{"__proto__":5},"primeiraTroca":{"__proto__":"2026-01-01","a":"nope"},"hoje":{"dia":"2026-10-10","feitas":{"__proto__":true,"x":true}}},"visitas":{"feitas":{"__proto__":"2026-01-01"},"hoje":{"dia":"2026-10-10","id":"__proto__","feita":true}}}')];
   let rebentou = null;
   lixo.forEach(function (a, ia) {
@@ -264,7 +264,7 @@ function correr(fonteNuvem) {
   // ---------------------------------------------------------------- (c) dois aparelhos, nos dois ramos
   const base = function (rep, em, extra) { return Object.assign({ reputacao: rep, ultimaGravacaoEm: em }, extra); };
   const feitoA = { // aparelho A: o Lagar e 2 trocas
-    lagar: { ultimoDia: '2026-10-10', dias: 3, mesaDia: '2026-10-10', assaltoDia: '2026-10-09' },
+    lagar: { ultimoDia: '2026-10-10', dias: 3, mesaDia: '2026-10-10', mesaSadoDia: '2026-10-09', assaltoDia: '2026-10-09' },
     despensa: { recebidos: { queijo_azeitao: 1, choco_sado: 1 }, entregues: {}, primeiraTroca: { queijo_azeitao: '2026-10-08', choco_sado: '2026-10-10' }, hoje: { dia: '2026-10-10', feitas: { sr_armindo: true, dona_rosa: true } } }
   };
   const feitoB = { // aparelho B: a Loja e 1 visita

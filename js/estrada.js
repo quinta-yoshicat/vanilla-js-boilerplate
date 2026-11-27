@@ -11,6 +11,10 @@
 // (ver atualizarLinhaVisitaQuinta() em js/visitas.js, que chama estradaOfertaHtml()), também sem gravar;
 // só o clique (estradaOferecerClique) chama despensaOferecer e grava, UMA vez.
 //
+// A "Mesa do Sado" (nível 16, ESTRADA_MESA_SADO em js/estrada-dados.js): outra ação do mesmo bloco, copiada da mesa da vindima do Lagar
+// (js/lagar.js) e com a mesma regra (despensaMesaVindima, js/despensa.js, com o campo state.lagar.mesaSadoDia). Também só lê ao desenhar;
+// só o clique (estradaMesaSadoClique) a põe e grava, UMA vez. Não tem assalto dos porcos (esse é só do Lagar).
+//
 // Abre-se a partir do Explorar (cartão com foto, só com o ecrã desbloqueado: ver explorarCartoesHtml() em
 // js/explorar.js e ecraDesbloqueado('estrada') em js/niveis.js; um jogador antigo vê-o sempre).
 // ---------------------------------------------------------------------
@@ -222,6 +226,8 @@ function estradaTrocarClique(vizinhoId) {
 // Só em memória: a oferta feita (para mostrar o agradecimento) até se sair da app. Guardam-se códigos, não textos.
 let estradaOfertaResultado = null; // { dia, personagem, bem, reputacaoGanha }
 let estradaOfertaOcupado = false;
+let estradaMesaSadoResultado = null; // { dia, reputacaoGanha }
+let estradaMesaSadoOcupado = false;
 
 // A visita de hoje, SÓ SE já se tocou nela (state.visitas.hoje.feita) e não estamos em modo de teste; senão null.
 // Só lê (visitaResolverHoje não grava).
@@ -239,12 +245,18 @@ function estradaNomeBem(bemId) {
   return bem ? estradaTexto(bem.nome) : '';
 }
 
-// O que se vê no cartão da Quinta, por baixo da linha da visita (só lê; devolve '' se não houver nada a mostrar):
+// O que se vê no cartão da Quinta, por baixo da linha da visita (só lê; devolve '' se não houver nada a mostrar), a oferta à visita e,
+// a partir do nível 16, a Mesa do Sado (esta também nos dias sem visita):
 //   oferta feita agora: "Ofereceste {bem} {a quem}", "+1 de Reputação" e a fala dessa visita para esse bem;
 //   oferta de hoje já feita: "Já ofereceste hoje";
 //   senão, havendo bens: o botão "Oferecer {bem}".
 // Só com a visita de hoje já tocada e a Estrada desbloqueada; sem bens e sem oferta feita, não mostra nada.
 function estradaOfertaHtml() {
+  return estradaOfertaVisitaHtml() + estradaMesaSadoHtml();
+}
+
+// A oferta à visita de hoje (o que está descrito acima, sem a Mesa do Sado).
+function estradaOfertaVisitaHtml() {
   if (typeof ecraDesbloqueado !== 'function' || !ecraDesbloqueado('estrada')) return '';
   const visita = estradaVisitaTocadaHoje();
   if (!visita) return '';
@@ -299,6 +311,83 @@ function estradaOferecerClique() {
     }
   } finally {
     estradaOfertaOcupado = false;
+  }
+  // Redesenha o cartão da Quinta (a barra de cima já foi atualizada).
+  if (typeof atualizarCartaoNivelQuinta === 'function') atualizarCartaoNivelQuinta();
+  if (typeof atualizarResumoQuinta === 'function') atualizarResumoQuinta();
+  if (typeof atualizarLinhaVisitaQuinta === 'function') atualizarLinhaVisitaQuinta();
+}
+
+// ---------------------------------------------------------------------
+// A MESA DO SADO (nível 16). Copiada da mesa da vindima (lagarMesaEstado, lagarTextoMesa e lagarMesaClique em js/lagar.js).
+// ---------------------------------------------------------------------
+
+function estradaMesaSadoReceita() {
+  return { bens: ESTRADA_MESA_SADO.bens, reputacao: ESTRADA_MESA_SADO.reputacao, campo: ESTRADA_MESA_SADO.campo, nivelMinimo: ESTRADA_MESA_SADO.nivelMinimo };
+}
+
+// Só lê. O estado da Mesa do Sado neste dia: { ok, motivo, faltam } com
+//   motivo null | 'nivel_insuficiente' | 'dia_anterior' | 'ja_hoje' | 'faltam_bens'  e  faltam = ids dos bens que faltam na Despensa.
+// Não altera nada (a regra a sério, que gasta, é despensaMesaVindima em js/despensa.js).
+function estradaMesaSadoEstado(estado, dia) {
+  const receita = estradaMesaSadoReceita();
+  if (!despensaMesaNivelOk(estado, receita)) return { ok: false, motivo: 'nivel_insuficiente', faltam: [] };
+  const ultima = despensaMesaDia(estado, receita.campo);
+  if (ultima !== null && dia < ultima) return { ok: false, motivo: 'dia_anterior', faltam: [] };
+  if (ultima !== null && dia === ultima) return { ok: false, motivo: 'ja_hoje', faltam: [] };
+  const faltam = receita.bens.filter(function (b) { return despensaQuantos(estado, b.bem) < b.n; }).map(function (b) { return b.bem; });
+  if (faltam.length > 0) return { ok: false, motivo: 'faltam_bens', faltam: faltam };
+  return { ok: true, motivo: null, faltam: [] };
+}
+
+function estradaMesaSadoTexto(m) {
+  if (m.motivo === 'ja_hoje') return t('estrada.mesaSadoJaHoje');
+  if (m.motivo === 'dia_anterior') return t('estrada.mesaSadoRelogio');
+  if (m.motivo === 'faltam_bens') {
+    const nomes = m.faltam.map(function (id) { return estradaNomeBem(id); }).join(', ');
+    return t('estrada.mesaSadoFalta').replace('{bens}', nomes) + ' ' + t('estrada.mesaSadoOnde');
+  }
+  return '';
+}
+
+// O que se vê no cartão da Quinta (só lê; '' antes do nível 16): a foto, o que a mesa pede e dá, o botão (apagado se não se pode) e,
+// por baixo, a mensagem: o agradecimento logo depois de a pôr, "já puseste hoje", o que falta na Despensa ou o relógio atrás.
+function estradaMesaSadoHtml() {
+  if (typeof despensaMesaNivelOk !== 'function' || !despensaMesaNivelOk(state, estradaMesaSadoReceita())) return '';
+  const dia = estradaDiaDeHoje();
+  const m = estradaMesaSadoEstado(state, dia);
+  const res = estradaMesaSadoResultado;
+  const feitaAgora = !!res && res.dia === dia && m.motivo === 'ja_hoje';
+  const texto = feitaAgora ? '' : estradaMesaSadoTexto(m);
+  return '<div class="mini-bloco mesa-sado">' +
+    '<img class="mesa-sado-img" src="' + ESTRADA_MESA_SADO.imagem + '" alt="' + cadernoEscapar(t('estrada.mesaSadoAlt')) + '" loading="lazy">' +
+    '<p class="oferta-linha">' + cadernoEscapar(t('estrada.mesaSadoDesc').replace('{pedido}', t('estrada.mesaSadoPedido')).replace('{rep}', ESTRADA_MESA_SADO.reputacao)) + '</p>' +
+    (feitaAgora ? '<div class="oferta-resultado"><p>' + cadernoEscapar(t('estrada.mesaSadoOk').replace('{rep}', res.reputacaoGanha)) + '</p></div>' : '') +
+    (texto ? '<p class="oferta-linha">' + cadernoEscapar(texto) + '</p>' : '') +
+    '<button type="button" class="btn-pill pill-main oferta-botao mesa-sado-botao" onclick="estradaMesaSadoClique()"' + (m.ok ? '' : ' disabled') + '>' +
+      cadernoEscapar(t('estrada.mesaSadoBtn')) + '</button>' +
+  '</div>';
+}
+
+// O ÚNICO sítio que põe a Mesa do Sado e grava (a regra é despensaMesaVindima, em js/despensa.js). Toque no botão: desativa-o logo
+// (clique duplo), põe a mesa e, se correu bem, grava UMA vez e atualiza a barra de cima. Se recusou, não grava.
+function estradaMesaSadoClique() {
+  if (estradaMesaSadoOcupado) return;
+  estradaMesaSadoOcupado = true;
+  try {
+    const botao = document.querySelector('.mesa-sado-botao');
+    if (botao) botao.disabled = true;
+    const dia = estradaDiaDeHoje();
+    const r = despensaMesaVindima(state, dia, estradaMesaSadoReceita());
+    if (r.ok) {
+      saveState(state);
+      updateStatsDisplays();
+      estradaMesaSadoResultado = { dia: dia, reputacaoGanha: r.reputacaoGanha };
+      if (typeof vibrar === 'function') vibrar('sucesso');
+      if (typeof tocarSom === 'function') tocarSom('objetivoCumprido'); // a mesa não é objetivo do dia: não há outro "ding"
+    }
+  } finally {
+    estradaMesaSadoOcupado = false;
   }
   // Redesenha o cartão da Quinta (a barra de cima já foi atualizada).
   if (typeof atualizarCartaoNivelQuinta === 'function') atualizarCartaoNivelQuinta();

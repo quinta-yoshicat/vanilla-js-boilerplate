@@ -1027,6 +1027,21 @@ const ESTRADA_OFERTA = {
   ordemEmpate: ['queijo_azeitao', 'mel_sesimbra', 'sal_sado', 'choco_sado']
 };
 
+// A MESA DO SADO (nível 16, a chegada da Dona Maria): uma ação do bloco da oferta às visitas (estradaOfertaHtml, js/estrada.js), com a mesma
+// regra da mesa da vindima do Lagar (despensaMesaVindima, js/despensa.js; os valores do Lagar estão em LAGAR_CONFIG.mesa, js/lagar.js).
+//   nivelMinimo  só existe a partir deste nível (também para um jogador antigo)
+//   bens         1 de cada, da Despensa (só sobe "entregues"; "recebidos" e o capítulo 7 não mudam)
+//   reputacao    +15 de Reputação, 1 vez por dia (dia de Lisboa; a marca é state.lagar.mesaSadoDia, independente da mesa da vindima)
+//   imagem       a foto que se vê na ação (sem assalto dos porcos: esse é só do Lagar)
+// Se mudares os bens, muda também o texto "estrada.mesaSadoPedido" (js/i18n.js).
+const ESTRADA_MESA_SADO = {
+  nivelMinimo: 16,
+  bens: [{ bem: 'choco_sado', n: 1 }, { bem: 'ostras_sado', n: 1 }, { bem: 'peixe_livramento', n: 1 }],
+  reputacao: 15,
+  campo: 'mesaSadoDia',
+  imagem: 'assets/ecras/mesa_sado.jpg'
+};
+
 // Fala especial de cada visita (id de VISITAS_PERSONAGENS) para cada bem oferecido: só gratidão, curiosidade e
 // carinho, sem factos (por isso "semFacto: true", como as outras falas de humor). Sem dizer qual Moscatel vai com
 // qual produto.
