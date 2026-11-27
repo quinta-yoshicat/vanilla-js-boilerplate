@@ -1,0 +1,43 @@
+{
+  "id": "feira_santiago",
+  "nome": "Feira de Sant'Iago",
+  "estado": "em PR",
+  "clima": "Em 2026, o IPMA registou nove ondas de calor em Portugal continental, um recorde, e o verão foi o terceiro mais quente desde 1931.",
+  "terras": {
+    "Feira de Sant'Iago": ["Setúbal"]
+  },
+  "fontes": [
+    "Regulamento da Feira de Sant'Iago (Aviso n.º 9921/2024/2): https://vlex.pt/vid/aviso-n-9921-2024-1034954153",
+    "Visit Setúbal: https://visitsetubal.com/en/feira-de-santiago/",
+    "DN, regresso da Feira de Sant'Iago (2022): https://www.dn.pt/sociedade/praias-de-setubal-estao-no-regresso-da-feira-de-santiago-15055729.html",
+    "Echo Boomer, Feira de Sant'Iago 2026: https://echoboomer.pt/ena-pa-2000-the-legendary-tigerman-feira-de-santiago-2026/",
+    "DECO Proteste (bairro das Manteigadas): https://www.deco.proteste.pt/familia-consumo/ferias-lazer/noticias/verao-2023-sitios-gratuitos-visitar-setubal",
+    "DN, nove ondas de calor em 2026: https://www.dn.pt/sociedade/portugal-continental-registou-recorde-de-nove-ondas-de-calor-em-2026",
+    "DN, verão de 2026: https://www.dn.pt/sociedade/vero-de-2026-foi-o-terceiro-mais-quente-desde-1931"
+  ],
+  "ids": {
+    "enciclopedia": [
+      "feira_santiago"
+    ],
+    "palavras": [
+      "alvara",
+      "feirante",
+      "manteigadas"
+    ],
+    "visitas": [],
+    "niveis": [],
+    "historias": [],
+    "capitulos": [],
+    "provas": []
+  },
+  "imagens": [
+    {
+      "caminho": "assets/ecras/feira_santiago.jpg",
+      "uso": "Entrada da Enciclopédia «feira_santiago» (campo imagem; só se acrescenta quando o ficheiro existir)",
+      "descricao": "A Feira de Sant'Iago ao fim da tarde de verão: bancas de comida e artesanato, fios de luzes acesas, gente a passear e, em primeiro plano, o Yoshi_Cat, o Chizo e o Fygmo II diante de uma banca de comida.",
+      "estado": "por_criar"
+    }
+  ],
+  "sons": [],
+  "excecoes": []
+}

@@ -40,6 +40,16 @@ dadosAcrescentar('palavras', {
 });
 
 dadosAcrescentar('palavras', {
+  id: 'alvara',
+  palavra: 'alvará',
+  explicacao: {
+    pt: 'documento oficial em que o rei, ou outra autoridade, dá licença para fazer alguma coisa. O da feira era um alvará régio, isto é, do rei.',
+    en: 'an official paper in which the king, or another authority, gives permission to do something. The fair\'s was a royal alvará, that is, one from the king.',
+    es: 'documento oficial en el que el rey, u otra autoridad, da licencia para hacer algo. El de la feria era un alvará real, es decir, del rey.'
+  }
+});
+
+dadosAcrescentar('palavras', {
   id: 'apicultor',
   palavra: 'apicultor',
   explicacao: {
@@ -230,6 +240,16 @@ dadosAcrescentar('palavras', {
 });
 
 dadosAcrescentar('palavras', {
+  id: 'feirante',
+  palavra: 'feirante',
+  explicacao: {
+    pt: 'pessoa que vende numa feira, na sua banca.',
+    en: 'a person who sells at a fair, at their stall.',
+    es: 'persona que vende en una feria, en su puesto.'
+  }
+});
+
+dadosAcrescentar('palavras', {
   id: 'flor_de_sal',
   palavra: 'flor de sal',
   explicacao: {
@@ -286,6 +306,16 @@ dadosAcrescentar('palavras', {
     pt: 'festa de outono, por volta do São Martinho, em que se assam castanhas na fogueira e se prova o vinho novo.',
     en: "an autumn festival, around St. Martin's Day, where chestnuts are roasted on the bonfire and the new wine is tasted.",
     es: 'fiesta de otoño, en torno a San Martín, en la que se asan castañas en la hoguera y se prueba el vino nuevo.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'manteigadas',
+  palavra: 'Manteigadas',
+  explicacao: {
+    pt: 'bairro de Setúbal onde fica o Parque Sant\'Iago, que é onde se faz a feira.',
+    en: 'a neighbourhood of Setúbal where Parque Sant\'Iago is, which is where the fair is held.',
+    es: 'barrio de Setúbal donde está el Parque Sant\'Iago, que es donde se hace la feria.'
   }
 });
 
@@ -485,7 +515,7 @@ dadosAcrescentar('palavras', {
   explicacao: {
     pt: 'pomar de castanheiros.',
     en: 'an orchard of chestnut trees.',
-    es: 'huerto de castaños.'
+    es: 'castañar: terreno poblado de castaños.'
   }
 });
 

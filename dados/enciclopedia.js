@@ -202,6 +202,18 @@ dadosAcrescentar('enciclopedia', {
   }
 });
 
+// Pacote «feira_santiago» (parte 1 de 2: só conteúdo; a festa fica para outra PR): sem imagem por agora (feira_santiago.jpg está «por_criar» em dados/pacotes/feira_santiago.json; o campo imagem só se acrescenta quando o ficheiro existir).
+dadosAcrescentar('enciclopedia', {
+  id: 'feira_santiago',
+  nivelMinimo: 7,
+  titulo: { pt: "A Feira de Sant'Iago", en: "The Sant'Iago Fair", es: "La Feria de Sant'Iago" },
+  texto: {
+    pt: "A Feira de Sant'Iago nasceu por alvará régio de 9 de julho de 1582, depois de os procuradores de Setúbal a pedirem às Cortes, reunidas em Tomar. Repete-se de verão em verão e hoje faz-se no Parque Sant'Iago, nas Manteigadas, com feirantes, artesanato, produtores da região, diversões e concertos. Em 2026 durou 11 dias, de 23 de julho a 2 de agosto, e as datas mudam de ano para ano. Tem mais de 400 anos e é uma das maiores feiras do Sul do país. O YoshiCat diz que o Fygmo II já a conhece de cor: sabe onde ficam todas as bancas de comida.",
+    en: "The Sant'Iago Fair was born by royal alvará of 9 July 1582, after the representatives of Setúbal asked the Cortes, meeting in Tomar, for it. It comes back every summer and today it is held in Parque Sant'Iago, in the Manteigadas, with stallholders, crafts, local producers, rides and concerts. In 2026 it lasted 11 days, from 23 July to 2 August, and the dates change from year to year. It is more than 400 years old and is one of the biggest fairs in the south of the country. YoshiCat says that Fygmo II already knows it by heart: he knows where all the food stalls are.",
+    es: "La Feria de Sant'Iago nació por alvará real de 9 de julio de 1582, después de que los procuradores de Setúbal la pidieran a las Cortes, reunidas en Tomar. Se repite de verano en verano y hoy se celebra en el Parque Sant'Iago, en las Manteigadas, con feriantes, artesanía, productores de la región, atracciones y conciertos. En 2026 duró 11 días, del 23 de julio al 2 de agosto, y las fechas cambian de un año a otro. Tiene más de 400 años y es una de las mayores ferias del sur del país. El YoshiCat dice que el Fygmo II ya la conoce de memoria: sabe dónde están todos los puestos de comida."
+  }
+});
+
 // Nível 11, "Moscatel da Arrábida": as 3 histórias que o capítulo 11 (dados/capitulos.js) pede. Sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'arrabida_biosfera',
