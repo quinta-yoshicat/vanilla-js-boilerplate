@@ -190,6 +190,18 @@ dadosAcrescentar('enciclopedia', {
   }
 });
 
+// Pacote «Castanhas»: souto fica sem imagem por agora (a imagem souto_castanheiros.jpg está «por_criar» em dados/pacotes/castanhas.json; o campo imagem só se acrescenta quando o ficheiro existir).
+dadosAcrescentar('enciclopedia', {
+  id: 'souto',
+  nivelMinimo: 7,
+  titulo: { pt: 'O souto', en: 'The souto', es: 'El souto' },
+  texto: {
+    pt: 'Souto é um pomar de castanheiros, alguns com mais de cem anos. O castanheiro floresce em junho e julho; no outono, os ouriços (as cápsulas espinhosas onde crescem as castanhas) abrem-se e caem. A apanha vai de outubro a novembro, mesmo a tempo do São Martinho. Antes de a batata chegar, a castanha era a base da alimentação de muita gente, sobretudo no Norte. Hoje há quatro castanhas com Denominação de Origem Protegida: Terra Fria e Padrela, em Trás-os-Montes; Soutos da Lapa, entre Viseu e a Guarda; e Marvão-Portalegre, no Alto Alentejo. As variedades têm nomes bonitos: Longal, Martaínha, Judia, Colarinha. O YoshiCat jura que o Fygmo II não distingue uma Longal de uma Martaínha. Para ele, todas têm o mesmo destino: o assador.',
+    en: "A souto is a chestnut orchard, with some trees more than a hundred years old. The chestnut tree flowers in June and July; in autumn, the burrs (the spiny husks where chestnuts grow) open and fall. The harvest runs from October to November, just in time for St. Martin's Day. Before the potato arrived, the chestnut was the staple food of many people, especially in the north. Today there are four chestnuts with Protected Designation of Origin: Terra Fria and Padrela, in Trás-os-Montes; Soutos da Lapa, between Viseu and Guarda; and Marvão-Portalegre, in the Alto Alentejo. The varieties have beautiful names: Longal, Martaínha, Judia, Colarinha. YoshiCat swears that Fygmo II cannot tell a Longal from a Martaínha. To him, they all have the same destiny: the roaster.",
+    es: 'El souto es un castañar, un huerto de castaños, algunos con más de cien años. El castaño florece en junio y julio; en otoño, los erizos (las cápsulas espinosas donde crecen las castañas) se abren y caen. La recogida va de octubre a noviembre, justo a tiempo para San Martín. Antes de que llegara la patata, la castaña era la base de la alimentación de mucha gente, sobre todo en el norte. Hoy hay cuatro castañas con Denominación de Origen Protegida: Terra Fria y Padrela, en Trás-os-Montes; Soutos da Lapa, entre Viseu y Guarda; y Marvão-Portalegre, en el Alto Alentejo. Las variedades tienen nombres bonitos: Longal, Martaínha, Judia, Colarinha. El YoshiCat jura que el Fygmo II no distingue una Longal de una Martaínha. Para él, todas tienen el mismo destino: el asador.'
+  }
+});
+
 // Nível 11, "Moscatel da Arrábida": as 3 histórias que o capítulo 11 (dados/capitulos.js) pede. Sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'arrabida_biosfera',

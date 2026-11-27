@@ -32,7 +32,7 @@ const LINGUAS = ['pt', 'en', 'es'];
 const TIPOS = ['visitas', 'niveis', 'historias', 'capitulos', 'enciclopedia', 'palavras', 'provas'];
 const ESTADOS_PACOTE = ['ideia', 'aprovada', 'em PR', 'feita'];
 const ESTADOS_ATIVO = ['por_criar', 'feita'];
-const CHAVES_PACOTE = ['id', 'nome', 'estado', 'clima', 'fontes', 'ids', 'imagens', 'sons', 'excecoes'];
+const CHAVES_PACOTE = ['id', 'nome', 'estado', 'clima', 'terras', 'fontes', 'ids', 'imagens', 'sons', 'excecoes'];
 const CHAVES_ATIVO = ['caminho', 'uso', 'descricao', 'estado'];
 const FORMATO_ID = /^[a-z0-9_]+$/;
 const FORMATO_IMAGEM = /^assets\/[A-Za-z0-9_\-\/.]+\.(jpg|jpeg|png|webp|gif)$/;
@@ -142,6 +142,7 @@ pacotes.forEach(function (pk) {
   if (p.estado !== undefined && ESTADOS_PACOTE.indexOf(p.estado) === -1) falta(nome, 'o estado devia ser um de ' + ESTADOS_PACOTE.join(', '));
   if (p.clima !== undefined && !temTexto(p.clima)) falta(nome, 'clima devia ser um texto (o fio condutor do clima)');
   if (p.fontes !== undefined && (!Array.isArray(p.fontes) || !p.fontes.every(temTexto))) falta(nome, 'fontes devia ser uma lista de textos (só no pacote, nunca no jogo)');
+  if (p.terras !== undefined && (!eObjeto(p.terras) || !Object.keys(p.terras).every(function (k) { return temTexto(k) && Array.isArray(p.terras[k]) && p.terras[k].every(temTexto); }))) falta(nome, 'terras devia ser um objeto {nome: [concelhos]} (só no pacote, nunca no jogo)');
   const excecoes = Array.isArray(p.excecoes) ? p.excecoes : [];
   if (p.excecoes !== undefined && (!Array.isArray(p.excecoes) || !p.excecoes.every(temTexto))) falta(nome, 'excecoes devia ser uma lista de «tipo:id:campo»');
   if (!eObjeto(p.ids)) { falta(nome, 'falta «ids» (um objeto com listas por tipo)'); return; }

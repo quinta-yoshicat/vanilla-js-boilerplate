@@ -1,0 +1,45 @@
+{
+  "id": "castanhas",
+  "nome": "Castanhas",
+  "estado": "em PR",
+  "clima": "Com mais calor e menos chuva no verão, os soutos produzem menos: em anos secos as castanhas caem dos ouriços secas, e os produtores de Marvão, a sul do Tejo, já o sentem.",
+  "terras": {
+    "Terra Fria": ["Bragança"],
+    "Padrela": ["Valpaços"],
+    "Soutos da Lapa": ["Trancoso", "Sernancelhe", "Penedono"],
+    "Marvão-Portalegre": ["Marvão", "Castelo de Vide", "Portalegre"]
+  },
+  "fontes": [
+    "INIAV, The European chestnut: https://projects.iniav.pt/NewCastRootstocks/index.php/en/the-chestnut/the-european-chestnut",
+    "INIAV, ficha do castanheiro: https://iniav.pt/component/flexicontent/weblink/49/1454/1",
+    "Agroportal, Frutos de outono: https://www.agroportal.pt/frutos-de-outono-colheitas-e-sabores-com-tradicao/",
+    "Agroportal/Lusa, Marvão (Feira da Castanha, seca): https://bo.agroportal.pt/?p=711421",
+    "Agroportal, clima e castanha: https://bo.agroportal.pt/fungo-provoca-perdas-de-80-a-produtores-de-castanha-que-nao-trataram-arvores",
+    "CCDRC, São Martinho e as castanhas DOP: https://www.ccdrc.pt/en/?p=83991"
+  ],
+  "ids": {
+    "enciclopedia": [
+      "souto"
+    ],
+    "palavras": [
+      "magusto",
+      "ourico",
+      "souto"
+    ],
+    "visitas": [],
+    "niveis": [],
+    "historias": [],
+    "capitulos": [],
+    "provas": []
+  },
+  "imagens": [
+    {
+      "caminho": "assets/ecras/souto_castanheiros.jpg",
+      "uso": "Entrada da Enciclopédia «souto» (campo imagem; só se acrescenta quando o ficheiro existir)",
+      "descricao": "Um souto de castanheiros velhos no outono, com o chão coberto de ouriços abertos e castanhas, folhas douradas e a luz baixa da tarde; ao fundo, o fumo de um assador de castanhas.",
+      "estado": "por_criar"
+    }
+  ],
+  "sons": [],
+  "excecoes": []
+}
