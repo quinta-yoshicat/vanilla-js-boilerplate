@@ -142,9 +142,9 @@ const FESTAS_CONFIG = [
     imagens: {
       diaGrande: 'assets/ecras/pascoa_dia_grande.jpg',
       faixa: 'assets/ecras/pascoa_festa.jpg',
-      folar: 'assets/ecras/pascoa_festa.jpg',
-      amendoas: 'assets/ecras/pascoa_festa.jpg',
-      ovos: 'assets/ecras/pascoa_festa.jpg'
+      folar: 'assets/ecras/pascoa_folar.jpg',
+      amendoas: 'assets/ecras/pascoa_amendoas.jpg',
+      ovos: 'assets/ecras/pascoa_ovos.jpg'
     },
     // Como o Natal e o Carnaval: só dá Reputação (que sobe o nível e nunca se gasta) e só gasta Gotas, nunca Uvas.
     // Os mesmos valores: folar = corso = consoada, amêndoas = fantasias = doces, os ovos = quem está mascarado = bolo-rei.

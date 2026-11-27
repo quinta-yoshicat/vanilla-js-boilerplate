@@ -881,13 +881,15 @@ function suite(fontes) {
       ok(JSON.stringify(pa.tarefas[0].premio) === '{"reputacao":5}' && JSON.stringify(pa.tarefas[1].premio) === '{"custoGotas":30,"reputacao":12}' && JSON.stringify(pa.tarefas[2].premio) === '{"reputacao":6}', 'Páscoa: folar +5 (sem custo), amêndoas 30 Gotas e +12, ovos +6');
       ok(JSON.stringify(pa.tarefas).indexOf('uvas') === -1 && JSON.stringify(pa.tarefas).indexOf('Uvas') === -1, 'Páscoa: nenhuma tarefa tem custo nem prémio em Uvas');
       ok(ca.tarefas.map(function (x) { return [x.regra, JSON.stringify(x.premio)].join(); }).join('|') === pa.tarefas.map(function (x) { return [x.regra, JSON.stringify(x.premio)].join(); }).join('|'), 'Páscoa: as mesmas regras e valores do Carnaval');
-      ok(pa.imagens.faixa === 'assets/ecras/pascoa_festa.jpg' && pa.imagens.diaGrande === 'assets/ecras/pascoa_dia_grande.jpg' && pa.imagens.folar === pa.imagens.faixa && pa.imagens.amendoas === pa.imagens.faixa && pa.imagens.ovos === pa.imagens.faixa, 'Páscoa: uma imagem para a faixa e as tarefas e outra para o dia grande');
+      ok(pa.imagens.faixa === 'assets/ecras/pascoa_festa.jpg' && pa.imagens.diaGrande === 'assets/ecras/pascoa_dia_grande.jpg' && pa.imagens.folar === 'assets/ecras/pascoa_folar.jpg' && pa.imagens.amendoas === 'assets/ecras/pascoa_amendoas.jpg' && pa.imagens.ovos === 'assets/ecras/pascoa_ovos.jpg', 'Páscoa: a faixa e o dia grande como estavam, e uma imagem própria para cada tarefa (folar, amendoas, ovos)');
+      ok(new Set(Object.keys(pa.imagens).map(function (k) { return pa.imagens[k]; })).size === Object.keys(pa.imagens).length, 'Páscoa: as 5 imagens são todas diferentes (nenhuma tarefa repete a faixa)');
       Object.keys(pa.imagens).forEach(function (k) {
         const f = path.join(RAIZ, pa.imagens[k]);
         ok(fs.existsSync(f), 'Páscoa: a imagem ' + k + ' existe (' + pa.imagens[k] + ')');
         if (fs.existsSync(f)) {
           ok(fs.statSync(f).size <= LIMITE_IMAGEM, 'Páscoa: ' + pa.imagens[k] + ' pesa no máximo 250 KB (pesa ' + fs.statSync(f).size + ' bytes)');
-          ok(JSON.stringify(dimp(f)) === '[714,1280]', 'Páscoa: ' + pa.imagens[k] + ' tem 714x1280');
+          const esperadap = (k === 'faixa' || k === 'diaGrande') ? '[714,1280]' : '[720,1290]'; // as 3 de tarefa: 720 de largura, proporção original de 768x1376
+          ok(JSON.stringify(dimp(f)) === esperadap, 'Páscoa: ' + pa.imagens[k] + ' tem ' + esperadap);
         }
       });
       ok(fs.statSync(path.join(RAIZ, pa.imagens.diaGrande)).size <= 240 * 1024, 'Páscoa: a imagem do dia grande pesa no máximo 240 KB');
@@ -897,6 +899,10 @@ function suite(fontes) {
       ['pascoa_festa.jpg', 'pascoa_dia_grande.jpg'].forEach(function (f) {
         const linha = CREDITOS.split('\n').filter(function (l) { return l.indexOf('assets/ecras/' + f) !== -1; })[0];
         ok(!!linha && linha.indexOf('gerada com IA (Gemini, Grok ou ChatGPT)') !== -1, 'CREDITOS.md devia listar ' + f + ' com "gerada com IA (Gemini, Grok ou ChatGPT)"');
+      });
+      ['pascoa_folar.jpg', 'pascoa_amendoas.jpg', 'pascoa_ovos.jpg'].forEach(function (f) {
+        const linhas = CREDITOS.split('\n').filter(function (l) { return l.indexOf('assets/ecras/' + f) !== -1; });
+        ok(linhas.length === 1 && linhas[0].indexOf('imagem gerada com IA pelo Yoshi_Cat, sem marcas') !== -1, 'CREDITOS.md devia listar ' + f + ' uma só vez, com "imagem gerada com IA pelo Yoshi_Cat, sem marcas"');
       });
     }
 
@@ -969,17 +975,18 @@ function suite(fontes) {
     const n = abrir(lis(4, 3), '?festa=pascoa');
     n.ev('state.reputacao = 372; state.gotas = 100; state.uvas = 7;');
     n.ev("iniciarTarefaFesta('amendoas')");
-    ok(n.ev('state.gotas') === 70 && n.ev('state.uvas') === 7 && n.ev('state.reputacao') === 384 && n.ev('SAVES') === 1 && n.ev('FUNDO') === 'assets/ecras/pascoa_festa.jpg', 'ecrã: amêndoas gastam 30 Gotas, dão +12, uma gravação, imagem da festa');
+    ok(n.ev('state.gotas') === 70 && n.ev('state.uvas') === 7 && n.ev('state.reputacao') === 384 && n.ev('SAVES') === 1 && n.ev('FUNDO') === 'assets/ecras/pascoa_amendoas.jpg', 'ecrã: amêndoas gastam 30 Gotas, dão +12, uma gravação, imagem das amêndoas');
     n.ev("iniciarTarefaFesta('amendoas')");
     ok(n.ev('state.gotas') === 70 && n.ev('state.reputacao') === 384 && n.ev('SAVES') === 1 && n.ev('festaMensagemAtual') === n.ev('FESTAS_STRINGS.pascoa.pt.amendoasJaFeitaHoje'), 'ecrã: amêndoas uma só vez por dia, com a mensagem de já feita');
     n.ev("iniciarTarefaFesta('folar')");
-    ok(n.ev('state.reputacao') === 389 && n.ev('SAVES') === 2 && n.ev('state.gotas') === 70, 'ecrã: folar +5');
+    ok(n.ev('state.reputacao') === 389 && n.ev('SAVES') === 2 && n.ev('state.gotas') === 70 && n.ev('FUNDO') === 'assets/ecras/pascoa_folar.jpg', 'ecrã: folar +5, com a imagem do folar');
     n.ev('state.gotas = 10;'); n.ev('state.festas.tarefasDia.pascoa_amendoas = null;');
     n.ev("iniciarTarefaFesta('amendoas')");
     ok(n.ev('state.gotas') === 10 && n.ev('state.reputacao') === 389 && n.ev('SAVES') === 2 && n.ev('festaMensagemAtual') === n.ev('FESTAS_STRINGS.pascoa.pt.amendoasFalta'), 'ecrã: amêndoas com 10 Gotas avisam sem gastar nem gravar');
     n.ev("iniciarTarefaFesta('ovos')");
     const cenaO = n.json('festaCenaAtual.cena');
     ok(cenaO && cenaO.opcoes.length === 3, 'ecrã: os ovos mostram uma cena de 3 opções');
+    ok(n.ev('FUNDO') === 'assets/ecras/pascoa_ovos.jpg', 'ecrã: os ovos mostram a imagem dos ovos');
     n.ev('festaResponderCenaDoDia(' + ((cenaO.correta + 1) % 3) + ')');
     ok(n.ev('state.reputacao') === 389 && n.ev('state.gotas') === 10 && n.ev('SAVES') === 3 && n.ev("festaJaFezTarefaHoje('pascoa', 'ovos')") === true, 'ecrã: ovos errados não custam nada e gastam a tentativa do dia');
     ok(n.json('ENTRADAS').join() === 'ovosAmendoas' && n.json('AVISOS').join() === 'ovosAmendoas', 'ecrã: responder à cena dos ovos (mesmo errando) abre a entrada ovosAmendoas e mostra o aviso de entrada nova: ' + n.json('ENTRADAS').join() + ' / ' + n.json('AVISOS').join());
@@ -1207,9 +1214,9 @@ function suite(fontes) {
       const tarefas = c.json('FESTAS_CONFIG[' + (k + 2) + '].tarefas').map(function (x) { return x.id; });
       tarefas.forEach(function (t) {
         c.ev('festaFundoTarefa(FESTAS_CONFIG[' + (k + 2) + '], ' + JSON.stringify(t) + ')');
-        // Páscoa: a mesma imagem de sempre; Carnaval: a imagem própria de cada tarefa (sem reserva, por isso sem pedido de imagem nova)
-        const esperada = id === 'carnaval' ? 'assets/ecras/carnaval_' + { corso: 'corso', fantasias: 'fantasias', quemEstaMascarado: 'mascarado' }[t] + '.jpg' : 'assets/ecras/' + id + '_festa.jpg';
-        ok(c.ev('FUNDO') === esperada && c.ev('IMGS.length') === 0, id + ' ' + t + ': ' + (id === 'carnaval' ? 'a imagem própria da tarefa' : 'a mesma imagem de sempre') + ', sem pedido de imagem nova');
+        // Carnaval e Páscoa: a imagem própria de cada tarefa (sem reserva, por isso sem pedido de imagem nova)
+        const esperada = 'assets/ecras/' + id + '_' + { corso: 'corso', fantasias: 'fantasias', quemEstaMascarado: 'mascarado', folar: 'folar', amendoas: 'amendoas', ovos: 'ovos' }[t] + '.jpg';
+        ok(c.ev('FUNDO') === esperada && c.ev('IMGS.length') === 0, id + ' ' + t + ': a imagem própria da tarefa, sem pedido de imagem nova');
       });
     });
     ['natal_consoada.jpg', 'natal_doces.jpg', 'natal_bolorei.jpg'].forEach(function (f) {
@@ -1219,7 +1226,7 @@ function suite(fontes) {
 
     // J4. O Carnaval, a Páscoa e o São Martinho ficam iguais (configuração e textos, nas 3 línguas)
     const crypto = require('crypto');
-    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', carnaval: '33467497694dd7b37dbb156f108e1205a1075196433441e3a6a4836cbb62ad02', pascoa: '33c3d22cac7624738ef9667c738d2ed28e7b25235e62ab21ec5296eb637299f1' };
+    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', carnaval: '33467497694dd7b37dbb156f108e1205a1075196433441e3a6a4836cbb62ad02', pascoa: 'bfc89a2da21c0b87c4d6359268460504d1cb7ebdfb48665eee198b50001c6f94' };
     Object.keys(IGUAIS).forEach(function (id) {
       const j = g.ev('JSON.stringify([FESTAS_CONFIG.filter(function (f) { return f.id === ' + JSON.stringify(id) + '; })[0], FESTAS_STRINGS[' + JSON.stringify(id) + ']])');
       ok(crypto.createHash('sha256').update(j).digest('hex') === IGUAIS[id], id + ': configuração e textos exatamente iguais aos de antes');
@@ -1421,7 +1428,7 @@ function suite(fontes) {
 
     // K8. As outras festas ficam iguais (configuração e textos)
     const crypto = require('crypto');
-    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', natal: '298fd87419769ae3b7cdb8738acbcd5f5579963f09eb2bbae8c95fe918bf59d8', carnaval: '33467497694dd7b37dbb156f108e1205a1075196433441e3a6a4836cbb62ad02', pascoa: '33c3d22cac7624738ef9667c738d2ed28e7b25235e62ab21ec5296eb637299f1' };
+    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', natal: '298fd87419769ae3b7cdb8738acbcd5f5579963f09eb2bbae8c95fe918bf59d8', carnaval: '33467497694dd7b37dbb156f108e1205a1075196433441e3a6a4836cbb62ad02', pascoa: 'bfc89a2da21c0b87c4d6359268460504d1cb7ebdfb48665eee198b50001c6f94' };
     Object.keys(IGUAIS).forEach(function (id) {
       const j = g.ev('JSON.stringify([FESTAS_CONFIG.filter(function (f) { return f.id === ' + JSON.stringify(id) + '; })[0], FESTAS_STRINGS[' + JSON.stringify(id) + ']])');
       ok(crypto.createHash('sha256').update(j).digest('hex') === IGUAIS[id], 'Reis: ' + id + ' fica exatamente igual (configuração e textos)');
@@ -1653,7 +1660,7 @@ function suite(fontes) {
     });
 
     // L9. As outras festas ficam exatamente iguais (configuração, textos e janela de datas)
-    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', natal: '298fd87419769ae3b7cdb8738acbcd5f5579963f09eb2bbae8c95fe918bf59d8', carnaval: '33467497694dd7b37dbb156f108e1205a1075196433441e3a6a4836cbb62ad02', pascoa: '33c3d22cac7624738ef9667c738d2ed28e7b25235e62ab21ec5296eb637299f1', reis: '4fd59d9157a7d121ef485018c1b0ed963ad4c05c106085a92b27b53885e0ef36' };
+    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', natal: '298fd87419769ae3b7cdb8738acbcd5f5579963f09eb2bbae8c95fe918bf59d8', carnaval: '33467497694dd7b37dbb156f108e1205a1075196433441e3a6a4836cbb62ad02', pascoa: 'bfc89a2da21c0b87c4d6359268460504d1cb7ebdfb48665eee198b50001c6f94', reis: '4fd59d9157a7d121ef485018c1b0ed963ad4c05c106085a92b27b53885e0ef36' };
     Object.keys(IGUAIS).forEach(function (id) {
       const j = g.ev('JSON.stringify([FESTAS_CONFIG.filter(function (f) { return f.id === ' + JSON.stringify(id) + '; })[0], FESTAS_STRINGS[' + JSON.stringify(id) + ']])');
       ok(crypto.createHash('sha256').update(j).digest('hex') === IGUAIS[id], 'Santos: ' + id + ' fica exatamente igual (configuração e textos)');
@@ -2093,6 +2100,12 @@ const MUTACOES = [
   ['o corso volta a usar a imagem da faixa', 'festas.js', "corso: 'assets/ecras/carnaval_corso.jpg'", "corso: 'assets/ecras/carnaval_festa.jpg'"],
   ['as fantasias voltam a usar a imagem da faixa', 'festas.js', "fantasias: 'assets/ecras/carnaval_fantasias.jpg'", "fantasias: 'assets/ecras/carnaval_festa.jpg'"],
   ['o quem está mascarado volta a usar a imagem da faixa', 'festas.js', "quemEstaMascarado: 'assets/ecras/carnaval_mascarado.jpg'", "quemEstaMascarado: 'assets/ecras/carnaval_festa.jpg'"],
+  ['imagem do folar que não existe', 'festas.js', "folar: 'assets/ecras/pascoa_folar.jpg'", "folar: 'assets/ecras/pascoa_folar_x.jpg'"],
+  ['o folar volta a usar a imagem da faixa', 'festas.js', "folar: 'assets/ecras/pascoa_folar.jpg'", "folar: 'assets/ecras/pascoa_festa.jpg'"],
+  ['as amêndoas voltam a usar a imagem da faixa', 'festas.js', "amendoas: 'assets/ecras/pascoa_amendoas.jpg'", "amendoas: 'assets/ecras/pascoa_festa.jpg'"],
+  ['os ovos voltam a usar a imagem da faixa', 'festas.js', "ovos: 'assets/ecras/pascoa_ovos.jpg'", "ovos: 'assets/ecras/pascoa_festa.jpg'"],
+  ['as amêndoas e o folar trocados', 'festas.js', "amendoas: 'assets/ecras/pascoa_amendoas.jpg'", "amendoas: 'assets/ecras/pascoa_folar.jpg'"],
+  ['os ovos e as amêndoas trocados', 'festas.js', "ovos: 'assets/ecras/pascoa_ovos.jpg'", "ovos: 'assets/ecras/pascoa_amendoas.jpg'"],
   ['as fantasias e o corso trocados', 'festas.js', "fantasias: 'assets/ecras/carnaval_fantasias.jpg'", "fantasias: 'assets/ecras/carnaval_corso.jpg'"],
   ['PT do Carnaval sem o texto de falta de Gotas', 'festas.js', "      fantasiasFalta: 'Ainda faltam Gotas para as fantasias. Junta mais e volta cá.',\n", ''],
   ['EN do Carnaval sem o texto do corso', 'festas.js', "      corsoSucesso: \"The corso parades", "      corsoSucessoX: \"The corso parades"],
