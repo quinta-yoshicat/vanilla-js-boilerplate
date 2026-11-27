@@ -83,7 +83,7 @@ dadosAcrescentar('enciclopedia', {
 dadosAcrescentar('enciclopedia', {
   id: 'azeite_do_olival_ao_lagar',
   imagem: 'assets/ecras/azeite_do_olival_ao_lagar.jpg',
-  nivelMinimo: 7,
+  nivelMinimo: 8,
   titulo: { pt: 'Do olival ao lagar', en: 'From the grove to the mill', es: 'Del olivar a la almazara' },
   texto: {
     pt: 'A oliveira chegou à Península Ibérica com os fenícios e os gregos, e os romanos deram força ao azeite. No lagar, mós de pedra, a galga, esmagavam a azeitona. A pasta ia para as seiras e era prensada com varas; depois juntava-se água quente, prensava-se outra vez e deixava-se o azeite separar-se da água. Muitos lagares eram de família ou da aldeia, e o dono da azeitona pagava com parte do azeite: a maquia. Clima: uma onda de calor pode estragar a floração, a gordura do fruto ou a maturação, conforme a altura em que chega.',
@@ -95,7 +95,7 @@ dadosAcrescentar('enciclopedia', {
 dadosAcrescentar('enciclopedia', {
   id: 'tirada_da_cortica',
   imagem: 'assets/ecras/tirada_da_cortica.jpg',
-  nivelMinimo: 7,
+  nivelMinimo: 10,
   titulo: { pt: 'A tirada da cortiça', en: 'Stripping the cork', es: 'El descorche' },
   texto: {
     pt: 'De nove em nove anos, entre o fim de maio e agosto, os tiradores sobem ao sobreiro com o machado e tiram a cortiça, sem cortar a árvore. O machado só pode ir até ao ponto em que não fere o entrecasco; por baixo, a casca volta a crescer. O primeiro descortiçamento, chama-se desbóia. Depois a cortiça repousa nos estaleiros pelo menos seis meses. Clima: em anos de seca o anel de crescimento da cortiça fica mais fino, e em alguns anos a tirada só pode começar em junho, em vez de meados de maio.',
@@ -132,7 +132,7 @@ dadosAcrescentar('enciclopedia', {
 // Pacote «Pesca do choco e golfinhos»: sem imagem por agora (a imagem prevista, para sado_golfinhos, está «por_criar» em dados/pacotes/cultura_choco.json).
 dadosAcrescentar('enciclopedia', {
   id: 'pesca_choco_sado',
-  nivelMinimo: 7,
+  nivelMinimo: 9,
   titulo: { pt: 'O choco do Sado', en: 'The Sado cuttlefish', es: 'El choco del Sado' },
   texto: {
     pt: 'No estuário do Sado apanha-se choco com covos, que são armadilhas, e com redes. O choco também é uma das comidas preferidas dos golfinhos-roazes que vivem no estuário. Em 2023 nasceram seis crias, o maior número desde que esta comunidade começou a ser acompanhada, há cerca de 40 anos. Cientistas estudam como a água do estuário mudou nas últimas décadas, por causa do clima e de outros fatores.',
@@ -145,7 +145,7 @@ dadosAcrescentar('enciclopedia', {
 dadosAcrescentar('enciclopedia', {
   id: 'arroz_agua',
   imagem: 'assets/ecras/yoshi_nos_arrozais.jpg',
-  nivelMinimo: 7,
+  nivelMinimo: 9,
   titulo: { pt: 'Sem água não há arroz', en: 'No water, no rice', es: 'Sin agua no hay arroz' },
   texto: {
     pt: 'O arroz precisa de muita água. No Vale do Sado, os campos são regados a partir de albufeiras. Em 2022, a seca fez os produtores estimar que cerca de 2500 hectares não se poderiam cultivar. Hoje há formas de poupar: a sementeira enterrada gasta cerca de 20% menos água de rega.',
@@ -157,7 +157,7 @@ dadosAcrescentar('enciclopedia', {
 dadosAcrescentar('enciclopedia', {
   id: 'arroz_aves',
   imagem: 'assets/ecras/aves_arrozais_sado.jpg',
-  nivelMinimo: 7,
+  nivelMinimo: 9,
   titulo: { pt: 'As aves dos arrozais', en: 'The birds of the rice paddies', es: 'Las aves de los arrozales' },
   texto: {
     pt: 'Um arrozal é uma zona húmida feita pelo homem. Muitas aves aquáticas usam os arrozais como casa, porque as zonas húmidas naturais têm diminuído. Perto de Possanco, no estuário do Sado, veem-se no inverno bandos de centenas de aves, como íbis-pretas e colhereiros.',
@@ -183,7 +183,7 @@ dadosAcrescentar('enciclopedia', {
 dadosAcrescentar('enciclopedia', {
   id: 'pinha_tres_anos',
   imagem: 'assets/ecras/estrada_sr_albano.jpg',
-  nivelMinimo: 7,
+  nivelMinimo: 8,
   titulo: { pt: 'A pinha que demora três anos', en: 'The cone that takes three years', es: 'La piña que tarda tres años' },
   texto: {
     pt: 'A pinha do pinheiro-manso demora cerca de três anos a ficar pronta e apanha-se no inverno, entre dezembro e março. Durante esse tempo pode ser atacada por pragas, como o sugador das pinhas, um inseto que surgiu em Portugal em 2010. Na campanha de 2022/23, as pinhas foram poucas, depois de vários anos quentes e secos.',
@@ -196,7 +196,7 @@ dadosAcrescentar('enciclopedia', {
 dadosAcrescentar('enciclopedia', {
   id: 'souto',
   imagem: 'assets/ecras/souto_castanheiros.jpg',
-  nivelMinimo: 7,
+  nivelMinimo: 8,
   titulo: { pt: 'O souto', en: 'The souto', es: 'El souto' },
   texto: {
     pt: 'Souto é um pomar de castanheiros, alguns com mais de cem anos. O castanheiro floresce em junho e julho; no outono, os ouriços (as cápsulas espinhosas onde crescem as castanhas) abrem-se e caem. A apanha vai de outubro a novembro, mesmo a tempo do São Martinho. Antes de a batata chegar, a castanha era a base da alimentação de muita gente, sobretudo no Norte. Hoje há quatro castanhas com Denominação de Origem Protegida: Terra Fria e Padrela, em Trás-os-Montes; Soutos da Lapa, entre Viseu e a Guarda; e Marvão-Portalegre, no Alto Alentejo. As variedades têm nomes bonitos: Longal, Martaínha, Judia, Colarinha. O YoshiCat jura que o Fygmo II não distingue uma Longal de uma Martaínha. Para ele, todas têm o mesmo destino: o assador.',
