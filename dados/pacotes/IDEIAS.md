@@ -15,4 +15,4 @@ Estados: `ideia` → `aprovada` → `em PR` → `feita`. Quando uma ideia passa 
 | ideia_07 | Queijo de Azeitão com flor de cardo | cultura | cultura_queijo | em PR | #243 |
 | ideia_08 | Pinhas e pinhão | cultura | cultura_pinhao | em PR | #244 |
 | ideia_09 | Castanhas | cultura | castanhas | em PR | #245 |
-| ideia_10 | Feira de Sant'Iago | festa | feira_santiago | em PR | #246, parte 1 de 2 (conteúdo); falta a festa |
+| ideia_10 | Feira de Sant'Iago | festa | feira_santiago | em PR | #247, parte 2 de 2 (festa) |

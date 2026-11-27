@@ -124,8 +124,8 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     { nome: 'Pinhão (três anos)', nivel: 7, ids: ['pinha_tres_anos'], imagens: { pinha_tres_anos: 'assets/ecras/estrada_sr_albano.jpg' } },
     // Pacote «Castanhas» (PR 9): uma entrada, de nível mínimo 7, a seguir à das pinhas; sem imagem (souto_castanheiros.jpg está «por_criar»).
     { nome: 'Souto', nivel: 7, ids: ['souto'] },
-    // Pacote «feira_santiago» (PR 10, parte 1 de 2): uma entrada, de nível mínimo 7, a seguir à do souto; sem imagem (feira_santiago.jpg está «por_criar»).
-    { nome: "Feira de Sant'Iago", nivel: 7, ids: ['feira_santiago'] },
+    // Pacote «feira_santiago» (PR 10): uma entrada, de nível mínimo 7, a seguir à do souto; leva a imagem santiago_festa (a mesma do menu da festa «santiago»).
+    { nome: "Feira de Sant'Iago", nivel: 7, ids: ['feira_santiago'], imagens: { feira_santiago: 'assets/ecras/santiago_festa.jpg' } },
     // Imagens que já existiam em assets/ecras: uma por entrada (campo «imagens»: id -> caminho), só onde mostram mesmo o tema.
     { nome: 'Arrábida', nivel: 11, ids: ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'] },
     { nome: 'Sado', nivel: 12, ids: ['sado_reserva', 'sado_golfinhos', 'sado_troia'], imagens: { sado_reserva: 'assets/ecras/sado_estuario.jpg' } },

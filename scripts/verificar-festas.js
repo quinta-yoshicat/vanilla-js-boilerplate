@@ -654,13 +654,13 @@ function suite(fontes) {
         if (f.ev('festaAbertaNoDia(CT, ' + JSON.stringify(d) + ')') !== dentro) aberturaMal++;
         if (f.ev('festaDiaGrandeNoDia(CT, ' + JSON.stringify(d) + ')') !== (d === JAN[y][2])) grandeMal++;
         const viaMotor = f.ev('(festaAtivaPelaDataReal(' + JSON.stringify(d) + ') || {}).id || null');
-        const esperado = dentro ? (d <= JAN[y][2] ? 'pascoa' : 'festaMovelTeste') : (d >= JC[y][0] && d <= JC[y][1] ? 'carnaval' : d >= y + '-11-08' && d <= y + '-11-14' ? 'saomartinho' : (d >= y + '-12-20' && d <= y + '-12-26' ? 'natal' : (d >= y + '-01-01' && d <= y + '-01-06' ? 'reis' : (d >= y + '-06-12' && d <= y + '-06-29' ? 'santos' : null))));
+        const esperado = dentro ? (d <= JAN[y][2] ? 'pascoa' : 'festaMovelTeste') : (d >= JC[y][0] && d <= JC[y][1] ? 'carnaval' : d >= y + '-11-08' && d <= y + '-11-14' ? 'saomartinho' : (d >= y + '-12-20' && d <= y + '-12-26' ? 'natal' : (d >= y + '-01-01' && d <= y + '-01-06' ? 'reis' : (d >= y + '-06-12' && d <= y + '-06-29' ? 'santos' : (d >= y + '-07-23' && d <= y + '-08-02' ? 'santiago' : null)))));
         if (viaMotor !== esperado) fora1++;
       }
     }
     ok(aberturaMal === 0, 'Festa móvel de teste (Sexta-feira Santa a Segunda de Páscoa): abre exatamente dentro da janela em todos os dias de 2026 a 2035 (' + aberturaMal + ' erros)');
     ok(grandeMal === 0, 'Festa móvel de teste (Sexta-feira Santa a Segunda de Páscoa): o dia grande é só a terça em todos os dias de 2026 a 2035 (' + grandeMal + ' erros)');
-    ok(fora1 === 0, 'o motor (festaAtivaPelaDataReal com o dia) escolhe a festa certa em todos os dias de 2026 a 2035: Páscoa (Sexta-feira Santa a domingo, que vem antes na lista), festa móvel de teste (só a segunda-feira), Carnaval, São Martinho, Natal, Reis (1 a 6/1), Santos Populares (12 a 29/6) ou nenhuma (' + fora1 + ' erros)');
+    ok(fora1 === 0, 'o motor (festaAtivaPelaDataReal com o dia) escolhe a festa certa em todos os dias de 2026 a 2035: Páscoa (Sexta-feira Santa a domingo, que vem antes na lista), festa móvel de teste (só a segunda-feira), Carnaval, São Martinho, Natal, Reis (1 a 6/1), Santos Populares (12 a 29/6), Feira de Sant\'Iago (23/7 a 2/8) ou nenhuma (' + fora1 + ' erros)');
     const abre = function (d) { return f.ev('festaAbertaNoDia(CT, ' + JSON.stringify(d) + ')'); };
     ok(abre('2027-03-25') === false && abre('2027-03-26') === true && abre('2027-03-29') === true && abre('2027-03-30') === false, '2027: abre a 26/03 (sexta) e fecha a 29/03 (segunda)');
     ok(abre('2026-04-02') === false && abre('2026-04-03') === true && abre('2026-04-06') === true && abre('2026-04-07') === false, '2026: abre a 03/04 (sexta) e fecha a 06/04 (segunda)');
@@ -710,23 +710,23 @@ function suite(fontes) {
         const pg = gauss(y), tp = Date.UTC(y, Number(pg.slice(5, 7)) - 1, Number(pg.slice(8, 10)));
         const emCarnaval = d >= fmt(tp - 50 * 86400000) && d <= fmt(tp - 47 * 86400000);
         const emPascoa = d >= fmt(tp - 2 * 86400000) && d <= fmt(tp);
-        const esperado = emCarnaval ? 'carnaval' : emPascoa ? 'pascoa' : (mmdd >= '11-08' && mmdd <= '11-14') ? 'saomartinho' : ((mmdd >= '12-20' && mmdd <= '12-26') ? 'natal' : ((mmdd >= '01-01' && mmdd <= '01-06') ? 'reis' : ((mmdd >= '06-12' && mmdd <= '06-29') ? 'santos' : null)));
+        const esperado = emCarnaval ? 'carnaval' : emPascoa ? 'pascoa' : (mmdd >= '11-08' && mmdd <= '11-14') ? 'saomartinho' : ((mmdd >= '12-20' && mmdd <= '12-26') ? 'natal' : ((mmdd >= '01-01' && mmdd <= '01-06') ? 'reis' : ((mmdd >= '06-12' && mmdd <= '06-29') ? 'santos' : ((mmdd >= '07-23' && mmdd <= '08-02') ? 'santiago' : null))));
         const obtido = g.ev('(festaAtivaPelaDataReal(' + JSON.stringify(d) + ') || {}).id || null');
         total++;
         if (obtido !== esperado) aberto++;
         const esperaGrande = mmdd === '11-11' || mmdd === '12-25';
-        const festaDoDia = g.ev('festaAtivaPelaDataReal(' + JSON.stringify(d) + ') !== null') && esperado !== 'carnaval' && esperado !== 'pascoa' && esperado !== 'reis' && esperado !== 'santos'; // o dia grande dos Reis e o dos Santos Populares têm verificação própria (secções K e L)
+        const festaDoDia = g.ev('festaAtivaPelaDataReal(' + JSON.stringify(d) + ') !== null') && esperado !== 'carnaval' && esperado !== 'pascoa' && esperado !== 'reis' && esperado !== 'santos' && esperado !== 'santiago'; // o dia grande dos Reis, o dos Santos Populares e o da Feira de Sant'Iago têm verificação própria (secções K, L e M)
         const obtidoGrande = festaDoDia && g.ev('estaNoDiaGrandeFesta(festaAtivaPelaDataReal(' + JSON.stringify(d) + '), ' + JSON.stringify(d) + ')');
         if (obtidoGrande !== (esperaGrande && festaDoDia)) grande++;
         if (esperado === 'saomartinho' && obtido !== 'saomartinho') sm++;
         if (esperado === 'natal' && obtido !== 'natal') nat++;
       }
     }
-    ok(total === 4749 && aberto === 0 && sm === 0 && nat === 0, 'São Martinho (8 a 14/11) e Natal (20 a 26/12) abrem exatamente como antes, e o Carnaval, a Páscoa, os Reis e os Santos Populares só nas suas janelas, em todos os ' + total + ' dias de 2024 a 2036 (' + aberto + ' diferenças)');
+    ok(total === 4749 && aberto === 0 && sm === 0 && nat === 0, 'São Martinho (8 a 14/11) e Natal (20 a 26/12) abrem exatamente como antes, e o Carnaval, a Páscoa, os Reis, os Santos Populares e a Feira de Sant\'Iago só nas suas janelas, em todos os ' + total + ' dias de 2024 a 2036 (' + aberto + ' diferenças)');
     ok(grande === 0, 'São Martinho e Natal: o dia grande é exatamente 11/11 e 25/12 em todos os dias de 2024 a 2036 (' + grande + ' diferenças)');
     const bordas = ['2026-11-07', '2026-11-08', '2026-11-11', '2026-11-14', '2026-11-15', '2026-12-19', '2026-12-20', '2026-12-25', '2026-12-26', '2026-12-27', '2028-11-08', '2028-12-26'];
     ok(JSON.stringify(bordas.map(function (d) { return g.ev('(festaAtivaPelaDataReal(' + JSON.stringify(d) + ') || {}).id || null'); })) === JSON.stringify([null, 'saomartinho', 'saomartinho', 'saomartinho', null, null, 'natal', 'natal', 'natal', null, 'saomartinho', 'natal']), 'São Martinho e Natal: dias de fronteira (dia antes, primeiro, grande, último, dia depois)');
-    ok(g.json('FESTAS_CONFIG.map(function (x) { return x.id; })').join() === 'saomartinho,natal,carnaval,pascoa,reis,santos' && g.json("FESTAS_CONFIG.map(function (x) { return !!x.movel; })").join() === 'false,false,true,true,false,false', 'o jogo tem o São Martinho e o Natal (datas fixas), o Carnaval e a Páscoa (datas móveis) e, por último, os Reis e os Santos Populares (datas fixas)');
+    ok(g.json('FESTAS_CONFIG.map(function (x) { return x.id; })').join() === 'saomartinho,natal,carnaval,pascoa,reis,santos,santiago' && g.json("FESTAS_CONFIG.map(function (x) { return !!x.movel; })").join() === 'false,false,true,true,false,false,false', 'o jogo tem o São Martinho e o Natal (datas fixas), o Carnaval e a Páscoa (datas móveis) e, por último, os Reis, os Santos Populares e a Feira de Sant\'Iago (datas fixas)');
 
     // as regras de datas são puras: nada de relógio do aparelho
     const fonte = fontes['festas.js'];
@@ -1054,7 +1054,7 @@ function suite(fontes) {
   {
     const g = abrir(lis(11, 10));
     const TXT = g.json('FESTAS_STRINGS');
-    const CENAS = [['saomartinho', 'castanhasCenas', 'São Martinho'], ['natal', 'boloReiCenas', 'Natal'], ['carnaval', 'quemEstaMascaradoCenas', 'Carnaval'], ['pascoa', 'ovosCenas', 'Páscoa'], ['natal', 'consoadaCenas', 'Natal (consoada)'], ['reis', 'janeirasCenas', 'Reis (Janeiras)'], ['reis', 'favaCenas', 'Reis (Fava)'], ['santos', 'manjericoCenas', 'Santos Populares (Manjerico)'], ['santos', 'arraialCenas', 'Santos Populares (Arraial)']];
+    const CENAS = [['saomartinho', 'castanhasCenas', 'São Martinho'], ['natal', 'boloReiCenas', 'Natal'], ['carnaval', 'quemEstaMascaradoCenas', 'Carnaval'], ['pascoa', 'ovosCenas', 'Páscoa'], ['natal', 'consoadaCenas', 'Natal (consoada)'], ['reis', 'janeirasCenas', 'Reis (Janeiras)'], ['reis', 'favaCenas', 'Reis (Fava)'], ['santos', 'manjericoCenas', 'Santos Populares (Manjerico)'], ['santos', 'arraialCenas', 'Santos Populares (Arraial)'], ['santiago', 'bancaCenas', 'Feira de Sant\'Iago (Banca)'], ['santiago', 'noiteCenas', 'Feira de Sant\'Iago (Noite)']];
     CENAS.forEach(function (fc) {
       const festa = fc[0], chave = fc[1], nome = fc[2];
       const pt = TXT[festa] && TXT[festa].pt && TXT[festa].pt[chave];
@@ -1665,6 +1665,225 @@ function suite(fontes) {
       r.ev('state.festas = { tarefasDia: { santos_manjerico: "2027-06-15", santos_arraial: 7 } };');
       ok(r.ev("festaJaFezTarefaHoje('santos', 'manjerico')") === true && r.ev("festaJaFezTarefaHoje('santos', 'arraial')") === false && r.ev("festaJaFezTarefaHoje('santos', 'sardinhada')") === false, 'Santos: um state.festas antigo com datas boas e más funciona (a data má conta como não feita)');
     }
+  }
+
+  // ---------------- M. Feira de Sant'Iago: 23 de julho a 2 de agosto (passa de um mês para o seguinte), dia grande 25/7, Banca, Artesanato e Noite ----------------
+  {
+    const quando = function (mes, d, hhmm, ano) { return Date.parse((ano || 2027) + '-' + String(mes).padStart(2, '0') + '-' + String(d).padStart(2, '0') + 'T' + (hhmm || '12:00') + ':00Z'); }; // Lisboa no verão = UTC+1
+    const jul = function (d, hhmm, ano) { return quando(7, d, hhmm, ano); };
+    const g = abrir(jul(27));
+    const sg = g.json("FESTAS_CONFIG.filter(function (f) { return f.id === 'santiago'; })[0]");
+    ok(!!sg, 'Santiago: existe em FESTAS_CONFIG');
+    if (sg) {
+      ok(JSON.stringify([sg.inicio, sg.fim, sg.diaGrande]) === JSON.stringify([{ mes: 6, dia: 23 }, { mes: 7, dia: 2 }, { mes: 6, dia: 25 }]) && sg.movel === undefined && sg.diasGrandes === undefined, 'Santiago: datas fixas de 23 de julho a 2 de agosto, dia grande a 25 de julho');
+      ok(sg.recompensas.multiplicadorDiaGrande === 2 && sg.entradaEnciclopedia === 'feira_santiago', 'Santiago: dia grande a dobrar e abre a entrada feira_santiago ao entrar');
+      ok(JSON.stringify(sg.tarefas.map(function (x) { return [x.id, x.onde, x.regra, x.btn, x.cenasSemRepetir === true, JSON.stringify(x.premio), x.entradaEnciclopedia || ''].join('|'); })) === JSON.stringify([
+        'banca|festa|cena_do_dia|btnBanca|true|{"reputacao":5}|', 'artesanato|festa|gastar_gotas|btnArtesanato|false|{"custoGotas":30,"reputacao":12}|', 'noite|festa|cena_do_dia|btnNoite|true|{"reputacao":6}|']), 'Santiago: banca (escolha, +5), artesanato (30 Gotas, +12) e noite (escolha, +6); as tarefas não abrem entradas');
+      ok(!/uvas|aguardente|bagaceira/i.test(JSON.stringify(sg.tarefas)), 'Santiago: nenhuma tarefa custa ou dá Uvas, Aguardente ou Bagaceira');
+      ok(sg.modoTesteSemGravar === true && sg.menuComReserva === true, 'Santiago: modo de teste sem gravar e a faixa e o dia grande também com reserva');
+      ok(JSON.stringify(sg.imagens) === JSON.stringify({ diaGrande: 'assets/ecras/santiago_dia_grande.jpg', faixa: 'assets/ecras/santiago_festa.jpg', reserva: 'assets/ecras/santiago_festa.jpg', banca: 'assets/ecras/santiago_banca.jpg', artesanato: 'assets/ecras/santiago_artesanato.jpg', noite: 'assets/ecras/santiago_noite.jpg' }), 'Santiago: as imagens santiago_festa (faixa e reserva), santiago_dia_grande, santiago_banca, santiago_artesanato e santiago_noite');
+      Object.keys(sg.imagens).forEach(function (k) { ok(fs.existsSync(path.join(RAIZ, sg.imagens[k])), 'Santiago: a imagem ' + k + ' existe'); });
+    }
+    ok(/id: 'feira_santiago',\n\s+imagem: 'assets\/ecras\/santiago_festa\.jpg',\n\s+nivelMinimo: 7,/.test(fs.readFileSync(path.join(RAIZ, 'dados', 'enciclopedia.js'), 'utf8')), 'Santiago: a entrada feira_santiago (dados/enciclopedia.js) existe, de nível 7, com a imagem santiago_festa.jpg');
+
+    // M1. Abre de 23/7 a 2/8 (passa de julho para agosto) e não noutros dias; dia grande só a 25/7 (de 2026 a 2036, dia de Lisboa)
+    const fmt = function (t) { const d = new Date(t); return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0') + '-' + String(d.getUTCDate()).padStart(2, '0'); };
+    g.ev("var SANTIAGO = FESTAS_CONFIG.filter(function (f) { return f.id === 'santiago'; })[0]; var TG = function (id) { return SANTIAGO.tarefas.filter(function (x) { return x.id === id; })[0]; };");
+    let abreMal = 0, grandeMal = 0, motorMal = 0;
+    for (let t = Date.UTC(2026, 0, 1); t <= Date.UTC(2036, 11, 31); t += 86400000) {
+      const d = fmt(t), mmdd = d.slice(5), dentro = mmdd >= '07-23' && mmdd <= '08-02';
+      if (g.ev('festaAbertaNoDia(SANTIAGO, ' + JSON.stringify(d) + ')') !== dentro) abreMal++;
+      if (g.ev('festaDiaGrandeNoDia(SANTIAGO, ' + JSON.stringify(d) + ')') !== (mmdd === '07-25')) grandeMal++;
+      if (dentro && g.ev('(festaAtivaPelaDataReal(' + JSON.stringify(d) + ') || {}).id') !== 'santiago') motorMal++;
+    }
+    ok(abreMal === 0 && grandeMal === 0 && motorMal === 0, 'Santiago: abre exatamente de 23/7 a 2/8 (inclui 31/7 e 1/8) e o dia grande é só 25/7, em todos os dias de 2026 a 2036 (' + abreMal + '/' + grandeMal + '/' + motorMal + ' erros)');
+    const q = function (t) { const x = abrir(t); return x.ev('(festaAtivaPelaDataReal() || {}).id || null'); };
+    ok(q(quando(7, 22, '22:30')) === null && q(quando(7, 22, '23:30')) === 'santiago' && q(quando(8, 2, '22:30')) === 'santiago' && q(quando(8, 2, '23:30')) === null, 'Santiago: abre às 00:00 de 23/7 em Lisboa (22:30 UTC de 22/7 ainda não, 23:30 UTC já) e fecha no fim de 2/8, dia de Lisboa e não o do aparelho');
+    ok(q(quando(7, 31)) === 'santiago' && q(quando(8, 1)) === 'santiago' && q(quando(7, 22)) === null && q(quando(8, 3)) === null, 'Santiago: 31/7 e 1/8 (a passagem de julho para agosto) estão abertos; 22/7 e 3/8 não');
+    ok(g.ev("festaJanela(SANTIAGO, 2027).inicio") === '2027-07-23' && g.ev("festaJanela(SANTIAGO, 2027).fim") === '2027-08-02' && g.ev("festaJanela(SANTIAGO, 2027).diaGrande") === '2027-07-25' && g.ev("festaJanela(SANTIAGO, 2027).diasGrandes") === undefined, 'Santiago: a janela de 2027 traz 23/7 a 2/8 e o dia grande a 25/7, sem diasGrandes');
+
+    // M2. No ecrã, na feira a sério (27/7, dia normal): cada tarefa 1 vez por dia, errar não custa nada, objetivo do dia, Enciclopédia
+    const e = abrir(jul(27));
+    e.ev('state.reputacao = 372; state.gotas = 100; state.uvas = 7; state.adega.aguardente = 2;');
+    e.ev('enterFesta()');
+    ok(e.json('ENTRADAS').join() === 'feira_santiago' && e.json('AVISOS').join() === 'feira_santiago', 'Santiago: entrar na festa abre a entrada feira_santiago, com o aviso');
+    e.ev('renderFestaHub()');
+    const hub = e.ev('caixa.innerHTML');
+    ok(/iniciarTarefaFesta\('banca'\)/.test(hub) && /iniciarTarefaFesta\('artesanato'\)/.test(hub) && /iniciarTarefaFesta\('noite'\)/.test(hub) && !/consoada|castanhas|corso|folar|janeiras|fava|manjerico|sardinhada|arraial/.test(hub), 'Santiago: o menu mostra os 3 botões da feira e nenhum de outra festa');
+    ok(hub.indexOf(e.ev('FESTAS_STRINGS.santiago.pt.diaGrandeAviso')) === -1, 'Santiago: a 27/7 não há aviso de dia grande');
+    e.ev("iniciarTarefaFesta('banca')");
+    ok(e.json('festaCenaAtual.cena').opcoes.length === 3, 'Santiago: a Banca mostra uma cena de 3 opções');
+    e.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+    ok(e.ev('state.reputacao') === 377, 'Santiago: Banca certa dá +5');
+    e.ev("iniciarTarefaFesta('noite')"); e.ev('festaResponderCenaDoDia((festaCenaAtual.cena.correta + 1) % 3)');
+    ok(e.ev('state.reputacao') === 377 && e.ev('state.gotas') === 100 && e.ev('DIALOGO') === e.ev('FESTAS_STRINGS.santiago.pt.noiteDerrota'), 'Santiago: errar a Noite não custa nada (Reputação e Gotas iguais) e mostra a derrota');
+    e.ev("iniciarTarefaFesta('artesanato')");
+    ok(e.ev('state.reputacao') === 389 && e.ev('state.gotas') === 70 && e.ev('state.uvas') === 7 && e.ev('state.adega.aguardente') === 2, 'Santiago: o Artesanato gasta 30 Gotas, dá +12 e não toca nas Uvas nem na aguardente');
+    const salvos = e.ev('SAVES');
+    ['banca', 'noite', 'artesanato'].forEach(function (id) {
+      e.ev("iniciarTarefaFesta('" + id + "')");
+      ok(e.ev('festaCenaAtual') === null && e.ev('state.reputacao') === 389 && e.ev('state.gotas') === 70 && (id !== 'artesanato' || e.ev('festaMensagemAtual') === e.ev('FESTAS_STRINGS.santiago.pt.artesanatoJaFeitaHoje')), 'Santiago: ' + id + ' não se repete no mesmo dia');
+      ok(new RegExp('data-acao="' + id + '" disabled').test(e.ev('caixa.innerHTML')), 'Santiago: o botão de ' + id + ' fica desativado («já feita hoje»)');
+    });
+    ok(e.ev('SAVES') === salvos && e.json('OBJETIVOS').join() === 'festa_tarefa,festa_tarefa,festa_tarefa', 'Santiago: cada tarefa conta para o objetivo do dia «festa_tarefa», uma gravação cada');
+    ok(e.json('Object.keys(state.festas.tarefasDia)').join() === 'santiago_banca,santiago_noite,santiago_artesanato', 'Santiago: o «uma vez por dia» guarda-se em state.festas.tarefasDia, sem campos novos');
+    e.ev('state.gotas = 10; state.festas.tarefasDia.santiago_artesanato = null;'); e.ev("iniciarTarefaFesta('artesanato')");
+    ok(e.ev('state.gotas') === 10 && e.ev('state.reputacao') === 389 && e.ev('festaMensagemAtual') === e.ev('FESTAS_STRINGS.santiago.pt.artesanatoFalta'), 'Santiago: sem Gotas o Artesanato avisa e não gasta nem marca o dia');
+    e.ir(jul(28)); e.ev("iniciarTarefaFesta('banca')");
+    ok(e.ev('festaCenaAtual !== null'), 'Santiago: no dia seguinte as tarefas voltam');
+    // a passagem de julho para agosto: a tarefa de 31/7 volta a 1/8
+    const mes = abrir(jul(31));
+    mes.ev('state.reputacao = 0; state.gotas = 100;'); mes.ev("iniciarTarefaFesta('banca')"); mes.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+    mes.ir(quando(8, 1)); mes.ev("iniciarTarefaFesta('banca')");
+    ok(mes.ev('festaCenaAtual !== null') && mes.ev('festaAtual().id') === 'santiago', 'Santiago: de 31/7 para 1/8 a festa continua aberta e a Banca volta');
+
+    // M3. Dia grande (25/7): aviso, prémios a dobrar, imagem do dia grande; os dias vizinhos não dobram
+    const gd = abrir(jul(25));
+    gd.ev('state.reputacao = 10; state.gotas = 100; renderFestaHub();');
+    const av = gd.json('FESTAS_STRINGS.santiago');
+    ok(gd.ev('caixa.innerHTML').indexOf(av.pt.diaGrandeAviso) !== -1 && /25 de julho/.test(av.pt.diaGrandeAviso) && /São Tiago/.test(av.pt.diaGrandeAviso) && /25 July/.test(av.en.diaGrandeAviso) && /25 de julio/.test(av.es.diaGrandeAviso), 'Santiago: a 25/7 o menu avisa «Hoje é 25 de julho, dia de São Tiago» (PT, EN e ES)');
+    gd.ev("iniciarTarefaFesta('banca')"); gd.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+    gd.ev("iniciarTarefaFesta('noite')"); gd.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+    gd.ev("iniciarTarefaFesta('artesanato')");
+    ok(gd.ev('state.reputacao') === 10 + 10 + 12 + 24 && gd.ev('state.gotas') === 70, 'Santiago: a 25/7 a Banca dá +10, a Noite +12 e o Artesanato +24 (o custo fica nas 30 Gotas), deu ' + gd.ev('state.reputacao'));
+    const imd = abrir(jul(25));
+    imd.ev('var IMGS = []; Image = function () { IMGS.push(this); }; renderFestaHub();');
+    ok(imd.ev('FUNDO') === 'assets/ecras/santiago_festa.jpg' && imd.ev('IMGS[0].src') === 'assets/ecras/santiago_dia_grande.jpg', 'Santiago: a 25/7 o menu pede santiago_dia_grande.jpg, com a reserva até lá');
+    imd.ev('IMGS[0].onload()'); ok(imd.ev('FUNDO') === 'assets/ecras/santiago_dia_grande.jpg', 'Santiago: santiago_dia_grande.jpg carregou: passa a ser o fundo do menu');
+    [23, 24, 26, 31].forEach(function (dia) {
+      const gn = abrir(jul(dia));
+      gn.ev('state.reputacao = 10; renderFestaHub(); iniciarTarefaFesta(\'banca\'); festaResponderCenaDoDia(festaCenaAtual.cena.correta);');
+      ok(gn.ev('state.reputacao') === 15 && gn.ev('caixa.innerHTML').indexOf(av.pt.diaGrandeAviso) === -1, 'Santiago: a ' + dia + '/7 (dia normal) a Banca dá só +5 e não há aviso de dia grande');
+    });
+    {
+      const ag = abrir(quando(8, 2));
+      ag.ev('state.reputacao = 10; renderFestaHub(); iniciarTarefaFesta(\'banca\'); festaResponderCenaDoDia(festaCenaAtual.cena.correta);');
+      ok(ag.ev('state.reputacao') === 15 && ag.ev('festaAtual().id') === 'santiago', 'Santiago: a 2/8, último dia, a festa está aberta e a Banca dá só +5');
+    }
+
+    // M4. Objetivo do dia e sinal da Quinta apanham a festa nova sem mais mudanças (js/objetivos.js real)
+    {
+      const extra = ['estacoes.js', 'vinha.js', 'alambique.js', 'garrafa.js', 'ronda.js', 'explorar.js'];
+      const o = abrir(jul(27));
+      o.ev("function mostrarFalas() {} function tocarSomDaAcao() {} function reposicionarFlutuantes() {} function atualizarCartaoObjetivosQuinta() {} function faseRealAtual() { return 'repouso'; } function jaFezTarefaTempoHoje() { return true; } function entradasBloqueadas() { return []; } function caveReservaAberta() { return true; } function garrafaQueMaisDescansou() { return 2; }");
+      extra.forEach(function (f) { vm.runInContext(fs.readFileSync(path.join(RAIZ, 'js', f), 'utf8'), o.cx, { filename: f }); });
+      o.ev('function vitoriasProtegerComPremioRestantesHoje() { return 1; } desbloquearEntradaEnciclopedia = function () { return null; };');
+      vm.runInContext(fontes['objetivos.js'], o.cx, { filename: 'objetivos.js' });
+      o.ev('state.reputacao = 500;');
+      ok(o.ev("festaAtual().id") === 'santiago' && o.ev("candidatosGrupoC().indexOf('festa_tarefa') !== -1") && o.json('quintaPendentes()').indexOf('festa') !== -1, 'Santiago: a 27/7, no nível 4 ou mais, o objetivo «festa_tarefa» é candidato e a Quinta mostra o sinal «festa»');
+      o.ev("['banca', 'artesanato'].forEach(function (x) { festaRegistarTarefaHoje('santiago', x); });");
+      ok(o.ev("candidatosGrupoC().indexOf('festa_tarefa')") !== -1 && o.json('quintaPendentes()').indexOf('festa') !== -1, 'Santiago: com 2 de 3 feitas ainda há objetivo e sinal');
+      o.ev("festaRegistarTarefaHoje('santiago', 'noite');");
+      ok(o.ev("candidatosGrupoC().indexOf('festa_tarefa')") === -1 && o.json('quintaPendentes()').indexOf('festa') === -1, 'Santiago: com as 3 feitas, já não há objetivo nem sinal da festa');
+      o.ev('state.reputacao = 0; state.acesso.jogadorAntigo = false; state.festas.tarefasDia = {};');
+      ok(o.ev("candidatosGrupoC().indexOf('festa_tarefa')") === -1 && o.json('quintaPendentes()').indexOf('festa') === -1, 'Santiago: abaixo do nível 4 não há objetivo nem sinal da festa');
+      ok(abrir(quando(8, 3)).ev('festaAtual()') === null && abrir(quando(7, 22)).ev('festaAtual()') === null, 'Santiago: a 22/7 e a 3/8 não há festa');
+    }
+
+    // M5. Cenas: nunca a mesma em dois dias seguidos; 3 dias seguidos mostram as 3 cenas
+    ['banca', 'noite'].forEach(function (id) {
+      let seguidas = 0, incompleto = 0;
+      for (let t = Date.UTC(2026, 0, 1); t <= Date.UTC(2036, 11, 31); t += 86400000) {
+        if (g.ev("festaCenaIndice(SANTIAGO, TG('" + id + "'), " + JSON.stringify(fmt(t)) + ', 3)') === g.ev("festaCenaIndice(SANTIAGO, TG('" + id + "'), " + JSON.stringify(fmt(t + 86400000)) + ', 3)')) seguidas++;
+      }
+      for (let y = 2026; y <= 2036; y++) {
+        const vistas = ['07-23', '07-24', '07-25'].map(function (d) { return g.ev("festaCenaIndice(SANTIAGO, TG('" + id + "'), '" + y + '-' + d + "', 3)"); });
+        if (new Set(vistas).size !== 3) incompleto++;
+      }
+      ok(seguidas === 0, 'Santiago ' + id + ': nunca a mesma cena em dois dias seguidos, de 2026 a 2036 (' + seguidas + ')');
+      ok(incompleto === 0, 'Santiago ' + id + ': em 3 dias seguidos aparecem as 3 cenas, todos os anos de 2026 a 2036');
+    });
+    {
+      const dd = abrir(jul(23));
+      let ontem = {}, repetiu = 0;
+      for (let d = 23; d <= 33; d++) {
+        dd.ir(d <= 31 ? jul(d) : quando(8, d - 31));
+        ['banca', 'noite'].forEach(function (id) {
+          dd.ev("iniciarTarefaFesta('" + id + "')");
+          const sit = dd.ev('festaCenaAtual.cena.situacao');
+          if (sit === ontem[id]) repetiu++;
+          ontem[id] = sit;
+          dd.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+        });
+      }
+      ok(repetiu === 0, 'Santiago: no ecrã, de 23/7 a 2/8, a Banca e a Noite nunca mostram a cena de ontem');
+    }
+
+    // M6. Textos nas 3 línguas
+    const TXT = g.json('FESTAS_STRINGS.santiago');
+    const ESCALARES = ['faixa', 'titulo', 'subtitulo', 'diaGrandeAviso', 'tarefaFeitaHoje', 'modoTesteAviso', 'btnBanca', 'btnArtesanato', 'btnNoite', 'btnVoltar',
+      'bancaTitulo', 'bancaSubtitulo', 'bancaJaFeitaHoje', 'bancaVitoria', 'bancaDerrota', 'artesanatoTitulo', 'artesanatoJaFeitaHoje', 'artesanatoFalta', 'artesanatoSucesso',
+      'noiteTitulo', 'noiteSubtitulo', 'noiteJaFeitaHoje', 'noiteVitoria', 'noiteDerrota'];
+    const textos = function (x) { return typeof x === 'string' ? [x] : Array.isArray(x) ? x.reduce(function (t, y) { return t.concat(textos(y)); }, []) : x && typeof x === 'object' ? Object.keys(x).reduce(function (t, k) { return t.concat(k === 'correta' ? [] : textos(x[k])); }, []) : []; };
+    ['pt', 'en', 'es'].forEach(function (l) {
+      const S = TXT && TXT[l];
+      ok(!!S, 'Santiago: faltam textos em ' + l);
+      if (!S) return;
+      ok(Object.keys(S).sort().join() === ESCALARES.concat(['bancaCenas', 'noiteCenas']).sort().join(), 'Santiago ' + l + ': as chaves de texto certas, nem mais nem menos');
+      ESCALARES.forEach(function (k) { ok(typeof S[k] === 'string' && S[k].trim() !== '', 'Santiago ' + l + ': falta o texto ' + k); });
+      ['bancaCenas', 'noiteCenas'].forEach(function (chave) {
+        ok(Array.isArray(S[chave]) && S[chave].length === 3, 'Santiago ' + l + ': 3 cenas em ' + chave);
+        (S[chave] || []).forEach(function (c, i) {
+          ok(c.opcoes.length === 3 && new Set(c.opcoes).size === 3 && c.correta === TXT.pt[chave][i].correta, 'Santiago ' + l + ' ' + chave + ' ' + (i + 1) + ': 3 opções diferentes e a mesma certa que em PT');
+          ok(c.situacao.length <= 143 && c.opcoes.every(function (o) { return o.length <= 63; }), 'Santiago ' + l + ' ' + chave + ' ' + (i + 1) + ': curta, como as dos Santos');
+        });
+      });
+      const junto = textos(S).join(' ');
+      ok(junto.indexOf('undefined') === -1 && !/Fygmo ?2/.test(junto) && /Fygmo II/.test(junto), 'Santiago ' + l + ': sem «undefined» e sempre «Fygmo II»');
+      ok(!/mestre|master|maestro|\bbot\b|\bIA\b|\bAI\b/i.test(junto), 'Santiago ' + l + ': sem «Mestre», «bot» nem «IA»');
+      ok(!/natal|christmas|navidad|carnaval|carnival|páscoa|pascua|easter|martinho|martin|reis\b|kings|reyes|janeiras|santo antónio|john|juan|pedro|peter/i.test(junto), 'Santiago ' + l + ': sem restos de outras festas');
+      ok(!/uva|grape|aguardente|brandy|dinheiro|money|euro|token/i.test(junto), 'Santiago ' + l + ': sem Uvas, aguardente, dinheiro nem tokens');
+    });
+    ok(/30/.test(TXT.pt.artesanatoFalta) && /30/.test(TXT.en.artesanatoFalta) && /30/.test(TXT.es.artesanatoFalta), 'Santiago: o aviso do Artesanato diz as 30 Gotas nas 3 línguas');
+    const ptT = textos(TXT.pt).join(' ');
+    ok(/queijo/.test(ptT) && /mel/.test(ptT) && /artesã/.test(ptT) && /carrossel/.test(ptT) && /concerto/.test(ptT), 'Santiago PT: fala do queijo, do mel, do artesão, do carrossel e do concerto');
+    ok(!/\b(você|vocês|fixe|bué)\b/i.test(ptT), 'Santiago PT de Portugal: sem "você" nem brasileirismos óbvios');
+    ok(!/matar|morrer|sangue|bater|pancada|murro|pontapé|violên/i.test(ptT), 'Santiago PT: porcos traquinas, nunca violentos');
+
+    // M7. Imagens: em falta fica a reserva (a santiago_festa), nunca erro nem ecrã vazio
+    const RES = 'assets/ecras/santiago_festa.jpg';
+    const im = abrir(jul(27));
+    im.ev('state.gotas = 100; var IMGS = []; Image = function () { IMGS.push(this); };');
+    im.ev('renderFestaHub()');
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS.length') === 0, 'Santiago: o menu mostra a santiago_festa (a faixa é a própria reserva: nada a pedir)');
+    im.ev("iniciarTarefaFesta('banca')");
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS[0].src') === 'assets/ecras/santiago_banca.jpg', 'Santiago: a Banca pede santiago_banca.jpg, com a reserva até lá');
+    im.ev('IMGS[0].onload()'); ok(im.ev('FUNDO') === 'assets/ecras/santiago_banca.jpg', 'Santiago: santiago_banca.jpg carregou: passa a ser o fundo');
+    im.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)'); im.ev("iniciarTarefaFesta('noite')");
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS[1].src') === 'assets/ecras/santiago_noite.jpg', 'Santiago: a Noite pede santiago_noite.jpg');
+    im.ev('IMGS[1].onerror()'); im.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS.length') === 2, 'Santiago: santiago_noite.jpg em falta: fica a reserva, sem pedir outra vez');
+    im.ev("iniciarTarefaFesta('artesanato')");
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS[2].src') === 'assets/ecras/santiago_artesanato.jpg' && im.ev('state.reputacao') >= 12, 'Santiago: o Artesanato pede santiago_artesanato.jpg, com a reserva até lá');
+    im.ev('IMGS[2].onerror()'); im.ev('renderFestaHub()');
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS.length') === 3, 'Santiago: santiago_artesanato.jpg em falta: o menu fica com a reserva e nada se pede outra vez');
+    const ir = abrir(jul(27));
+    ir.ev("Image = function () { throw new Error('sem Image'); }; renderFestaHub(); iniciarTarefaFesta('banca');");
+    ok(ir.ev('FUNDO') === RES && ir.ev('festaCenaAtual !== null'), 'Santiago: sem Image (ou a rebentar) fica a reserva e a cena abre');
+    ['santiago_festa.jpg', 'santiago_dia_grande.jpg', 'santiago_banca.jpg', 'santiago_artesanato.jpg', 'santiago_noite.jpg'].forEach(function (f) {
+      const c = path.join(RAIZ, 'assets', 'ecras', f);
+      ok(fs.existsSync(c) && fs.statSync(c).size <= LIMITE_IMAGEM && fs.readFileSync(c).slice(0, 2).equals(Buffer.from([0xFF, 0xD8])), f + ': existe e é JPEG até 250 KB');
+    });
+
+    // M8. Modo de teste (?festa=santiago e ?festa=santiago&dia=25): mostra tudo, nunca grava
+    [['?festa=santiago', 5, 6, 12, false], ['?festa=santiago&dia=25', 10, 12, 24, true], ['?festa=santiago&dia=26', 5, 6, 12, false]].forEach(function (c) {
+      const t = abrir(lis(10, 10), c[0]);
+      t.ev("state.reputacao = 372; state.gotas = 100; state.festas.tarefasDia = { santiago_banca: diaLisboaDeHoje() };");
+      const antes = t.ev('JSON.stringify(state)'), AV = t.ev('FESTAS_STRINGS.santiago.pt.modoTesteAviso'), AG = t.ev('FESTAS_STRINGS.santiago.pt.diaGrandeAviso');
+      t.ev('enterFesta()');
+      ok((t.ev('caixa.innerHTML').indexOf(AG) !== -1) === c[4], c[0] + ': o menu ' + (c[4] ? 'mostra' : 'não mostra') + ' o aviso de dia grande');
+      t.ev("iniciarTarefaFesta('banca')"); t.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+      ok(t.ev('DIALOGO').indexOf('+' + c[1] + ' ') !== -1 && t.ev('DIALOGO').slice(-AV.length) === AV, c[0] + ': a Banca mostra +' + c[1] + ' e o aviso de teste, mesmo já feita hoje');
+      t.ev("iniciarTarefaFesta('noite')"); t.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+      ok(t.ev('DIALOGO').indexOf('+' + c[2] + ' ') !== -1, c[0] + ': a Noite mostra +' + c[2]);
+      t.ev("iniciarTarefaFesta('artesanato')");
+      ok(t.ev('DIALOGO').indexOf('-30 ') !== -1 && t.ev('DIALOGO').indexOf('+' + c[3] + ' ') !== -1, c[0] + ': o Artesanato mostra -30 Gotas e +' + c[3]);
+      ok(t.ev('SAVES') === 0 && t.json('OBJETIVOS').length === 0 && t.json('ENTRADAS').length === 0 && t.ev('JSON.stringify(state)') === antes, c[0] + ': nada gravado, nada mudado, sem objetivo do dia nem entrada da Enciclopédia');
+    });
+
+    // M9. A festa nova é a última da lista e não traz campos novos ao estado
+    ok(g.json("FESTAS_CONFIG.map(function (x) { return x.id; })").join() === 'saomartinho,natal,carnaval,pascoa,reis,santos,santiago', 'Santiago: é a 7.ª e última festa da lista');
+    ok(g.json('Object.keys(defaultState().festas)').join() === 'tarefasDia', 'Santiago: nenhum campo novo no estado');
   }
 
   return falhas;

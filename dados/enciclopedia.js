@@ -202,9 +202,10 @@ dadosAcrescentar('enciclopedia', {
   }
 });
 
-// Pacote «feira_santiago» (parte 1 de 2: só conteúdo; a festa fica para outra PR): sem imagem por agora (feira_santiago.jpg está «por_criar» em dados/pacotes/feira_santiago.json; o campo imagem só se acrescenta quando o ficheiro existir).
+// Pacote «feira_santiago» (parte 2 de 2: a festa «santiago», em js/festas.js, abre esta entrada ao entrar); a imagem é a santiago_festa.jpg, a mesma do menu da festa.
 dadosAcrescentar('enciclopedia', {
   id: 'feira_santiago',
+  imagem: 'assets/ecras/santiago_festa.jpg',
   nivelMinimo: 7,
   titulo: { pt: "A Feira de Sant'Iago", en: "The Sant'Iago Fair", es: "La Feria de Sant'Iago" },
   texto: {

@@ -32,10 +32,34 @@
   },
   "imagens": [
     {
-      "caminho": "assets/ecras/feira_santiago.jpg",
-      "uso": "Entrada da Enciclopédia «feira_santiago» (campo imagem; só se acrescenta quando o ficheiro existir)",
-      "descricao": "A Feira de Sant'Iago ao fim da tarde de verão: bancas de comida e artesanato, fios de luzes acesas, gente a passear e, em primeiro plano, o Yoshi_Cat, o Chizo e o Fygmo II diante de uma banca de comida.",
-      "estado": "por_criar"
+      "caminho": "assets/ecras/santiago_festa.jpg",
+      "uso": "Festa «santiago» (js/festas.js): faixa, menu da festa fora do dia grande e imagem de reserva das tarefas; e entrada da Enciclopédia «feira_santiago» (campo imagem)",
+      "descricao": "A feira ao pôr do sol, com roda gigante, bandeirolas e uma banca de maçãs de caramelo e rosquilhas; o Yoshi_Cat, o Chizo e os dois Fygmos à frente.",
+      "estado": "feita"
+    },
+    {
+      "caminho": "assets/ecras/santiago_dia_grande.jpg",
+      "uso": "Festa «santiago» (js/festas.js): menu da festa no dia grande (25 de julho)",
+      "descricao": "Muita gente na feira, balões, a bandeira azul com uma concha de vieira e, ao fundo, um palco com músicos.",
+      "estado": "feita"
+    },
+    {
+      "caminho": "assets/ecras/santiago_banca.jpg",
+      "uso": "Festa «santiago», tarefa «banca» (cena e resultado)",
+      "descricao": "Uma banca de queijos redondos, favo e frascos de mel, com o Yoshi_Cat, o Chizo e um só Fygmo à frente.",
+      "estado": "feita"
+    },
+    {
+      "caminho": "assets/ecras/santiago_artesanato.jpg",
+      "uso": "Festa «santiago», tarefa «artesanato» (resultado)",
+      "descricao": "Uma banca de cerâmica pintada e cestos, com um artesão sorridente de avental, e o Yoshi_Cat, o Chizo e os dois Fygmos à frente.",
+      "estado": "feita"
+    },
+    {
+      "caminho": "assets/ecras/santiago_noite.jpg",
+      "uso": "Festa «santiago», tarefa «noite» (cena e resultado)",
+      "descricao": "A feira de noite, com céu estrelado, carrossel iluminado e um palco com concerto; os dois Fygmos a comer de cartuchos.",
+      "estado": "feita"
     }
   ],
   "sons": [],
