@@ -100,6 +100,16 @@ dadosAcrescentar('palavras', {
 });
 
 dadosAcrescentar('palavras', {
+  id: 'cardo',
+  palavra: 'cardo',
+  explicacao: {
+    pt: 'Planta de flor roxa que nasce sozinha no monte; a sua flor serve de coalho.',
+    en: 'Plant with a purple flower that grows wild in the countryside; its flower is used as rennet.',
+    es: 'Planta de flor morada que nace sola en el monte; su flor sirve de cuajo.'
+  }
+});
+
+dadosAcrescentar('palavras', {
   id: 'casta',
   palavra: 'casta',
   explicacao: {
@@ -116,6 +126,16 @@ dadosAcrescentar('palavras', {
     pt: 'Animal marinho de corpo mole, parente do polvo e da lula, muito pescado no estuário do Sado.',
     en: 'Soft-bodied sea animal, a relative of the octopus and the squid, widely fished in the Sado estuary.',
     es: 'Animal marino de cuerpo blando, pariente del pulpo y del calamar, muy pescado en el estuario del Sado.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'coalho',
+  palavra: 'coalho',
+  explicacao: {
+    pt: 'Aquilo que faz o leite coalhar e virar queijo. No queijo de Azeitão vem da flor de cardo.',
+    en: 'What makes milk curdle and turn into cheese. In Azeitão cheese it comes from the cardoon flower.',
+    es: 'Lo que hace cuajar la leche y convertirla en queso. En el queso de Azeitão procede de la flor de cardo.'
   }
 });
 
@@ -396,6 +416,16 @@ dadosAcrescentar('palavras', {
     pt: 'Cesto redondo, de esparto, onde se põe a pasta da azeitona para a prensa.',
     en: 'Round esparto basket that holds the olive paste for the press.',
     es: 'Cesto redondo de esparto que sostiene la pasta de aceituna en la prensa.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'soro',
+  palavra: 'soro',
+  explicacao: {
+    pt: 'Líquido que sai do queijo quando se espreme a massa.',
+    en: 'Liquid that comes out of the cheese when the curd is pressed.',
+    es: 'Líquido que sale del queso cuando se prensa la masa.'
   }
 });
 

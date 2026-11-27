@@ -6,7 +6,7 @@
 // 3) uma entrada que já existe nunca é substituída;
 // 4) o index.html carrega js/palavras.js (a lista do glossário), o dados.js e os 7 ficheiros de dados/ depois das listas e antes do main.js, e
 //    os ficheiros de dados/ só trazem o que está combinado: as visitas marisa_5 e henrique_5 e os pacotes dos níveis 11 a 20 (nível,
-//    história, 3 histórias da Enciclopédia e capítulo cada) e as 42 palavras do glossário (tipo 'palavras'); objetivos.js só tem comentários; as listas de origem ficam iguais.
+//    história, 3 histórias da Enciclopédia e capítulo cada) e as 45 palavras do glossário (tipo 'palavras'); objetivos.js só tem comentários; as listas de origem ficam iguais.
 // As entradas de teste vivem só no ambiente simulado (módulo vm); nada fica no jogo.
 //
 // Uso: node scripts/verificar-dados-carregar.js
@@ -72,18 +72,19 @@ const IDS_ALCACER = ['sal_alcacer', 'sal_setubal', 'sal_redura'];
 const IDS_COMPORTA = ['arroz_arrozais', 'arroz_carolino', 'arroz_consumo'];
 const IDS_MONTADO = ['sobreiro_cortica', 'sobreiro_assobiador', 'sobreiro_rolha'];
 const IDS_BOCAGE = ['bocage_poeta', 'bocage_casa', 'bocage_dia'];
-const IDS_ARROZ = ['arroz_agua', 'arroz_aves'];   // PR 6 dos pacotes: «Cultura do Arroz» (nível mínimo 7; só arroz_agua leva imagem)
+const IDS_ARROZ = ['arroz_agua', 'arroz_aves'];
+const IDS_QUEIJO = ['azeitao_coalho'];   // PR 7 dos pacotes: «Cultura do Queijo de Azeitão» (nível mínimo 7; leva a imagem estrada_amelia, que já existia)   // PR 6 dos pacotes: «Cultura do Arroz» (nível mínimo 7; só arroz_agua leva imagem)
 const IDS_CHOCO = ['pesca_choco_sado'];   // PR 5 dos pacotes: «Pesca do choco e golfinhos» (nível mínimo 7, sem imagem)
 const IDS_MEL = ['mel_arrabida'];   // PR 4 dos pacotes: «Cultura do Mel (Arrábida)» (nível mínimo 7, sem imagem)
 const IDS_SAL = ['salina_marnoto'];   // PR 3 dos pacotes: «Cultura do Sal» (nível mínimo 7)
 const IDS_CORTICA = ['tirada_da_cortica'];   // PR 2 dos pacotes: «Cultura da Cortiça» (nível mínimo 7)
 const IDS_AZEITE = ['azeite_do_olival_ao_lagar'];   // PR 1 dos pacotes: «Cultura da Azeitona» (nível mínimo 7)
-// As 42 palavras do glossário (dados/palavras.js), por ordem alfabética; o conteúdo prova-o scripts/verificar-palavras.js.
-const IDS_PALAVRAS = ['agua_ruca', 'aguardente_vinica', 'alambique', 'apicultor', 'arrozal', 'bacelo', 'bagaceira', 'bagaco', 'caldeacao', 'casta', 'choco', 'colhereiro', 'colmeia', 'covo', 'cristalizador', 'curtimenta', 'desboia', 'dop', 'entrecasco', 'estuario', 'flor_de_sal', 'fortificar', 'galga', 'jeropiga', 'lagar', 'maquia', 'marnoto', 'mildio', 'molheiro', 'montado', 'mosto', 'nectar', 'oidio', 'pousio', 'redura', 'regadio', 'roaz', 'rosmaninho', 'seira', 'tiradia', 'torna_viagem', 'vinho_generoso'];
+// As 45 palavras do glossário (dados/palavras.js), por ordem alfabética; o conteúdo prova-o scripts/verificar-palavras.js.
+const IDS_PALAVRAS = ['agua_ruca', 'aguardente_vinica', 'alambique', 'apicultor', 'arrozal', 'bacelo', 'bagaceira', 'bagaco', 'caldeacao', 'cardo', 'casta', 'choco', 'coalho', 'colhereiro', 'colmeia', 'covo', 'cristalizador', 'curtimenta', 'desboia', 'dop', 'entrecasco', 'estuario', 'flor_de_sal', 'fortificar', 'galga', 'jeropiga', 'lagar', 'maquia', 'marnoto', 'mildio', 'molheiro', 'montado', 'mosto', 'nectar', 'oidio', 'pousio', 'redura', 'regadio', 'roaz', 'rosmaninho', 'seira', 'soro', 'tiradia', 'torna_viagem', 'vinho_generoso'];
 const ESPERADO_EM_DADOS = {
   'visitas.js': ['marisa_5', 'henrique_5'], 'niveis.js': ['nivel_11', 'nivel_12', 'nivel_13', 'nivel_14', 'nivel_15', 'nivel_16', 'nivel_17', 'nivel_18', 'nivel_19', 'nivel_20'],
   'historias.js': ['historia_11', 'historia_12', 'historia_13', 'historia_14', 'historia_15', 'historia_16', 'historia_17', 'historia_18', 'historia_19', 'historia_20'], 'capitulos.js': ['cap11', 'cap12', 'cap13', 'cap14', 'cap15', 'cap16', 'cap17', 'cap18', 'cap19', 'cap20'],
-  'objetivos.js': [], 'enciclopedia.js': IDS_CAVE.concat(IDS_COLECAO, IDS_AZEITE, IDS_CORTICA, IDS_SAL, IDS_MEL, IDS_CHOCO, IDS_ARROZ, IDS_ARRABIDA, IDS_SADO, IDS_PALMELA, IDS_AZEITAO, IDS_SESIMBRA, IDS_SETUBAL, IDS_ALCACER, IDS_COMPORTA, IDS_MONTADO, IDS_BOCAGE),
+  'objetivos.js': [], 'enciclopedia.js': IDS_CAVE.concat(IDS_COLECAO, IDS_AZEITE, IDS_CORTICA, IDS_SAL, IDS_MEL, IDS_CHOCO, IDS_ARROZ, IDS_QUEIJO, IDS_ARRABIDA, IDS_SADO, IDS_PALMELA, IDS_AZEITAO, IDS_SESIMBRA, IDS_SETUBAL, IDS_ALCACER, IDS_COMPORTA, IDS_MONTADO, IDS_BOCAGE),
   'palavras.js': IDS_PALAVRAS,
   // A Prova às cegas (js/prova.js): 5 descrições e a linha que ensina, por cor (Jovem, Dourado, Âmbar, Cobre).
   'provas.js': ['jovem', 'dourado', 'ambar', 'cobre'].reduce(function (l, c) { return l.concat([1, 2, 3, 4, 5].map(function (i) { return 'prova_' + c + '_' + i; }), ['prova_ensino_' + c]); }, [])
@@ -97,12 +98,12 @@ const ESPERADO_EM_DADOS = {
   const idsDe = function (tipo) { return real.ev('DADOS_ACRESCENTADOS.' + tipo + '.map(function (v) { return v.id; }).join()'); };
   ok(idsDe('visitas') === 'marisa_5,henrique_5', 'de dados/ só deviam vir as visitas marisa_5 e henrique_5, por esta ordem: ' + idsDe('visitas'));
   ok(idsDe('niveis') === 'nivel_11,nivel_12,nivel_13,nivel_14,nivel_15,nivel_16,nivel_17,nivel_18,nivel_19,nivel_20' && idsDe('historias') === 'historia_11,historia_12,historia_13,historia_14,historia_15,historia_16,historia_17,historia_18,historia_19,historia_20' && idsDe('capitulos') === 'cap11,cap12,cap13,cap14,cap15,cap16,cap17,cap18,cap19,cap20', 'de dados/ só deviam vir os pacotes dos níveis 11 a 20 (nivel_N, historia_N, capN)');
-  ok(idsDe('enciclopedia') === IDS_CAVE.concat(IDS_COLECAO, IDS_AZEITE, IDS_CORTICA, IDS_SAL, IDS_MEL, IDS_CHOCO, IDS_ARROZ, IDS_ARRABIDA, IDS_SADO, IDS_PALMELA, IDS_AZEITAO, IDS_SESIMBRA, IDS_SETUBAL, IDS_ALCACER, IDS_COMPORTA, IDS_MONTADO, IDS_BOCAGE).join(), 'de dados/ só deviam vir as 3 histórias da Cave de Reserva (nível 5), as 3 da Coleção (nível 6), a da Azeitona, a da Cortiça, a do Sal, a do Mel, a do Choco e as 2 do Arroz (nível 7), as 3 da Arrábida, as 3 do Sado, as 3 de Palmela, as 3 de Azeitão, as 3 de Sesimbra, as 3 de Setúbal, as 3 de Alcácer (o sal do Sado), as 3 da Comporta (o arroz do Sado), as 3 do Montado (o sobreiro e a cortiça) e as 3 de Bocage (o poeta de Setúbal), por esta ordem: ' + idsDe('enciclopedia'));
+  ok(idsDe('enciclopedia') === IDS_CAVE.concat(IDS_COLECAO, IDS_AZEITE, IDS_CORTICA, IDS_SAL, IDS_MEL, IDS_CHOCO, IDS_ARROZ, IDS_QUEIJO, IDS_ARRABIDA, IDS_SADO, IDS_PALMELA, IDS_AZEITAO, IDS_SESIMBRA, IDS_SETUBAL, IDS_ALCACER, IDS_COMPORTA, IDS_MONTADO, IDS_BOCAGE).join(), 'de dados/ só deviam vir as 3 histórias da Cave de Reserva (nível 5), as 3 da Coleção (nível 6), a da Azeitona, a da Cortiça, a do Sal, a do Mel, a do Choco, as 2 do Arroz e a do Queijo de Azeitão (nível 7), as 3 da Arrábida, as 3 do Sado, as 3 de Palmela, as 3 de Azeitão, as 3 de Sesimbra, as 3 de Setúbal, as 3 de Alcácer (o sal do Sado), as 3 da Comporta (o arroz do Sado), as 3 do Montado (o sobreiro e a cortiça) e as 3 de Bocage (o poeta de Setúbal), por esta ordem: ' + idsDe('enciclopedia'));
   ok(idsDe('objetivos') === '', 'dados/ não devia trazer objetivos');
-  ok(idsDe('palavras') === IDS_PALAVRAS.join(), 'de dados/ só deviam vir as 42 palavras do glossário: ' + idsDe('palavras'));
-  ok(real.ev('PALAVRAS_DA_QUINTA.map(function (p) { return p.id; }).join()') === IDS_PALAVRAS.join() && real.ev('palavrasTotal()') === 42, 'com dados/ as 42 palavras deviam ficar em PALAVRAS_DA_QUINTA (por ordem de entrada) e palavrasTotal() devia ser 42');
+  ok(idsDe('palavras') === IDS_PALAVRAS.join(), 'de dados/ só deviam vir as 45 palavras do glossário: ' + idsDe('palavras'));
+  ok(real.ev('PALAVRAS_DA_QUINTA.map(function (p) { return p.id; }).join()') === IDS_PALAVRAS.join() && real.ev('palavrasTotal()') === 45, 'com dados/ as 45 palavras deviam ficar em PALAVRAS_DA_QUINTA (por ordem de entrada) e palavrasTotal() devia ser 45');
   ok(real.ev('VISITAS.length') === 14 && real.ev('NIVEIS_CONFIG.length') === 20 && real.ev('CAPITULOS_CONFIG.length') === 20 && real.ev('OBJETIVOS_GRUPO_C.length') === 5, 'com dados/ devia haver 14 visitas, 20 níveis, 20 capítulos e os 5 do Grupo C');
-  ok(Object.keys(real.ev('HISTORIA_NIVEIS')).join() === '2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20' && real.ev('ENCYCLOPEDIA_ENTRIES.pt.length') === 77, 'com dados/ devia haver histórias dos níveis 2 a 20 e 77 entradas da Enciclopédia (34 de origem + 43 de dados/)');
+  ok(Object.keys(real.ev('HISTORIA_NIVEIS')).join() === '2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20' && real.ev('ENCYCLOPEDIA_ENTRIES.pt.length') === 78, 'com dados/ devia haver histórias dos níveis 2 a 20 e 78 entradas da Enciclopédia (34 de origem + 44 de dados/)');
   ok(real.ev('JSON.stringify(VISITAS.slice(0, 12))') === ev('JSON.stringify(VISITAS)'), 'as 12 visitas de origem (e a sua ordem) deviam ficar iguais com dados/');
   ok(real.ev('JSON.stringify(NIVEIS_CONFIG.slice(0, 10))') === ev('JSON.stringify(NIVEIS_CONFIG)'), 'os 10 níveis de origem deviam ficar iguais com dados/');
   ok(real.ev('JSON.stringify(CAPITULOS_CONFIG.slice(0, 10))') === ev('JSON.stringify(CAPITULOS_CONFIG)'), 'os 10 capítulos de origem deviam ficar iguais com dados/');

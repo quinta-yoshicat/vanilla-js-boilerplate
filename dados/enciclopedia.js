@@ -164,6 +164,19 @@ dadosAcrescentar('enciclopedia', {
   }
 });
 
+// Pacote «Cultura do Queijo de Azeitão»: azeitao_coalho leva uma imagem que já existia (estrada_amelia, com linha no CREDITOS.md). Não mexe em azeitao_queijo (nível 14).
+dadosAcrescentar('enciclopedia', {
+  id: 'azeitao_coalho',
+  imagem: 'assets/ecras/estrada_amelia.jpg',
+  nivelMinimo: 7,
+  titulo: { pt: 'Como se faz o queijo de Azeitão', en: 'How Azeitão cheese is made', es: 'Cómo se hace el queso de Azeitão' },
+  texto: {
+    pt: 'O queijo de Azeitão coalha com a flor de cardo, que nasce sozinha no monte. O leite é filtrado, juntam-se o cardo e o sal, e a massa é espremida para tirar o soro. Depois descansa cerca de 20 dias numa casa fresca. O cardo que coalha o queijo da Serra da Estrela vem do sul do país, onde cientistas dizem que a seca e o calor excessivo estão a aumentar.',
+    en: 'Azeitão cheese is curdled with cardoon flower, which grows wild in the countryside. The milk is filtered, the cardoon and salt are added, and the curd is pressed to remove the whey. Then it rests for about 20 days in a cool room. The cardoon that curdles Serra da Estrela cheese comes from the south of the country, where scientists say that drought and excessive heat are increasing.',
+    es: 'El queso de Azeitão cuaja con la flor de cardo, que nace sola en el monte. La leche se filtra, se añaden el cardo y la sal, y la masa se prensa para sacar el suero. Después reposa unos 20 días en un lugar fresco. El cardo que cuaja el queso de la Serra da Estrela viene del sur del país, donde los científicos dicen que la sequía y el calor excesivo están aumentando.'
+  }
+});
+
 // Nível 11, "Moscatel da Arrábida": as 3 histórias que o capítulo 11 (dados/capitulos.js) pede. Sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'arrabida_biosfera',
