@@ -113,9 +113,12 @@ function suite(fontes) {
       return normal(x.replace(/@supports \(height: 100dvh\) \{\s*[^{}]*prova[^{}]*\{[^{}]*\}\s*\}/g, '').replace(/[^{}]*prova[^{}]*\{[^{}]*\}/g, ''));
     };
     // E as do «Ver cenário» (o olho da Quinta, js/cenario.js: seletores com «cenario»), que também não são de ecrã baixo.
-    const semCenario = function (x) { return normal(x.replace(/[^{}]*cenario[^{}]*\{[^{}]*\}/g, '')); };
-    ok(semCenario(semProva(M.fora)) === semCenario(semProva(fora)), '(c) o CSS de fora do bloco é igual ao do master (origin/master), tirando as regras da Prova às cegas e do «Ver cenário»');
-    ok(semCenario(fora) !== fora || !/cenario/.test(fora), '(c) (as regras do «Ver cenário» saem mesmo da comparação)');
+    const semCenarioSo = function (x) { return normal(x.replace(/[^{}]*cenario[^{}]*\{[^{}]*\}/g, '')); };
+    // E as da «Mesa do Sado» (a foto em faixa no bloco da oferta, js/estrada.js: seletores com «mesa-sado»), que também não são de ecrã baixo.
+    const semCenario = function (x) { return normal(semCenarioSo(x).replace(/[^{}]*mesa-sado[^{}]*\{[^{}]*\}/g, '')); };
+    ok(semCenario(semProva(M.fora)) === semCenario(semProva(fora)), '(c) o CSS de fora do bloco é igual ao do master (origin/master), tirando as regras da Prova às cegas, do «Ver cenário» e da «Mesa do Sado»');
+    ok(semCenarioSo(fora) !== fora || !/cenario/.test(fora), '(c) (as regras do «Ver cenário» saem mesmo da comparação)');
+    ok(semCenario(fora) !== semCenarioSo(fora) || !/mesa-sado/.test(fora), '(c) (as regras da «Mesa do Sado» saem mesmo da comparação)');
     ok(semProva(fora) !== fora || !/prova/.test(fora), '(c) (as regras da prova saem mesmo da comparação)');
   }
 

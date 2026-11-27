@@ -116,9 +116,9 @@ const saveNivel10 = function (extra) {
 // 3. state.roxo: por omissão null/0 (jogo novo, save antigo, nuvem), reparado se vier estranho, e nada mais muda.
 {
   ok(JSON.stringify(abrir().json('state.roxo')) === '{"brindeDia":null,"dias":0}', 'jogo novo: roxo { brindeDia: null, dias: 0 }');
-  const g = abrir({ reputacao: 2900, uvas: 9, garrafas: 14, camara: { provaDia: '2026-10-05', dias: 3 }, lagar: { ultimoDia: '2026-10-05', dias: 3, mesaDia: '2026-10-06', assaltoDia: '2026-10-06' } });
+  const g = abrir({ reputacao: 2900, uvas: 9, garrafas: 14, camara: { provaDia: '2026-10-05', dias: 3 }, lagar: { ultimoDia: '2026-10-05', dias: 3, mesaDia: '2026-10-06', mesaSadoDia: null, assaltoDia: '2026-10-06' } });
   ok(JSON.stringify(g.json('state.roxo')) === '{"brindeDia":null,"dias":0}', 'save do PR anterior (sem roxo) ganha o valor por omissão');
-  ok(g.ev('state.reputacao') === 2900 && g.ev('state.garrafas') === 14 && JSON.stringify(g.json('state.camara')) === '{"provaDia":"2026-10-05","dias":3}' && JSON.stringify(g.json('state.lagar')) === '{"ultimoDia":"2026-10-05","dias":3,"mesaDia":"2026-10-06","assaltoDia":"2026-10-06"}', 'o resto do save (Câmara e Lagar incluídos) fica igual');
+  ok(g.ev('state.reputacao') === 2900 && g.ev('state.garrafas') === 14 && JSON.stringify(g.json('state.camara')) === '{"provaDia":"2026-10-05","dias":3}' && JSON.stringify(g.json('state.lagar')) === '{"ultimoDia":"2026-10-05","dias":3,"mesaDia":"2026-10-06","mesaSadoDia":null,"assaltoDia":"2026-10-06"}', 'o resto do save (Câmara e Lagar incluídos) fica igual');
   ok(JSON.stringify(g.json('mergeDeep(defaultState(), { reputacao: 5 }).roxo')) === '{"brindeDia":null,"dias":0}', 'estado da nuvem sem roxo ganha o valor por omissão');
   ok(JSON.stringify(g.json('mergeDeep(defaultState(), { roxo: { dias: 2 } }).roxo')) === '{"brindeDia":null,"dias":2}', 'estado da nuvem com roxo parcial mantém o que traz e ganha o resto');
   [['null', 'state.roxo = null'], ['texto', "state.roxo = 'x'"], ['lista', 'state.roxo = []'], ['dia inválido', "state.roxo = { brindeDia: 12345, dias: 'x' }"], ['dias negativos', "state.roxo = { brindeDia: null, dias: -4 }"], ['dias fração', "state.roxo = { brindeDia: null, dias: 1.5 }"]].forEach(function (c) {

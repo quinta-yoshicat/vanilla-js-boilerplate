@@ -276,7 +276,9 @@ if (!process.env.ESTRADA_JS) {
   const ECRA_REAL = fs.readFileSync(path.join(RAIZ, 'js', 'estrada.js'), 'utf8');
   const CHAVES_ESPERADAS = ['estrada.btnBagaceira', 'estrada.btnGarrafa', 'estrada.btnSal', 'estrada.btnUvas', 'estrada.da', 'estrada.erro', 'estrada.faltamUvas', 'estrada.garrafasLevar',
     'estrada.jaHoje', 'estrada.levouGarrafa', 'estrada.naDespensa', 'estrada.pagouBagaceira', 'estrada.pagouSal', 'estrada.pagouUvas', 'estrada.pedeBagaceiraNao', 'estrada.pedeBagaceiraTem', 'estrada.pedeSalNao', 'estrada.pedeSalTem',
-    'estrada.prateleira', 'estrada.recebeste', 'estrada.relogio', 'estrada.repPrimeira', 'estrada.tetoDia', 'estrada.title'].sort();
+    'estrada.prateleira', 'estrada.recebeste', 'estrada.relogio', 'estrada.repPrimeira', 'estrada.tetoDia', 'estrada.title',
+    // A Mesa do Sado (nível 16, bloco da oferta; ver scripts/verificar-mesa-sado.js): os 7 textos da mesa da vindima, mais o do relógio atrás e o da foto.
+    'estrada.mesaSadoAlt', 'estrada.mesaSadoBtn', 'estrada.mesaSadoDesc', 'estrada.mesaSadoFalta', 'estrada.mesaSadoJaHoje', 'estrada.mesaSadoOk', 'estrada.mesaSadoOnde', 'estrada.mesaSadoPedido', 'estrada.mesaSadoRelogio'].sort();
 
   // Verificações do ecrã (js/estrada.js) sobre uma versão do ficheiro; devolve as falhas. Corre com o código real e
   // com versões estragadas de propósito (mutantes) no fim: cada estrago tem de fazer falhar alguma verificação.
@@ -284,15 +286,17 @@ if (!process.env.ESTRADA_JS) {
     const falhasEcra = [];
     const ok = function (cond, msg) { if (!cond) falhasEcra.push(msg); };
     const ecra = semComentarios(srcEcra);
-    // Só os dois cliques gravam: estradaTrocarClique (troca) e estradaOferecerClique (oferta, PR 5C). Cada um chama a sua
-    // regra (despensaTrocar / despensaOferecer) e saveState uma vez, e só eles atualizam a barra de cima.
+    // Só os três cliques gravam: estradaTrocarClique (troca), estradaOferecerClique (oferta, PR 5C) e estradaMesaSadoClique (Mesa do Sado,
+    // nível 16). Cada um chama a sua regra (despensaTrocar / despensaOferecer / despensaMesaVindima) e saveState uma vez, e só eles
+    // atualizam a barra de cima.
     const corpoDe = function (nome) { const m = new RegExp('function ' + nome + '\\([^)]*\\) \\{[\\s\\S]*?\\n\\}\\n').exec(ecra); return m ? m[0] : ''; };
-    const corpoTroca = corpoDe('estradaTrocarClique'), corpoOferta = corpoDe('estradaOferecerClique');
-    const fora = ecra.replace(corpoTroca, '').replace(corpoOferta, '');
-    ok(corpoTroca !== '' && corpoOferta !== '', 'devia existir estradaTrocarClique e estradaOferecerClique');
+    const corpoTroca = corpoDe('estradaTrocarClique'), corpoOferta = corpoDe('estradaOferecerClique'), corpoMesa = corpoDe('estradaMesaSadoClique');
+    const fora = ecra.replace(corpoTroca, '').replace(corpoOferta, '').replace(corpoMesa, '');
+    ok(corpoTroca !== '' && corpoOferta !== '' && corpoMesa !== '', 'devia existir estradaTrocarClique, estradaOferecerClique e estradaMesaSadoClique');
     ok((ecra.match(/despensaTrocar\(/g) || []).length === 1 && corpoTroca.indexOf('despensaTrocar(') !== -1 && fora.indexOf('despensaTrocar') === -1, 'só o clique (estradaTrocarClique) pode chamar despensaTrocar');
     ok((ecra.match(/despensaOferecer\(/g) || []).length === 1 && corpoOferta.indexOf('despensaOferecer(') !== -1 && fora.indexOf('despensaOferecer') === -1, 'só o clique (estradaOferecerClique) pode chamar despensaOferecer');
-    ok((ecra.match(/saveState\(/g) || []).length === 2 && (corpoTroca.match(/saveState\(/g) || []).length === 1 && (corpoOferta.match(/saveState\(/g) || []).length === 1 && fora.indexOf('saveState') === -1, 'só os cliques (estradaTrocarClique e estradaOferecerClique) podem chamar saveState, uma vez cada');
+    ok((ecra.match(/despensaMesaVindima\(/g) || []).length === 1 && corpoMesa.indexOf('despensaMesaVindima(') !== -1 && fora.indexOf('despensaMesaVindima') === -1, 'só o clique (estradaMesaSadoClique) pode chamar despensaMesaVindima');
+    ok((ecra.match(/saveState\(/g) || []).length === 3 && (corpoTroca.match(/saveState\(/g) || []).length === 1 && (corpoOferta.match(/saveState\(/g) || []).length === 1 && (corpoMesa.match(/saveState\(/g) || []).length === 1 && fora.indexOf('saveState') === -1, 'só os cliques (estradaTrocarClique, estradaOferecerClique e estradaMesaSadoClique) podem chamar saveState, uma vez cada');
     ok(!/localStorage|nuvem|marcarObjetivo|despensaEstado|despensaRegistar|ESTRADA_PEDIDOS/.test(ecra), 'estrada.js não devia usar localStorage, a nuvem, objetivos, despensaEstado, despensaRegistar* nem ESTRADA_PEDIDOS');
     ok(!/\b(state|estado)\.(uvas|reputacao|garrafas|gotas|despensa|adega)[\w.\[\]'"]*\s*(=[^=]|[-+*\/]=|\+\+|--)/.test(ecra), 'estrada.js não devia escrever em uvas, Reputação, garrafas, gotas, despensa nem adega (quem altera é despensaTrocar)');
     ok(!/Math\.random|Date\.now|new Date/.test(ecra), 'estrada.js não devia usar Math.random, Date.now nem new Date');
