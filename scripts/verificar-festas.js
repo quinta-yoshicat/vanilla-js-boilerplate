@@ -1247,7 +1247,22 @@ function suite(fontes) {
         'janeiras|festa|cena_do_dia|btnJaneiras|true|{"reputacao":5}|', 'fava|festa|cena_do_dia|btnFava|true|{"reputacao":6}|', 'boloReis|festa|gastar_gotas|btnBoloReis|false|{"custoGotas":30,"reputacao":12}|']), 'Reis: janeiras (escolha, +5), fava (escolha, +6) e bolo-rei de Reis (30 Gotas, +12); as tarefas não abrem entradas');
       ok(!/uvas|aguardente|bagaceira/i.test(JSON.stringify(rs.tarefas)), 'Reis: nenhuma tarefa custa ou dá Uvas, Aguardente ou Bagaceira');
       ok(rs.modoTesteSemGravar === true && rs.menuComReserva === true, 'Reis: modo de teste sem gravar e a faixa e o dia grande também com reserva');
-      ok(JSON.stringify(rs.imagens) === JSON.stringify({ diaGrande: 'assets/ecras/reis_dia_grande.jpg', faixa: 'assets/ecras/reis_festa.jpg', reserva: 'assets/ecras/natal_festa.jpg', janeiras: 'assets/ecras/reis_janeiras.jpg', fava: 'assets/ecras/reis_fava.jpg', boloReis: 'assets/ecras/reis_festa.jpg' }), 'Reis: as imagens reis_festa, reis_dia_grande, reis_janeiras e reis_fava, com a natal_festa de reserva');
+      ok(JSON.stringify(rs.imagens) === JSON.stringify({ diaGrande: 'assets/ecras/reis_dia_grande.jpg', faixa: 'assets/ecras/reis_festa.jpg', reserva: 'assets/ecras/natal_festa.jpg', janeiras: 'assets/ecras/reis_janeiras.jpg', fava: 'assets/ecras/reis_fava.jpg', boloReis: 'assets/ecras/reis_bolo.jpg' }), 'Reis: as imagens reis_festa, reis_dia_grande, reis_janeiras, reis_fava e reis_bolo, com a natal_festa de reserva');
+      const dimr = function (f) { // largura e altura de um JPEG (marcador SOF)
+        const b = fs.readFileSync(f); let i = 2;
+        while (i < b.length) { if (b[i] !== 0xFF) { i++; continue; } const m = b[i + 1]; if (m >= 0xC0 && m <= 0xCF && m !== 0xC4 && m !== 0xC8 && m !== 0xCC) return [b.readUInt16BE(i + 7), b.readUInt16BE(i + 5)]; i += 2 + b.readUInt16BE(i + 2); }
+        return null;
+      };
+      const fb = path.join(RAIZ, rs.imagens.boloReis);
+      ok(fs.existsSync(fb), 'Reis: a imagem boloReis existe (' + rs.imagens.boloReis + ')');
+      if (fs.existsSync(fb)) {
+        ok(fs.statSync(fb).size <= LIMITE_IMAGEM && fs.readFileSync(fb).slice(0, 2).equals(Buffer.from([0xFF, 0xD8])), 'Reis: ' + rs.imagens.boloReis + ' é um JPEG até 250 KB (pesa ' + fs.statSync(fb).size + ' bytes)');
+        ok(JSON.stringify(dimr(fb)) === '[720,1290]', 'Reis: ' + rs.imagens.boloReis + ' tem 720x1290 (720 de largura, proporção original de 768x1376)');
+      }
+      ok(['diaGrande', 'faixa', 'janeiras', 'fava', 'boloReis'].every(function (k, i, a) { return a.every(function (k2, i2) { return i === i2 || rs.imagens[k] !== rs.imagens[k2]; }); }), 'Reis: as 5 imagens são todas diferentes (a tarefa do bolo-rei já não repete a faixa)');
+      const linhasB = CREDITOS.split('\n').filter(function (l) { return l.indexOf('assets/ecras/reis_bolo.jpg') !== -1; });
+      ok(linhasB.length === 1 && linhasB[0].indexOf('imagem gerada com IA pelo Yoshi_Cat, sem marcas') !== -1, 'CREDITOS.md devia listar reis_bolo.jpg uma só vez, com "imagem gerada com IA pelo Yoshi_Cat, sem marcas"');
+      ok(!fs.existsSync(path.join(RAIZ, 'imagens_JOGO_TELEGRAM', '1795785142664.jpg')), 'Reis: o original já não está em imagens_JOGO_TELEGRAM');
       ok(fs.existsSync(path.join(RAIZ, rs.imagens.reserva)), 'Reis: a imagem de reserva existe');
     }
     ok(g.ev('NIVEL_NECESSARIO_POR_ECRA.festa') === 4, 'Reis: o nível mínimo continua a ser o 4 de todas as festas');
@@ -1394,7 +1409,11 @@ function suite(fontes) {
     im.ev('IMGS[2].onerror()'); im.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
     ok(im.ev('FUNDO') === RES && im.ev('IMGS.length') === 3, 'Reis: reis_fava.jpg em falta: fica a reserva, sem pedir outra vez');
     im.ev("iniciarTarefaFesta('boloReis')");
-    ok(im.ev('FUNDO') === RES && im.ev('IMGS.length') === 3 && im.ev('state.reputacao') === 23, 'Reis: o Bolo-Rei de Reis usa a reis_festa.jpg (já sabida em falta): fica a reserva');
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS.length') === 4 && im.ev('IMGS[3].src') === 'assets/ecras/reis_bolo.jpg' && im.ev('state.reputacao') === 23, 'Reis: o Bolo-Rei de Reis pede a reis_bolo.jpg (a reis_festa.jpg em falta já não conta), com a reserva até lá');
+    im.ev('IMGS[3].onload()'); ok(im.ev('FUNDO') === 'assets/ecras/reis_bolo.jpg', 'Reis: reis_bolo.jpg carregou: passa a ser o fundo do Bolo-Rei de Reis');
+    const ib = abrir(jan(3));
+    ib.ev('state.gotas = 100; var IMGS = []; Image = function () { IMGS.push(this); }; iniciarTarefaFesta(\'boloReis\');');
+    ib.ev('IMGS[0].onerror()'); ok(ib.ev('FUNDO') === RES && ib.ev('IMGS.length') === 1, 'Reis: reis_bolo.jpg em falta: fica a reserva, sem pedir outra vez');
     const igd = abrir(jan(6));
     igd.ev('var IMGS = []; Image = function () { IMGS.push(this); }; renderFestaHub();');
     ok(igd.ev('FUNDO') === RES && igd.ev('IMGS[0].src') === 'assets/ecras/reis_dia_grande.jpg', 'Reis: no dia grande o menu pede reis_dia_grande.jpg, com a reserva até lá');
@@ -1660,7 +1679,7 @@ function suite(fontes) {
     });
 
     // L9. As outras festas ficam exatamente iguais (configuração, textos e janela de datas)
-    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', natal: '298fd87419769ae3b7cdb8738acbcd5f5579963f09eb2bbae8c95fe918bf59d8', carnaval: '33467497694dd7b37dbb156f108e1205a1075196433441e3a6a4836cbb62ad02', pascoa: 'bfc89a2da21c0b87c4d6359268460504d1cb7ebdfb48665eee198b50001c6f94', reis: '4fd59d9157a7d121ef485018c1b0ed963ad4c05c106085a92b27b53885e0ef36' };
+    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', natal: '298fd87419769ae3b7cdb8738acbcd5f5579963f09eb2bbae8c95fe918bf59d8', carnaval: '33467497694dd7b37dbb156f108e1205a1075196433441e3a6a4836cbb62ad02', pascoa: 'bfc89a2da21c0b87c4d6359268460504d1cb7ebdfb48665eee198b50001c6f94', reis: 'dd399f21d36627ce6820861bd7752370c8e479195cb4a2edf23d52515456aa8a' };
     Object.keys(IGUAIS).forEach(function (id) {
       const j = g.ev('JSON.stringify([FESTAS_CONFIG.filter(function (f) { return f.id === ' + JSON.stringify(id) + '; })[0], FESTAS_STRINGS[' + JSON.stringify(id) + ']])');
       ok(crypto.createHash('sha256').update(j).digest('hex') === IGUAIS[id], 'Santos: ' + id + ' fica exatamente igual (configuração e textos)');
@@ -2006,6 +2025,9 @@ const MUTACOES = [
   ['menu dos Reis sem reserva', 'festas.js', '    menuComReserva: true,\n', ''],
   ['menu dos Reis ignora a reserva', 'festas.js', "  if (festa.menuComReserva === true) festaFundoTarefa(", "  if (false) festaFundoTarefa("],
   ['menu de todas as festas com reserva', 'festas.js', "  if (festa.menuComReserva === true) festaFundoTarefa(", "  if (true) festaFundoTarefa("],
+  ['imagem do bolo-rei de Reis que não existe', 'festas.js', "boloReis: 'assets/ecras/reis_bolo.jpg'", "boloReis: 'assets/ecras/reis_bolo_x.jpg'"],
+  ['o bolo-rei de Reis volta a usar a imagem da faixa', 'festas.js', "boloReis: 'assets/ecras/reis_bolo.jpg'", "boloReis: 'assets/ecras/reis_festa.jpg'"],
+  ['o bolo-rei de Reis usa a imagem da fava', 'festas.js', "boloReis: 'assets/ecras/reis_bolo.jpg'", "boloReis: 'assets/ecras/reis_fava.jpg'"],
   ['Reis sem imagem de reserva', 'festas.js', "      faixa: 'assets/ecras/reis_festa.jpg',\n      reserva: 'assets/ecras/natal_festa.jpg',\n", "      faixa: 'assets/ecras/reis_festa.jpg',\n"],
   ['texto dos Reis com Fygmo2', 'festas.js', "O Fygmo II corre à frente", "O Fygmo2 corre à frente"],
   ['Janeiras em inglês com outra opção certa', 'festas.js', "'Start again and sing the proper words'], correta: 2", "'Start again and sing the proper words'], correta: 1"],
