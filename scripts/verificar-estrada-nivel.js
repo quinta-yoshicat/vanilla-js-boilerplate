@@ -504,7 +504,8 @@ function provasDoVizinho(c) {
       });
     };
     andar(RAIZ);
-    const dele = todos.filter(function (f) { return c.ficheirosRegex.test(path.basename(f)); });
+    // Os pacotes de conteúdo (dados/pacotes/*.json, p. ex. cultura_pinhao.json) não são imagens: o nome deles pode coincidir com o do bem sem ser uma cópia.
+    const dele = todos.filter(function (f) { return c.ficheirosRegex.test(path.basename(f)) && path.dirname(f) !== path.join('dados', 'pacotes'); });
     ok(dele.filter(function (f) { return /\.png$/i.test(f); }).length === 0, c.etiqueta + ': não devia haver nenhum PNG dele nem do bem: ' + dele.filter(function (f) { return /\.png$/i.test(f); }).join(', '));
     ok(dele.filter(function (f) { return f.indexOf(path.sep) === -1; }).length === 0, c.etiqueta + ': não devia haver cópias dele nem do bem na raiz: ' + dele.filter(function (f) { return f.indexOf(path.sep) === -1; }).join(', '));
     ok(dele.slice().sort().join() === [c.cena, c.cara].sort().join(), c.etiqueta + ': só deviam existir os 2 JPG dele (nomes sem acentos nem vírgulas): ' + dele.join(', '));

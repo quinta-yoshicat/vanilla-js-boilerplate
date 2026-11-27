@@ -1,0 +1,36 @@
+{
+  "id": "cultura_pinhao",
+  "nome": "Cultura das Pinhas e do Pinhão",
+  "estado": "em PR",
+  "clima": "Em Portugal, a campanha de 2022/23 teve produções médias baixas de pinha, depois de uma sequência de anos quentes e secos.",
+  "fontes": [
+    "Agroportal, UNAC e o pinhão, campanha de 2022/23 (bo.agroportal.pt/?p=1116530)",
+    "INIAV, Dossiê Técnico, «Rendimento de miolo de pinhão de pinheiro-manso» (Isabel Carrasquinho), abril de 2020",
+    "INIAV, GO +PINHÃO, «Gestão integrada de agentes bióticos associados à perda de produção do pinhão»"
+  ],
+  "ids": {
+    "enciclopedia": [
+      "pinha_tres_anos"
+    ],
+    "palavras": [
+      "miolo",
+      "pinha",
+      "pinhal"
+    ],
+    "visitas": [],
+    "niveis": [],
+    "historias": [],
+    "capitulos": [],
+    "provas": []
+  },
+  "imagens": [
+    {
+      "caminho": "assets/ecras/estrada_sr_albano.jpg",
+      "uso": "Entrada da Enciclopédia «pinha_tres_anos» (campo imagem; imagem que já existia, com linha no CREDITOS.md, também usada na Estrada)",
+      "descricao": "A cena do Sr. Albano na Estrada: um apanhador de pinhas num pinhal, com uma pinha na mão e um cesto cheio (imagem que já existia no jogo).",
+      "estado": "feita"
+    }
+  ],
+  "sons": [],
+  "excecoes": []
+}
