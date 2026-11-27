@@ -178,7 +178,7 @@ const FESTAS_CONFIG = [
       reserva: 'assets/ecras/natal_festa.jpg',
       janeiras: 'assets/ecras/reis_janeiras.jpg',
       fava: 'assets/ecras/reis_fava.jpg',
-      boloReis: 'assets/ecras/reis_festa.jpg'
+      boloReis: 'assets/ecras/reis_bolo.jpg'
     },
     // Com ?festa=reis (ou outro parâmetro de teste) no endereço, mostra tudo mas não muda nem grava nada.
     modoTesteSemGravar: true,
