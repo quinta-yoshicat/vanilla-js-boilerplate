@@ -24,8 +24,8 @@
 //
 // Para testar: acrescenta ?festa=saomartinho (ou ?festa=natal) ao endereço
 // para simular estar dentro da festa, e ?festa=saomartinho&dia=11 (ou
-// ?festa=natal&dia=25, ou ?festa=reis&dia=6; nos Santos Populares ?festa=santos&dia=13, 24 ou 29) para simular o dia grande. Funciona junto com
-// ?estacao= e ?tempo=. Numa festa com modoTesteSemGravar (o Natal, os Reis e os Santos Populares), o modo de
+// ?festa=natal&dia=25, ou ?festa=reis&dia=6; nos Santos Populares ?festa=santos&dia=13, 24 ou 29; na Feira de Sant'Iago ?festa=santiago&dia=25) para simular o dia grande. Funciona junto com
+// ?estacao= e ?tempo=. Numa festa com modoTesteSemGravar (o Natal, os Reis, os Santos Populares e a Feira de Sant'Iago), o modo de
 // teste mostra tudo mas não grava nem muda nada (ver festaModoTesteSemGravar).
 // ---------------------------------------------------------------------
 
@@ -224,6 +224,42 @@ const FESTAS_CONFIG = [
       { id: 'sardinhada', onde: 'festa', regra: 'gastar_gotas', btn: 'btnSardinhada',
         premio: { custoGotas: 30, reputacao: 12 } },
       { id: 'arraial', onde: 'festa', regra: 'cena_do_dia', btn: 'btnArraial', cenasSemRepetir: true,
+        premio: { reputacao: 6 } }
+    ],
+    recompensas: {
+      multiplicadorDiaGrande: 2
+    }
+  },
+  {
+    id: 'santiago',
+    // Datas fixas pelo calendário de Portugal (mês 0 = janeiro): de 23 de julho a 2 de agosto. A janela passa de um mês
+    // para o seguinte (julho para agosto), o que o motor já trata bem (festaJanela monta cada data com o seu mês); só não
+    // suporta janelas que atravessem o fim do ano.
+    inicio: { mes: 6, dia: 23 },      // 23 de julho
+    fim: { mes: 7, dia: 2 },          // 2 de agosto
+    diaGrande: { mes: 6, dia: 25 },   // 25 de julho, dia de São Tiago
+    // Entrada da Enciclopédia que abre ao entrar na festa (está em dados/enciclopedia.js).
+    entradaEnciclopedia: 'feira_santiago',
+    // Como nos Santos: cada imagem (também a da faixa e a do dia grande, menuComReserva) só aparece depois de se saber
+    // que existe; até lá, e se faltar, fica a de reserva (ver festaFundoTarefa).
+    menuComReserva: true,
+    imagens: {
+      diaGrande: 'assets/ecras/santiago_dia_grande.jpg',
+      faixa: 'assets/ecras/santiago_festa.jpg',
+      reserva: 'assets/ecras/santiago_festa.jpg',
+      banca: 'assets/ecras/santiago_banca.jpg',
+      artesanato: 'assets/ecras/santiago_artesanato.jpg',
+      noite: 'assets/ecras/santiago_noite.jpg'
+    },
+    // Com ?festa=santiago (ou outro parâmetro de teste) no endereço, mostra tudo mas não muda nem grava nada.
+    modoTesteSemGravar: true,
+    // Os mesmos valores dos Santos, do Natal e dos Reis: só Reputação, só gasta Gotas, nunca Uvas nem aguardente.
+    tarefas: [
+      { id: 'banca', onde: 'festa', regra: 'cena_do_dia', btn: 'btnBanca', cenasSemRepetir: true,
+        premio: { reputacao: 5 } },
+      { id: 'artesanato', onde: 'festa', regra: 'gastar_gotas', btn: 'btnArtesanato',
+        premio: { custoGotas: 30, reputacao: 12 } },
+      { id: 'noite', onde: 'festa', regra: 'cena_do_dia', btn: 'btnNoite', cenasSemRepetir: true,
         premio: { reputacao: 6 } }
     ],
     recompensas: {
@@ -1207,6 +1243,125 @@ const FESTAS_STRINGS = {
       ],
       arraialVitoria: 'La hoguera arde sin sustos y el arraial se anima. El Fygmo y el Fygmo II bailan en su rincón, el Chizo vigila las brasas y nadie se chamusca.',
       arraialDerrota: 'Esta vez la hoguera quedó en manos de los Fygmos y el cesto de las bellotas huele un poco a chamuscado. El arraial continúa. No se perdió nada.'
+    }
+  },
+  santiago: {
+    pt: {
+      faixa: "Há Feira de Sant'Iago na Quinta! De 23 de julho a 2 de agosto.",
+      titulo: "A Feira de Sant'Iago",
+      subtitulo: "Bancas, artesanato e música no Parque Sant'Iago. O Fygmo II já foi à frente ver as bancas da comida.",
+      diaGrandeAviso: 'Hoje é 25 de julho, dia de São Tiago! Os prémios contam a dobrar.',
+      tarefaFeitaHoje: 'já feita hoje',
+      modoTesteAviso: '(Modo de teste: nada ficou gravado.)',
+      btnBanca: 'Atender a banca',
+      btnArtesanato: 'Comprar artesanato',
+      btnNoite: 'Ir ao concerto',
+      btnVoltar: 'Voltar',
+
+      bancaTitulo: 'A banca de queijo e mel',
+      bancaSubtitulo: 'O Fygmo II quer ajudar a atender os clientes',
+      bancaJaFeitaHoje: 'Hoje já atendeste a banca. Amanhã há mais clientes!',
+      bancaCenas: [
+        { situacao: 'Um cliente quer levar três queijos e pede um desconto.', opcoes: ['Recusar sem dizer palavra e virar-lhe as costas.', 'Fazer um pequeno desconto, com um sorriso.', 'Subir o preço e chamar-lhe «preço de feira».'], correta: 1 },
+        { situacao: 'É meio da tarde e o calor aperta. O queijo na banca começa a suar.', opcoes: ['Pô-lo à sombra, tapado com um pano húmido.', 'Deixá-lo ao sol para curar mais depressa.', 'Pôr-lhe um chapéu de palha, para ficar fresco.'], correta: 0 },
+        { situacao: 'O Fygmo II aproxima-se da banca com ar inocente, a olhar para o mel.', opcoes: ['Deixá-lo provar «só um bocadinho»… outra vez.', 'Esconder os frascos de mel atrás do Chizo.', 'Pedir-lhe que pague primeiro, como todos.'], correta: 2 }
+      ],
+      bancaVitoria: 'Boa! A banca não parou e os clientes saíram satisfeitos.',
+      bancaDerrota: 'Desta vez a banca correu mal, mas amanhã há mais clientes.',
+
+      artesanatoTitulo: 'A banca do artesão',
+      artesanatoJaFeitaHoje: 'Hoje já compraste a tua lembrança. Amanhã há mais artesanato.',
+      artesanatoFalta: 'Precisas de 30 Gotas para comprar uma peça de artesanato.',
+      artesanatoSucesso: 'Compraste uma peça feita à mão. O artesão ficou contente e a tua fama na feira subiu!',
+
+      noiteTitulo: 'A noite da feira',
+      noiteSubtitulo: 'O Fygmo II quer aproveitar a noite toda',
+      noiteJaFeitaHoje: 'Hoje já viveste a noite da feira. Amanhã há mais música!',
+      noiteCenas: [
+        { situacao: 'Há uma fila enorme para o carrossel e o Fygmo II tenta passar à frente.', opcoes: ['Inventar uma fila nova, só para o Fygmo II.', 'Fingir que é o dono do carrossel, com ar sério.', 'Ficar na fila e esperar pela vez, como todos.'], correta: 2 },
+        { situacao: 'Começa o concerto e a música é tão alta que o Chizo se assusta.', opcoes: ['Pôr-lhe um chapéu para ele não ouvir a música.', 'Afastar-se da coluna e fazer-lhe festas.', 'Subir ao palco com ele, para ver de perto.'], correta: 1 },
+        { situacao: 'O Fygmo II quer repetir pela quarta vez na banca da comida.', opcoes: ['Dizer-lhe que três chegam e ir descansar.', 'Pagar-lhe a quarta, que hoje é dia de feira.', 'Esconder-lhe a carteira dentro de um cesto.'], correta: 0 }
+      ],
+      noiteVitoria: 'Que noite! Houve música, luzes e ninguém se perdeu.',
+      noiteDerrota: 'A noite não correu como esperavas, mas amanhã há mais música.'
+    },
+    en: {
+      faixa: "There is a Sant'Iago Fair on the Quinta! From 23 July to 2 August.",
+      titulo: "The Sant'Iago Fair",
+      subtitulo: "Stalls, crafts and music in Parque Sant'Iago. Fygmo II has already gone ahead to check out the food stalls.",
+      diaGrandeAviso: "Today is 25 July, Saint James's Day! Prizes count double.",
+      tarefaFeitaHoje: 'already done today',
+      modoTesteAviso: '(Test mode: nothing was saved.)',
+      btnBanca: 'Serve the Stall',
+      btnArtesanato: 'Buy Crafts',
+      btnNoite: 'Go to the Concert',
+      btnVoltar: 'Back',
+
+      bancaTitulo: 'The Cheese and Honey Stall',
+      bancaSubtitulo: 'Fygmo II wants to help serve the customers',
+      bancaJaFeitaHoje: 'You have already served the stall today. Tomorrow there will be more customers!',
+      bancaCenas: [
+        { situacao: 'A customer wants to take three cheeses and asks for a discount.', opcoes: ['Refuse without a word and turn his back.', 'Give a small discount, with a smile.', 'Raise the price and call it a "fair price".'], correta: 1 },
+        { situacao: 'It is mid-afternoon and the heat is bearing down. The cheese on the stall is starting to sweat.', opcoes: ['Put it in the shade, with a wet cloth.', 'Leave it in the sun to cure faster.', 'Put a straw hat on it, to keep it cool.'], correta: 0 },
+        { situacao: 'Fygmo II walks up to the stall looking innocent, eyeing the honey.', opcoes: ['Let him taste "just a little bit"... again.', 'Hide the jars of honey behind Chizo.', 'Ask him to pay first, like everyone else.'], correta: 2 }
+      ],
+      bancaVitoria: 'Well done! The stall never stopped and the customers left happy.',
+      bancaDerrota: 'This time the stall went badly, but there will be more customers tomorrow.',
+
+      artesanatoTitulo: "The Craftsman's Stall",
+      artesanatoJaFeitaHoje: 'You have already bought your souvenir today. Tomorrow there will be more crafts.',
+      artesanatoFalta: 'You need 30 Drops to buy a piece of craft work.',
+      artesanatoSucesso: 'You bought a handmade piece. The craftsman was pleased and your fame at the fair went up!',
+
+      noiteTitulo: 'The Fair at Night',
+      noiteSubtitulo: 'Fygmo II wants to enjoy the whole night',
+      noiteJaFeitaHoje: 'You have already enjoyed the fair night today. Tomorrow there will be more music!',
+      noiteCenas: [
+        { situacao: 'There is a huge queue for the carousel and Fygmo II tries to cut in.', opcoes: ['Make a new queue, just for Fygmo II.', 'Pretend to be the owner of the carousel.', 'Stay in the queue and wait your turn.'], correta: 2 },
+        { situacao: 'The concert starts and the music is so loud that Chizo gets scared.', opcoes: ['Put a hat on him so he cannot hear the music.', 'Move away from the speaker and pet him.', 'Go up on stage with him, to see it up close.'], correta: 1 },
+        { situacao: 'Fygmo II wants a fourth helping at the food stall.', opcoes: ['Tell him three is enough and go rest.', 'Pay for the fourth, since it is fair day.', 'Hide his wallet inside a picnic basket.'], correta: 0 }
+      ],
+      noiteVitoria: 'What a night! There was music, lights and nobody got lost.',
+      noiteDerrota: 'The night did not go as you hoped, but there will be more music tomorrow.'
+    },
+    es: {
+      faixa: "¡Hay Feria de Sant'Iago en la Quinta! Del 23 de julio al 2 de agosto.",
+      titulo: "La Feria de Sant'Iago",
+      subtitulo: "Puestos, artesanía y música en el Parque Sant'Iago. El Fygmo II ya se ha adelantado a ver los puestos de comida.",
+      diaGrandeAviso: '¡Hoy es 25 de julio, día de Santiago! Los premios cuentan el doble.',
+      tarefaFeitaHoje: 'ya hecha hoy',
+      modoTesteAviso: '(Modo de prueba: no se ha guardado nada.)',
+      btnBanca: 'Atender el Puesto',
+      btnArtesanato: 'Comprar Artesanía',
+      btnNoite: 'Ir al Concierto',
+      btnVoltar: 'Volver',
+
+      bancaTitulo: 'El puesto de queso y miel',
+      bancaSubtitulo: 'El Fygmo II quiere ayudar a atender a los clientes',
+      bancaJaFeitaHoje: 'Hoy ya has atendido el puesto. ¡Mañana habrá más clientes!',
+      bancaCenas: [
+        { situacao: 'Un cliente quiere llevarse tres quesos y pide un descuento.', opcoes: ['Negarse sin decir palabra y darle la espalda.', 'Hacer un pequeño descuento, con una sonrisa.', 'Subir el precio y llamarlo "precio de feria".'], correta: 1 },
+        { situacao: 'Es media tarde y aprieta el calor. El queso del puesto empieza a sudar.', opcoes: ['Ponerlo a la sombra, tapado con un paño húmedo.', 'Dejarlo al sol para que cure más deprisa.', 'Ponerle un sombrero de paja, para que esté fresco.'], correta: 0 },
+        { situacao: 'El Fygmo II se acerca al puesto con aire inocente, mirando la miel.', opcoes: ['Dejarle probar "solo un poquito"... otra vez.', 'Esconder los frascos de miel detrás del Chizo.', 'Pedirle que pague primero, como los demás.'], correta: 2 }
+      ],
+      bancaVitoria: '¡Bien hecho! El puesto no paró y los clientes se fueron satisfechos.',
+      bancaDerrota: 'Esta vez el puesto fue mal, pero mañana habrá más clientes.',
+
+      artesanatoTitulo: 'El puesto del artesano',
+      artesanatoJaFeitaHoje: 'Hoy ya has comprado tu recuerdo. Mañana habrá más artesanía.',
+      artesanatoFalta: 'Necesitas 30 Gotas para comprar una pieza de artesanía.',
+      artesanatoSucesso: 'Has comprado una pieza hecha a mano. ¡El artesano se puso contento y tu fama en la feria subió!',
+
+      noiteTitulo: 'La noche de la feria',
+      noiteSubtitulo: 'El Fygmo II quiere aprovechar toda la noche',
+      noiteJaFeitaHoje: 'Hoy ya has vivido la noche de la feria. ¡Mañana habrá más música!',
+      noiteCenas: [
+        { situacao: 'Hay una cola enorme para el carrusel y el Fygmo II intenta colarse.', opcoes: ['Hacer una cola nueva, solo para el Fygmo II.', 'Fingir que es el dueño del carrusel.', 'Quedarse en la cola y esperar su turno.'], correta: 2 },
+        { situacao: 'Empieza el concierto y la música está tan alta que el Chizo se asusta.', opcoes: ['Ponerle un sombrero para que no oiga la música.', 'Alejarse del altavoz y hacerle cariños.', 'Subir al escenario con él, para verlo de cerca.'], correta: 1 },
+        { situacao: 'El Fygmo II quiere repetir por cuarta vez en el puesto de comida.', opcoes: ['Decirle que tres bastan e irse a descansar.', 'Pagarle la cuarta, porque hoy es día de feria.', 'Esconderle la cartera dentro de un cesto grande.'], correta: 0 }
+      ],
+      noiteVitoria: '¡Qué noche! Hubo música, luces y nadie se perdió.',
+      noiteDerrota: 'La noche no salió como esperabas, pero mañana habrá más música.'
     }
   }
 };
