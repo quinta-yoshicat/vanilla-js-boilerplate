@@ -101,12 +101,13 @@ const FUNDO_DOS_ECRAS = {
   explorar: { src: 'assets/ecras/explorar_trator.jpg' },
   enciclopedia: { src: 'assets/ecras/enciclopedia_yoshi_cat_2.jpg' },
   caderno: { src: 'assets/ecras/fygmos_fazem_das_suas.jpg' },
-  palavras: { src: 'assets/ecras/enciclopedia_yoshi_cat_2.jpg' },
+  palavras: { src: 'assets/ecras/palavras.jpg' },
   perfil: { src: 'assets/ecras/yoshi_cat_varanda.jpg' },
   definicoes: { src: 'assets/ecras/yoshi_cat_varanda.jpg' }, // o mesmo fundo do Perfil, de onde se abre
   lagar: { src: 'assets/ecras/festa_vindima_todos_juntos.jpg' },
+  colecao: { src: 'assets/ecras/colecao.jpg' },
   camara: { src: 'assets/vinha/barril_dourado.jpg' },
-  roxo: { src: 'assets/ecras/yoshi_cat_festa_vindima.jpg' },
+  roxo: { src: 'assets/ecras/cepa_roxa.jpg' },
   // A Loja escolhe o fundo pelo tempo quando desenha (ver fundoTempoLoja() em js/loja.js); esta é a de reserva (sol).
   loja: { src: 'assets/ecras/casa_loja_meio_da_vinha_4.jpg' },
   conquistas: { src: 'assets/ecras/livro_conquistas.jpg' },

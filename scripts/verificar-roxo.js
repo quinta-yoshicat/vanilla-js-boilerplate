@@ -223,7 +223,7 @@ const saveNivel10 = function (extra) {
   ok(fs.existsSync(path.join(RAIZ, 'assets/garrafas/garrafa_3_ambar.jpg')) && /garrafa_3_ambar\.jpg/.test(ler(path.join(RAIZ, 'js', 'garrafa.js'))), 'a garrafa âmbar continua na Adega (garrafa.js), só deixou de ser a da Cepa Roxa');
   ok(fs.existsSync(path.join(RAIZ, 'assets/ecras/moscatel_roxo_com_uvas.jpg')) && !fs.existsSync(path.join(RAIZ, 'moscatel_roxo_com_uvas.jpg')), 'o original moscatel_roxo_com_uvas.jpg está em assets/ecras e já não está na raiz');
   const main = ler(path.join(RAIZ, 'js', 'main.js'));
-  ok(/roxo:\s*\{\s*src:\s*'assets\/ecras\/yoshi_cat_festa_vindima\.jpg'/.test(main) && fs.existsSync(path.join(RAIZ, 'assets/ecras/yoshi_cat_festa_vindima.jpg')) && /roxo:\s*'explorar'/.test(main) && /renderRoxo\(\)/.test(main) && !/atualizarLinhaRoxoQuinta/.test(main), 'main.js liga a Cepa Roxa (fundo yoshi_cat_festa_vindima, barra acende o Explorar, render; já sem linha na Quinta)');
+  ok(/roxo:\s*\{\s*src:\s*'assets\/ecras\/cepa_roxa\.jpg'/.test(main) && fs.existsSync(path.join(RAIZ, 'assets/ecras/cepa_roxa.jpg')) && /roxo:\s*'explorar'/.test(main) && /renderRoxo\(\)/.test(main) && !/atualizarLinhaRoxoQuinta/.test(main), 'main.js liga a Cepa Roxa (fundo cepa_roxa, barra acende o Explorar, render; já sem linha na Quinta)');
   ok(!/atualizarLinhaRoxoQuinta/.test(ler(path.join(RAIZ, 'js', 'niveis.js'))), 'o cartão do nível já não refaz nenhuma linha da Cepa Roxa (o cartão vive no Explorar)');
   const html = ler(path.join(RAIZ, 'index.html'));
   ok(/id="screen-roxo"/.test(html) && /id="roxo-container"/.test(html) && !/roxo-linha-container/.test(html) && /#screen-roxo\.content/.test(html), 'index.html tem o ecrã e a classe do jogo-cheio, e já sem a linha da Cepa Roxa na Quinta');

@@ -1,7 +1,7 @@
 {
   "id": "cultura_azeitona",
   "nome": "Cultura da Azeitona",
-  "estado": "em PR",
+  "estado": "feita",
   "ids": {
     "enciclopedia": ["azeite_do_olival_ao_lagar"],
     "palavras": ["agua_ruca", "caldeacao", "galga", "maquia", "seira"],
