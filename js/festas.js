@@ -1301,8 +1301,8 @@ const FESTAS_STRINGS = {
       bancaSubtitulo: 'Fygmo II wants to help serve the customers',
       bancaJaFeitaHoje: 'You have already served the stall today. Tomorrow there will be more customers!',
       bancaCenas: [
-        { situacao: 'A customer wants to take three cheeses and asks for a discount.', opcoes: ['Refuse without a word and turn his back.', 'Give a small discount, with a smile.', 'Raise the price and call it a "fair price".'], correta: 1 },
-        { situacao: 'It is mid-afternoon and the heat is bearing down. The cheese on the stall is starting to sweat.', opcoes: ['Put it in the shade, with a wet cloth.', 'Leave it in the sun to cure faster.', 'Put a straw hat on it, to keep it cool.'], correta: 0 },
+        { situacao: 'A customer wants to take three cheeses and asks for a discount.', opcoes: ['Refuse without a word and turn away.', 'Give a small discount, with a smile.', 'Raise the price and call it a "fair price".'], correta: 1 },
+        { situacao: 'It is mid-afternoon and the heat is bearing down. The cheese on the stall is starting to sweat.', opcoes: ['Put it in the shade, covered with a damp cloth.', 'Leave it out in the sun so that it cures faster.', 'Put a little straw hat on it, to keep it cool.'], correta: 0 },
         { situacao: 'Fygmo II walks up to the stall looking innocent, eyeing the honey.', opcoes: ['Let him taste "just a little bit"... again.', 'Hide the jars of honey behind Chizo.', 'Ask him to pay first, like everyone else.'], correta: 2 }
       ],
       bancaVitoria: 'Well done! The stall never stopped and the customers left happy.',
@@ -1310,7 +1310,7 @@ const FESTAS_STRINGS = {
 
       artesanatoTitulo: "The Craftsman's Stall",
       artesanatoJaFeitaHoje: 'You have already bought your souvenir today. Tomorrow there will be more crafts.',
-      artesanatoFalta: 'You need 30 Drops to buy a piece of craft work.',
+      artesanatoFalta: 'You need 30 Drops to buy a piece of handicraft.',
       artesanatoSucesso: 'You bought a handmade piece. The craftsman was pleased and your fame at the fair went up!',
 
       noiteTitulo: 'The Fair at Night',
@@ -1356,8 +1356,8 @@ const FESTAS_STRINGS = {
       noiteSubtitulo: 'El Fygmo II quiere aprovechar toda la noche',
       noiteJaFeitaHoje: 'Hoy ya has vivido la noche de la feria. ¡Mañana habrá más música!',
       noiteCenas: [
-        { situacao: 'Hay una cola enorme para el carrusel y el Fygmo II intenta colarse.', opcoes: ['Hacer una cola nueva, solo para el Fygmo II.', 'Fingir que es el dueño del carrusel.', 'Quedarse en la cola y esperar su turno.'], correta: 2 },
-        { situacao: 'Empieza el concierto y la música está tan alta que el Chizo se asusta.', opcoes: ['Ponerle un sombrero para que no oiga la música.', 'Alejarse del altavoz y hacerle cariños.', 'Subir al escenario con él, para verlo de cerca.'], correta: 1 },
+        { situacao: 'Hay una cola enorme para el carrusel y el Fygmo II intenta colarse.', opcoes: ['Hacer una cola nueva, solo para el Fygmo II.', 'Fingir que es el dueño del carrusel.', 'Quedarse en la cola y esperar el turno.'], correta: 2 },
+        { situacao: 'Empieza el concierto y la música está tan alta que el Chizo se asusta.', opcoes: ['Ponerle un sombrero para que no oiga la música.', 'Alejarse del altavoz y hacerle caricias.', 'Subir al escenario con él, para verlo de cerca.'], correta: 1 },
         { situacao: 'El Fygmo II quiere repetir por cuarta vez en el puesto de comida.', opcoes: ['Decirle que tres bastan e irse a descansar.', 'Pagarle la cuarta, porque hoy es día de feria.', 'Esconderle la cartera dentro de un cesto grande.'], correta: 0 }
       ],
       noiteVitoria: '¡Qué noche! Hubo música, luces y nadie se perdió.',
