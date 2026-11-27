@@ -116,9 +116,10 @@ dadosAcrescentar('enciclopedia', {
   }
 });
 
-// Pacote «Cultura do Mel (Arrábida)»: sem imagem por agora (a imagem está «por_criar» em dados/pacotes/cultura_mel.json).
+// Pacote «Cultura do Mel (Arrábida)»: leva a imagem mel_arrabida.jpg (feita, ver dados/pacotes/cultura_mel.json).
 dadosAcrescentar('enciclopedia', {
   id: 'mel_arrabida',
+  imagem: 'assets/ecras/mel_arrabida.jpg',
   nivelMinimo: 7,
   titulo: { pt: 'O mel da Arrábida', en: 'Arrábida honey', es: 'La miel de la Arrábida' },
   texto: {
@@ -155,6 +156,7 @@ dadosAcrescentar('enciclopedia', {
 
 dadosAcrescentar('enciclopedia', {
   id: 'arroz_aves',
+  imagem: 'assets/ecras/aves_arrozais_sado.jpg',
   nivelMinimo: 7,
   titulo: { pt: 'As aves dos arrozais', en: 'The birds of the rice paddies', es: 'Las aves de los arrozales' },
   texto: {
@@ -190,9 +192,10 @@ dadosAcrescentar('enciclopedia', {
   }
 });
 
-// Pacote «Castanhas»: souto fica sem imagem por agora (a imagem souto_castanheiros.jpg está «por_criar» em dados/pacotes/castanhas.json; o campo imagem só se acrescenta quando o ficheiro existir).
+// Pacote «Castanhas»: souto leva a imagem souto_castanheiros.jpg (feita, ver dados/pacotes/castanhas.json).
 dadosAcrescentar('enciclopedia', {
   id: 'souto',
+  imagem: 'assets/ecras/souto_castanheiros.jpg',
   nivelMinimo: 7,
   titulo: { pt: 'O souto', en: 'The souto', es: 'El souto' },
   texto: {
@@ -264,6 +267,7 @@ dadosAcrescentar('enciclopedia', {
 
 dadosAcrescentar('enciclopedia', {
   id: 'sado_golfinhos',
+  imagem: 'assets/ecras/golfinhos_sado.jpg',
   nivelMinimo: 12,
   titulo: { pt: 'Os Golfinhos do Sado', en: 'The Dolphins of the Sado', es: 'Los Delfines del Sado' },
   texto: {
