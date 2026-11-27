@@ -58,7 +58,7 @@ const TEXTO = function (pt) { return { pt: pt, en: pt + ' (en)', es: pt + ' (es)
 
 // O que dados/ traz de verdade, ficheiro a ficheiro (os ids pela ordem em que aparecem): a visita marisa_5 e os pacotes dos
 // níveis 11 («Moscatel da Arrábida»), 12 («Moscatel do Sado»), 13 («Moscatel de Palmela»), 14 («Moscatel de Azeitão»), 15 («Moscatel de Sesimbra»), 16 («Moscatel de Setúbal»), 17 («Moscatel de Alcácer»), 18 («Moscatel da Comporta»), 19 («Moscatel do Montado») e 20 («Moscatel do Poeta»), cada um
-// com nível, história, 3 histórias da Enciclopédia e capítulo (mais as 6 histórias soltas da Enciclopédia dos níveis 5 e 6, sem nível nem capítulo). Os outros testes de dados (verificar-nivel-11/12/13/14/15/16/17/18/19/20.js, verificar-enciclopedia-dados.js)
+// com nível, história, 3 histórias da Enciclopédia e capítulo (mais as 17 histórias soltas da Enciclopédia dos níveis 5 a 10, sem nível nem capítulo). Os outros testes de dados (verificar-nivel-11/12/13/14/15/16/17/18/19/20.js, verificar-enciclopedia-dados.js)
 // provam o conteúdo; aqui prova-se que nada mais entra por dados/ (cada nível novo acrescenta aqui os seus ids).
 const IDS_CAVE = ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa']; // nível 5
 const IDS_COLECAO = ['colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos']; // nível 6
@@ -73,16 +73,16 @@ const IDS_ALCACER = ['sal_alcacer', 'sal_setubal', 'sal_redura'];
 const IDS_COMPORTA = ['arroz_arrozais', 'arroz_carolino', 'arroz_consumo'];
 const IDS_MONTADO = ['sobreiro_cortica', 'sobreiro_assobiador', 'sobreiro_rolha'];
 const IDS_BOCAGE = ['bocage_poeta', 'bocage_casa', 'bocage_dia'];
-const IDS_ARROZ = ['arroz_agua', 'arroz_aves'];   // PR 6 dos pacotes: «Cultura do Arroz» (nível mínimo 7; as duas levam imagem: arroz_agua e arroz_aves)
+const IDS_ARROZ = ['arroz_agua', 'arroz_aves'];   // PR 6 dos pacotes: «Cultura do Arroz» (nível mínimo 9; as duas levam imagem: arroz_agua e arroz_aves)
 const IDS_QUEIJO = ['azeitao_coalho'];   // PR 7 dos pacotes: «Cultura do Queijo de Azeitão» (nível mínimo 7; leva a imagem estrada_amelia, que já existia)
-const IDS_SOUTO = ['souto'];   // PR 9 dos pacotes: «Castanhas» (nível mínimo 7; leva a imagem souto_castanheiros.jpg)
+const IDS_SOUTO = ['souto'];   // PR 9 dos pacotes: «Castanhas» (nível mínimo 8; leva a imagem souto_castanheiros.jpg)
 const IDS_FEIRA = ['feira_santiago'];   // PR 10 dos pacotes: «Feira de Sant\'Iago», parte 1 de 2 (nível mínimo 7; sem imagem, feira_santiago.jpg está «por_criar»)
-const IDS_PINHA = ['pinha_tres_anos'];   // PR 8 dos pacotes: «Cultura das Pinhas e do Pinhão» (nível mínimo 7; leva a imagem estrada_sr_albano, que já existia)
-const IDS_CHOCO = ['pesca_choco_sado'];   // PR 5 dos pacotes: «Pesca do choco e golfinhos» (nível mínimo 7, sem imagem)
+const IDS_PINHA = ['pinha_tres_anos'];   // PR 8 dos pacotes: «Cultura das Pinhas e do Pinhão» (nível mínimo 8; leva a imagem estrada_sr_albano, que já existia)
+const IDS_CHOCO = ['pesca_choco_sado'];   // PR 5 dos pacotes: «Pesca do choco e golfinhos» (nível mínimo 9, sem imagem)
 const IDS_MEL = ['mel_arrabida'];   // PR 4 dos pacotes: «Cultura do Mel (Arrábida)» (nível mínimo 7; leva a imagem mel_arrabida.jpg)
 const IDS_SAL = ['salina_marnoto'];   // PR 3 dos pacotes: «Cultura do Sal» (nível mínimo 7)
-const IDS_CORTICA = ['tirada_da_cortica'];   // PR 2 dos pacotes: «Cultura da Cortiça» (nível mínimo 7)
-const IDS_AZEITE = ['azeite_do_olival_ao_lagar'];   // PR 1 dos pacotes: «Cultura da Azeitona» (nível mínimo 7)
+const IDS_CORTICA = ['tirada_da_cortica'];   // PR 2 dos pacotes: «Cultura da Cortiça» (nível mínimo 10)
+const IDS_AZEITE = ['azeite_do_olival_ao_lagar'];   // PR 1 dos pacotes: «Cultura da Azeitona» (nível mínimo 8)
 // As 54 palavras do glossário (dados/palavras.js), por ordem alfabética; o conteúdo prova-o scripts/verificar-palavras.js.
 const IDS_PALAVRAS = ['agua_ruca', 'aguardente_vinica', 'alambique', 'alvara', 'apicultor', 'arrozal', 'bacelo', 'bagaceira', 'bagaco', 'caldeacao', 'cardo', 'casta', 'choco', 'coalho', 'colhereiro', 'colmeia', 'covo', 'cristalizador', 'curtimenta', 'desboia', 'dop', 'entrecasco', 'estuario', 'feirante', 'flor_de_sal', 'fortificar', 'galga', 'jeropiga', 'lagar', 'magusto', 'manteigadas', 'maquia', 'marnoto', 'mildio', 'miolo', 'molheiro', 'montado', 'mosto', 'nectar', 'oidio', 'ourico', 'pinha', 'pinhal', 'pousio', 'redura', 'regadio', 'roaz', 'rosmaninho', 'seira', 'soro', 'souto', 'tiradia', 'torna_viagem', 'vinho_generoso'];
 const ESPERADO_EM_DADOS = {

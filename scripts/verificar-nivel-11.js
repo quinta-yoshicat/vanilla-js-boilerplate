@@ -58,7 +58,7 @@ const FALAS = [
 ];
 const IDS = ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'];
 const IMG = { arrabida_biosfera: 'assets/ecras/arrabida_colina.jpg' }; // só a arrabida_biosfera leva imagem (já existia); as outras duas, sem imagem
-// As 7 histórias dos níveis 5, 6 e 7 (a última, «azeite_do_olival_ao_lagar», é do pacote «Cultura da Azeitona»; a seguir às 34 de origem e antes destas 3): também têm nivelMinimo, por isso entram na prioridade do Explorar.
+// As 17 histórias dos níveis 5 a 10 (3 de nível 5, 3 de nível 6, 4 de nível 7, 3 de nível 8, 3 de nível 9 e 1 de nível 10, dos pacotes das culturas e da feira; a seguir às 34 de origem e antes destas 3): também têm nivelMinimo, por isso entram na prioridade do Explorar.
 const IDS_5_6 = ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa', 'colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos', 'azeite_do_olival_ao_lagar', 'tirada_da_cortica', 'salina_marnoto', 'mel_arrabida', 'pesca_choco_sado', 'arroz_agua', 'arroz_aves', 'azeitao_coalho', 'pinha_tres_anos', 'souto', 'feira_santiago'];
 const ATE_10 = 34 + IDS_5_6.length; // entradas visíveis no nível 10
 const ATE_11 = ATE_10 + IDS.length;
