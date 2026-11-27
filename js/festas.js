@@ -114,9 +114,9 @@ const FESTAS_CONFIG = [
     imagens: {
       diaGrande: 'assets/ecras/carnaval_dia_grande.jpg',
       faixa: 'assets/ecras/carnaval_festa.jpg',
-      corso: 'assets/ecras/carnaval_festa.jpg',
-      fantasias: 'assets/ecras/carnaval_festa.jpg',
-      quemEstaMascarado: 'assets/ecras/carnaval_festa.jpg'
+      corso: 'assets/ecras/carnaval_corso.jpg',
+      fantasias: 'assets/ecras/carnaval_fantasias.jpg',
+      quemEstaMascarado: 'assets/ecras/carnaval_mascarado.jpg'
     },
     // Como o Natal: só dá Reputação (que sobe o nível e nunca se gasta) e só gasta Gotas, nunca Uvas.
     // Os mesmos valores do Natal: corso = consoada, fantasias = doces, quem está mascarado = bolo-rei.

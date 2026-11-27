@@ -454,11 +454,11 @@ function suite(fontes) {
     const n = abrir(lis(2, 14), '?festa=carnaval');
     n.ev('state.reputacao = 372; state.gotas = 100; state.uvas = 7;');
     n.ev("iniciarTarefaFesta('fantasias')");
-    ok(n.ev('state.gotas') === 70 && n.ev('state.uvas') === 7 && n.ev('state.reputacao') === 384 && n.ev('SAVES') === 1 && n.ev('FUNDO') === 'assets/ecras/carnaval_festa.jpg', 'ecrã: fantasias gastam 30 Gotas, dão +12, uma gravação, imagem da festa');
+    ok(n.ev('state.gotas') === 70 && n.ev('state.uvas') === 7 && n.ev('state.reputacao') === 384 && n.ev('SAVES') === 1 && n.ev('FUNDO') === 'assets/ecras/carnaval_fantasias.jpg', 'ecrã: fantasias gastam 30 Gotas, dão +12, uma gravação, imagem das fantasias');
     n.ev("iniciarTarefaFesta('fantasias')");
     ok(n.ev('state.gotas') === 70 && n.ev('state.reputacao') === 384 && n.ev('SAVES') === 1 && n.ev('festaMensagemAtual') === n.ev('FESTAS_STRINGS.carnaval.pt.fantasiasJaFeitaHoje'), 'ecrã: fantasias uma só vez por dia, com a mensagem de já feita');
     n.ev("iniciarTarefaFesta('corso')");
-    ok(n.ev('state.reputacao') === 389 && n.ev('SAVES') === 2, 'ecrã: corso +5');
+    ok(n.ev('state.reputacao') === 389 && n.ev('SAVES') === 2 && n.ev('FUNDO') === 'assets/ecras/carnaval_corso.jpg', 'ecrã: corso +5, com a imagem do corso');
     n.ev('state.gotas = 10;'); n.ev('state.festas.tarefasDia.carnaval_fantasias = null;');
     n.ev("iniciarTarefaFesta('fantasias')");
     ok(n.ev('state.gotas') === 10 && n.ev('state.reputacao') === 389 && n.ev('SAVES') === 2 && n.ev('festaMensagemAtual') === n.ev('FESTAS_STRINGS.carnaval.pt.fantasiasFalta'), 'ecrã: fantasias com 10 Gotas avisam sem gastar nem gravar');
@@ -466,6 +466,7 @@ function suite(fontes) {
     n.ev("iniciarTarefaFesta('quemEstaMascarado')");
     const cena = n.json('festaCenaAtual.cena');
     ok(cena && cena.opcoes.length === 3, 'ecrã: o quem está mascarado mostra uma cena de 3 opções');
+    ok(n.ev('FUNDO') === 'assets/ecras/carnaval_mascarado.jpg', 'ecrã: o quem está mascarado mostra a imagem dos mascarados');
     const errada = (cena.correta + 1) % 3;
     n.ev('festaResponderCenaDoDia(' + errada + ')');
     ok(n.ev('state.reputacao') === 389 && n.ev('state.gotas') === 10 && n.ev('SAVES') === 3 && n.ev("festaJaFezTarefaHoje('carnaval', 'quemEstaMascarado')") === true, 'ecrã: quem está mascarado errado não custa nada e gasta a tentativa do dia');
@@ -752,7 +753,8 @@ function suite(fontes) {
       ok(JSON.stringify(cv.tarefas).indexOf('uvas') === -1 && JSON.stringify(cv.tarefas).indexOf('Uvas') === -1, 'Carnaval: nenhuma tarefa tem custo nem prémio em Uvas');
       ok(ANTIGO_NATAL_TAREFAS === cv.tarefas.map(function (x) { return [x.regra, JSON.stringify(x.premio)].join(); }).join('|'), 'Carnaval: as mesmas regras e valores de sempre (os do Natal antes de a consoada passar a cena)');
       ok(cv.modoTesteSemGravar === undefined && cv.imagens.reserva === undefined && cv.tarefas.every(function (x) { return x.cenasSemRepetir === undefined; }), 'Carnaval: nada do Natal novo (grava em modo de teste, sem imagem de reserva, cena pelo sorteio do dia de sempre)');
-      ok(cv.imagens.faixa === 'assets/ecras/carnaval_festa.jpg' && cv.imagens.diaGrande === 'assets/ecras/carnaval_dia_grande.jpg' && cv.imagens.corso === cv.imagens.faixa && cv.imagens.fantasias === cv.imagens.faixa && cv.imagens.quemEstaMascarado === cv.imagens.faixa, 'Carnaval: uma imagem para a faixa e as tarefas e outra (com gente) para o dia grande');
+      ok(cv.imagens.faixa === 'assets/ecras/carnaval_festa.jpg' && cv.imagens.diaGrande === 'assets/ecras/carnaval_dia_grande.jpg' && cv.imagens.corso === 'assets/ecras/carnaval_corso.jpg' && cv.imagens.fantasias === 'assets/ecras/carnaval_fantasias.jpg' && cv.imagens.quemEstaMascarado === 'assets/ecras/carnaval_mascarado.jpg', 'Carnaval: a faixa e o dia grande como estavam, e uma imagem própria para cada tarefa (corso, fantasias, quemEstaMascarado)');
+      ok(new Set(Object.keys(cv.imagens).map(function (k) { return cv.imagens[k]; })).size === Object.keys(cv.imagens).length, 'Carnaval: as 5 imagens são todas diferentes (nenhuma tarefa repete a faixa)');
       const dim = function (f) { // largura e altura de um JPEG (marcador SOF)
         const b = fs.readFileSync(f); let i = 2;
         while (i < b.length) { if (b[i] !== 0xFF) { i++; continue; } const m = b[i + 1]; if (m >= 0xC0 && m <= 0xCF && m !== 0xC4 && m !== 0xC8 && m !== 0xCC) return [b.readUInt16BE(i + 7), b.readUInt16BE(i + 5)]; i += 2 + b.readUInt16BE(i + 2); }
@@ -763,7 +765,8 @@ function suite(fontes) {
         ok(fs.existsSync(f), 'Carnaval: a imagem ' + k + ' existe (' + cv.imagens[k] + ')');
         if (fs.existsSync(f)) {
           ok(fs.statSync(f).size < 256000, 'Carnaval: ' + cv.imagens[k] + ' tem de pesar menos de 256 000 bytes (pesa ' + fs.statSync(f).size + ')');
-          ok(JSON.stringify(dim(f)) === '[714,1280]', 'Carnaval: ' + cv.imagens[k] + ' mantém 714x1280');
+          const esperada = (k === 'faixa' || k === 'diaGrande') ? '[714,1280]' : '[720,1290]'; // as 3 de tarefa: 720 de largura, proporção original de 768x1376
+          ok(JSON.stringify(dim(f)) === esperada, 'Carnaval: ' + cv.imagens[k] + ' tem ' + esperada);
         }
       });
       ok(fs.statSync(path.join(RAIZ, cv.imagens.diaGrande)).size <= 245000, 'Carnaval: a imagem do dia grande ficou com margem (até 245 000 bytes)');
@@ -773,6 +776,10 @@ function suite(fontes) {
       ['carnaval_festa.jpg', 'carnaval_dia_grande.jpg'].forEach(function (f) {
         const linha = CREDITOS.split('\n').filter(function (l) { return l.indexOf('assets/ecras/' + f) !== -1; })[0];
         ok(!!linha && linha.indexOf('gerada com IA (Gemini, Grok ou ChatGPT)') !== -1, 'CREDITOS.md devia listar ' + f + ' com "gerada com IA (Gemini, Grok ou ChatGPT)"');
+      });
+      ['carnaval_corso.jpg', 'carnaval_fantasias.jpg', 'carnaval_mascarado.jpg'].forEach(function (f) {
+        const linhas = CREDITOS.split('\n').filter(function (l) { return l.indexOf('assets/ecras/' + f) !== -1; });
+        ok(linhas.length === 1 && linhas[0].indexOf('imagem gerada com IA pelo Yoshi_Cat, sem marcas') !== -1, 'CREDITOS.md devia listar ' + f + ' uma só vez, com "imagem gerada com IA pelo Yoshi_Cat, sem marcas"');
       });
     }
 
@@ -1200,7 +1207,9 @@ function suite(fontes) {
       const tarefas = c.json('FESTAS_CONFIG[' + (k + 2) + '].tarefas').map(function (x) { return x.id; });
       tarefas.forEach(function (t) {
         c.ev('festaFundoTarefa(FESTAS_CONFIG[' + (k + 2) + '], ' + JSON.stringify(t) + ')');
-        ok(c.ev('FUNDO') === 'assets/ecras/' + id + '_festa.jpg' && c.ev('IMGS.length') === 0, id + ' ' + t + ': a mesma imagem de sempre, sem pedido de imagem nova');
+        // Páscoa: a mesma imagem de sempre; Carnaval: a imagem própria de cada tarefa (sem reserva, por isso sem pedido de imagem nova)
+        const esperada = id === 'carnaval' ? 'assets/ecras/carnaval_' + { corso: 'corso', fantasias: 'fantasias', quemEstaMascarado: 'mascarado' }[t] + '.jpg' : 'assets/ecras/' + id + '_festa.jpg';
+        ok(c.ev('FUNDO') === esperada && c.ev('IMGS.length') === 0, id + ' ' + t + ': ' + (id === 'carnaval' ? 'a imagem própria da tarefa' : 'a mesma imagem de sempre') + ', sem pedido de imagem nova');
       });
     });
     ['natal_consoada.jpg', 'natal_doces.jpg', 'natal_bolorei.jpg'].forEach(function (f) {
@@ -1210,7 +1219,7 @@ function suite(fontes) {
 
     // J4. O Carnaval, a Páscoa e o São Martinho ficam iguais (configuração e textos, nas 3 línguas)
     const crypto = require('crypto');
-    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', carnaval: '609899f969d707c4cce7c543406eec2d500ee2bb92eb712bac6013ba36afe84f', pascoa: '33c3d22cac7624738ef9667c738d2ed28e7b25235e62ab21ec5296eb637299f1' };
+    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', carnaval: '33467497694dd7b37dbb156f108e1205a1075196433441e3a6a4836cbb62ad02', pascoa: '33c3d22cac7624738ef9667c738d2ed28e7b25235e62ab21ec5296eb637299f1' };
     Object.keys(IGUAIS).forEach(function (id) {
       const j = g.ev('JSON.stringify([FESTAS_CONFIG.filter(function (f) { return f.id === ' + JSON.stringify(id) + '; })[0], FESTAS_STRINGS[' + JSON.stringify(id) + ']])');
       ok(crypto.createHash('sha256').update(j).digest('hex') === IGUAIS[id], id + ': configuração e textos exatamente iguais aos de antes');
@@ -1412,7 +1421,7 @@ function suite(fontes) {
 
     // K8. As outras festas ficam iguais (configuração e textos)
     const crypto = require('crypto');
-    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', natal: '298fd87419769ae3b7cdb8738acbcd5f5579963f09eb2bbae8c95fe918bf59d8', carnaval: '609899f969d707c4cce7c543406eec2d500ee2bb92eb712bac6013ba36afe84f', pascoa: '33c3d22cac7624738ef9667c738d2ed28e7b25235e62ab21ec5296eb637299f1' };
+    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', natal: '298fd87419769ae3b7cdb8738acbcd5f5579963f09eb2bbae8c95fe918bf59d8', carnaval: '33467497694dd7b37dbb156f108e1205a1075196433441e3a6a4836cbb62ad02', pascoa: '33c3d22cac7624738ef9667c738d2ed28e7b25235e62ab21ec5296eb637299f1' };
     Object.keys(IGUAIS).forEach(function (id) {
       const j = g.ev('JSON.stringify([FESTAS_CONFIG.filter(function (f) { return f.id === ' + JSON.stringify(id) + '; })[0], FESTAS_STRINGS[' + JSON.stringify(id) + ']])');
       ok(crypto.createHash('sha256').update(j).digest('hex') === IGUAIS[id], 'Reis: ' + id + ' fica exatamente igual (configuração e textos)');
@@ -1644,7 +1653,7 @@ function suite(fontes) {
     });
 
     // L9. As outras festas ficam exatamente iguais (configuração, textos e janela de datas)
-    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', natal: '298fd87419769ae3b7cdb8738acbcd5f5579963f09eb2bbae8c95fe918bf59d8', carnaval: '609899f969d707c4cce7c543406eec2d500ee2bb92eb712bac6013ba36afe84f', pascoa: '33c3d22cac7624738ef9667c738d2ed28e7b25235e62ab21ec5296eb637299f1', reis: '4fd59d9157a7d121ef485018c1b0ed963ad4c05c106085a92b27b53885e0ef36' };
+    const IGUAIS = { saomartinho: '3e6e3128adebb2ce1c74ea3ec451a04de3f038670c886b9e688f8268dd4eb566', natal: '298fd87419769ae3b7cdb8738acbcd5f5579963f09eb2bbae8c95fe918bf59d8', carnaval: '33467497694dd7b37dbb156f108e1205a1075196433441e3a6a4836cbb62ad02', pascoa: '33c3d22cac7624738ef9667c738d2ed28e7b25235e62ab21ec5296eb637299f1', reis: '4fd59d9157a7d121ef485018c1b0ed963ad4c05c106085a92b27b53885e0ef36' };
     Object.keys(IGUAIS).forEach(function (id) {
       const j = g.ev('JSON.stringify([FESTAS_CONFIG.filter(function (f) { return f.id === ' + JSON.stringify(id) + '; })[0], FESTAS_STRINGS[' + JSON.stringify(id) + ']])');
       ok(crypto.createHash('sha256').update(j).digest('hex') === IGUAIS[id], 'Santos: ' + id + ' fica exatamente igual (configuração e textos)');
@@ -2080,7 +2089,11 @@ const MUTACOES = [
   ['Carnaval sem dia grande a dobrar', 'festas.js', "entradaEnciclopedia: 'caretos',\n        premio: { reputacao: 6 } }\n    ],\n    recompensas: {\n      multiplicadorDiaGrande: 2", "entradaEnciclopedia: 'caretos',\n        premio: { reputacao: 6 } }\n    ],\n    recompensas: {\n      multiplicadorDiaGrande: 1"],
   ['imagem do dia grande do Carnaval = a da festa', 'festas.js', "diaGrande: 'assets/ecras/carnaval_dia_grande.jpg'", "diaGrande: 'assets/ecras/carnaval_festa.jpg'"],
   ['imagem da festa do Carnaval = a do dia grande', 'festas.js', "faixa: 'assets/ecras/carnaval_festa.jpg',", "faixa: 'assets/ecras/carnaval_dia_grande.jpg',"],
-  ['imagem do corso que não existe', 'festas.js', "corso: 'assets/ecras/carnaval_festa.jpg'", "corso: 'assets/ecras/carnaval_corso.jpg'"],
+  ['imagem do corso que não existe', 'festas.js', "corso: 'assets/ecras/carnaval_corso.jpg'", "corso: 'assets/ecras/carnaval_corso_x.jpg'"],
+  ['o corso volta a usar a imagem da faixa', 'festas.js', "corso: 'assets/ecras/carnaval_corso.jpg'", "corso: 'assets/ecras/carnaval_festa.jpg'"],
+  ['as fantasias voltam a usar a imagem da faixa', 'festas.js', "fantasias: 'assets/ecras/carnaval_fantasias.jpg'", "fantasias: 'assets/ecras/carnaval_festa.jpg'"],
+  ['o quem está mascarado volta a usar a imagem da faixa', 'festas.js', "quemEstaMascarado: 'assets/ecras/carnaval_mascarado.jpg'", "quemEstaMascarado: 'assets/ecras/carnaval_festa.jpg'"],
+  ['as fantasias e o corso trocados', 'festas.js', "fantasias: 'assets/ecras/carnaval_fantasias.jpg'", "fantasias: 'assets/ecras/carnaval_corso.jpg'"],
   ['PT do Carnaval sem o texto de falta de Gotas', 'festas.js', "      fantasiasFalta: 'Ainda faltam Gotas para as fantasias. Junta mais e volta cá.',\n", ''],
   ['EN do Carnaval sem o texto do corso', 'festas.js', "      corsoSucesso: \"The corso parades", "      corsoSucessoX: \"The corso parades"],
   ['ES do Carnaval sem o aviso do dia grande', 'festas.js', "      diaGrandeAviso: '¡Hoy es martes de Carnaval! Los premios cuentan el doble.',\n", ''],
