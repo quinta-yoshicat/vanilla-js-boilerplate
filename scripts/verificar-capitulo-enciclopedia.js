@@ -364,8 +364,8 @@ function semente(g, s) {
   }
   const C3 = "{ tipo: 'temIds', caminho: 'encyclopedia.unlocked', ids: ['arr_a', 'arr_b', 'arr_c'] }";
   const pBom = correr(JS_DIR, pacote('bom', C3, ['arr_a', 'arr_b', 'arr_c']));
-  // 86 = 2 visitas (marisa_5, henrique_5) + o pacote de teste (nível, história, capítulo, 3 entradas) + 54 palavras do glossário + 24 da Prova às cegas (20 descrições e 4 linhas que ensinam).
-  ok(pBom.codigo === 0 && pBom.saida.indexOf(' 86 entradas vindas de dados/') !== -1, '(d) o pacote completo (nível, história, capítulo temIds e 3 entradas) devia passar: ' + pBom.saida.slice(-300));
+  // 88 = 4 visitas (marisa_5, henrique_5, valentim_5, henrique_6) + o pacote de teste (nível, história, capítulo, 3 entradas) + 54 palavras do glossário + 24 da Prova às cegas (20 descrições e 4 linhas que ensinam).
+  ok(pBom.codigo === 0 && pBom.saida.indexOf(' 88 entradas vindas de dados/') !== -1, '(d) o pacote completo (nível, história, capítulo temIds e 3 entradas) devia passar: ' + pBom.saida.slice(-300));
   const pBomEstrito = cp.spawnSync(process.execPath, [path.join(__dirname, 'verificar-dados.js'), '--estrito'], { env: Object.assign({}, process.env, { JS_DIR: JS_DIR, DADOS_DIR: path.join(tmp, 'dados-bom') }), encoding: 'utf8' });
   ok(pBomEstrito.status === 0, '(d) e em modo estrito também');
   const pFalta = correr(JS_DIR, pacote('falta', C3, ['arr_a', 'arr_b']));

@@ -17,7 +17,7 @@ function ok(cond, msg) { if (!cond) { falhas++; console.log('FALHA: ' + msg); } 
 
 const g = abrirJogo({ jsDir: JS_DIR });
 const ev = g.ev;
-const ctx = function (nivel, cave, extra) { return JSON.stringify(Object.assign({ nivel: nivel, estacao: 'verao', fase: 'repouso', festaAtiva: false, caveAberta: cave, garrafaDias: null }, extra || {})); };
+const ctx = function (nivel, cave, extra) { return JSON.stringify(Object.assign({ nivel: nivel, estacao: 'outono', fase: 'repouso', festaAtiva: false, caveAberta: cave, garrafaDias: null }, extra || {})); };
 const possivel = function (nivel, cave) { return ev('visitaCondicaoOk(visitaPorId("henrique_5"), ' + ctx(nivel, cave) + ')'); };
 const escolher = function (feitas, contexto, dia) { return ev('(escolherVisitaDoDia(' + JSON.stringify(feitas) + ', ' + contexto + ', ' + JSON.stringify(dia) + ').visita || {}).id || null'); };
 const dia = function (n) { return '2026-' + String(1 + Math.floor(n / 28) % 12).padStart(2, '0') + '-' + String(1 + n % 28).padStart(2, '0') + '#' + n; };
@@ -27,7 +27,7 @@ ok(ev('visitaPorId("henrique_5") !== null'), 'henrique_5 devia existir no jogo (
 ok(ev('visitaPorId("henrique_5").personagem') === 'henrique' && ev('visitaPorId("henrique_5").reputacao') === 2, 'henrique_5: personagem henrique, reputação 2');
 ok(ev('JSON.stringify(visitaPorId("henrique_5").condicao)') === '{"tipo":"cave"}', 'henrique_5: condição cave');
 ok(ev('Object.keys(visitaPorId("henrique_5")).sort().join()') === 'condicao,id,personagem,reputacao,texto', 'henrique_5: só id, personagem, reputacao, condicao e texto: ' + ev('Object.keys(visitaPorId("henrique_5")).join()'));
-ok(ev('VISITAS[VISITAS.length - 1].id') === 'henrique_5' && ev('VISITAS.map(function (v) { return v.id; }).indexOf("henrique_5")') === ev('VISITAS.map(function (v) { return v.id; }).indexOf("marisa_5")') + 1, 'henrique_5 devia vir logo a seguir à marisa_5');
+ok(ev('VISITAS[VISITAS.length - 3].id') === 'henrique_5' && ev('VISITAS.map(function (v) { return v.id; }).indexOf("henrique_5")') === ev('VISITAS.map(function (v) { return v.id; }).indexOf("marisa_5")') + 1, 'henrique_5 devia vir logo a seguir à marisa_5');
 
 // Textos pedidos, escritos aqui à parte (não lidos de dados/).
 const TEXTOS = {
@@ -76,7 +76,7 @@ const comDatas = {};
 outras.forEach(function (id, i) { comDatas[id] = '2026-01-' + String(1 + i).padStart(2, '0'); });
 comDatas.henrique_5 = '2026-03-01';
 const possiveisHoje = JSON.parse(ev('JSON.stringify(VISITAS.filter(function (v) { return visitaCondicaoOk(v, ' + ctx(5, true) + '); }).map(function (v) { return v.id; }))'));
-ok(possiveisHoje.indexOf('henrique_4') !== -1 && possiveisHoje.indexOf('henrique_5') !== -1, 'com a Cave aberta (verão, repouso) a henrique_4 e a henrique_5 são possíveis: ' + possiveisHoje);
+ok(possiveisHoje.indexOf('henrique_4') !== -1 && possiveisHoje.indexOf('henrique_5') !== -1, 'com a Cave aberta (outono, repouso) a henrique_4 e a henrique_5 são possíveis: ' + possiveisHoje);
 let repetiu = false;
 for (let n = 0; n < 80; n++) if (escolher(comDatas, ctx(5, true), dia(n)) === 'henrique_5') repetiu = true;
 ok(repetiu === false, 'no ciclo, a feita há menos tempo (a henrique_5) não devia sair antes das outras');

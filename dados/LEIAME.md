@@ -2,11 +2,11 @@
 
 Esta pasta é para juntar conteúdo novo ao jogo (visitas, níveis, histórias, capítulos, histórias da Enciclopédia e objetivos) escrito **só como dados**, sem mexer no código. Quem escreve é o Yoshi_Cat, com o Claude.ai.
 
-**O jogo lê esta pasta.** Carrega os 8 ficheiros pela ordem do `index.html`, a seguir às listas que alimentam (incluindo o `js/explorar.js`, da Enciclopédia, e o `js/palavras.js`, do glossário, e o `js/prova.js`, da Prova às cegas) e antes do `main.js`, e cada entrada entra na lista certa através de `dadosAcrescentar` (`js/dados.js`). **Hoje `dados/` traz as visitas `marisa_5` e `henrique_5` e os pacotes dos níveis 11, «Moscatel da Arrábida», 12, «Moscatel do Sado», 13, «Moscatel de Palmela», 14, «Moscatel de Azeitão», 15, «Moscatel de Sesimbra», 16, «Moscatel de Setúbal», 17, «Moscatel de Alcácer», 18, «Moscatel da Comporta», 19, «Moscatel do Montado», e 20, «Moscatel do Poeta» (cada um com nível, história, 3 histórias da Enciclopédia e capítulo), mais as 20 palavras do glossário «Palavras da Quinta» (`dados/palavras.js`, que se vê no Perfil a partir do nível 4); só `dados/objetivos.js` tem apenas comentários.**
+**O jogo lê esta pasta.** Carrega os 8 ficheiros pela ordem do `index.html`, a seguir às listas que alimentam (incluindo o `js/explorar.js`, da Enciclopédia, e o `js/palavras.js`, do glossário, e o `js/prova.js`, da Prova às cegas) e antes do `main.js`, e cada entrada entra na lista certa através de `dadosAcrescentar` (`js/dados.js`). **Hoje `dados/` traz as visitas `marisa_5`, `henrique_5`, `valentim_5` e `henrique_6` e os pacotes dos níveis 11, «Moscatel da Arrábida», 12, «Moscatel do Sado», 13, «Moscatel de Palmela», 14, «Moscatel de Azeitão», 15, «Moscatel de Sesimbra», 16, «Moscatel de Setúbal», 17, «Moscatel de Alcácer», 18, «Moscatel da Comporta», 19, «Moscatel do Montado», e 20, «Moscatel do Poeta» (cada um com nível, história, 3 histórias da Enciclopédia e capítulo), mais as 20 palavras do glossário «Palavras da Quinta» (`dados/palavras.js`, que se vê no Perfil a partir do nível 4); só `dados/objetivos.js` tem apenas comentários.**
 
 | Ficheiro | O que lá vai | Estado |
 |---|---|---|
-| `dados/visitas.js` | visitas novas | suportado (já tem `marisa_5` e `henrique_5`) |
+| `dados/visitas.js` | visitas novas | suportado (já tem `marisa_5`, `henrique_5`, `valentim_5` e `henrique_6`) |
 | `dados/niveis.js` | níveis novos | suportado (já tem `nivel_11`, 3650, `nivel_12`, 4550, `nivel_13`, 5500, `nivel_14`, 6500, `nivel_15`, 7550, `nivel_16`, 8650, `nivel_17`, 9850, `nivel_18`, 11050, `nivel_19`, 12350, e `nivel_20`, 13750) |
 | `dados/historias.js` | histórias de nível novas | suportado (já tem `historia_11`, `historia_12`, `historia_13`, `historia_14`, `historia_15`, `historia_16`, `historia_17`, `historia_18`, `historia_19` e `historia_20`) |
 | `dados/capitulos.js` | capítulos novos | suportado (já tem `cap11`, `cap12`, `cap13`, `cap14`, `cap15`, `cap16`, `cap17`, `cap18`, `cap19` e `cap20`) |
@@ -128,7 +128,12 @@ Mesmo molde dos níveis 11 a 14:
 - `dados/visitas.js`: `henrique_5`, do Dr. Henrique (`henrique`), Reputação 2, condição `{ tipo: 'cave' }`. Fala da idade no rótulo do Moscatel («10 anos» só se tiver mesmo 10 anos); as fontes estão em comentário antes da entrada. Sem imagem: a cara vem da personagem.
 - A condição `cave` é a Cave de Reserva aberta (nível 5 ou mais, ou jogador antigo), e a visita só existe a partir do nível 4, por isso só aparece a quem já tem a Cave.
 - Convive com a `henrique_4` (também `cave`): entram as duas no sorteio do dia, com prioridade sobre as visitas sem condição, e nenhuma sai duas vezes antes das restantes. Quem já tem a visita de hoje guardada não muda; a nova só entra a partir do dia seguinte.
-- Teste: `scripts/verificar-visita-henrique-5.js`; `scripts/verificar-dados-carregar.js` fixa os ids de `dados/visitas.js` (`marisa_5`, `henrique_5`) e as 14 visitas.
+- Teste: `scripts/verificar-visita-henrique-5.js`; `scripts/verificar-dados-carregar.js` fixa os ids de `dados/visitas.js` (`marisa_5`, `henrique_5`, `valentim_5`, `henrique_6`) e as 16 visitas.
+
+## As visitas `valentim_5` (verão) e `henrique_6` (inverno)
+
+- `dados/visitas.js`: `valentim_5`, do Sr. Valentim (`valentim`), Reputação 1, condição `{ tipo: 'estacao', valor: 'verao' }` (o valor que o jogo usa, sem acento): a tirada da cortiça, de maio a agosto, de nove em nove anos, e a casca que fecha as garrafas. `henrique_6`, do Dr. Henrique (`henrique`), Reputação 1, condição `{ tipo: 'estacao', valor: 'inverno' }`: a maquia, o pagamento em azeite ao lagar, e os «copos» dele. Só factos que a Enciclopédia e o glossário já dizem; sem imagem: a cara vem da personagem.
+- Teste: `scripts/verificar-visitas-cortica-azeite.js`. Com `valentim_5` o verão deixa de ficar sem visitas (inverno 2, primavera 2, verão 1).
 
 ## Histórias dos níveis 5 e 6 (só dados, sem nível nem capítulo novos)
 
