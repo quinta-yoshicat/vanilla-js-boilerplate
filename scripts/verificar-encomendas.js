@@ -399,7 +399,7 @@ const MUTACOES = [
   ['nuvem: ignora quem tem mais cumpridas', 'nuvem.js', '  if (x.cumpridas > y.cumpridas) atual = x.atual;\n  else if (y.cumpridas > x.cumpridas) atual = y.atual;\n  else if', '  if'],
   ['nuvem: fica a mais antiga', 'nuvem.js', 'atual = chave(y.atual) > chave(x.atual) ? y.atual : x.atual;', 'atual = chave(y.atual) < chave(x.atual) ? y.atual : x.atual;'],
   ['nuvem: no mesmo dia depende da ordem', 'nuvem.js', "return e.aceiteDia + '|' + e.escalao", "return e.aceiteDia + '|' + 0"],
-  ['nuvem: sem a área', 'nuvem.js', "'reserva', 'colecao', 'encomendas', 'prova'];", "'reserva', 'colecao', 'prova'];"],
+  ['nuvem: sem a área', 'nuvem.js', "'reserva', 'colecao', 'encomendas', 'prova', 'moinho'];", "'reserva', 'colecao', 'prova', 'moinho'];"],
   ['o engarrafar passa a chamá-las', 'garrafa.js', '    a.lote = null;\n    adegaGarrafaFeita', '    a.lote = null; if (typeof encomendaProcurarGarrafa === "function") encomendaProcurarGarrafa(state, "x");\n    adegaGarrafaFeita'],
   ['carregado antes de visitas.js', 'index.html', (FONTES['index.html'].match(/  <script src="js\/visitas\.js\?v=\d+"><\/script>\n/) || ['(sem a linha do visitas.js)'])[0], '']
 ];

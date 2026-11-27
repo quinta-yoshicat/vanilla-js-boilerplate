@@ -12,7 +12,7 @@
 //   fotosExtra     (opcional) { numeroDaFala: 'assets/ecras/yyy.jpg' } fotos noutras falas (a raiz também não pode ter cópia); sem isto só a fala 1 leva foto
 //   falas          4 textos { pt, en, es }
 //   ids, enc, cap  os 3 ids das entradas, os textos { titulo, texto } de cada uma e o capítulo { titulo, objetivo, conclusao }
-//   grupos         os ids das entradas dos pacotes anteriores (nivelMinimo 11, 12, ..., N - 1): [[...], [...], ...]; as 17 dos níveis 5 a 10 juntam-se aqui sozinhas (GRUPOS_NIVEIS_5_6; o nome ficou do tempo em que só havia as dos níveis 5 e 6)
+//   grupos         os ids das entradas dos pacotes anteriores (nivelMinimo 11, 12, ..., N - 1): [[...], [...], ...]; as 18 dos níveis 5 a 10 juntam-se aqui sozinhas (GRUPOS_NIVEIS_5_6; o nome ficou do tempo em que só havia as dos níveis 5 e 6)
 // }
 //
 // Prova (como em verificar-nivel-11/12/13.js):
@@ -39,9 +39,9 @@ const JS_DIR = process.env.JS_DIR || path.join(RAIZ, 'js');
 const DADOS_DIR = process.env.DADOS_DIR || path.join(RAIZ, 'dados');
 const LINGUAS = ['pt', 'en', 'es'];
 const ENTRADAS_ORIGEM = 34; // as histórias da Enciclopédia de origem (em js/explorar.js; a 33.ª é a «janeiras», dos Reis, e a 34.ª a «santosPopulares»)
-// As 17 histórias dos níveis 5 a 10 (dados/enciclopedia.js, a seguir às 34 de origem e antes das do nível 11): 3 de nivelMinimo 5, 3 de nivelMinimo 6,
+// As 18 histórias dos níveis 5 a 10 (dados/enciclopedia.js, a seguir às 34 de origem e antes das do nível 11): 3 de nivelMinimo 5, 3 de nivelMinimo 6,
 // 4 de nivelMinimo 7 (sal, mel, queijo e feira_santiago), 3 de nivelMinimo 8 (azeite, pinha e souto), 3 de nivelMinimo 9 (choco, arroz_agua e arroz_aves)
-// e 1 de nivelMinimo 10 (tirada_da_cortica), como as repartiu a PR 255 (só o nivelMinimo; a ordem é a de entrada em dados/).
+// e 2 de nivelMinimo 10 (tirada_da_cortica e, no fim do grupo, moinho_mare_mourisca), como as repartiu a PR 255 (só o nivelMinimo; a ordem é a de entrada em dados/).
 const GRUPOS_NIVEIS_5_6 = [
   ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa'],
   ['colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos'],
@@ -54,7 +54,8 @@ const GRUPOS_NIVEIS_5_6 = [
   ['azeitao_coalho'],
   ['pinha_tres_anos'],
   ['souto'],
-  ['feira_santiago']
+  ['feira_santiago'],
+  ['moinho_mare_mourisca']
 ];
 
 function correr(spec) {
@@ -77,8 +78,8 @@ function correr(spec) {
   function js(o) { return JSON.stringify(o); }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
   function nivelEsperado(rep) { let n = 1; LIMIARES.forEach(function (m, i) { if (rep >= m) n = i + 1; }); return n; }
-  // Quantas entradas da Enciclopédia vê um jogador do nível n (os níveis 5 e 6 juntam 3 cada, o 7 junta 4, o 8 e o 9 juntam 3 cada, o 10 junta 1 e cada pacote de nível 11, 12, ... junta 3; a partir do 13 conta mais 1, a da Festa das Vindimas de Palmela).
-  function entradasNoNivel(n) { return ENTRADAS_ORIGEM + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 7 ? 4 : 0) + (n >= 8 ? 3 : 0) + (n >= 9 ? 3 : 0) + (n >= 10 ? 1 : 0) + 3 * Math.max(0, Math.min(n, M) - 10) + (Math.min(n, M) >= 13 ? 1 : 0); }
+  // Quantas entradas da Enciclopédia vê um jogador do nível n (os níveis 5 e 6 juntam 3 cada, o 7 junta 4, o 8 e o 9 juntam 3 cada, o 10 junta 2 e cada pacote de nível 11, 12, ... junta 3; a partir do 13 conta mais 1, a da Festa das Vindimas de Palmela).
+  function entradasNoNivel(n) { return ENTRADAS_ORIGEM + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 7 ? 4 : 0) + (n >= 8 ? 3 : 0) + (n >= 9 ? 3 : 0) + (n >= 10 ? 2 : 0) + 3 * Math.max(0, Math.min(n, M) - 10) + (Math.min(n, M) >= 13 ? 1 : 0); }
 
   // Abre o jogo REAL com a pasta dados/ (ou outra) e os ganchos de teste.
   function abrir(opcoes) {

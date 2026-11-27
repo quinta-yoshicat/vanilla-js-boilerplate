@@ -261,8 +261,36 @@ function defaultState() {
       ultimoDia: null,
       dias: 0,
       acertos: 0
+    },
+    // O Moinho de Maré da Mourisca (nível 10, ação no bloco da oferta da Estrada, js/estrada.js). fechadoEm: o carimbo (Date.now(), em
+    // milissegundos) do momento em que fechou a comporta; null = não há comporta fechada à espera. A água só se solta 6 horas depois.
+    // dia: o último dia (Lisboa, 'AAAA-MM-DD') em que soltou a água e ganhou a Reputação (null = nunca; 1 recompensa por dia).
+    // Junta-se na nuvem como as áreas leves (nuvemJuntarLeves, js/nuvem.js); reparação em memória em moinhoEstado() abaixo.
+    moinho: {
+      fechadoEm: null,
+      dia: null
     }
   };
+}
+
+// ---------------------------------------------------------------------
+// MOINHO DE MARÉ: a forma certa de state.moinho (uma nuvem, um save antigo ou um estranho podem trazer null, outro tipo, um carimbo que
+// não é um inteiro positivo ou um dia mal escrito). Puras: recebem o valor por argumento. moinhoNormalizar() devolve um objeto NOVO (a
+// nuvem usa-a); moinhoEstado() repara em memória o estado que recebe e devolve state.moinho.
+// ---------------------------------------------------------------------
+function moinhoNormalizar(x) {
+  const m = x && typeof x === 'object' && !Array.isArray(x) ? x : {};
+  const carimbo = typeof m.fechadoEm === 'number' && Number.isSafeInteger(m.fechadoEm) && m.fechadoEm > 0 ? m.fechadoEm : null;
+  const dia = typeof m.dia === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(m.dia) ? m.dia : null;
+  return { fechadoEm: carimbo, dia: dia };
+}
+
+function moinhoEstado(estado) {
+  if (!estado || typeof estado !== 'object') return moinhoNormalizar(null);
+  const atual = estado.moinho;
+  const certo = moinhoNormalizar(atual);
+  if (JSON.stringify(atual) !== JSON.stringify(certo)) estado.moinho = certo;
+  return estado.moinho;
 }
 
 // ---------------------------------------------------------------------

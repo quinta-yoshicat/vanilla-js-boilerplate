@@ -25,7 +25,7 @@ const vm = require('vm');
 const RAIZ = path.join(__dirname, '..');
 const STATE_JS = fs.readFileSync(path.join(RAIZ, 'js', 'state.js'), 'utf8');
 const NUVEM_JS = fs.readFileSync(path.join(RAIZ, 'js', 'nuvem.js'), 'utf8');
-const AREAS = ['despensa', 'visitas', 'lagar', 'camara', 'roxo', 'loja', 'reserva', 'colecao', 'encomendas', 'prova'];
+const AREAS = ['despensa', 'visitas', 'lagar', 'camara', 'roxo', 'loja', 'reserva', 'colecao', 'encomendas', 'prova', 'moinho'];
 const CHAVE = 'yoshicat_quinta_state_v2';
 const MIN = 60000;
 

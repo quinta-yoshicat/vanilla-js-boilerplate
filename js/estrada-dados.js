@@ -1042,6 +1042,22 @@ const ESTRADA_MESA_SADO = {
   imagem: 'assets/ecras/mesa_sado.jpg'
 };
 
+// O MOINHO DE MARÉ DA MOURISCA (nível 10): outra ação do bloco da oferta às visitas (estradaOfertaHtml, js/estrada.js), com uma espera em
+// vez de bens (o mesmo padrão de cooldown da Vinha, js/vinha.js: guarda-se o carimbo Date.now() e vê-se quanto falta). Não gasta nada
+// e não tem assalto dos porcos. O estado é state.moinho { fechadoEm, dia } (js/state.js).
+//   nivelMinimo   só existe a partir deste nível (também para um jogador antigo)
+//   esperaMs      6 horas entre «Fechar a comporta» e «Soltar a água»
+//   reputacao     +10 de Reputação ao soltar a água, 1 vez por dia (dia de Lisboa; a marca é state.moinho.dia)
+//   imagemFechar  a foto antes de soltar a água (a comporta fechada, com a maré cheia)
+//   imagemSoltar  a foto depois de soltar a água (a água a correr para a roda)
+const ESTRADA_MOINHO_MARE = {
+  nivelMinimo: 10,
+  esperaMs: 6 * 60 * 60 * 1000,
+  reputacao: 10,
+  imagemFechar: 'assets/ecras/moinho_mare_a.jpg',
+  imagemSoltar: 'assets/ecras/moinho_mare_b.jpg'
+};
+
 // Fala especial de cada visita (id de VISITAS_PERSONAGENS) para cada bem oferecido: só gratidão, curiosidade e
 // carinho, sem factos (por isso "semFacto: true", como as outras falas de humor). Sem dizer qual Moscatel vai com
 // qual produto.

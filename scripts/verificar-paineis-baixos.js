@@ -115,10 +115,12 @@ function suite(fontes) {
     // E as do «Ver cenário» (o olho da Quinta, js/cenario.js: seletores com «cenario»), que também não são de ecrã baixo.
     const semCenarioSo = function (x) { return normal(x.replace(/[^{}]*cenario[^{}]*\{[^{}]*\}/g, '')); };
     // E as da «Mesa do Sado» (a foto em faixa no bloco da oferta, js/estrada.js: seletores com «mesa-sado»), que também não são de ecrã baixo.
-    const semCenario = function (x) { return normal(semCenarioSo(x).replace(/[^{}]*mesa-sado[^{}]*\{[^{}]*\}/g, '')); };
-    ok(semCenario(semProva(M.fora)) === semCenario(semProva(fora)), '(c) o CSS de fora do bloco é igual ao do master (origin/master), tirando as regras da Prova às cegas, do «Ver cenário» e da «Mesa do Sado»');
+    // E as do «Moinho de Maré da Mourisca» (a foto a 100% da largura no mesmo bloco, js/estrada.js: seletores com «moinho-mare»), pelo mesmo motivo.
+    const semCenario = function (x) { return normal(semCenarioSo(x).replace(/[^{}]*mesa-sado[^{}]*\{[^{}]*\}/g, '').replace(/[^{}]*moinho-mare[^{}]*\{[^{}]*\}/g, '')); };
+    ok(semCenario(semProva(M.fora)) === semCenario(semProva(fora)), '(c) o CSS de fora do bloco é igual ao do master (origin/master), tirando as regras da Prova às cegas, do «Ver cenário», da «Mesa do Sado» e do «Moinho de Maré»');
     ok(semCenarioSo(fora) !== fora || !/cenario/.test(fora), '(c) (as regras do «Ver cenário» saem mesmo da comparação)');
     ok(semCenario(fora) !== semCenarioSo(fora) || !/mesa-sado/.test(fora), '(c) (as regras da «Mesa do Sado» saem mesmo da comparação)');
+    ok(!/moinho-mare/.test(fora) || semCenario(fora) !== semCenarioSo(fora).replace(/[^{}]*mesa-sado[^{}]*\{[^{}]*\}/g, ''), '(c) (as regras do «Moinho de Maré» saem mesmo da comparação)');
     ok(semProva(fora) !== fora || !/prova/.test(fora), '(c) (as regras da prova saem mesmo da comparação)');
   }
 
