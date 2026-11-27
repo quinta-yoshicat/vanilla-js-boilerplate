@@ -66,7 +66,7 @@ const IDS = ['palmela_castelo', 'palmela_capelo', 'palmela_castelao'];
 const IDS_FESTA = ['festa_vindimas_palmela']; // a 4.ª entrada de nível 13 (festa das Vindimas de Palmela): no fim de dados/enciclopedia.js e fora do capítulo 13
 const IDS_11 = ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'];
 const IDS_12 = ['sado_reserva', 'sado_golfinhos', 'sado_troia'];
-// As 6 histórias dos níveis 5 e 6 (a seguir às 34 de origem e antes das da Arrábida): também têm nivelMinimo, por isso entram na prioridade do Explorar.
+// As 17 histórias dos níveis 5 a 10 (a seguir às 34 de origem e antes das da Arrábida): também têm nivelMinimo, por isso entram na prioridade do Explorar.
 const IDS_5_6 = ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa', 'colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos', 'azeite_do_olival_ao_lagar', 'tirada_da_cortica', 'salina_marnoto', 'mel_arrabida', 'pesca_choco_sado', 'arroz_agua', 'arroz_aves', 'azeitao_coalho', 'pinha_tres_anos', 'souto', 'feira_santiago'];
 const ATE_10 = 34 + IDS_5_6.length; // entradas visíveis até ao nível 10
 const ATE_11 = ATE_10 + IDS_11.length;
