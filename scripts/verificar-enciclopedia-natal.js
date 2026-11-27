@@ -151,17 +151,18 @@ function correr(explorarJs, festasJs) {
     const cfg = f.__cfg || [];
     const festa = function (id) { return cfg.filter(function (x) { return x.id === id; })[0]; };
     const tarefa = function (f, id) { return f && f.tarefas.filter(function (t) { return t.id === id; })[0]; };
-    const natal = festa('natal'), carnaval = festa('carnaval'), pascoa = festa('pascoa'), reis = festa('reis'), santos = festa('santos'), santiago = festa('santiago');
+    const natal = festa('natal'), carnaval = festa('carnaval'), pascoa = festa('pascoa'), reis = festa('reis'), santos = festa('santos'), santiago = festa('santiago'), vindimas = festa('vindimas');
     ok(reis && reis.entradaEnciclopedia === 'janeiras', '(f) a festa dos Reis devia abrir a janeiras ao entrar');
     ok(santos && santos.entradaEnciclopedia === 'santosPopulares', '(f) a festa dos Santos Populares devia abrir a santosPopulares ao entrar');
     ok(santiago && santiago.entradaEnciclopedia === 'feira_santiago', '(f) a festa da Feira de Sant\'Iago devia abrir a feira_santiago (de dados/enciclopedia.js) ao entrar');
+    ok(vindimas && vindimas.entradaEnciclopedia === 'festa_vindimas_palmela', '(f) a festa das Vindimas de Palmela devia abrir a festa_vindimas_palmela (de dados/enciclopedia.js, nível mínimo 13) ao entrar');
     ok(natal && natal.entradaEnciclopedia === 'consoada', '(f) a festa do Natal devia abrir a consoada ao entrar');
     ok(tarefa(natal, 'boloRei') && tarefa(natal, 'boloRei').entradaEnciclopedia === 'boloRei', '(f) a tarefa do bolo-rei devia abrir o boloRei');
     ok(carnaval && carnaval.entradaEnciclopedia === 'entrudo', '(f) a festa do Carnaval devia abrir o entrudo ao entrar');
     ok(tarefa(carnaval, 'quemEstaMascarado') && tarefa(carnaval, 'quemEstaMascarado').entradaEnciclopedia === 'caretos', '(f) a tarefa quemEstaMascarado devia abrir os caretos');
     ok(pascoa && pascoa.entradaEnciclopedia === 'folar', '(f) a festa da Páscoa devia abrir o folar ao entrar');
     ok(tarefa(pascoa, 'ovos') && tarefa(pascoa, 'ovos').entradaEnciclopedia === 'ovosAmendoas', '(f) a tarefa dos ovos devia abrir o ovosAmendoas');
-    ok(cfg.filter(function (x) { return x.id !== 'saomartinho' && x.id !== 'natal' && x.id !== 'carnaval' && x.id !== 'pascoa' && x.id !== 'reis' && x.id !== 'santos' && x.id !== 'santiago' && x.entradaEnciclopedia; }).length === 0, '(f) não há outras festas a abrir entradas');
+    ok(cfg.filter(function (x) { return x.id !== 'saomartinho' && x.id !== 'natal' && x.id !== 'carnaval' && x.id !== 'pascoa' && x.id !== 'reis' && x.id !== 'santos' && x.id !== 'santiago' && x.id !== 'vindimas' && x.entradaEnciclopedia; }).length === 0, '(f) não há outras festas a abrir entradas');
     ok(cfg.every(function (x) { return x.tarefas.every(function (t) { return !t.entradaEnciclopedia || (x.id === 'natal' && t.id === 'boloRei') || (x.id === 'carnaval' && t.id === 'quemEstaMascarado') || (x.id === 'pascoa' && t.id === 'ovos'); }); }), '(f) só o bolo-rei, o quem está mascarado e os ovos abrem uma entrada (a consoada, os doces, o corso, as fantasias, a tarefa do folar, as amêndoas e as 3 tarefas dos Reis não)');
   } catch (e) { ok(false, '(f) FESTAS_CONFIG não carrega: ' + e.message); }
   return falhas;

@@ -97,9 +97,9 @@ Mesmo molde dos níveis 11 e 12:
 
 - `dados/niveis.js`: `nivel_13`, a partir de **5500** de Reputação.
 - `dados/historias.js`: `historia_13`, 4 falas. A 1.ª leva a foto `assets/ecras/palmela_castelo.jpg`; nenhuma leva som.
-- `dados/enciclopedia.js`: `palmela_castelo`, `palmela_capelo` e `palmela_castelao` (nível mínimo 13, sem imagem).
+- `dados/enciclopedia.js`: `palmela_castelo`, `palmela_capelo` e `palmela_castelao` (nível mínimo 13, sem imagem) e, a seguir, `festa_vindimas_palmela` (nível mínimo 13, imagem `vindimas_palmela_festa.jpg`): a 4.ª entrada de nível 13, aberta ao entrar na festa «vindimas» (`js/festas.js`) ou pelo Explorar; o capítulo 13 não a pede.
 - `dados/capitulos.js`: `cap13` «Do Castelo ao Mundo», critério `temIds` nessas 3 entradas.
-- **Três grupos de `nivelMinimo` (11, 12 e 13).** Continua a ser um só grupo de prioridade: no nível 13, as da Arrábida e do Sado ainda por abrir e as de Palmela saem **todas** (as 9, por ordem aleatória) antes de qualquer entrada de hoje. Quem tem os grupos anteriores abertos recebe primeiro só os que faltam. Abaixo do nível 13 o jogador não vê as de Palmela. O cartão do capítulo mostra sempre o primeiro capítulo por cumprir, por isso um capítulo antigo em atraso (ex.: o 11) aparece antes do 13.
+- **Três grupos de `nivelMinimo` (11, 12 e 13).** Continua a ser um só grupo de prioridade: no nível 13, as da Arrábida e do Sado ainda por abrir e as de Palmela saem **todas** (as 10, por ordem aleatória) antes de qualquer entrada de hoje. Quem tem os grupos anteriores abertos recebe primeiro só os que faltam. Abaixo do nível 13 o jogador não vê as de Palmela. O cartão do capítulo mostra sempre o primeiro capítulo por cumprir, por isso um capítulo antigo em atraso (ex.: o 11) aparece antes do 13.
 
 ## O nível 14, «Moscatel de Azeitão» (Parte 2, A Terra)
 

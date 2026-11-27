@@ -23,6 +23,12 @@
 // Depois de passar, aplica "mutações" (estraga cada regra de propósito) e confirma que o teste as apanha.
 // Uso: node scripts/verificar-festas.js     Sai com 0 se estiver tudo OK e 1 se alguma verificação falhar.
 process.env.TZ = 'Pacific/Auckland';
+// Cada ambiente simulado (módulo vm) fica retido na memória até ao fim, e as mutações repetem a suite mais de 200 vezes: com as 8 festas
+// o limite normal do Node (cerca de 8 GB) já não chega. Por isso o teste volta a arrancar-se a si próprio com mais memória (só uma vez).
+if (!process.env.VERIFICAR_FESTAS_FILHO && require('v8').getHeapStatistics().heap_size_limit < 11 * 1024 * 1024 * 1024) {
+  const filho = require('child_process').spawnSync(process.execPath, ['--max-old-space-size=12288'].concat(process.argv.slice(1)), { stdio: 'inherit', env: Object.assign({}, process.env, { VERIFICAR_FESTAS_FILHO: '1' }) });
+  process.exit(filho.status === null ? 1 : filho.status);
+}
 const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
@@ -655,7 +661,7 @@ function suite(fontes) {
         if (f.ev('festaAbertaNoDia(CT, ' + JSON.stringify(d) + ')') !== dentro) aberturaMal++;
         if (f.ev('festaDiaGrandeNoDia(CT, ' + JSON.stringify(d) + ')') !== (d === JAN[y][2])) grandeMal++;
         const viaMotor = f.ev('(festaAtivaPelaDataReal(' + JSON.stringify(d) + ') || {}).id || null');
-        const esperado = dentro ? (d <= JAN[y][2] ? 'pascoa' : 'festaMovelTeste') : (d >= JC[y][0] && d <= JC[y][1] ? 'carnaval' : d >= y + '-11-08' && d <= y + '-11-14' ? 'saomartinho' : (d >= y + '-12-20' && d <= y + '-12-26' ? 'natal' : (d >= y + '-01-01' && d <= y + '-01-06' ? 'reis' : (d >= y + '-06-12' && d <= y + '-06-29' ? 'santos' : (d >= y + '-07-23' && d <= y + '-08-02' ? 'santiago' : null)))));
+        const esperado = dentro ? (d <= JAN[y][2] ? 'pascoa' : 'festaMovelTeste') : (d >= JC[y][0] && d <= JC[y][1] ? 'carnaval' : d >= y + '-11-08' && d <= y + '-11-14' ? 'saomartinho' : (d >= y + '-12-20' && d <= y + '-12-26' ? 'natal' : (d >= y + '-01-01' && d <= y + '-01-06' ? 'reis' : (d >= y + '-06-12' && d <= y + '-06-29' ? 'santos' : (d >= y + '-07-23' && d <= y + '-08-02' ? 'santiago' : (d >= y + '-09-05' && d <= y + '-09-11' ? 'vindimas' : null))))));
         if (viaMotor !== esperado) fora1++;
       }
     }
@@ -711,23 +717,23 @@ function suite(fontes) {
         const pg = gauss(y), tp = Date.UTC(y, Number(pg.slice(5, 7)) - 1, Number(pg.slice(8, 10)));
         const emCarnaval = d >= fmt(tp - 50 * 86400000) && d <= fmt(tp - 47 * 86400000);
         const emPascoa = d >= fmt(tp - 2 * 86400000) && d <= fmt(tp);
-        const esperado = emCarnaval ? 'carnaval' : emPascoa ? 'pascoa' : (mmdd >= '11-08' && mmdd <= '11-14') ? 'saomartinho' : ((mmdd >= '12-20' && mmdd <= '12-26') ? 'natal' : ((mmdd >= '01-01' && mmdd <= '01-06') ? 'reis' : ((mmdd >= '06-12' && mmdd <= '06-29') ? 'santos' : ((mmdd >= '07-23' && mmdd <= '08-02') ? 'santiago' : null))));
+        const esperado = emCarnaval ? 'carnaval' : emPascoa ? 'pascoa' : (mmdd >= '11-08' && mmdd <= '11-14') ? 'saomartinho' : ((mmdd >= '12-20' && mmdd <= '12-26') ? 'natal' : ((mmdd >= '01-01' && mmdd <= '01-06') ? 'reis' : ((mmdd >= '06-12' && mmdd <= '06-29') ? 'santos' : ((mmdd >= '07-23' && mmdd <= '08-02') ? 'santiago' : ((mmdd >= '09-05' && mmdd <= '09-11') ? 'vindimas' : null)))));
         const obtido = g.ev('(festaAtivaPelaDataReal(' + JSON.stringify(d) + ') || {}).id || null');
         total++;
         if (obtido !== esperado) aberto++;
         const esperaGrande = mmdd === '11-11' || mmdd === '12-25';
-        const festaDoDia = g.ev('festaAtivaPelaDataReal(' + JSON.stringify(d) + ') !== null') && esperado !== 'carnaval' && esperado !== 'pascoa' && esperado !== 'reis' && esperado !== 'santos' && esperado !== 'santiago'; // o dia grande dos Reis, o dos Santos Populares e o da Feira de Sant'Iago têm verificação própria (secções K, L e M)
+        const festaDoDia = g.ev('festaAtivaPelaDataReal(' + JSON.stringify(d) + ') !== null') && esperado !== 'carnaval' && esperado !== 'pascoa' && esperado !== 'reis' && esperado !== 'santos' && esperado !== 'santiago' && esperado !== 'vindimas'; // o dia grande dos Reis, o dos Santos Populares, o da Feira de Sant'Iago e o das Vindimas de Palmela têm verificação própria (secções K, L, M e N)
         const obtidoGrande = festaDoDia && g.ev('estaNoDiaGrandeFesta(festaAtivaPelaDataReal(' + JSON.stringify(d) + '), ' + JSON.stringify(d) + ')');
         if (obtidoGrande !== (esperaGrande && festaDoDia)) grande++;
         if (esperado === 'saomartinho' && obtido !== 'saomartinho') sm++;
         if (esperado === 'natal' && obtido !== 'natal') nat++;
       }
     }
-    ok(total === 4749 && aberto === 0 && sm === 0 && nat === 0, 'São Martinho (8 a 14/11) e Natal (20 a 26/12) abrem exatamente como antes, e o Carnaval, a Páscoa, os Reis, os Santos Populares e a Feira de Sant\'Iago só nas suas janelas, em todos os ' + total + ' dias de 2024 a 2036 (' + aberto + ' diferenças)');
+    ok(total === 4749 && aberto === 0 && sm === 0 && nat === 0, 'São Martinho (8 a 14/11) e Natal (20 a 26/12) abrem exatamente como antes, e o Carnaval, a Páscoa, os Reis, os Santos Populares, a Feira de Sant\'Iago e as Vindimas de Palmela só nas suas janelas, em todos os ' + total + ' dias de 2024 a 2036 (' + aberto + ' diferenças)');
     ok(grande === 0, 'São Martinho e Natal: o dia grande é exatamente 11/11 e 25/12 em todos os dias de 2024 a 2036 (' + grande + ' diferenças)');
     const bordas = ['2026-11-07', '2026-11-08', '2026-11-11', '2026-11-14', '2026-11-15', '2026-12-19', '2026-12-20', '2026-12-25', '2026-12-26', '2026-12-27', '2028-11-08', '2028-12-26'];
     ok(JSON.stringify(bordas.map(function (d) { return g.ev('(festaAtivaPelaDataReal(' + JSON.stringify(d) + ') || {}).id || null'); })) === JSON.stringify([null, 'saomartinho', 'saomartinho', 'saomartinho', null, null, 'natal', 'natal', 'natal', null, 'saomartinho', 'natal']), 'São Martinho e Natal: dias de fronteira (dia antes, primeiro, grande, último, dia depois)');
-    ok(g.json('FESTAS_CONFIG.map(function (x) { return x.id; })').join() === 'saomartinho,natal,carnaval,pascoa,reis,santos,santiago' && g.json("FESTAS_CONFIG.map(function (x) { return !!x.movel; })").join() === 'false,false,true,true,false,false,false', 'o jogo tem o São Martinho e o Natal (datas fixas), o Carnaval e a Páscoa (datas móveis) e, por último, os Reis, os Santos Populares e a Feira de Sant\'Iago (datas fixas)');
+    ok(g.json('FESTAS_CONFIG.map(function (x) { return x.id; })').join() === 'saomartinho,natal,carnaval,pascoa,reis,santos,santiago,vindimas' && g.json("FESTAS_CONFIG.map(function (x) { return !!x.movel; })").join() === 'false,false,true,true,false,false,false,false', 'o jogo tem o São Martinho e o Natal (datas fixas), o Carnaval e a Páscoa (datas móveis) e, por último, os Reis, os Santos Populares, a Feira de Sant\'Iago e as Vindimas de Palmela (datas fixas)');
 
     // as regras de datas são puras: nada de relógio do aparelho
     const fonte = fontes['festas.js'];
@@ -1068,7 +1074,7 @@ function suite(fontes) {
   {
     const g = abrir(lis(11, 10));
     const TXT = g.json('FESTAS_STRINGS');
-    const CENAS = [['saomartinho', 'castanhasCenas', 'São Martinho'], ['natal', 'boloReiCenas', 'Natal'], ['carnaval', 'quemEstaMascaradoCenas', 'Carnaval'], ['pascoa', 'ovosCenas', 'Páscoa'], ['natal', 'consoadaCenas', 'Natal (consoada)'], ['reis', 'janeirasCenas', 'Reis (Janeiras)'], ['reis', 'favaCenas', 'Reis (Fava)'], ['santos', 'manjericoCenas', 'Santos Populares (Manjerico)'], ['santos', 'arraialCenas', 'Santos Populares (Arraial)'], ['santiago', 'bancaCenas', 'Feira de Sant\'Iago (Banca)'], ['santiago', 'noiteCenas', 'Feira de Sant\'Iago (Noite)']];
+    const CENAS = [['saomartinho', 'castanhasCenas', 'São Martinho'], ['natal', 'boloReiCenas', 'Natal'], ['carnaval', 'quemEstaMascaradoCenas', 'Carnaval'], ['pascoa', 'ovosCenas', 'Páscoa'], ['natal', 'consoadaCenas', 'Natal (consoada)'], ['reis', 'janeirasCenas', 'Reis (Janeiras)'], ['reis', 'favaCenas', 'Reis (Fava)'], ['santos', 'manjericoCenas', 'Santos Populares (Manjerico)'], ['santos', 'arraialCenas', 'Santos Populares (Arraial)'], ['santiago', 'bancaCenas', 'Feira de Sant\'Iago (Banca)'], ['santiago', 'noiteCenas', 'Feira de Sant\'Iago (Noite)'], ['vindimas', 'cortejoCenas', 'Vindimas de Palmela (Cortejo)'], ['vindimas', 'arraialCenas', 'Vindimas de Palmela (Arraial)']];
     CENAS.forEach(function (fc) {
       const festa = fc[0], chave = fc[1], nome = fc[2];
       const pt = TXT[festa] && TXT[festa].pt && TXT[festa].pt[chave];
@@ -1917,8 +1923,261 @@ function suite(fontes) {
     });
 
     // M9. A festa nova é a última da lista e não traz campos novos ao estado
-    ok(g.json("FESTAS_CONFIG.map(function (x) { return x.id; })").join() === 'saomartinho,natal,carnaval,pascoa,reis,santos,santiago', 'Santiago: é a 7.ª e última festa da lista');
+    ok(g.json("FESTAS_CONFIG.map(function (x) { return x.id; })").join() === 'saomartinho,natal,carnaval,pascoa,reis,santos,santiago,vindimas', 'Santiago: é a 7.ª festa da lista (as Vindimas de Palmela são a 8.ª e última)');
     ok(g.json('Object.keys(defaultState().festas)').join() === 'tarefasDia', 'Santiago: nenhum campo novo no estado');
+  }
+
+
+  // ---------------- N. Festa das Vindimas de Palmela: 5 a 11 de setembro (datas provisórias, a confirmar na Câmara de Palmela), dia grande 5/9, Cortejo, Mosto e Arraial ----------------
+  {
+    const quando = function (mes, d, hhmm, ano) { return Date.parse((ano || 2027) + '-' + String(mes).padStart(2, '0') + '-' + String(d).padStart(2, '0') + 'T' + (hhmm || '12:00') + ':00Z'); }; // Lisboa no verão = UTC+1
+    const set = function (d, hhmm, ano) { return quando(9, d, hhmm, ano); };
+    const g = abrir(set(7));
+    const sg = g.json("FESTAS_CONFIG.filter(function (f) { return f.id === 'vindimas'; })[0]");
+    ok(!!sg, 'Vindimas: existe em FESTAS_CONFIG');
+    if (sg) {
+      ok(JSON.stringify([sg.inicio, sg.fim, sg.diaGrande]) === JSON.stringify([{ mes: 8, dia: 5 }, { mes: 8, dia: 11 }, { mes: 8, dia: 5 }]) && sg.movel === undefined && sg.diasGrandes === undefined, 'Vindimas: datas fixas (provisórias) de 5 a 11 de setembro, dia grande a 5 de setembro');
+      ok(sg.recompensas.multiplicadorDiaGrande === 2 && sg.entradaEnciclopedia === 'festa_vindimas_palmela', 'Vindimas: dia grande a dobrar e abre a entrada festa_vindimas_palmela ao entrar');
+      ok(JSON.stringify(sg.tarefas.map(function (x) { return [x.id, x.onde, x.regra, x.btn, x.cenasSemRepetir === true, JSON.stringify(x.premio), x.entradaEnciclopedia || ''].join('|'); })) === JSON.stringify([
+        'cortejo|festa|cena_do_dia|btnCortejo|true|{"reputacao":5}|', 'mosto|festa|gastar_gotas|btnMosto|false|{"custoGotas":30,"reputacao":12}|', 'arraial|festa|cena_do_dia|btnArraial|true|{"reputacao":6}|']), 'Vindimas: cortejo (escolha, +5), mosto (30 Gotas, +12) e arraial (escolha, +6); as tarefas não abrem entradas');
+      ok(!/uvas|aguardente|bagaceira/i.test(JSON.stringify(sg.tarefas)), 'Vindimas: nenhuma tarefa custa ou dá Uvas, Aguardente ou Bagaceira');
+      ok(sg.modoTesteSemGravar === true && sg.menuComReserva === true, 'Vindimas: modo de teste sem gravar e a faixa e o dia grande também com reserva');
+      ok(JSON.stringify(sg.imagens) === JSON.stringify({ diaGrande: 'assets/ecras/vindimas_palmela_festa.jpg', faixa: 'assets/ecras/vindimas_palmela_festa.jpg', reserva: 'assets/ecras/vindimas_palmela_festa.jpg', cortejo: 'assets/ecras/vindimas_palmela_cortejo.jpg', mosto: 'assets/ecras/vindimas_palmela_mosto.jpg', arraial: 'assets/ecras/vindimas_palmela_arraial.jpg' }), 'Vindimas: as imagens vindimas_palmela_festa (faixa e reserva), vindimas_dia_grande, vindimas_cortejo, vindimas_mosto e vindimas_arraial');
+      Object.keys(sg.imagens).forEach(function (k) { ok(fs.existsSync(path.join(RAIZ, sg.imagens[k])), 'Vindimas: a imagem ' + k + ' existe'); });
+    }
+    ok(/id: 'festa_vindimas_palmela',\n\s+imagem: 'assets\/ecras\/vindimas_palmela_festa\.jpg',\n\s+nivelMinimo: 13,/.test(fs.readFileSync(path.join(RAIZ, 'dados', 'enciclopedia.js'), 'utf8')), 'Vindimas: a entrada festa_vindimas_palmela (dados/enciclopedia.js) existe, de nível 13, com a imagem vindimas_palmela_festa.jpg');
+
+    // N1. Abre de 5/9 a 11/9 e não noutros dias; dia grande só a 5/9 (de 2026 a 2036, dia de Lisboa)
+    const fmt = function (t) { const d = new Date(t); return d.getUTCFullYear() + '-' + String(d.getUTCMonth() + 1).padStart(2, '0') + '-' + String(d.getUTCDate()).padStart(2, '0'); };
+    g.ev("var VINDIMAS = FESTAS_CONFIG.filter(function (f) { return f.id === 'vindimas'; })[0]; var TG = function (id) { return VINDIMAS.tarefas.filter(function (x) { return x.id === id; })[0]; };");
+    let abreMal = 0, grandeMal = 0, motorMal = 0;
+    for (let t = Date.UTC(2026, 0, 1); t <= Date.UTC(2036, 11, 31); t += 86400000) {
+      const d = fmt(t), mmdd = d.slice(5), dentro = mmdd >= '09-05' && mmdd <= '09-11';
+      if (g.ev('festaAbertaNoDia(VINDIMAS, ' + JSON.stringify(d) + ')') !== dentro) abreMal++;
+      if (g.ev('festaDiaGrandeNoDia(VINDIMAS, ' + JSON.stringify(d) + ')') !== (mmdd === '09-05')) grandeMal++;
+      if (dentro && g.ev('(festaAtivaPelaDataReal(' + JSON.stringify(d) + ') || {}).id') !== 'vindimas') motorMal++;
+    }
+    ok(abreMal === 0 && grandeMal === 0 && motorMal === 0, 'Vindimas: abre exatamente de 5/9 a 11/9 e o dia grande é só 5/9, em todos os dias de 2026 a 2036 (' + abreMal + '/' + grandeMal + '/' + motorMal + ' erros)');
+    const q = function (t) { const x = abrir(t); return x.ev('(festaAtivaPelaDataReal() || {}).id || null'); };
+    ok(q(quando(9, 4, '22:30')) === null && q(quando(9, 4, '23:30')) === 'vindimas' && q(quando(9, 11, '22:30')) === 'vindimas' && q(quando(9, 11, '23:30')) === null, 'Vindimas: abre às 00:00 de 5/9 em Lisboa (22:30 UTC de 4/9 ainda não, 23:30 UTC já) e fecha no fim de 11/9, dia de Lisboa e não o do aparelho');
+    ok(q(quando(9, 5)) === 'vindimas' && q(quando(9, 11)) === 'vindimas' && q(quando(9, 4)) === null && q(quando(9, 12)) === null && q(quando(8, 31)) === null && q(quando(9, 30)) === null, 'Vindimas: 5/9 e 11/9 estão abertos; 4/9, 12/9, 31/8 e 30/9 não (o resto de setembro fica livre)');
+    ok(g.ev("festaJanela(VINDIMAS, 2027).inicio") === '2027-09-05' && g.ev("festaJanela(VINDIMAS, 2027).fim") === '2027-09-11' && g.ev("festaJanela(VINDIMAS, 2027).diaGrande") === '2027-09-05' && g.ev("festaJanela(VINDIMAS, 2027).diasGrandes") === undefined, 'Vindimas: a janela de 2027 traz 5/9 a 11/9 e o dia grande a 5/9, sem diasGrandes');
+
+    // N2. No ecrã, na festa a sério (7/9, dia normal): cada tarefa 1 vez por dia, errar não custa nada, objetivo do dia, Enciclopédia
+    const e = abrir(set(7));
+    e.ev('state.reputacao = 372; state.gotas = 100; state.uvas = 7; state.adega.aguardente = 2;');
+    e.ev('enterFesta()');
+    ok(e.json('ENTRADAS').join() === 'festa_vindimas_palmela' && e.json('AVISOS').join() === 'festa_vindimas_palmela', 'Vindimas: entrar na festa abre a entrada festa_vindimas_palmela, com o aviso');
+    e.ev('renderFestaHub()');
+    const hub = e.ev('caixa.innerHTML');
+    ok(/iniciarTarefaFesta\('cortejo'\)/.test(hub) && /iniciarTarefaFesta\('mosto'\)/.test(hub) && /iniciarTarefaFesta\('arraial'\)/.test(hub) && !/consoada|castanhas|corso|folar|janeiras|fava|manjerico|sardinhada/.test(hub), 'Vindimas: o menu mostra os 3 botões da feira e nenhum de outra festa');
+    ok(hub.indexOf(e.ev('FESTAS_STRINGS.vindimas.pt.diaGrandeAviso')) === -1, 'Vindimas: a 7/9 não há aviso de dia grande');
+    e.ev("iniciarTarefaFesta('cortejo')");
+    ok(e.json('festaCenaAtual.cena').opcoes.length === 3, 'Vindimas: o Cortejo mostra uma cena de 3 opções');
+    e.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+    ok(e.ev('state.reputacao') === 377, 'Vindimas: Cortejo certa dá +5');
+    e.ev("iniciarTarefaFesta('arraial')"); e.ev('festaResponderCenaDoDia((festaCenaAtual.cena.correta + 1) % 3)');
+    ok(e.ev('state.reputacao') === 377 && e.ev('state.gotas') === 100 && e.ev('DIALOGO') === e.ev('FESTAS_STRINGS.vindimas.pt.arraialDerrota'), 'Vindimas: errar o Arraial não custa nada (Reputação e Gotas iguais) e mostra a derrota');
+    e.ev("iniciarTarefaFesta('mosto')");
+    ok(e.ev('state.reputacao') === 389 && e.ev('state.gotas') === 70 && e.ev('state.uvas') === 7 && e.ev('state.adega.aguardente') === 2, 'Vindimas: o Mosto gasta 30 Gotas, dá +12 e não toca nas Uvas nem na aguardente');
+    const salvos = e.ev('SAVES');
+    ['cortejo', 'arraial', 'mosto'].forEach(function (id) {
+      e.ev("iniciarTarefaFesta('" + id + "')");
+      ok(e.ev('festaCenaAtual') === null && e.ev('state.reputacao') === 389 && e.ev('state.gotas') === 70 && (id !== 'mosto' || e.ev('festaMensagemAtual') === e.ev('FESTAS_STRINGS.vindimas.pt.mostoJaFeitaHoje')), 'Vindimas: ' + id + ' não se repete no mesmo dia');
+      ok(new RegExp('data-acao="' + id + '" disabled').test(e.ev('caixa.innerHTML')), 'Vindimas: o botão de ' + id + ' fica desativado («já feita hoje»)');
+    });
+    ok(e.ev('SAVES') === salvos && e.json('OBJETIVOS').join() === 'festa_tarefa,festa_tarefa,festa_tarefa', 'Vindimas: cada tarefa conta para o objetivo do dia «festa_tarefa», uma gravação cada');
+    ok(e.json('Object.keys(state.festas.tarefasDia)').join() === 'vindimas_cortejo,vindimas_arraial,vindimas_mosto', 'Vindimas: o «uma vez por dia» guarda-se em state.festas.tarefasDia, sem campos novos');
+    e.ev('state.gotas = 10; state.festas.tarefasDia.vindimas_mosto = null;'); e.ev("iniciarTarefaFesta('mosto')");
+    ok(e.ev('state.gotas') === 10 && e.ev('state.reputacao') === 389 && e.ev('festaMensagemAtual') === e.ev('FESTAS_STRINGS.vindimas.pt.mostoFalta'), 'Vindimas: sem Gotas o Mosto avisa e não gasta nem marca o dia');
+    e.ir(set(8)); e.ev("iniciarTarefaFesta('cortejo')");
+    ok(e.ev('festaCenaAtual !== null'), 'Vindimas: no dia seguinte as tarefas voltam');
+
+    // N3. Dia grande (5/9): aviso, prémios a dobrar, imagem do dia grande; os dias vizinhos não dobram
+    const gd = abrir(set(5));
+    gd.ev('state.reputacao = 10; state.gotas = 100; renderFestaHub();');
+    const av = gd.json('FESTAS_STRINGS.vindimas');
+    ok(gd.ev('caixa.innerHTML').indexOf(av.pt.diaGrandeAviso) !== -1 && av.pt.diaGrandeAviso === 'Hoje é o dia grande da Festa das Vindimas! Os prémios contam a dobrar.' && /big day/.test(av.en.diaGrandeAviso) && /día grande/.test(av.es.diaGrandeAviso) && !/histór|histor|since|desde|tradicional/i.test(av.pt.diaGrandeAviso + av.en.diaGrandeAviso + av.es.diaGrandeAviso), 'Vindimas: a 5/9 o menu avisa «Hoje é o dia grande da Festa das Vindimas! Os prémios contam a dobrar.» (PT, EN e ES), sem afirmar que é um dia histórico');
+    gd.ev("iniciarTarefaFesta('cortejo')"); gd.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+    gd.ev("iniciarTarefaFesta('arraial')"); gd.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+    gd.ev("iniciarTarefaFesta('mosto')");
+    ok(gd.ev('state.reputacao') === 10 + 10 + 12 + 24 && gd.ev('state.gotas') === 70, 'Vindimas: a 5/9 o Cortejo dá +10, o Arraial +12 e o Mosto +24 (o custo fica nas 30 Gotas), deu ' + gd.ev('state.reputacao'));
+    const imd = abrir(set(5));
+    imd.ev('var IMGS = []; Image = function () { IMGS.push(this); }; renderFestaHub();');
+    ok(imd.ev('FUNDO') === 'assets/ecras/vindimas_palmela_festa.jpg' && imd.ev('IMGS.length') === 0, 'Vindimas: a 5/9 o menu usa vindimas_palmela_festa.jpg (o dia grande reutiliza a da festa: nada a pedir)');
+    [6, 7, 10, 11].forEach(function (dia) {
+      const gn = abrir(set(dia));
+      gn.ev('state.reputacao = 10; renderFestaHub(); iniciarTarefaFesta(\'cortejo\'); festaResponderCenaDoDia(festaCenaAtual.cena.correta);');
+      ok(gn.ev('state.reputacao') === 15 && gn.ev('caixa.innerHTML').indexOf(av.pt.diaGrandeAviso) === -1, 'Vindimas: a ' + dia + '/9 (dia normal) o Cortejo dá só +5 e não há aviso de dia grande');
+    });
+    {
+      const ag = abrir(quando(9, 11));
+      ag.ev('state.reputacao = 10; renderFestaHub(); iniciarTarefaFesta(\'cortejo\'); festaResponderCenaDoDia(festaCenaAtual.cena.correta);');
+      ok(ag.ev('state.reputacao') === 15 && ag.ev('festaAtual().id') === 'vindimas', 'Vindimas: a 11/9, último dia, a festa está aberta e o Cortejo dá só +5');
+    }
+
+    // N4. Objetivo do dia e sinal da Quinta apanham a festa nova sem mais mudanças (js/objetivos.js real)
+    {
+      const extra = ['estacoes.js', 'vinha.js', 'alambique.js', 'garrafa.js', 'ronda.js', 'explorar.js'];
+      const o = abrir(set(7));
+      o.ev("function mostrarFalas() {} function tocarSomDaAcao() {} function reposicionarFlutuantes() {} function atualizarCartaoObjetivosQuinta() {} function faseRealAtual() { return 'repouso'; } function jaFezTarefaTempoHoje() { return true; } function entradasBloqueadas() { return []; } function caveReservaAberta() { return true; } function garrafaQueMaisDescansou() { return 2; }");
+      extra.forEach(function (f) { vm.runInContext(fs.readFileSync(path.join(RAIZ, 'js', f), 'utf8'), o.cx, { filename: f }); });
+      o.ev('function vitoriasProtegerComPremioRestantesHoje() { return 1; } desbloquearEntradaEnciclopedia = function () { return null; };');
+      vm.runInContext(fontes['objetivos.js'], o.cx, { filename: 'objetivos.js' });
+      o.ev('state.reputacao = 500;');
+      ok(o.ev("festaAtual().id") === 'vindimas' && o.ev("candidatosGrupoC().indexOf('festa_tarefa') !== -1") && o.json('quintaPendentes()').indexOf('festa') !== -1, 'Vindimas: a 7/9, no nível 4 ou mais, o objetivo «festa_tarefa» é candidato e a Quinta mostra o sinal «festa»');
+      o.ev("['cortejo', 'mosto'].forEach(function (x) { festaRegistarTarefaHoje('vindimas', x); });");
+      ok(o.ev("candidatosGrupoC().indexOf('festa_tarefa')") !== -1 && o.json('quintaPendentes()').indexOf('festa') !== -1, 'Vindimas: com 2 de 3 feitas ainda há objetivo e sinal');
+      o.ev("festaRegistarTarefaHoje('vindimas', 'arraial');");
+      ok(o.ev("candidatosGrupoC().indexOf('festa_tarefa')") === -1 && o.json('quintaPendentes()').indexOf('festa') === -1, 'Vindimas: com as 3 feitas, já não há objetivo nem sinal da festa');
+      o.ev('state.reputacao = 0; state.acesso.jogadorAntigo = false; state.festas.tarefasDia = {};');
+      ok(o.ev("candidatosGrupoC().indexOf('festa_tarefa')") === -1 && o.json('quintaPendentes()').indexOf('festa') === -1, 'Vindimas: abaixo do nível 4 não há objetivo nem sinal da festa');
+      ok(abrir(quando(9, 12)).ev('festaAtual()') === null && abrir(quando(9, 4)).ev('festaAtual()') === null, 'Vindimas: a 4/9 e a 12/9 não há festa');
+    }
+
+    // N5. Cenas: nunca a mesma em dois dias seguidos; 3 dias seguidos mostram as 3 cenas
+    ['cortejo', 'arraial'].forEach(function (id) {
+      let seguidas = 0, incompleto = 0;
+      for (let t = Date.UTC(2026, 0, 1); t <= Date.UTC(2036, 11, 31); t += 86400000) {
+        if (g.ev("festaCenaIndice(VINDIMAS, TG('" + id + "'), " + JSON.stringify(fmt(t)) + ', 3)') === g.ev("festaCenaIndice(VINDIMAS, TG('" + id + "'), " + JSON.stringify(fmt(t + 86400000)) + ', 3)')) seguidas++;
+      }
+      for (let y = 2026; y <= 2036; y++) {
+        const vistas = ['09-05', '09-06', '09-07'].map(function (d) { return g.ev("festaCenaIndice(VINDIMAS, TG('" + id + "'), '" + y + '-' + d + "', 3)"); });
+        if (new Set(vistas).size !== 3) incompleto++;
+      }
+      ok(seguidas === 0, 'Vindimas ' + id + ': nunca a mesma cena em dois dias seguidos, de 2026 a 2036 (' + seguidas + ')');
+      ok(incompleto === 0, 'Vindimas ' + id + ': em 3 dias seguidos aparecem as 3 cenas, todos os anos de 2026 a 2036');
+    });
+    {
+      const dd = abrir(set(5));
+      let ontem = {}, repetiu = 0;
+      for (let d = 5; d <= 11; d++) {
+        dd.ir(set(d));
+        ['cortejo', 'arraial'].forEach(function (id) {
+          dd.ev("iniciarTarefaFesta('" + id + "')");
+          const sit = dd.ev('festaCenaAtual.cena.situacao');
+          if (sit === ontem[id]) repetiu++;
+          ontem[id] = sit;
+          dd.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+        });
+      }
+      ok(repetiu === 0, 'Vindimas: no ecrã, de 5/9 a 11/9, o Cortejo e o Arraial nunca mostram a cena de ontem');
+    }
+
+    // N6. Textos nas 3 línguas
+    const TXT = g.json('FESTAS_STRINGS.vindimas');
+    const ESCALARES = ['faixa', 'titulo', 'subtitulo', 'diaGrandeAviso', 'tarefaFeitaHoje', 'modoTesteAviso', 'btnCortejo', 'btnMosto', 'btnArraial', 'btnVoltar',
+      'cortejoTitulo', 'cortejoSubtitulo', 'cortejoJaFeitaHoje', 'cortejoVitoria', 'cortejoDerrota', 'mostoTitulo', 'mostoJaFeitaHoje', 'mostoFalta', 'mostoSucesso',
+      'arraialTitulo', 'arraialSubtitulo', 'arraialJaFeitaHoje', 'arraialVitoria', 'arraialDerrota'];
+    const textos = function (x) { return typeof x === 'string' ? [x] : Array.isArray(x) ? x.reduce(function (t, y) { return t.concat(textos(y)); }, []) : x && typeof x === 'object' ? Object.keys(x).reduce(function (t, k) { return t.concat(k === 'correta' ? [] : textos(x[k])); }, []) : []; };
+    ['pt', 'en', 'es'].forEach(function (l) {
+      const S = TXT && TXT[l];
+      ok(!!S, 'Vindimas: faltam textos em ' + l);
+      if (!S) return;
+      ok(Object.keys(S).sort().join() === ESCALARES.concat(['cortejoCenas', 'arraialCenas']).sort().join(), 'Vindimas ' + l + ': as chaves de texto certas, nem mais nem menos');
+      ESCALARES.forEach(function (k) { ok(typeof S[k] === 'string' && S[k].trim() !== '', 'Vindimas ' + l + ': falta o texto ' + k); });
+      ['cortejoCenas', 'arraialCenas'].forEach(function (chave) {
+        ok(Array.isArray(S[chave]) && S[chave].length === 3, 'Vindimas ' + l + ': 3 cenas em ' + chave);
+        (S[chave] || []).forEach(function (c, i) {
+          ok(c.opcoes.length === 3 && new Set(c.opcoes).size === 3 && c.correta === TXT.pt[chave][i].correta, 'Vindimas ' + l + ' ' + chave + ' ' + (i + 1) + ': 3 opções diferentes e a mesma certa que em PT');
+          ok(c.situacao.length <= 143 && c.opcoes.every(function (o) { return o.length <= 63; }), 'Vindimas ' + l + ' ' + chave + ' ' + (i + 1) + ': curta, como as dos Santos');
+        });
+      });
+      const junto = textos(S).join(' ');
+      ok(junto.indexOf('undefined') === -1 && !/Fygmo ?2/.test(junto) && /Fygmo II/.test(junto), 'Vindimas ' + l + ': sem «undefined» e sempre «Fygmo II»');
+      ok(!/mestre|master|maestro|\bbot\b|\bIA\b|\bAI\b/i.test(junto), 'Vindimas ' + l + ': sem «Mestre», «bot» nem «IA»');
+      ok(!/natal|christmas|navidad|carnaval|carnival|páscoa|pascua|easter|martinho|martin|reis\b|kings|reyes|janeiras|santo antónio|john|juan|pedro|peter/i.test(junto), 'Vindimas ' + l + ': sem restos de outras festas');
+      ok(!/aguardente|brandy|dinheiro|money|euro|token/i.test(junto) && !/touro|bull|\btoros?\b|corrida|bullfight/i.test(junto), 'Vindimas ' + l + ': sem aguardente, dinheiro, tokens nem touros');
+    });
+    ok(/30/.test(TXT.pt.mostoFalta) && /30/.test(TXT.en.mostoFalta) && /30/.test(TXT.es.mostoFalta), 'Vindimas: o aviso do Mosto diz as 30 Gotas nas 3 línguas');
+    const ptT = textos(TXT.pt).join(' ');
+    ok(/cortejo/.test(ptT) && /mosto novo/.test(ptT) && /Dona Lurdes/.test(ptT) && /Rainha das Vindimas/.test(ptT) && /arraial/.test(ptT), 'Vindimas PT: fala do cortejo, do mosto novo, da Dona Lurdes, da Rainha das Vindimas e do arraial');
+    ok(!/\b(você|vocês|fixe|bué)\b/i.test(ptT), 'Vindimas PT de Portugal: sem "você" nem brasileirismos óbvios');
+    ok(!/matar|morrer|sangue|bater|pancada|murro|pontapé|violên/i.test(ptT), 'Vindimas PT: porcos traquinas, nunca violentos');
+
+    // N7. Imagens: em falta fica a reserva (a vindimas_palmela_festa), nunca erro nem ecrã vazio
+    const RES = 'assets/ecras/vindimas_palmela_festa.jpg';
+    const im = abrir(set(7));
+    im.ev('state.gotas = 100; var IMGS = []; Image = function () { IMGS.push(this); };');
+    im.ev('renderFestaHub()');
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS.length') === 0, 'Vindimas: o menu mostra a vindimas_palmela_festa (a faixa é a própria reserva: nada a pedir)');
+    im.ev("iniciarTarefaFesta('cortejo')");
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS[0].src') === 'assets/ecras/vindimas_palmela_cortejo.jpg', 'Vindimas: o Cortejo pede vindimas_palmela_cortejo.jpg, com a reserva até lá');
+    im.ev('IMGS[0].onload()'); ok(im.ev('FUNDO') === 'assets/ecras/vindimas_palmela_cortejo.jpg', 'Vindimas: vindimas_palmela_cortejo.jpg carregou: passa a ser o fundo');
+    im.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)'); im.ev("iniciarTarefaFesta('arraial')");
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS[1].src') === 'assets/ecras/vindimas_palmela_arraial.jpg', 'Vindimas: o Arraial pede vindimas_palmela_arraial.jpg');
+    im.ev('IMGS[1].onerror()'); im.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS.length') === 2, 'Vindimas: vindimas_palmela_arraial.jpg em falta: fica a reserva, sem pedir outra vez');
+    im.ev("iniciarTarefaFesta('mosto')");
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS[2].src') === 'assets/ecras/vindimas_palmela_mosto.jpg' && im.ev('state.reputacao') >= 12, 'Vindimas: o Mosto pede vindimas_palmela_mosto.jpg, com a reserva até lá');
+    im.ev('IMGS[2].onerror()'); im.ev('renderFestaHub()');
+    ok(im.ev('FUNDO') === RES && im.ev('IMGS.length') === 3, 'Vindimas: vindimas_palmela_mosto.jpg em falta: o menu fica com a reserva e nada se pede outra vez');
+    const ir = abrir(set(7));
+    ir.ev("Image = function () { throw new Error('sem Image'); }; renderFestaHub(); iniciarTarefaFesta('cortejo');");
+    ok(ir.ev('FUNDO') === RES && ir.ev('festaCenaAtual !== null'), 'Vindimas: sem Image (ou a rebentar) fica a reserva e a cena abre');
+    ['vindimas_palmela_festa.jpg', 'vindimas_palmela_festa.jpg', 'vindimas_palmela_cortejo.jpg', 'vindimas_palmela_mosto.jpg', 'vindimas_palmela_arraial.jpg'].forEach(function (f) {
+      const c = path.join(RAIZ, 'assets', 'ecras', f);
+      ok(fs.existsSync(c) && fs.statSync(c).size <= LIMITE_IMAGEM && fs.readFileSync(c).slice(0, 2).equals(Buffer.from([0xFF, 0xD8])), f + ': existe e é JPEG até 250 KB');
+    });
+
+    // N8. Modo de teste (?festa=vindimas e ?festa=vindimas&dia=5): mostra tudo, nunca grava
+    [['?festa=vindimas', 5, 6, 12, false], ['?festa=vindimas&dia=5', 10, 12, 24, true], ['?festa=vindimas&dia=6', 5, 6, 12, false]].forEach(function (c) {
+      const t = abrir(lis(10, 10), c[0]);
+      t.ev("state.reputacao = 372; state.gotas = 100; state.festas.tarefasDia = { vindimas_cortejo: diaLisboaDeHoje() };");
+      const antes = t.ev('JSON.stringify(state)'), AV = t.ev('FESTAS_STRINGS.vindimas.pt.modoTesteAviso'), AG = t.ev('FESTAS_STRINGS.vindimas.pt.diaGrandeAviso');
+      t.ev('enterFesta()');
+      ok((t.ev('caixa.innerHTML').indexOf(AG) !== -1) === c[4], c[0] + ': o menu ' + (c[4] ? 'mostra' : 'não mostra') + ' o aviso de dia grande');
+      t.ev("iniciarTarefaFesta('cortejo')"); t.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+      ok(t.ev('DIALOGO').indexOf('+' + c[1] + ' ') !== -1 && t.ev('DIALOGO').slice(-AV.length) === AV, c[0] + ': o Cortejo mostra +' + c[1] + ' e o aviso de teste, mesmo já feita hoje');
+      t.ev("iniciarTarefaFesta('arraial')"); t.ev('festaResponderCenaDoDia(festaCenaAtual.cena.correta)');
+      ok(t.ev('DIALOGO').indexOf('+' + c[2] + ' ') !== -1, c[0] + ': o Arraial mostra +' + c[2]);
+      t.ev("iniciarTarefaFesta('mosto')");
+      ok(t.ev('DIALOGO').indexOf('-30 ') !== -1 && t.ev('DIALOGO').indexOf('+' + c[3] + ' ') !== -1, c[0] + ': o Mosto mostra -30 Gotas e +' + c[3]);
+      ok(t.ev('SAVES') === 0 && t.json('OBJETIVOS').length === 0 && t.json('ENTRADAS').length === 0 && t.ev('JSON.stringify(state)') === antes, c[0] + ': nada gravado, nada mudado, sem objetivo do dia nem entrada da Enciclopédia');
+    });
+
+    // N9. A festa nova é a última da lista e não traz campos novos ao estado
+    ok(g.json("FESTAS_CONFIG.map(function (x) { return x.id; })").join() === 'saomartinho,natal,carnaval,pascoa,reis,santos,santiago,vindimas', 'Vindimas: é a 8.ª e última festa da lista');
+    ok(g.json('Object.keys(defaultState().festas)').join() === 'tarefasDia', 'Vindimas: nenhum campo novo no estado');
+
+    // N10. Regras de escrita das cenas, entrada da Enciclopédia, comentário das datas e imagens (720 px, JPEG até 250 KB)
+    {
+      const TV = g.json('FESTAS_STRINGS.vindimas');
+      ['cortejoCenas', 'arraialCenas'].forEach(function (chave) {
+        ok(new Set(TV.pt[chave].map(function (c) { return c.correta; })).size === 3, 'Vindimas ' + chave + ': as opções certas variam de posição (uma em cada)');
+        ['pt', 'en', 'es'].forEach(function (l) {
+          TV[l][chave].forEach(function (c, i) {
+            const n = c.opcoes.map(function (o) { return o.length; }), max = Math.max.apply(null, n), min = Math.min.apply(null, n);
+            ok(n[c.correta] < max, 'Vindimas ' + l + ' ' + chave + ' ' + (i + 1) + ': a opção certa nunca é a mais comprida (' + n.join('/') + ')');
+            ok(max <= min * 1.2, 'Vindimas ' + l + ' ' + chave + ' ' + (i + 1) + ': as 3 opções não diferem mais de 20 % (' + n.join('/') + ')');
+          });
+        });
+      });
+      const ENTS = [];
+      vm.runInNewContext(fs.readFileSync(path.join(RAIZ, 'dados', 'enciclopedia.js'), 'utf8'), { dadosAcrescentar: function (tipo, e) { if (tipo === 'enciclopedia') ENTS.push(e); return true; } });
+      const E = {};
+      ['pt', 'en', 'es'].forEach(function (l) { E[l] = ENTS.map(function (e) { return { id: e.id, nivelMinimo: e.nivelMinimo, imagem: e.imagem, titulo: e.titulo[l], texto: e.texto[l] }; }); });
+      ['pt', 'en', 'es'].forEach(function (l) {
+        const ent = E[l].filter(function (x) { return x.id === 'festa_vindimas_palmela'; })[0];
+        ok(!!ent && ent.nivelMinimo === 13 && ent.imagem === 'assets/ecras/vindimas_palmela_festa.jpg', 'Vindimas ' + l + ': a entrada festa_vindimas_palmela é de nível 13, com a imagem da festa');
+        if (!ent) return;
+        ok(!/[\r\n]/.test(ent.texto) && typeof ent.titulo === 'string' && ent.titulo.trim() !== '', 'Vindimas ' + l + ': a entrada tem um só parágrafo, sem quebras de linha');
+        ok(!/\b(1[0-9]{3}|20[0-9]{2})\b/.test(ent.texto) && !/\d+\s*(de\s+)?(setembro|september|septiembre)|(setembro|september|septiembre)\s+\d+/i.test(ent.texto) && !/touro|bull|\btoros?\b/i.test(ent.texto), 'Vindimas ' + l + ': a entrada não traz ano, datas exatas nem touros');
+        ok(!/mestre|master|maestro|\bbot\b|\bIA\b|\bAI\b|https?:/i.test(ent.titulo + ' ' + ent.texto), 'Vindimas ' + l + ': a entrada sem Mestre, bot, IA nem ligações');
+      });
+      const pt = E.pt.filter(function (x) { return x.id === 'festa_vindimas_palmela'; })[0], en = E.en.filter(function (x) { return x.id === 'festa_vindimas_palmela'; })[0], es = E.es.filter(function (x) { return x.id === 'festa_vindimas_palmela'; })[0];
+      ok(pt && /início de setembro/.test(pt.texto) && /cortejos, espetáculos e arraial/.test(pt.texto) && /bênção do primeiro mosto/.test(pt.texto) && /Rainha das Vindimas/.test(pt.texto) && /Dona Lurdes/.test(pt.texto), 'Vindimas PT: a entrada só diz os factos permitidos (início de setembro, cortejos, espetáculos, arraial, bênção do primeiro mosto, Rainha) e fecha com a Dona Lurdes');
+      ok(en && /early September/.test(en.texto) && /parades, shows and a street party/.test(en.texto) && /blessing of the first must/.test(en.texto) && /Harvest Queen/.test(en.texto), 'Vindimas EN: a entrada diz os mesmos factos');
+      ok(es && /principios de septiembre/.test(es.texto) && /desfiles, espectáculos y arraial/.test(es.texto) && /bendición del primer mosto/.test(es.texto) && /Reina de las Vendimias/.test(es.texto), 'Vindimas ES: a entrada diz os mesmos factos');
+      ok(E.pt.filter(function (x) { return x.nivelMinimo === 13; }).map(function (x) { return x.id; }).join() === 'palmela_castelo,palmela_capelo,palmela_castelao,festa_vindimas_palmela', 'Vindimas: o nível 13 fica com 4 entradas (as 3 de Palmela e a da festa)');
+      ok(/ids: \['palmela_castelo', 'palmela_capelo', 'palmela_castelao'\] \}\],/.test(fs.readFileSync(path.join(RAIZ, 'dados', 'capitulos.js'), 'utf8')), 'Vindimas: o capítulo 13 continua a pedir só as 3 histórias de Palmela (a entrada da festa não conta)');
+      ok(/datas a confirmar na Câmara de Palmela/.test(fs.readFileSync(path.join(RAIZ, 'js', 'festas.js'), 'utf8')), 'Vindimas: o código diz «datas a confirmar na Câmara de Palmela»');
+      const larguraJpeg = function (b) { let i = 2; while (i < b.length) { if (b[i] !== 0xFF) { i++; continue; } const m = b[i + 1]; if (m >= 0xC0 && m <= 0xC3) return b.readUInt16BE(i + 7); i += 2 + b.readUInt16BE(i + 2); } return 0; };
+      ['festa', 'cortejo', 'mosto', 'arraial'].forEach(function (x) {
+        const c = path.join(RAIZ, 'assets', 'ecras', 'vindimas_palmela_' + x + '.jpg');
+        ok(fs.existsSync(c) && larguraJpeg(fs.readFileSync(c)) === 720 && fs.statSync(c).size <= 250 * 1024, 'vindimas_palmela_' + x + '.jpg: 720 px de largura e até 250 KB');
+      });
+    }
   }
 
   return falhas;
@@ -2138,7 +2397,11 @@ const MUTACOES = [
   ['Entrudo no texto do Carnaval', 'festas.js', "subtitulo: 'Uns dias de Carnaval, com o dia grande na terça-feira.'", "subtitulo: 'Uns dias de Entrudo, com o dia grande na terça-feira.'"],
   ['número no texto do Carnaval', 'festas.js', "subtitulo: 'Uns dias de Carnaval, com o dia grande na terça-feira.'", "subtitulo: 'Uns 4 dias de Carnaval, com o dia grande na terça-feira.'"],
   ['Carnaval mencionado no texto do Natal', 'festas.js', "faixa: 'É Natal na Quinta!'", "faixa: 'É Natal (e Carnaval) na Quinta!'"],
-  ['botão da tarefa sem o texto da configuração', 'festas.js', 'S[tarefa.btn]', 'S.btnProva']
+  ['botão da tarefa sem o texto da configuração', 'festas.js', 'S[tarefa.btn]', 'S.btnProva'],
+  ['Vindimas: a festa passa a acabar a 12 de setembro', 'festas.js', "fim: { mes: 8, dia: 11 },         // 11 de setembro", "fim: { mes: 8, dia: 12 },         // 12 de setembro"],
+  ['Vindimas: cena do arraial com a opção certa trocada', 'festas.js', "'Dizer-lhe que é um voto cada, como todos.'], correta: 2 }", "'Dizer-lhe que é um voto cada, como todos.'], correta: 1 }"],
+  ['Vindimas: EN sem o aviso do dia grande', 'festas.js', "      diaGrandeAviso: 'Today is the big day of the Harvest Festival! Prizes count double.',\n", ''],
+  ['Vindimas: touros no texto da festa', 'festas.js', "faixa: 'Há Festa das Vindimas de Palmela na Quinta! De 5 a 11 de setembro.'", "faixa: 'Há touros na Festa das Vindimas de Palmela! De 5 a 11 de setembro.'"]
 ];
 MUTACOES.forEach(function (m) {
   const f = mutar(m[1], m[2], m[3]);
