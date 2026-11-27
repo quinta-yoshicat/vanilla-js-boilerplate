@@ -120,6 +120,8 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     { nome: 'Arroz (água e aves)', nivel: 7, ids: ['arroz_agua', 'arroz_aves'], imagens: { arroz_agua: 'assets/ecras/yoshi_nos_arrozais.jpg' } },
     // Pacote «Cultura do Queijo de Azeitão» (PR 7): uma entrada, de nível mínimo 7, a seguir às do arroz; leva a imagem estrada_amelia (já existia).
     { nome: 'Queijo de Azeitão (coalho)', nivel: 7, ids: ['azeitao_coalho'], imagens: { azeitao_coalho: 'assets/ecras/estrada_amelia.jpg' } },
+    // Pacote «Cultura das Pinhas e do Pinhão» (PR 8): uma entrada, de nível mínimo 7, a seguir à do queijo; leva a imagem estrada_sr_albano (já existia).
+    { nome: 'Pinhão (três anos)', nivel: 7, ids: ['pinha_tres_anos'], imagens: { pinha_tres_anos: 'assets/ecras/estrada_sr_albano.jpg' } },
     // Imagens que já existiam em assets/ecras: uma por entrada (campo «imagens»: id -> caminho), só onde mostram mesmo o tema.
     { nome: 'Arrábida', nivel: 11, ids: ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'] },
     { nome: 'Sado', nivel: 12, ids: ['sado_reserva', 'sado_golfinhos', 'sado_troia'], imagens: { sado_reserva: 'assets/ecras/sado_estuario.jpg' } },

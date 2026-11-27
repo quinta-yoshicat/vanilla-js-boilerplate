@@ -177,6 +177,19 @@ dadosAcrescentar('enciclopedia', {
   }
 });
 
+// Pacote «Cultura das Pinhas e do Pinhão»: pinha_tres_anos leva uma imagem que já existia (estrada_sr_albano, com linha no CREDITOS.md). Não mexe na Estrada (sr_albano).
+dadosAcrescentar('enciclopedia', {
+  id: 'pinha_tres_anos',
+  imagem: 'assets/ecras/estrada_sr_albano.jpg',
+  nivelMinimo: 7,
+  titulo: { pt: 'A pinha que demora três anos', en: 'The cone that takes three years', es: 'La piña que tarda tres años' },
+  texto: {
+    pt: 'A pinha do pinheiro-manso demora cerca de três anos a ficar pronta e apanha-se no inverno, entre dezembro e março. Durante esse tempo pode ser atacada por pragas, como o sugador das pinhas, um inseto que surgiu em Portugal em 2010. Na campanha de 2022/23, as pinhas foram poucas, depois de vários anos quentes e secos.',
+    en: 'The stone pine cone takes about three years to be ready and is harvested in winter, between December and March. During that time it can be attacked by pests, such as the western conifer seed bug, an insect that appeared in Portugal in 2010. In the 2022/23 season, there were few cones, after several hot and dry years.',
+    es: 'La piña del pino piñonero tarda unos tres años en estar lista y se recoge en invierno, entre diciembre y marzo. Durante ese tiempo puede ser atacada por plagas, como la chinche de las piñas, un insecto que apareció en Portugal en 2010. En la campaña de 2022/23 hubo pocas piñas, tras varios años cálidos y secos.'
+  }
+});
+
 // Nível 11, "Moscatel da Arrábida": as 3 histórias que o capítulo 11 (dados/capitulos.js) pede. Sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'arrabida_biosfera',

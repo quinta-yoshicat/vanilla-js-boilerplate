@@ -83,7 +83,7 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/estrada_joaquim.jpg` | A Estrada (cena do vizinho) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/estrada_tomas.jpg` | A Estrada (cena do vizinho) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/estrada_dona_natalia.jpg` | A Estrada (cena da Dona Natália; recorte do topo da imagem original, 640x347) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
-| `assets/ecras/estrada_sr_albano.jpg` | A Estrada (cena do Sr. Albano; a imagem toda, sem recorte, reduzida a 640x953) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
+| `assets/ecras/estrada_sr_albano.jpg` | A Estrada (cena do Sr. Albano; a imagem toda, sem recorte, reduzida a 640x953) e Enciclopédia (pinha_tres_anos) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
 | `assets/ecras/estrada_dona_fernanda.jpg` | A Estrada (cena da Dona Fernanda; recorte do topo da imagem original, 640x751) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
 | `assets/ecras/estrada_sr_anselmo.jpg` | A Estrada (cena do Sr. Anselmo; recorte do topo da imagem original, 640x513) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 17/10/2026 |
 | `assets/ecras/estrada_dona_rosa.jpg` | A Estrada (cena da Dona Rosa; recorte da imagem original, 640x702) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 19/10/2026 |

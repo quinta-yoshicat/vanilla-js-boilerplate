@@ -310,6 +310,16 @@ dadosAcrescentar('palavras', {
 });
 
 dadosAcrescentar('palavras', {
+  id: 'miolo',
+  palavra: 'miolo',
+  explicacao: {
+    pt: 'A parte branca de dentro do pinhão, depois de tirada a casca.',
+    en: 'The white part inside the pine nut, after the shell is removed.',
+    es: 'La parte blanca del interior del piñón, una vez quitada la cáscara.'
+  }
+});
+
+dadosAcrescentar('palavras', {
   id: 'molheiro',
   palavra: 'molheiro',
   explicacao: {
@@ -356,6 +366,26 @@ dadosAcrescentar('palavras', {
     pt: 'doença da vinha que aparece com calor, e deixa um pó esbranquiçado nas folhas.',
     en: 'a vine disease that appears with heat, and leaves a whitish powder on the leaves.',
     es: 'enfermedad de la vid que aparece con calor y deja un polvo blanquecino en las hojas.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'pinha',
+  palavra: 'pinha',
+  explicacao: {
+    pt: 'Fruto do pinheiro, em forma de ovo, que guarda os pinhões lá dentro.',
+    en: 'The fruit of the pine tree, egg-shaped, that keeps the pine nuts inside.',
+    es: 'Fruto del pino, con forma de huevo, que guarda los piñones dentro.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'pinhal',
+  palavra: 'pinhal',
+  explicacao: {
+    pt: 'Floresta de pinheiros.',
+    en: 'A forest of pine trees.',
+    es: 'Bosque de pinos.'
   }
 });
 
