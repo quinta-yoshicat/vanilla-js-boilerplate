@@ -277,6 +277,7 @@ const sem = function (o, chaves) { const c = JSON.parse(JSON.stringify(o)); chav
   ok(/6 horas/.test(g.ev('TRANSLATIONS.pt["estrada.moinhoDesc"]')) && /6 hours/.test(g.ev('TRANSLATIONS.en["estrada.moinhoDesc"]')) && /6 horas/.test(g.ev('TRANSLATIONS.es["estrada.moinhoDesc"]')), 'a descrição diz as 6 horas nas 3 línguas');
   ok(/uma vez por dia/i.test(g.ev('TRANSLATIONS.pt["estrada.moinhoDesc"]')) && /once a day/i.test(g.ev('TRANSLATIONS.en["estrada.moinhoDesc"]')) && /una vez al d/i.test(g.ev('TRANSLATIONS.es["estrada.moinhoDesc"]')), 'a descrição diz "uma vez por dia" nas 3 línguas');
   ok(/n[aã]o gasta nada/i.test(g.ev('TRANSLATIONS.pt["estrada.moinhoDesc"]')) && /costs nothing/i.test(g.ev('TRANSLATIONS.en["estrada.moinhoDesc"]')) && /no gasta nada/i.test(g.ev('TRANSLATIONS.es["estrada.moinhoDesc"]')), 'a descrição diz que não gasta nada nas 3 línguas');
+  ok(/YoshiCat/.test(g.ev('TRANSLATIONS.pt["estrada.moinhoAltFechar"]')) && /YoshiCat/.test(g.ev('TRANSLATIONS.en["estrada.moinhoAltSoltar"]')) && /el YoshiCat/.test(g.ev('TRANSLATIONS.es["estrada.moinhoAltFechar"]')) && /el YoshiCat/.test(g.ev('TRANSLATIONS.es["estrada.moinhoAltSoltar"]')), 'as legendas das fotos escrevem «YoshiCat» (em ES com artigo, como o resto do jogo)');
   ok(/Fygmo II/.test(g.ev('TRANSLATIONS.pt["estrada.moinhoOk"]')) && /Fygmo II/.test(g.ev('TRANSLATIONS.en["estrada.moinhoOk"]')) && /Fygmo II/.test(g.ev('TRANSLATIONS.es["estrada.moinhoOk"]')), 'o agradecimento fala do Fygmo II nas 3 línguas');
   ['pt', 'en', 'es'].forEach(function (l) {
     chaves.forEach(function (k) {
@@ -284,6 +285,7 @@ const sem = function (o, chaves) { const c = JSON.parse(JSON.stringify(o)); chav
       ok(!/Fygmo 2/.test(v), k + ' (' + l + '): escreve-se «Fygmo II», nunca «Fygmo 2»');
       ok(!/\bMestre\b|\bbot\b|\bIA\b/i.test(v), k + ' (' + l + '): sem as palavras «Mestre», «bot» ou «IA»');
       ok(!/https?:|www\./i.test(v), k + ' (' + l + '): sem fontes nem ligações no jogo');
+      ok(!/Yoshi_Cat/.test(v), k + ' (' + l + '): nos textos do jogo a personagem escreve-se «YoshiCat», nunca «Yoshi_Cat» (esse fica só nos créditos)');
     });
   });
 }
@@ -388,6 +390,7 @@ const sem = function (o, chaves) { const c = JSON.parse(JSON.stringify(o)); chav
     ok(typeof m.titulo[l] === 'string' && m.titulo[l].length > 0 && typeof t === 'string' && t.length > 0, 'título e texto em ' + l);
     ok(typeof t === 'string' && !/[\r\n]/.test(t) && t === t.trim(), 'o texto (' + l + ') é um só parágrafo, sem quebras de linha');
     ok(typeof t === 'string' && !/[<>&]/.test(t) && !/https?:|www\.|\.pdf|visitsetubal|setubalbay|visitlisboa|dgterritorio/i.test(t), 'o texto (' + l + ') não tem < > & nem fontes (essas ficam no pacote e na PR)');
+    ok(typeof t === 'string' && !/Yoshi_Cat/.test(t), 'o texto (' + l + ') não escreve «Yoshi_Cat»');
     ok(typeof t === 'string' && !/Fygmo 2|\bMestre\b|\bbot\b|\bIA\b/.test(t), 'o texto (' + l + ') sem «Fygmo 2», «Mestre», «bot» nem «IA»');
   });
   // Só os factos dados: cada um aparece (como número ou palavra) nas 3 línguas.
