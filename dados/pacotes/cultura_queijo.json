@@ -1,0 +1,36 @@
+{
+  "id": "cultura_queijo",
+  "nome": "Cultura do Queijo de Azeitão",
+  "estado": "em PR",
+  "clima": "Cientistas do projeto ProCardo dizem que, no sul do país, de onde vem o cardo do queijo da Serra da Estrela, a seca e o calor excessivo estão a aumentar.",
+  "fontes": [
+    "Agroportal, ficha «Queijo de Azeitão DOP» (agroportal.pt/?p=988711)",
+    "Agroportal/Lusa, projeto ProCardo da Faculdade de Ciências da Universidade do Porto, 2024 (bo.agroportal.pt/?p=1134501)",
+    "Folgado e Abranches (2019), «O cardo e a indústria de queijo», Revista de Ciências Agrárias"
+  ],
+  "ids": {
+    "enciclopedia": [
+      "azeitao_coalho"
+    ],
+    "palavras": [
+      "cardo",
+      "coalho",
+      "soro"
+    ],
+    "visitas": [],
+    "niveis": [],
+    "historias": [],
+    "capitulos": [],
+    "provas": []
+  },
+  "imagens": [
+    {
+      "caminho": "assets/ecras/estrada_amelia.jpg",
+      "uso": "Entrada da Enciclopédia «azeitao_coalho» (campo imagem; imagem que já existia, com linha no CREDITOS.md, também usada na Estrada)",
+      "descricao": "A cena do vizinho na Estrada (imagem que já existia no jogo).",
+      "estado": "feita"
+    }
+  ],
+  "sons": [],
+  "excecoes": []
+}

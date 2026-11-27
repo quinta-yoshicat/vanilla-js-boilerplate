@@ -49,7 +49,8 @@ const GRUPOS_NIVEIS_5_6 = [
   ['salina_marnoto'],
   ['mel_arrabida'],
   ['pesca_choco_sado'],
-  ['arroz_agua', 'arroz_aves']
+  ['arroz_agua', 'arroz_aves'],
+  ['azeitao_coalho']
 ];
 
 function correr(spec) {
@@ -72,7 +73,7 @@ function correr(spec) {
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
   function nivelEsperado(rep) { let n = 1; LIMIARES.forEach(function (m, i) { if (rep >= m) n = i + 1; }); return n; }
   // Quantas entradas da Enciclopédia vê um jogador do nível n (os níveis 5 e 6 juntam 3 cada e cada pacote de nível 11, 12, ... junta 3).
-  function entradasNoNivel(n) { return ENTRADAS_ORIGEM + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 7 ? 7 : 0) + 3 * Math.max(0, Math.min(n, M) - 10); }
+  function entradasNoNivel(n) { return ENTRADAS_ORIGEM + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 7 ? 8 : 0) + 3 * Math.max(0, Math.min(n, M) - 10); }
 
   // Abre o jogo REAL com a pasta dados/ (ou outra) e os ganchos de teste.
   function abrir(opcoes) {
