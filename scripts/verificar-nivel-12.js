@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // O NÍVEL 12 REAL, «Moscatel do Sado» (Parte 2, A Terra), que vive só como dados (dados/niveis.js, historias.js, enciclopedia.js e
 // capitulos.js): o nível (4550 de Reputação), a história de 4 falas (a 1.ª com a foto assets/ecras/sado_estuario.jpg, SEM som), as 3
-// histórias do Sado na Enciclopédia (nível mínimo 12, sem imagem) e o capítulo 12 «O Rio e os Golfinhos» (critério temIds nessas 3).
+// histórias do Sado na Enciclopédia (nível mínimo 12, só duas com imagem) e o capítulo 12 «O Rio e os Golfinhos» (critério temIds nessas 3).
 // Corre o jogo REAL (js/ e dados/) no ambiente simulado (módulo vm, scripts/_jogo-vm.js), em pt, en e es, e só LÊ: nada fica gravado.
 // Mesmo molde de scripts/verificar-nivel-11.js.
 //
@@ -9,7 +9,7 @@
 //  (a) 4550 dá o nível 12 e 4549 ainda o 11; o nome do nível;
 //  (b) a subida ao 12 mostra as 4 falas (textos exatos), com a foto da fala 1 que existe, e nenhuma com som;
 //  (c) a história do 12 não aparece ao subir ao 11 nem ficando no 11;
-//  (d) as 3 entradas não existem para o nível 11 e existem no 12 (textos exatos, nível mínimo 12, sem imagem); no 12 o Explorar entrega
+//  (d) as 3 entradas não existem para o nível 11 e existem no 12 (textos exatos, nível mínimo 12, só duas com imagem); no 12 o Explorar entrega
 //      as do Sado e as da Arrábida ainda por abrir (os dois grupos de nivelMinimo) antes de qualquer outra, e no 11 nunca as do Sado;
 //  (e) o capítulo 12 só está ativo no nível 12 e cumpre-se, e celebra uma só vez, com as 3 desbloqueadas;
 //  (f) no nível 11 com o capítulo 11 cumprido o cartão aponta para o capítulo do nível 12;
@@ -61,7 +61,7 @@ const FALAS = [
   }
 ];
 // Imagem que já existia em assets/ecras e que mostra o tema: só uma das 3 entradas a leva.
-const IMG = { sado_reserva: 'assets/ecras/sado_estuario.jpg' };
+const IMG = { sado_reserva: 'assets/ecras/sado_estuario.jpg', sado_golfinhos: 'assets/ecras/golfinhos_sado.jpg' };
 const IDS = ['sado_reserva', 'sado_golfinhos', 'sado_troia'];
 const IDS_11 = ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'];
 // As 6 histórias dos níveis 5 e 6 (a seguir às 34 de origem e antes das da Arrábida): também têm nivelMinimo, por isso entram na prioridade do Explorar.
@@ -248,7 +248,7 @@ LINGUAS.forEach(function (l) {
     ok(g.ev('encyclopediaEntries().length') === ATE_12, '(d) nível 12: ' + ATE_12 + ' entradas' + L);
     IDS.forEach(function (id) {
       const e = g.ev('encyclopediaEntries().filter(function (e) { return e.id === ' + js(id) + '; })[0]');
-      ok(e && e.titulo === ENC[id].titulo[l] && e.texto === ENC[id].texto[l] && e.nivelMinimo === 12 && e.imagem === IMG[id], '(d) ' + id + ': título e texto exatos, nível mínimo 12, só a de sado_reserva com imagem' + L);
+      ok(e && e.titulo === ENC[id].titulo[l] && e.texto === ENC[id].texto[l] && e.nivelMinimo === 12 && e.imagem === IMG[id], '(d) ' + id + ': título e texto exatos, nível mínimo 12, só as de sado_reserva e sado_golfinhos com imagem' + L);
     });
     g.ev('renderEnciclopedia();');
     h = html(g, 'enciclopedia-container');
@@ -257,7 +257,7 @@ LINGUAS.forEach(function (l) {
     g.ev('renderEnciclopedia();');
     h = html(g, 'enciclopedia-container');
     ok(IDS.every(function (id) { return h.indexOf('<h3>' + esc(ENC[id].titulo[l]) + '</h3>') !== -1 && h.indexOf('<p>' + esc(ENC[id].texto[l]) + '</p>') !== -1; }), '(d) nível 12: abertas, mostram o título e o texto (escapados)' + L);
-    ok(h.indexOf('3 / ' + ATE_12) !== -1 && (h.match(/<img/g) || []).length === 1 && h.indexOf('<img src="' + IMG.sado_reserva + '" alt="">') !== -1, '(d) nível 12: 3 / ' + ATE_12 + ' e só uma imagem (a de sado_reserva)' + L);
+    ok(h.indexOf('3 / ' + ATE_12) !== -1 && (h.match(/<img/g) || []).length === 2 && h.indexOf('<img src="' + IMG.sado_reserva + '" alt="">') !== -1 && h.indexOf('<img src="' + IMG.sado_golfinhos + '" alt="">') !== -1, '(d) nível 12: 3 / ' + ATE_12 + ' e só duas imagens (as de sado_reserva e sado_golfinhos)' + L);
     limpo(h, '(d) Enciclopédia' + L);
   }
   {

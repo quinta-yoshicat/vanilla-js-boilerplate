@@ -112,23 +112,23 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     { nome: 'Cortiça', nivel: 7, ids: ['tirada_da_cortica'], imagem: 'assets/ecras/tirada_da_cortica.jpg' },
     // Pacote «Cultura do Sal» (PR 3): uma só entrada, de nível mínimo 7, a seguir à da cortiça, com imagem.
     { nome: 'Sal', nivel: 7, ids: ['salina_marnoto'], imagem: 'assets/ecras/salina_marnoto.jpg' },
-    // Pacote «Cultura do Mel (Arrábida)» (PR 4): uma só entrada, de nível mínimo 7, a seguir à do sal, SEM imagem (por criar).
-    { nome: 'Mel', nivel: 7, ids: ['mel_arrabida'] },
+    // Pacote «Cultura do Mel (Arrábida)» (PR 4): uma só entrada, de nível mínimo 7, a seguir à do sal; leva a imagem mel_arrabida.jpg (feita).
+    { nome: 'Mel', nivel: 7, ids: ['mel_arrabida'], imagem: 'assets/ecras/mel_arrabida.jpg' },
     // Pacote «Pesca do choco e golfinhos» (PR 5): uma só entrada, de nível mínimo 7, a seguir à do mel, SEM imagem (por criar).
     { nome: 'Choco', nivel: 7, ids: ['pesca_choco_sado'] },
     // Pacote «Cultura do Arroz» (PR 6): duas entradas, de nível mínimo 7, a seguir à do choco; só arroz_agua leva imagem (já existia).
-    { nome: 'Arroz (água e aves)', nivel: 7, ids: ['arroz_agua', 'arroz_aves'], imagens: { arroz_agua: 'assets/ecras/yoshi_nos_arrozais.jpg' } },
+    { nome: 'Arroz (água e aves)', nivel: 7, ids: ['arroz_agua', 'arroz_aves'], imagens: { arroz_agua: 'assets/ecras/yoshi_nos_arrozais.jpg', arroz_aves: 'assets/ecras/aves_arrozais_sado.jpg' } },
     // Pacote «Cultura do Queijo de Azeitão» (PR 7): uma entrada, de nível mínimo 7, a seguir às do arroz; leva a imagem estrada_amelia (já existia).
     { nome: 'Queijo de Azeitão (coalho)', nivel: 7, ids: ['azeitao_coalho'], imagens: { azeitao_coalho: 'assets/ecras/estrada_amelia.jpg' } },
     // Pacote «Cultura das Pinhas e do Pinhão» (PR 8): uma entrada, de nível mínimo 7, a seguir à do queijo; leva a imagem estrada_sr_albano (já existia).
     { nome: 'Pinhão (três anos)', nivel: 7, ids: ['pinha_tres_anos'], imagens: { pinha_tres_anos: 'assets/ecras/estrada_sr_albano.jpg' } },
-    // Pacote «Castanhas» (PR 9): uma entrada, de nível mínimo 7, a seguir à das pinhas; sem imagem (souto_castanheiros.jpg está «por_criar»).
-    { nome: 'Souto', nivel: 7, ids: ['souto'] },
+    // Pacote «Castanhas» (PR 9): uma entrada, de nível mínimo 7, a seguir à das pinhas; leva a imagem souto_castanheiros.jpg (feita).
+    { nome: 'Souto', nivel: 7, ids: ['souto'], imagem: 'assets/ecras/souto_castanheiros.jpg' },
     // Pacote «feira_santiago» (PR 10): uma entrada, de nível mínimo 7, a seguir à do souto; leva a imagem santiago_festa (a mesma do menu da festa «santiago»).
     { nome: "Feira de Sant'Iago", nivel: 7, ids: ['feira_santiago'], imagens: { feira_santiago: 'assets/ecras/santiago_festa.jpg' } },
     // Imagens que já existiam em assets/ecras: uma por entrada (campo «imagens»: id -> caminho), só onde mostram mesmo o tema.
     { nome: 'Arrábida', nivel: 11, ids: ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'] },
-    { nome: 'Sado', nivel: 12, ids: ['sado_reserva', 'sado_golfinhos', 'sado_troia'], imagens: { sado_reserva: 'assets/ecras/sado_estuario.jpg' } },
+    { nome: 'Sado', nivel: 12, ids: ['sado_reserva', 'sado_golfinhos', 'sado_troia'], imagens: { sado_reserva: 'assets/ecras/sado_estuario.jpg', sado_golfinhos: 'assets/ecras/golfinhos_sado.jpg' } },
     { nome: 'Palmela', nivel: 13, ids: ['palmela_castelo', 'palmela_capelo', 'palmela_castelao'], imagens: { palmela_castelo: 'assets/ecras/palmela_castelo.jpg' } },
     { nome: 'Azeitão', nivel: 14, ids: ['azeitao_queijo', 'azeitao_adega', 'azeitao_palacio'], imagens: { azeitao_queijo: 'assets/ecras/azeitao_vila.jpg' } },
     { nome: 'Sesimbra', nivel: 15, ids: ['sesimbra_castelo', 'sesimbra_vila', 'sesimbra_espichel'], imagens: { sesimbra_vila: 'assets/ecras/sesimbra_vila.jpg' } },

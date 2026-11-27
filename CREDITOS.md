@@ -41,6 +41,8 @@ Imagens geradas com IA (Grok/Gemini), sem marca de serviço, carregadas a 04/10/
 
 `assets/ecras/santiago_festa.jpg`, `santiago_dia_grande.jpg`, `santiago_banca.jpg`, `santiago_artesanato.jpg` e `santiago_noite.jpg` (carregadas a 27/11/2026): imagens geradas com IA pelo autor do jogo, sem marcas. As duas primeiras vieram de ficheiros `file_*.png` e as três últimas do Grok (`grok_*.jpg`); todas são dele. Foram convertidas para JPEG até 250 KB, na proporção original, sem cortar nem esticar. Os originais saíram de `imagens_JOGO_TELEGRAM/` (como nos Santos Populares) e ficam no histórico do git.
 
+`assets/ecras/souto_castanheiros.jpg`, `mel_arrabida.jpg`, `golfinhos_sado.jpg` e `aves_arrozais_sado.jpg` (carregadas a 27/11/2026): imagens geradas com IA pelo Yoshi_Cat, sem marcas, para as entradas da Enciclopédia «souto», «mel_arrabida», «sado_golfinhos» e «arroz_aves». A primeira veio do Grok (`grok_*.jpg`) e as outras de ficheiros `1795*.jpg`; todas são dele. Foram convertidas para JPEG até 250 KB, na proporção original, sem cortar nem esticar. Os originais saíram de `imagens_JOGO_TELEGRAM/` (como nos Santos Populares e na Feira de Sant'Iago) e ficam no histórico do git.
+
 ## Imagens e sons que o jogo usa
 
 Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do código onde aparece). **Quem fez cada imagem ou som, e com que licença, não se vê nos ficheiros**; por isso a coluna "Origem" vem do que o Yoshi_Cat confirmou a 13/10/2026: todos os sons vêm do BigSoundBank (CC0) e todas as imagens foram geradas com IA (Gemini, Grok ou ChatGPT). A única exceção é `assets/tapps.png`, o logo do modelo original. O que já se sabe está nas secções "Sons" e "Imagens novas" acima.
@@ -61,6 +63,7 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/apontar_esquerda.jpg` | Proteger | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/arco_iris.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/arrozal_2.jpg` | Enciclopédia, entrada «O arroz carolino» (pacote do nível 18; arrozal com os campos alagados e a mesa com grãos de arroz; cópia de `imagens_JOGO_TELEGRAM/arrozal_2.jpg`, JPEG 714x1280, até 250 KB) | imagem gerada com IA (Gemini, Grok ou ChatGPT) pelo autor do jogo, sem marcas (carregada a 26/11/2026) |
+| `assets/ecras/aves_arrozais_sado.jpg` | Enciclopédia, entrada «As aves dos arrozais» (arroz_aves; pacote Cultura do Arroz: garças e outras aves num arrozal alagado ao amanhecer, com o Yoshi_Cat a observá-las de binóculos) | imagem gerada com IA pelo Yoshi_Cat, sem marcas (carregada a 27/11/2026; original `1795774040437.jpg`, convertida para JPEG 720x1290, 240 KB, até 250 KB) |
 | `assets/ecras/arrozal_personagens.jpg` | Enciclopédia, entrada «Os arrozais do Sado» (pacote do nível 18; arrozal com trabalhadores a plantar arroz; cópia de `imagens_JOGO_TELEGRAM/arrozal_personagens.jpg`, JPEG 714x1280, até 250 KB) | imagem gerada com IA (Gemini, Grok ou ChatGPT) pelo autor do jogo, sem marcas (carregada a 26/11/2026) |
 | `assets/ecras/azeite_do_olival_ao_lagar.jpg` | Enciclopédia, entrada «Do olival ao lagar» (pacote Cultura da Azeitona; lagar de varas: galga, seiras e talhas; JPEG 720x1280, até 250 KB, na proporção original) | imagem gerada com IA (Gemini, Grok ou ChatGPT) pelo autor do jogo, sem marcas (carregada a 26/11/2026) |
 | `assets/ecras/bagaco.jpg` | Adega / Cave / Coleção | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
@@ -100,12 +103,14 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/fygmos_quinta_passear.jpg` | O Lagar | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/doencas_e_pragas.jpg` | Vigiar a vinha (sinal de míldio, com chuva) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/doencas_e_pragas_2.jpg` | Vigiar a vinha (depois de vigiar, míldio) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/golfinhos_sado.jpg` | Enciclopédia, entrada «Os Golfinhos do Sado» (sado_golfinhos; golfinhos a saltar junto a uma barca de pesca, com a serra ao fundo, ao pôr do sol) | imagem gerada com IA pelo Yoshi_Cat, sem marcas (carregada a 27/11/2026; original `1795773961425.jpg`, convertida para JPEG 720x1290, 230 KB, até 250 KB) |
 | `assets/ecras/granizo.jpg` | tempo real de Setúbal (fundo da Vinha com granizo) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/inverno_poda.jpg` | Vinha | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/livro_cabecalho.jpg` | Livro de Conquistas | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/livro_conquistas.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/lojas_casas.jpg` | A Loja da Quinta (fundo à chuva) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/lojas_casas_janelas_abertas_2.jpg` | A Loja da Quinta (fundo com trovoada ou granizo) | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/mel_arrabida.jpg` | Enciclopédia, entrada «O mel da Arrábida» (mel_arrabida; pacote Cultura do Mel: colmeias de madeira entre flores silvestres na serra, com o mar ao fundo e o Yoshi_Cat com um favo) | imagem gerada com IA pelo Yoshi_Cat, sem marcas (carregada a 27/11/2026; original `1795773902645.jpg`, convertida para JPEG 720x1290, 237 KB, até 250 KB) |
 | `assets/ecras/menu_quinta.jpg` | fundo de um ecrã | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/moscatel_roxo_com_uvas.jpg` | ainda sem uso direto no código (original; a versão pequena é `assets/garrafas/garrafa_roxo_uvas.jpg`, o brinde da Cepa Roxa) | imagem gerada com IA pelo autor do jogo, sem marcas |
 | `assets/ecras/natal_bolorei.jpg` | festa de Natal, tarefa «O Bolo-Rei» (cena e resultado) | gerada com IA pelo autor do jogo, sem marcas (carregada a 22/11/2026; convertida para JPEG 714x1280, até 250 KB) |
@@ -141,6 +146,7 @@ Esta lista foi feita a partir do que se vê nos ficheiros (nome e sítio do cód
 | `assets/ecras/sao_martinho_prova.jpg` | festa de São Martinho, história dos níveis | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/sao_martinho_roubo.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/sao_martinho_verao.jpg` | festa de São Martinho | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
+| `assets/ecras/souto_castanheiros.jpg` | Enciclopédia, entrada «O souto» (souto; pacote Castanhas: castanheiros no outono, com ouriços abertos e castanhas num cesto no chão) | imagem gerada com IA pelo Yoshi_Cat, sem marcas (carregada a 27/11/2026; original `grok_1795773747460.jpg`, convertida para JPEG 720x1280, 238 KB, até 250 KB) |
 | `assets/ecras/tempestade.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/tempo_chuva.jpg` | tempo real de Setúbal | gerada com IA (Gemini, Grok ou ChatGPT), confirmado pelo Yoshi_Cat a 13/10/2026 |
 | `assets/ecras/tirada_da_cortica.jpg` | Enciclopédia, entrada «A tirada da cortiça» (pacote Cultura da Cortiça; sobreiro descortiçado com um machado encostado e pranchas de cortiça empilhadas num montado; JPEG 720x1280, até 250 KB, na proporção original) | imagem gerada com IA (Gemini, Grok ou ChatGPT) pelo autor do jogo, sem marcas (carregada a 26/11/2026) |
