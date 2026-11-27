@@ -336,7 +336,7 @@ LINGUAS.forEach(function (l) {
       g.ev('state.acesso.jogadorAntigo = true;');
       ecras.forEach(function (e) { ok(g.ev("ecraDesbloqueado('" + e + "')") === true, '(g) jogador antigo: o ecrã ' + e + ' aberto com ' + onde); });
       // O jogador antigo não salta o nível mínimo das histórias novas.
-      if (n < 11) ok(g.ev('encyclopediaEntries().length') === 34 + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 7 ? 11 : 0), '(g) jogador antigo abaixo do 11: continua sem as 3 da Arrábida (nem as dos níveis 5 e 6 antes do 5 e do 6) com ' + onde);
+      if (n < 11) ok(g.ev('encyclopediaEntries().length') === 34 + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 7 ? 4 : 0) + (n >= 8 ? 3 : 0) + (n >= 9 ? 3 : 0) + (n >= 10 ? 1 : 0), '(g) jogador antigo abaixo do 11: continua sem as 3 da Arrábida (nem as dos níveis 5 e 6 antes do 5 e do 6) com ' + onde);
       g.ev('state.acesso.jogadorAntigo = false;');
     });
     // Mensagem de ecrã trancado no nível 10: o nome do nível 11 não aparece (nenhum ecrã o pede).

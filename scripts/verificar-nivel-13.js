@@ -381,7 +381,7 @@ LINGUAS.forEach(function (l) {
       g.ev('state.acesso.jogadorAntigo = true;');
       ecras.forEach(function (e) { ok(g.ev("ecraDesbloqueado('" + e + "')") === true, '(g) jogador antigo: o ecrã ' + e + ' aberto com ' + onde); });
       // O jogador antigo não salta o nível mínimo das histórias novas.
-      if (n < 13) ok(g.ev('encyclopediaEntries().length') === (34 + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 7 ? 11 : 0) + (n >= 11 ? 3 : 0) + (n >= 12 ? 3 : 0)), '(g) jogador antigo abaixo do 13: continua sem as 3 de Palmela com ' + onde);
+      if (n < 13) ok(g.ev('encyclopediaEntries().length') === (34 + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 7 ? 4 : 0) + (n >= 8 ? 3 : 0) + (n >= 9 ? 3 : 0) + (n >= 10 ? 1 : 0) + (n >= 11 ? 3 : 0) + (n >= 12 ? 3 : 0)), '(g) jogador antigo abaixo do 13: continua sem as 3 de Palmela com ' + onde);
       g.ev('state.acesso.jogadorAntigo = false;');
     });
     // O modo de teste ?capitulo=13 mostra a celebração do cap13 (e continua a aceitar 1 a 12).
