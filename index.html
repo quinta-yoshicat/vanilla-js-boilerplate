@@ -989,8 +989,8 @@
     .oferta-resultado { padding: 6px 8px; border: 1px solid rgba(245, 215, 110, 0.5); border-radius: 10px; background: rgba(245, 215, 110, 0.1); font-size: 12.5px; }
     .oferta-resultado p { margin: 2px 0 0; }
     .oferta-fala { font-style: italic; }
-    /* A Mesa do Sado (ver estradaMesaSadoHtml() em js/estrada.js): a foto em faixa, por cima do texto e do botão */
-    .mesa-sado-img { display: block; width: 100%; height: 130px; object-fit: cover; object-position: 50% 58%; border-radius: 10px; margin-bottom: 6px; }
+    /* A Mesa do Sado (ver estradaMesaSadoHtml() em js/estrada.js): a foto inteira (720x640, já cortada à mesa e às personagens), a 100% da largura e com a altura que lhe corresponde */
+    .mesa-sado-img { display: block; width: 100%; height: auto; border-radius: 10px; margin-bottom: 6px; }
     .mesa-sado .oferta-linha + .oferta-resultado, .mesa-sado .oferta-linha + .oferta-linha { margin-top: 4px; }
     /* Encomenda da visita (ver encomendaHtml() em js/encomendas.js): «Aceitar» e «Agora não» lado a lado, metade cada um;
        o texto parte linha (regra dos .btn-pill no telemóvel) e cada botão tem 44 px de toque. */

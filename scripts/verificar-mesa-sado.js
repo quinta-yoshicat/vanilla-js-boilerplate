@@ -98,7 +98,7 @@ const cap7 = "capituloEstaCumprido(CAPITULOS_CONFIG.filter(function (c) { return
     // JPEG: procura o marcador SOF (0xFFC0 a 0xFFC2) para ler a altura e a largura.
     let i = 2, w = 0, h = 0;
     while (i < b.length) { if (b[i] !== 0xff) { i++; continue; } const m = b[i + 1]; if (m >= 0xc0 && m <= 0xc2) { h = b.readUInt16BE(i + 5); w = b.readUInt16BE(i + 7); break; } i += 2 + b.readUInt16BE(i + 2); }
-    ok(b[0] === 0xff && b[1] === 0xd8 && w === 720 && h > 0, 'mesa_sado.jpg é um JPEG de 720 px de largura (tem ' + w + 'x' + h + ')');
+    ok(b[0] === 0xff && b[1] === 0xd8 && w === 720 && h === 640, 'mesa_sado.jpg é um JPEG 720x640, horizontal, cortado à mesa e às personagens (tem ' + w + 'x' + h + ')');
     ok(b.length <= 250 * 1024, 'mesa_sado.jpg não devia pesar mais de 250 KB (pesa ' + b.length + ')');
   }
   ok(fs.existsSync(path.join(RAIZ, 'imagens_JOGO_TELEGRAM', '1795807770996.jpg')), 'o original imagens_JOGO_TELEGRAM/1795807770996.jpg continua no sítio');
@@ -307,7 +307,8 @@ const cap7 = "capituloEstaCumprido(CAPITULOS_CONFIG.filter(function (c) { return
   const vis = ler(path.join(RAIZ, 'js', 'visitas.js'));
   ok(/if \(!r\.visita\) \{ container\.innerHTML = ofertaBloco\(\) \+ encomendaBloco\(\); return; \}/.test(vis), 'js/visitas.js mostra o bloco também nos dias sem visita (a mesa não depende da visita)');
   const html = ler(path.join(RAIZ, 'index.html'));
-  ok(/\.mesa-sado-img \{/.test(html), 'index.html tem o estilo da foto (.mesa-sado-img)');
+  const css = (/\.mesa-sado-img \{([^}]*)\}/.exec(html) || [0, ''])[1];
+  ok(/width:\s*100%/.test(css) && /height:\s*auto/.test(css) && !/object-fit|object-position|\b(max-)?height:\s*\d+px/.test(css), 'a foto mostra-se a 100% da largura e com altura automática (sem faixa de altura fixa nem object-fit que corte)');
   const desp = semComentarios(ler(DESPENSA_JS));
   const corpo = desp.slice(desp.indexOf('function despensaMesaVindima('));
   ok(!/Math\.random|Date\.now|new Date|saveState|localStorage/.test(corpo), 'despensaMesaVindima é pura (sem relógio, sorteio nem gravação)');
