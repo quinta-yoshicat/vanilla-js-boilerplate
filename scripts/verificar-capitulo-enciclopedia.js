@@ -276,7 +276,7 @@ function semente(g, s) {
     // Um estado inicial qualquer: um subconjunto das 32 entradas aberto (decidido pela semente).
     jogador(g, rep, []);
     g.ev(`(function () { var a = ${s} * 2654435761 % 4294967296; var ids = ENCYCLOPEDIA_ENTRIES.pt.map(function (e) { return e.id; });
-      ids.forEach(function (id, i) { a = (a * 1103515245 + 12345) % 2147783648; if (a % 5 < ${s % 5}) state.encyclopedia.unlocked.push(id); }); })();`);
+      ids.forEach(function (id, i) { a = (a * 1103515245 + 12345) % 2147483648; if (a % 5 < ${s % 5}) state.encyclopedia.unlocked.push(id); }); })();`);
     semente(g, s);
     const bloqueadas = g.ev('entradasBloqueadas().map(function (e) { return e.id; })');
     g.ev('_chamadas.length = 0;');
