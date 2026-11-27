@@ -24,8 +24,8 @@
 //
 // Para testar: acrescenta ?festa=saomartinho (ou ?festa=natal) ao endereço
 // para simular estar dentro da festa, e ?festa=saomartinho&dia=11 (ou
-// ?festa=natal&dia=25, ou ?festa=reis&dia=6; nos Santos Populares ?festa=santos&dia=13, 24 ou 29; na Feira de Sant'Iago ?festa=santiago&dia=25) para simular o dia grande. Funciona junto com
-// ?estacao= e ?tempo=. Numa festa com modoTesteSemGravar (o Natal, os Reis, os Santos Populares e a Feira de Sant'Iago), o modo de
+// ?festa=natal&dia=25, ou ?festa=reis&dia=6; nos Santos Populares ?festa=santos&dia=13, 24 ou 29; na Feira de Sant'Iago ?festa=santiago&dia=25; na Festa das Vindimas de Palmela ?festa=vindimas&dia=5) para simular o dia grande. Funciona junto com
+// ?estacao= e ?tempo=. Numa festa com modoTesteSemGravar (o Natal, os Reis, os Santos Populares, a Feira de Sant'Iago e as Vindimas de Palmela), o modo de
 // teste mostra tudo mas não grava nem muda nada (ver festaModoTesteSemGravar).
 // ---------------------------------------------------------------------
 
@@ -260,6 +260,41 @@ const FESTAS_CONFIG = [
       { id: 'artesanato', onde: 'festa', regra: 'gastar_gotas', btn: 'btnArtesanato',
         premio: { custoGotas: 30, reputacao: 12 } },
       { id: 'noite', onde: 'festa', regra: 'cena_do_dia', btn: 'btnNoite', cenasSemRepetir: true,
+        premio: { reputacao: 6 } }
+    ],
+    recompensas: {
+      multiplicadorDiaGrande: 2
+    }
+  },
+  {
+    id: 'vindimas',
+    // Datas fixas pelo calendário de Portugal (mês 0 = janeiro): de 5 a 11 de setembro.
+    // Datas provisórias: datas a confirmar na Câmara de Palmela.
+    inicio: { mes: 8, dia: 5 },       // 5 de setembro
+    fim: { mes: 8, dia: 11 },         // 11 de setembro
+    diaGrande: { mes: 8, dia: 5 },    // 5 de setembro (datas a confirmar na Câmara de Palmela)
+    // Entrada da Enciclopédia que abre ao entrar na festa (está em dados/enciclopedia.js; nível mínimo 13).
+    entradaEnciclopedia: 'festa_vindimas_palmela',
+    // Como na Feira de Sant'Iago: cada imagem (também a da faixa e a do dia grande, menuComReserva) só aparece depois de se saber
+    // que existe; até lá, e se faltar, fica a de reserva (ver festaFundoTarefa). A festa não tem nível mínimo, como as outras.
+    menuComReserva: true,
+    imagens: {
+      diaGrande: 'assets/ecras/vindimas_palmela_festa.jpg',
+      faixa: 'assets/ecras/vindimas_palmela_festa.jpg',
+      reserva: 'assets/ecras/vindimas_palmela_festa.jpg',
+      cortejo: 'assets/ecras/vindimas_palmela_cortejo.jpg',
+      mosto: 'assets/ecras/vindimas_palmela_mosto.jpg',
+      arraial: 'assets/ecras/vindimas_palmela_arraial.jpg'
+    },
+    // Com ?festa=vindimas (ou outro parâmetro de teste) no endereço, mostra tudo mas não muda nem grava nada.
+    modoTesteSemGravar: true,
+    // Os mesmos valores da Feira de Sant'Iago: só Reputação, só gasta Gotas, nunca Uvas nem aguardente.
+    tarefas: [
+      { id: 'cortejo', onde: 'festa', regra: 'cena_do_dia', btn: 'btnCortejo', cenasSemRepetir: true,
+        premio: { reputacao: 5 } },
+      { id: 'mosto', onde: 'festa', regra: 'gastar_gotas', btn: 'btnMosto',
+        premio: { custoGotas: 30, reputacao: 12 } },
+      { id: 'arraial', onde: 'festa', regra: 'cena_do_dia', btn: 'btnArraial', cenasSemRepetir: true,
         premio: { reputacao: 6 } }
     ],
     recompensas: {
@@ -1362,6 +1397,125 @@ const FESTAS_STRINGS = {
       ],
       noiteVitoria: '¡Qué noche! Hubo música, luces y nadie se perdió.',
       noiteDerrota: 'La noche no salió como esperabas, pero mañana habrá más música.'
+    }
+  },
+  vindimas: {
+    pt: {
+      faixa: 'Há Festa das Vindimas de Palmela na Quinta! De 5 a 11 de setembro.',
+      titulo: 'A Festa das Vindimas de Palmela',
+      subtitulo: 'Cortejo, mosto novo e arraial em Palmela. A Dona Lurdes, a vindimadora de Palmela, leva-te a ver a festa.',
+      diaGrandeAviso: 'Hoje é o dia grande da Festa das Vindimas! Os prémios contam a dobrar.',
+      tarefaFeitaHoje: 'já feita hoje',
+      modoTesteAviso: '(Modo de teste: nada ficou gravado.)',
+      btnCortejo: 'Ver o cortejo',
+      btnMosto: 'Provar o mosto novo',
+      btnArraial: 'Ir ao arraial',
+      btnVoltar: 'Voltar',
+
+      cortejoTitulo: 'O cortejo das vindimas',
+      cortejoSubtitulo: 'O Fygmo II quer ver o carro de perto',
+      cortejoJaFeitaHoje: 'Hoje já viste o cortejo. Amanhã passa outro carro!',
+      cortejoCenas: [
+        { situacao: 'O carro enfeitado com cachos passa devagar e o Fygmo II quer apanhar um cacho.', opcoes: ['Apanhar um cacho para ele, sem ninguém ver.', 'Pedir um cacho ao condutor, a sorrir.', 'Deixá-lo trepar à roda para chegar lá.'], correta: 1 },
+        { situacao: 'Os foguetes rebentam no ar e o Chizo assusta-se.', opcoes: ['Fazer-lhe festas, longe do barulho.', 'Rir-se e acender outro foguete, a ver.', 'Pô-lo em cima do carro, lá no alto.'], correta: 0 },
+        { situacao: 'O Fygmo II quer subir para o carro, no meio dos cachos.', opcoes: ['Dar-lhe um empurrãozinho para cima do carro.', 'Deixá-lo subir sozinho com o carro a andar.', 'Convidá-lo a seguir a pé, ao lado do carro.'], correta: 2 }
+      ],
+      cortejoVitoria: 'Boa! O carro seguiu o seu caminho e ninguém se atrapalhou.',
+      cortejoDerrota: 'Desta vez o cortejo atrapalhou-se um pouco, mas amanhã passa outro carro.',
+
+      mostoTitulo: 'O mosto novo',
+      mostoJaFeitaHoje: 'Hoje já provaste o mosto novo. Amanhã a Dona Lurdes serve mais!',
+      mostoFalta: 'Precisas de 30 Gotas para provar o mosto novo.',
+      mostoSucesso: 'A Dona Lurdes serviu-te um copo de mosto novo, doce e fresco. A tua fama na festa subiu!',
+
+      arraialTitulo: 'O arraial',
+      arraialSubtitulo: 'O Fygmo II quer aproveitar o arraial até ao fim',
+      arraialJaFeitaHoje: 'Hoje já foste ao arraial. Amanhã há mais música!',
+      arraialCenas: [
+        { situacao: 'Elege-se a Rainha das Vindimas e o Fygmo II quer votar cinco vezes.', opcoes: ['Passar-lhe mais quatro papéis às escondidas.', 'Esconder a urna atrás do acordeonista.', 'Dizer-lhe que é um voto cada, como todos.'], correta: 2 },
+        { situacao: 'Pedem ao Yoshi_Cat que dance no meio do arraial.', opcoes: ['Fugir para trás do palco, de chapéu na cara.', 'Dançar uma volta com os outros, a rir.', 'Subir ao palco e pedir o microfone ao cantor.'], correta: 1 },
+        { situacao: 'É fim de noite e o Fygmo II não quer ir embora. A vinha espera por todos.', opcoes: ['Prometer-lhe voltar amanhã e ir para casa.', 'Deixá-lo a dançar sozinho até ser de manhã.', 'Dizer-lhe que a vinha pode esperar uma semana.'], correta: 0 }
+      ],
+      arraialVitoria: 'Que serão! Houve música, dança e a Rainha das Vindimas foi aplaudida.',
+      arraialDerrota: 'O arraial não correu como esperavas, mas amanhã há mais música.'
+    },
+    en: {
+      faixa: 'There is a Palmela Harvest Festival on the Quinta! From 5 to 11 September.',
+      titulo: 'The Palmela Harvest Festival',
+      subtitulo: 'A parade, new must and a street party in Palmela. Dona Lurdes, the grape picker from Palmela, takes you to see the festival.',
+      diaGrandeAviso: 'Today is the big day of the Harvest Festival! Prizes count double.',
+      tarefaFeitaHoje: 'already done today',
+      modoTesteAviso: '(Test mode: nothing was saved.)',
+      btnCortejo: 'Watch the Parade',
+      btnMosto: 'Taste the New Must',
+      btnArraial: 'Go to the Street Party',
+      btnVoltar: 'Back',
+
+      cortejoTitulo: 'The Harvest Parade',
+      cortejoSubtitulo: 'Fygmo II wants to see the cart up close',
+      cortejoJaFeitaHoje: 'You have already watched the parade today. Tomorrow another cart goes by!',
+      cortejoCenas: [
+        { situacao: 'The cart decked with grapes rolls by slowly and Fygmo II wants to grab a bunch.', opcoes: ['Grab a bunch for him when nobody looks.', 'Ask the driver for a bunch, smiling.', 'Let him climb the wheel to reach one.'], correta: 1 },
+        { situacao: 'Fireworks go off in the sky and Chizo gets scared.', opcoes: ['Pet him and lead him from the noise.', 'Laugh and set off another one, to see.', 'Put him on top of the cart, up high.'], correta: 0 },
+        { situacao: 'Fygmo II wants to climb onto the cart, among the grapes.', opcoes: ['Give him a little push up onto the cart.', 'Let him climb up alone while it moves.', 'Invite him to walk beside the cart.'], correta: 2 }
+      ],
+      cortejoVitoria: 'Well done! The cart carried on its way and nobody got flustered.',
+      cortejoDerrota: 'This time the parade got a little tangled, but tomorrow another cart goes by.',
+
+      mostoTitulo: 'The New Must',
+      mostoJaFeitaHoje: 'You have already tasted the new must today. Tomorrow Dona Lurdes will pour more!',
+      mostoFalta: 'You need 30 Drops to taste the new must.',
+      mostoSucesso: 'Dona Lurdes poured you a glass of new must, sweet and fresh. Your fame at the festival went up!',
+
+      arraialTitulo: 'The Street Party',
+      arraialSubtitulo: 'Fygmo II wants to enjoy the party to the very end',
+      arraialJaFeitaHoje: 'You have already been to the street party today. Tomorrow there will be more music!',
+      arraialCenas: [
+        { situacao: 'The Harvest Queen is being chosen and Fygmo II wants to vote five times.', opcoes: ['Slip him four more ballots on the quiet.', 'Hide the ballot box behind the accordionist.', 'Say it is one vote each and vote together.'], correta: 2 },
+        { situacao: 'They ask Yoshi_Cat to dance in the middle of the street party.', opcoes: ['Run behind the stage with the hat pulled down.', 'Dance one round with everyone, laughing.', 'Climb on stage and ask the singer for the mic.'], correta: 1 },
+        { situacao: 'It is late at night and Fygmo II does not want to leave. The vineyard is waiting for everyone.', opcoes: ['Promise to come back tomorrow and go home.', 'Let him keep dancing alone until morning.', 'Tell him the vineyard can wait a whole week.'], correta: 0 }
+      ],
+      arraialVitoria: 'What an evening! There was music, dancing and the Harvest Queen got a big round of applause.',
+      arraialDerrota: 'The street party did not go as you hoped, but tomorrow there will be more music.'
+    },
+    es: {
+      faixa: '¡Hay Fiesta de las Vendimias de Palmela en la Quinta! Del 5 al 11 de septiembre.',
+      titulo: 'La Fiesta de las Vendimias de Palmela',
+      subtitulo: 'Desfile, mosto nuevo y arraial en Palmela. Dona Lurdes, la vendimiadora de Palmela, te lleva a ver la fiesta.',
+      diaGrandeAviso: '¡Hoy es el día grande de la Fiesta de las Vendimias! Los premios cuentan el doble.',
+      tarefaFeitaHoje: 'ya hecha hoy',
+      modoTesteAviso: '(Modo de prueba: no se ha guardado nada.)',
+      btnCortejo: 'Ver el Desfile',
+      btnMosto: 'Probar el Mosto Nuevo',
+      btnArraial: 'Ir al Arraial',
+      btnVoltar: 'Volver',
+
+      cortejoTitulo: 'El desfile de las vendimias',
+      cortejoSubtitulo: 'El Fygmo II quiere ver el carro de cerca',
+      cortejoJaFeitaHoje: 'Hoy ya has visto el desfile. ¡Mañana pasa otro carro!',
+      cortejoCenas: [
+        { situacao: 'El carro adornado con racimos pasa despacio y el Fygmo II quiere coger un racimo.', opcoes: ['Coger un racimo para él, sin que nadie lo vea.', 'Pedirle un racimo al conductor, sonriendo.', 'Dejarle trepar a la rueda para alcanzarlo.'], correta: 1 },
+        { situacao: 'Los cohetes estallan en el aire y el Chizo se asusta.', opcoes: ['Hacerle caricias y alejarlo del ruido.', 'Reírse y encender otro cohete, a ver.', 'Subirlo al carro, allí arriba, bien alto.'], correta: 0 },
+        { situacao: 'El Fygmo II quiere subirse al carro, entre los racimos.', opcoes: ['Darle un empujoncito para subirlo al carro.', 'Dejarle subir solo con el carro en marcha.', 'Invitarle a seguir a pie, junto al carro.'], correta: 2 }
+      ],
+      cortejoVitoria: '¡Bien hecho! El carro siguió su camino y nadie se agobió.',
+      cortejoDerrota: 'Esta vez el desfile se enredó un poco, pero mañana pasa otro carro.',
+
+      mostoTitulo: 'El mosto nuevo',
+      mostoJaFeitaHoje: 'Hoy ya has probado el mosto nuevo. ¡Mañana Dona Lurdes servirá más!',
+      mostoFalta: 'Necesitas 30 Gotas para probar el mosto nuevo.',
+      mostoSucesso: 'Dona Lurdes te sirvió un vaso de mosto nuevo, dulce y fresco. ¡Tu fama en la fiesta subió!',
+
+      arraialTitulo: 'El arraial',
+      arraialSubtitulo: 'El Fygmo II quiere disfrutar del arraial hasta el final',
+      arraialJaFeitaHoje: 'Hoy ya has ido al arraial. ¡Mañana habrá más música!',
+      arraialCenas: [
+        { situacao: 'Se elige a la Reina de las Vendimias y el Fygmo II quiere votar cinco veces.', opcoes: ['Darle cuatro papeletas más, a escondidas.', 'Esconder la urna detrás del acordeonista.', 'Decirle que es un voto cada uno y votar.'], correta: 2 },
+        { situacao: 'Le piden al Yoshi_Cat que baile en medio del arraial.', opcoes: ['Huir detrás del escenario, sombrero calado.', 'Bailar una vuelta con todos, entre risas.', 'Subir al escenario a pedir el micro al cantante.'], correta: 1 },
+        { situacao: 'Es el final de la noche y el Fygmo II no quiere irse. La viña espera a todos.', opcoes: ['Prometerle volver mañana e irse a casa.', 'Dejarle bailando solo hasta la mañana.', 'Decirle que la viña puede esperar una semana.'], correta: 0 }
+      ],
+      arraialVitoria: '¡Qué noche! Hubo música, baile y la Reina de las Vendimias fue aplaudida.',
+      arraialDerrota: 'El arraial no salió como esperabas, pero mañana habrá más música.'
     }
   }
 };

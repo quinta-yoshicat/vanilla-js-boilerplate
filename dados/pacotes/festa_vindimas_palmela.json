@@ -1,0 +1,52 @@
+{
+  "id": "festa_vindimas_palmela",
+  "nome": "Festa das Vindimas de Palmela",
+  "estado": "feita",
+  "nota": "Datas por confirmar: 5 a 11 de setembro, dia grande a 5 de setembro, são provisórias (datas a confirmar na Câmara de Palmela). A bênção do primeiro mosto e a eleição da Rainha das Vindimas vêm de uma fonte não oficial. A entrada da Enciclopédia não traz ano de início, datas exatas nem outros factos além destes.",
+  "terras": {
+    "Festa das Vindimas de Palmela": ["Palmela"]
+  },
+  "fontes": [
+    "Visit Portugal, Palmela (início de setembro, cortejos e espetáculos): https://www.visitportugal.com/pt-pt/content/palmela",
+    "Setúbal (cópia de segurança), Vindimas de Palmela (bênção do primeiro mosto e Rainha das Vindimas; fonte não oficial): https://setubal-backup.pages.dev/docs/festivals/vindimas-palmela/"
+  ],
+  "ids": {
+    "enciclopedia": [
+      "festa_vindimas_palmela"
+    ],
+    "palavras": [],
+    "visitas": [],
+    "niveis": [],
+    "historias": [],
+    "capitulos": [],
+    "provas": []
+  },
+  "imagens": [
+    {
+      "caminho": "assets/ecras/vindimas_palmela_festa.jpg",
+      "uso": "Festa «vindimas» (js/festas.js): faixa, menu da festa (também no dia grande) e imagem de reserva das tarefas; e entrada da Enciclopédia «festa_vindimas_palmela» (campo imagem)",
+      "descricao": "O castelo de Palmela ao fundo, ao pôr do sol, uma rua de pedra com bandeirinhas e uma carroça com cachos de uvas; o Yoshi_Cat, o Chizo e um Fygmo à frente.",
+      "estado": "feita"
+    },
+    {
+      "caminho": "assets/ecras/vindimas_palmela_cortejo.jpg",
+      "uso": "Festa «vindimas», tarefa «cortejo» (cena e resultado)",
+      "descricao": "A carroça enfeitada com cachos e fitas, puxada por um burro, a passar na rua; pétalas no ar, gente a assistir, o Yoshi_Cat a acenar, o Chizo ao lado e um Fygmo em cima da carroça.",
+      "estado": "feita"
+    },
+    {
+      "caminho": "assets/ecras/vindimas_palmela_mosto.jpg",
+      "uso": "Festa «vindimas», tarefa «mosto» (cena e resultado)",
+      "descricao": "A Dona Lurdes, de lenço na cabeça, a servir mosto novo em copos numa banca com jarros de barro; o Yoshi_Cat a provar um copo e o Chizo sentado ao lado.",
+      "estado": "feita"
+    },
+    {
+      "caminho": "assets/ecras/vindimas_palmela_arraial.jpg",
+      "uso": "Festa «vindimas», tarefa «arraial» (cena e resultado)",
+      "descricao": "O arraial de noite, com luzinhas, o castelo iluminado, um palco com acordeão e viola, a dança e a Rainha das Vindimas de coroa de folhas e faixa; o Yoshi_Cat, o Chizo e um Fygmo à frente.",
+      "estado": "feita"
+    }
+  ],
+  "sons": [],
+  "excecoes": []
+}

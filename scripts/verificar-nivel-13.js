@@ -63,6 +63,7 @@ const FALAS = [
 // Imagem que já existia em assets/ecras e que mostra o tema: só uma das 3 entradas a leva.
 const IMG = { palmela_castelo: 'assets/ecras/palmela_castelo.jpg' };
 const IDS = ['palmela_castelo', 'palmela_capelo', 'palmela_castelao'];
+const IDS_FESTA = ['festa_vindimas_palmela']; // a 4.ª entrada de nível 13 (festa das Vindimas de Palmela): no fim de dados/enciclopedia.js e fora do capítulo 13
 const IDS_11 = ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'];
 const IDS_12 = ['sado_reserva', 'sado_golfinhos', 'sado_troia'];
 // As 6 histórias dos níveis 5 e 6 (a seguir às 34 de origem e antes das da Arrábida): também têm nivelMinimo, por isso entram na prioridade do Explorar.
@@ -70,7 +71,7 @@ const IDS_5_6 = ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa', 'c
 const ATE_10 = 34 + IDS_5_6.length; // entradas visíveis até ao nível 10
 const ATE_11 = ATE_10 + IDS_11.length;
 const ATE_12 = ATE_11 + IDS_12.length;
-const ATE_13 = ATE_12 + 3;
+const ATE_13 = ATE_12 + 3 + IDS_FESTA.length; // entradas visíveis no nível 13: as 3 de Palmela e a da festa
 const ENC = {
   palmela_castelo: {
     titulo: { pt: 'O Castelo de Palmela', en: 'Palmela Castle', es: 'El Castillo de Palmela' },
@@ -183,7 +184,7 @@ function dadosSem(desde) {
   ok(g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES.pt.slice(0, 34))') === base.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES.pt)'), '(i) as 34 entradas de origem ficam iguais ao jogo sem dados/');
   ok(g.ev('Math.max.apply(null, Object.keys(NIVEL_NECESSARIO_POR_ECRA).map(function (k) { return NIVEL_NECESSARIO_POR_ECRA[k]; }))') === 10, '(i) nenhum ecrã novo: o mais alto continua a abrir no nível 10');
   ok(g.ev('NIVEIS_CONFIG[12].id') === 'nivel_13' && g.ev('NIVEIS_CONFIG[12].min') === 5500 && g.ev('CAPITULOS_CONFIG[12].id') === 'cap13' && g.ev('CAPITULOS_CONFIG[12].nivel') === 13, '(i) nivel_13 (5500) e cap13 (nível 13)');
-  ok(JSON.stringify(g.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; })').slice(IDS_5_6.length + 6, IDS_5_6.length + 9)) === JSON.stringify(IDS) && JSON.stringify(g.ev('ENCYCLOPEDIA_ENTRIES.pt.slice(' + ATE_12 + ', ' + ATE_13 + ').map(function (e) { return e.id; })')) === JSON.stringify(IDS), '(i) as 3 entradas de Palmela, por esta ordem, logo a seguir às da Arrábida e do Sado: ' + IDS);
+  ok(JSON.stringify(g.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; })').slice(IDS_5_6.length + 6, IDS_5_6.length + 9)) === JSON.stringify(IDS) && JSON.stringify(g.ev('ENCYCLOPEDIA_ENTRIES.pt.slice(' + ATE_12 + ', ' + (ATE_12 + 3) + ').map(function (e) { return e.id; })')) === JSON.stringify(IDS), '(i) as 3 entradas de Palmela, por esta ordem, logo a seguir às da Arrábida e do Sado: ' + IDS);
   ok(g.ev('JSON.stringify(CAPITULOS_CONFIG[12].criterio)') === js([{ tipo: 'temIds', caminho: 'encyclopedia.unlocked', ids: IDS }]), '(i) o critério do cap13 é temIds nos 3 ids: ' + g.ev('JSON.stringify(CAPITULOS_CONFIG[12].criterio)'));
   ok(fs.existsSync(path.join(RAIZ, FOTO)), '(i) a foto da fala 1 existe em ' + FOTO);
   ok(!fs.existsSync(path.join(RAIZ, 'palmela_castelo.jpg')), '(i) não devia haver cópia da foto na raiz do repositório');
@@ -254,7 +255,7 @@ LINGUAS.forEach(function (l) {
     });
     g.ev('renderEnciclopedia();');
     h = html(g, 'enciclopedia-container');
-    ok((h.match(/encyclopedia-card/g) || []).length === ATE_13 && h.indexOf('0 / ' + ATE_13) !== -1, '(d) nível 13: a Enciclopédia tem ' + ATE_13 + ' cartões (as 3 novas bloqueadas) e 0 / ' + ATE_13 + L);
+    ok((h.match(/encyclopedia-card/g) || []).length === ATE_13 && h.indexOf('0 / ' + ATE_13) !== -1, '(d) nível 13: a Enciclopédia tem ' + ATE_13 + ' cartões (as 4 novas bloqueadas: as 3 de Palmela e a da festa) e 0 / ' + ATE_13 + L);
     preparar(g, REP_13, 13, IDS);
     g.ev('renderEnciclopedia();');
     h = html(g, 'enciclopedia-container');
@@ -269,23 +270,23 @@ LINGUAS.forEach(function (l) {
       const g = abrir(); lingua(g, l);
       preparar(g, REP_13, 13); semente(g, s * 7 + (l === 'pt' ? 0 : l === 'en' ? 1 : 2));
       const saidas = [];
-      const COM_NIVEL = IDS_5_6.concat(IDS_11, IDS_12, IDS);
+      const COM_NIVEL = IDS_5_6.concat(IDS_11, IDS_12, IDS, IDS_FESTA);
       for (let i = 0; i < COM_NIVEL.length + 3; i++) { g.ev('enterExplorar();'); const a = idsAbertos(g); saidas.push(a[a.length - 1]); }
       ok(saidas.slice(0, COM_NIVEL.length).slice().sort().join() === COM_NIVEL.slice().sort().join(), '(d) semente ' + s + L + ': as ' + COM_NIVEL.length + ' primeiras entregas são as ' + COM_NIVEL.length + ' com nivelMinimo: ' + saidas.slice(0, COM_NIVEL.length));
       ok(saidas.slice(COM_NIVEL.length).every(function (id) { return COM_NIVEL.indexOf(id) === -1; }) && new Set(saidas).size === saidas.length, '(d) semente ' + s + L + ': depois só as outras, sem repetir');
     }
-    // Com os níveis 5 e 6 e a Arrábida abertos, as 6 primeiras são as do Sado e de Palmela; com mais o Sado abertos, as 3 primeiras são as de Palmela.
+    // Com os níveis 5 e 6 e a Arrábida abertos, as 7 primeiras são as do Sado, de Palmela e da festa; com mais o Sado abertos, as 4 primeiras são as de Palmela e a da festa.
     for (let s = 1; s <= 10; s++) {
       const g = abrir(); lingua(g, l);
       preparar(g, REP_13, 13, IDS_5_6.concat(IDS_11)); semente(g, s * 13);
       const saidas = [];
-      for (let i = 0; i < 8; i++) { g.ev('enterExplorar();'); const a = idsAbertos(g); saidas.push(a[a.length - 1]); }
-      ok(saidas.slice(0, 6).slice().sort().join() === IDS_12.concat(IDS).sort().join() && saidas.slice(6).every(function (id) { return IDS.indexOf(id) === -1 && IDS_12.indexOf(id) === -1 && IDS_11.indexOf(id) === -1; }), '(d) semente ' + s + L + ': com a Arrábida aberta, as 6 primeiras são as do Sado e de Palmela: ' + saidas);
+      for (let i = 0; i < 9; i++) { g.ev('enterExplorar();'); const a = idsAbertos(g); saidas.push(a[a.length - 1]); }
+      ok(saidas.slice(0, 7).slice().sort().join() === IDS_12.concat(IDS, IDS_FESTA).sort().join() && saidas.slice(7).every(function (id) { return IDS.indexOf(id) === -1 && IDS_FESTA.indexOf(id) === -1 && IDS_12.indexOf(id) === -1 && IDS_11.indexOf(id) === -1; }), '(d) semente ' + s + L + ': com a Arrábida aberta, as 7 primeiras são as do Sado, de Palmela e da festa: ' + saidas);
       const g2 = abrir(); lingua(g2, l);
       preparar(g2, REP_13, 13, IDS_5_6.concat(IDS_11, IDS_12)); semente(g2, s * 17);
       const s2 = [];
-      for (let i = 0; i < 5; i++) { g2.ev('enterExplorar();'); const a = idsAbertos(g2); s2.push(a[a.length - 1]); }
-      ok(s2.slice(0, 3).slice().sort().join() === IDS.slice().sort().join() && s2.slice(3).every(function (id) { return IDS.indexOf(id) === -1; }), '(d) semente ' + s + L + ': com a Arrábida e o Sado abertos, as 3 primeiras são as de Palmela: ' + s2);
+      for (let i = 0; i < 6; i++) { g2.ev('enterExplorar();'); const a = idsAbertos(g2); s2.push(a[a.length - 1]); }
+      ok(s2.slice(0, 4).slice().sort().join() === IDS.concat(IDS_FESTA).sort().join() && s2.slice(4).every(function (id) { return IDS.indexOf(id) === -1 && IDS_FESTA.indexOf(id) === -1; }), '(d) semente ' + s + L + ': com a Arrábida e o Sado abertos, as 4 primeiras são as de Palmela e a da festa: ' + s2);
     }
   }
 
@@ -332,11 +333,11 @@ LINGUAS.forEach(function (l) {
     const seguinte = g.ev("CAPITULOS_CONFIG.filter(function (c) { return state.capitulos.concluidos[c.id] !== true; }).map(function (c) { return c.nivel; })[0]");
     const cartaoFim = html(g, 'capitulo-container');
     ok(seguinte === undefined ? cartaoFim.indexOf(ui.todos) !== -1 : cartaoFim.indexOf(ui.proximo.replace('{n}', seguinte)) !== -1, '(e) cumprido o cap13, o cartão diz ' + (seguinte === undefined ? 'que estão todos cumpridos' : 'o próximo capítulo no nível ' + seguinte) + L + ': ' + cartaoFim);
-    // Pelo Explorar de ponta a ponta, com a Arrábida e o Sado já abertos: 3 cliques cumprem o capítulo 13
+    // Pelo Explorar de ponta a ponta, com a Arrábida e o Sado já abertos: com a 4.ª entrada de nível 13 (a da festa) a sair ao acaso no mesmo grupo, 4 cliques cumprem sempre o capítulo 13 (o capítulo continua a pedir só as 3 de Palmela)
     const g2 = abrir(); lingua(g2, l);
     preparar(g2, REP_13, 13, IDS_5_6.concat(IDS_11, IDS_12)); semente(g2, 99);
-    for (let i = 0; i < 3; i++) g2.ev('enterExplorar();');
-    ok(g2.ev('capitulosAvaliarCelebracao()') === true && g2.ev('FALAS[0].m[0]') === CAP.conclusao[l], '(e) 3 cliques no Explorar chegam para cumprir o capítulo 13' + L);
+    for (let i = 0; i < 4; i++) g2.ev('enterExplorar();');
+    ok(g2.ev('capitulosAvaliarCelebracao()') === true && g2.ev('FALAS[0].m[0]') === CAP.conclusao[l], '(e) 4 cliques no Explorar chegam para cumprir o capítulo 13 (3 se nenhum for a entrada da festa)' + L);
   }
 
   // ===================================================================
@@ -403,7 +404,7 @@ LINGUAS.forEach(function (l) {
   preparar(a, REP_13, 12, IDS_5_6.concat(IDS_11, IDS_12));
   a.ev('verificarSubidaNivel();');
   semente(a, 5);
-  for (let i = 0; i < 3; i++) a.ev('enterExplorar();');
+  for (let i = 0; i < 4; i++) a.ev('enterExplorar();'); // as 3 de Palmela e a da festa, por ordem aleatória
   a.ev('capitulosAvaliarCelebracao(); TIMEOUTS.forEach(function (f) { f(); }); saveState(state);');
   const salvo = a.guardado.yoshicat_quinta_state_v2;
   ok(typeof salvo === 'string' && salvo.length > 100, '(h) o jogo A gravou o estado');

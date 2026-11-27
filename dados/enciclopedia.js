@@ -324,6 +324,19 @@ dadosAcrescentar('enciclopedia', {
   }
 });
 
+// Nível 13, 4.ª entrada: Festa das Vindimas de Palmela (fora do capítulo 13, que continua a pedir só as 3 de Palmela): abre ao entrar na festa «vindimas» (js/festas.js); a imagem é a vindimas_palmela_festa.jpg, a mesma do menu da festa.
+dadosAcrescentar('enciclopedia', {
+  id: 'festa_vindimas_palmela',
+  imagem: 'assets/ecras/vindimas_palmela_festa.jpg',
+  nivelMinimo: 13,
+  titulo: { pt: 'A Festa das Vindimas de Palmela', en: 'The Palmela Harvest Festival', es: 'La Fiesta de las Vendimias de Palmela' },
+  texto: {
+    pt: 'A Festa das Vindimas de Palmela realiza-se no início de setembro, em Palmela, e inclui cortejos, espetáculos e arraial. Fazem parte da tradição a bênção do primeiro mosto e a eleição da Rainha das Vindimas. A Dona Lurdes, vindimadora de Palmela, diz que o primeiro copo de mosto novo sabe sempre melhor.',
+    en: 'The Palmela Harvest Festival takes place in early September, in Palmela, and includes parades, shows and a street party. The blessing of the first must and the election of the Harvest Queen are part of the tradition. Dona Lurdes, a grape picker from Palmela, says the first glass of new must always tastes the best.',
+    es: 'La Fiesta de las Vendimias de Palmela se celebra a principios de septiembre, en Palmela, e incluye desfiles, espectáculos y arraial. Forman parte de la tradición la bendición del primer mosto y la elección de la Reina de las Vendimias. Dona Lurdes, vendimiadora de Palmela, dice que el primer vaso de mosto nuevo siempre sabe mejor.'
+  }
+});
+
 // Nível 14, «Moscatel de Azeitão»: as 3 histórias que o capítulo 14 (dados/capitulos.js) pede. Sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'azeitao_queijo',

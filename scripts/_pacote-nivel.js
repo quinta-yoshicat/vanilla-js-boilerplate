@@ -65,7 +65,8 @@ function correr(spec) {
   const IMGS = spec.imagens || {}; // entradas deste nível com imagem que já existia em assets/ecras (id -> caminho); as outras ficam sem imagem
   const FOTOS_EXTRA = spec.fotosExtra || {}; // fala (1 a 4) -> foto, além da fala 1
   const FOTOS_TODAS = [FOTO].concat(Object.keys(FOTOS_EXTRA).map(function (k) { return FOTOS_EXTRA[k]; }));
-  const GRUPOS = GRUPOS_NIVEIS_5_6.concat(spec.grupos); // grupos anteriores de nivelMinimo (5, 6, 11, 12, ..., N - 1)
+  // grupos anteriores de nivelMinimo (5, 6, 11, 12, ..., N - 1); ao grupo de Palmela (nível 13) junta-se a 4.ª entrada, a da Festa das Vindimas de Palmela (fica a seguir às 3 de Palmela, fora do capítulo 13)
+  const GRUPOS = GRUPOS_NIVEIS_5_6.concat(spec.grupos.map(function (g) { return g.indexOf('palmela_castelo') !== -1 ? g.concat(['festa_vindimas_palmela']) : g; }));
   const TODOS_ANT = GRUPOS.reduce(function (t, g) { return t.concat(g); }, []);
   const ATE_M = ENTRADAS_ORIGEM + TODOS_ANT.length; // entradas visíveis no nível M
   const ATE_N = ATE_M + 3;
@@ -75,8 +76,8 @@ function correr(spec) {
   function js(o) { return JSON.stringify(o); }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
   function nivelEsperado(rep) { let n = 1; LIMIARES.forEach(function (m, i) { if (rep >= m) n = i + 1; }); return n; }
-  // Quantas entradas da Enciclopédia vê um jogador do nível n (os níveis 5 e 6 juntam 3 cada e cada pacote de nível 11, 12, ... junta 3).
-  function entradasNoNivel(n) { return ENTRADAS_ORIGEM + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 7 ? 4 : 0) + (n >= 8 ? 3 : 0) + (n >= 9 ? 3 : 0) + (n >= 10 ? 1 : 0) + 3 * Math.max(0, Math.min(n, M) - 10); }
+  // Quantas entradas da Enciclopédia vê um jogador do nível n (os níveis 5 e 6 juntam 3 cada e cada pacote de nível 11, 12, ... junta 3; a partir do 13 conta mais 1, a da Festa das Vindimas de Palmela).
+  function entradasNoNivel(n) { return ENTRADAS_ORIGEM + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 7 ? 4 : 0) + (n >= 8 ? 3 : 0) + (n >= 9 ? 3 : 0) + (n >= 10 ? 1 : 0) + 3 * Math.max(0, Math.min(n, M) - 10) + (Math.min(n, M) >= 13 ? 1 : 0); }
 
   // Abre o jogo REAL com a pasta dados/ (ou outra) e os ganchos de teste.
   function abrir(opcoes) {

@@ -10,7 +10,7 @@
 //      os campos conhecidos; entra nas 3 línguas;
 //  (d) título e texto com <b>, &, aspas e <script> saem escapados (uma só vez) na Enciclopédia e no Explorar;
 //  (e) o estado guardado só tem ids e carrega bem se a entrada deixar de existir (o id solto não conta);
-//  (f) as entradas de hoje ficam idênticas às da master (impressão digital) e dados/ só traz as histórias da Cave de Reserva (nível 5) e da Coleção (6), da Arrábida (nível 11), do Sado (12), de Palmela (13), de Azeitão (14), de Sesimbra (15), de Setúbal (16), de Alcácer (17, o sal do Sado), da Comporta (18, o arroz do Sado), do Montado (19, o sobreiro e a cortiça) e de Bocage (20, o poeta de Setúbal).
+//  (f) as entradas de hoje ficam idênticas às da master (impressão digital) e dados/ só traz as histórias da Cave de Reserva (nível 5) e da Coleção (6), da Arrábida (nível 11), do Sado (12), de Palmela e a da Festa das Vindimas (13), de Azeitão (14), de Sesimbra (15), de Setúbal (16), de Alcácer (17, o sal do Sado), da Comporta (18, o arroz do Sado), do Montado (19, o sobreiro e a cortiça) e de Bocage (20, o poeta de Setúbal).
 //
 // Uso: node scripts/verificar-enciclopedia-dados.js
 // JS_DIR=pasta  corre sobre outra versão dos js/ (para provar que o teste apanha o que se estraga).
@@ -101,7 +101,7 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     ok(g.ev('encyclopediaEntries() === ENCYCLOPEDIA_ENTRIES.' + l) === true, '(f) sem nivelMinimo, a lista do jogo é exatamente a de hoje (' + l + ')');
   });
   // Com a pasta dados/ real: as 32 de antes (nas 3 línguas) ficam idênticas, a 33.ª é a «janeiras», a 34.ª a «santosPopulares», e só entram as 3 da Cave de Reserva (nível mínimo 5), as 3 da Coleção (6), as 3 da Arrábida (nível mínimo 11), as 3 do
-  // Sado (12), as 3 de Palmela (13), as 3 de Azeitão (14), as 3 de Sesimbra (15), as 3 de Setúbal (16), as 3 de Alcácer (17), as 3 da Comporta (18), as 3 do Montado (19) e as 3 de Bocage (20), por esta ordem, sem imagem (cada nível novo acrescenta aqui o seu grupo).
+  // Sado (12), as 3 de Palmela e a da Festa das Vindimas (13), as 3 de Azeitão (14), as 3 de Sesimbra (15), as 3 de Setúbal (16), as 3 de Alcácer (17), as 3 da Comporta (18), as 3 do Montado (19) e as 3 de Bocage (20), por esta ordem, sem imagem (cada nível novo acrescenta aqui o seu grupo).
   const real = abrir({ dadosDir: path.join(RAIZ, 'dados'), nivel11: false });
   const GRUPOS = [
     { nome: 'Cave de Reserva', nivel: 5, ids: ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa'] },
@@ -130,6 +130,8 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     { nome: 'Arrábida', nivel: 11, ids: ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'], imagens: { arrabida_biosfera: 'assets/ecras/arrabida_colina.jpg' } },
     { nome: 'Sado', nivel: 12, ids: ['sado_reserva', 'sado_golfinhos', 'sado_troia'], imagens: { sado_reserva: 'assets/ecras/sado_estuario.jpg', sado_golfinhos: 'assets/ecras/golfinhos_sado.jpg' } },
     { nome: 'Palmela', nivel: 13, ids: ['palmela_castelo', 'palmela_capelo', 'palmela_castelao'], imagens: { palmela_castelo: 'assets/ecras/palmela_castelo.jpg' } },
+    // Festa das Vindimas de Palmela: uma 4.ª entrada de nível 13, a seguir às 3 de Palmela (o capítulo 13 continua a pedir só essas 3); leva a imagem vindimas_palmela_festa (a mesma do menu da festa «vindimas»).
+    { nome: 'Festa das Vindimas de Palmela', nivel: 13, ids: ['festa_vindimas_palmela'], imagens: { festa_vindimas_palmela: 'assets/ecras/vindimas_palmela_festa.jpg' } },
     { nome: 'Azeitão', nivel: 14, ids: ['azeitao_queijo', 'azeitao_adega', 'azeitao_palacio'], imagens: { azeitao_queijo: 'assets/ecras/azeitao_vila.jpg' } },
     { nome: 'Sesimbra', nivel: 15, ids: ['sesimbra_castelo', 'sesimbra_vila', 'sesimbra_espichel'], imagens: { sesimbra_vila: 'assets/ecras/sesimbra_vila.jpg' } },
     { nome: 'Setúbal', nivel: 16, ids: ['setubal_forte', 'setubal_roxo', 'setubal_familias'], imagens: { setubal_roxo: 'assets/ecras/moscatel_roxo_com_uvas.jpg' } },
@@ -140,7 +142,7 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
   ];
   const TODOS = GRUPOS.reduce(function (t, g) { return t.concat(g.ids); }, []);
   ok(real.avisos.length === 0, '(f) carregar o jogo com dados/ não devia avisar nada: ' + real.avisos);
-  ok(real.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; }).join()') === TODOS.join(), '(f) de dados/ só deviam vir as histórias da Cave de Reserva, da Coleção, da Arrábida, do Sado, de Palmela, de Azeitão, de Sesimbra, de Setúbal, de Alcácer, da Comporta, do Montado e de Bocage, por ordem: ' + real.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; }).join()'));
+  ok(real.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; }).join()') === TODOS.join(), '(f) de dados/ só deviam vir as histórias da Cave de Reserva, da Coleção, da Arrábida, do Sado, de Palmela (com a da Festa das Vindimas), de Azeitão, de Sesimbra, de Setúbal, de Alcácer, da Comporta, do Montado e de Bocage, por ordem: ' + real.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; }).join()'));
   const dasTresLinguas = real.ev('JSON.stringify({ pt: ENCYCLOPEDIA_ENTRIES.pt.slice(0, 32), en: ENCYCLOPEDIA_ENTRIES.en.slice(0, 32), es: ENCYCLOPEDIA_ENTRIES.es.slice(0, 32) })');
   ok(['pt', 'en', 'es'].every(function (l) { return real.ev('ENCYCLOPEDIA_ENTRIES.' + l + '[32].id') === 'janeiras' && real.ev('ENCYCLOPEDIA_ENTRIES.' + l + '[33].id') === 'santosPopulares'; }), '(f) a 33.ª e a 34.ª entradas de hoje, nas 3 línguas, são a «janeiras» (Reis) e a «santosPopulares», logo a seguir às 32 de antes');
   ok(crypto.createHash('sha256').update(dasTresLinguas).digest('hex') === IMPRESSAO_DIGITAL_DE_HOJE, '(f) com dados/ as 32 entradas de antes da festa dos Reis ficam idênticas às da master, nas 3 línguas');
