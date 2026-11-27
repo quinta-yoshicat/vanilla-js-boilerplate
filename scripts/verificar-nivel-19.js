@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 // O NÍVEL 19 REAL, «Moscatel do Montado» (Parte 2, A Terra, o sobreiro e a cortiça), que vive só como dados (dados/niveis.js, historias.js, enciclopedia.js e
 // capitulos.js): o nível (12350 de Reputação), a história de 4 falas (a 1.ª com a foto assets/ecras/yoshi_no_montado.jpg e a 3.ª com assets/ecras/yoshi_sobreiro.jpg, SEM som), as 3
-// histórias do sobreiro e da cortiça na Enciclopédia (nível mínimo 19, sem imagem) e o capítulo 19 «A Casca que Volta» (critério temIds nessas 3).
+// histórias do sobreiro e da cortiça na Enciclopédia (nível mínimo 19; só duas com imagem: sobreiro_assobiador e sobreiro_rolha) e o capítulo 19 «A Casca que Volta» (critério temIds nessas 3).
 // Só traz os textos e números do nível: a prova em si está no auxiliar scripts/_pacote-nivel.js. Textos escritos aqui, à parte (não lidos de dados/).
 //
 // Uso: node scripts/verificar-nivel-19.js
@@ -11,7 +11,7 @@ const { correr } = require('./_pacote-nivel');
 
 correr({
   nivel: 19,
-  imagens: { sobreiro_rolha: 'assets/ecras/cortica.jpg' },
+  imagens: { sobreiro_assobiador: 'assets/ecras/sobreiro_assobiador.jpg', sobreiro_rolha: 'assets/ecras/cortica.jpg' },
   limiares: [0, 15, 50, 120, 300, 600, 1000, 1500, 2100, 2800, 3650, 4550, 5500, 6500, 7550, 8650, 9850, 11050, 12350],
   nome: { pt: 'Moscatel do Montado', en: 'Montado Moscatel', es: 'Moscatel del Montado' },
   nomeAnt: { pt: 'Moscatel da Comporta', en: 'Comporta Moscatel', es: 'Moscatel de Comporta' },

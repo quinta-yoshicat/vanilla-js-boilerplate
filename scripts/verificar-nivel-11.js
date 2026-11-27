@@ -57,6 +57,7 @@ const FALAS = [
   }
 ];
 const IDS = ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'];
+const IMG = { arrabida_biosfera: 'assets/ecras/arrabida_colina.jpg' }; // só a arrabida_biosfera leva imagem (já existia); as outras duas, sem imagem
 // As 7 histórias dos níveis 5, 6 e 7 (a última, «azeite_do_olival_ao_lagar», é do pacote «Cultura da Azeitona»; a seguir às 34 de origem e antes destas 3): também têm nivelMinimo, por isso entram na prioridade do Explorar.
 const IDS_5_6 = ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa', 'colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos', 'azeite_do_olival_ao_lagar', 'tirada_da_cortica', 'salina_marnoto', 'mel_arrabida', 'pesca_choco_sado', 'arroz_agua', 'arroz_aves', 'azeitao_coalho', 'pinha_tres_anos', 'souto', 'feira_santiago'];
 const ATE_10 = 34 + IDS_5_6.length; // entradas visíveis no nível 10
@@ -221,7 +222,7 @@ LINGUAS.forEach(function (l) {
     ok(g.ev('encyclopediaEntries().length') === ATE_11, '(d) nível 11: ' + ATE_11 + ' entradas' + L);
     IDS.forEach(function (id) {
       const e = g.ev('encyclopediaEntries().filter(function (e) { return e.id === ' + js(id) + '; })[0]');
-      ok(e && e.titulo === ENC[id].titulo[l] && e.texto === ENC[id].texto[l] && e.nivelMinimo === 11 && e.imagem === undefined, '(d) ' + id + ': título e texto exatos, nível mínimo 11, sem imagem' + L);
+      ok(e && e.titulo === ENC[id].titulo[l] && e.texto === ENC[id].texto[l] && e.nivelMinimo === 11 && e.imagem === IMG[id], '(d) ' + id + ': título e texto exatos, nível mínimo 11, só a arrabida_biosfera com imagem' + L);
     });
     g.ev('renderEnciclopedia();');
     h = html(g, 'enciclopedia-container');
@@ -230,7 +231,7 @@ LINGUAS.forEach(function (l) {
     g.ev('renderEnciclopedia();');
     h = html(g, 'enciclopedia-container');
     ok(IDS.every(function (id) { return h.indexOf('<h3>' + esc(ENC[id].titulo[l]) + '</h3>') !== -1 && h.indexOf('<p>' + esc(ENC[id].texto[l]) + '</p>') !== -1; }), '(d) nível 11: abertas, mostram o título e o texto (escapados)' + L);
-    ok(h.indexOf('3 / ' + ATE_11) !== -1 && h.indexOf('<img') === -1, '(d) nível 11: 3 / ' + ATE_11 + ' e sem imagens' + L);
+    ok(h.indexOf('3 / ' + ATE_11) !== -1 && (h.match(/<img/g) || []).length === 1 && h.indexOf('<img src="' + IMG.arrabida_biosfera + '" alt="">') !== -1, '(d) nível 11: 3 / ' + ATE_11 + ' e só uma imagem (a da arrabida_biosfera)' + L);
     limpo(h, '(d) Enciclopédia' + L);
   }
   {

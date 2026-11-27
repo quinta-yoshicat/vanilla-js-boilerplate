@@ -25,7 +25,7 @@ const RAIZ = path.join(__dirname, '..');
 const JS_DIR = process.env.JS_DIR || path.join(RAIZ, 'js');
 const LINGUAS = ['pt', 'en', 'es'];
 // sha256 do JSON das 32 primeiras entradas de ENCYCLOPEDIA_ENTRIES (as de antes da festa dos Reis, nas 3 línguas), já com a frase de Ricardo II na forma cautelosa («Diz-se que ...») e o nome «Fygmo II»; a 33.ª é a «janeiras».
-const IMPRESSAO_DIGITAL_DE_HOJE = '5e34b9b887da087005120fe30b7747d174407df5cd5b94b43c533b5cfd27db61'; // muda só com o campo imagem de «poda» e «mildio» (js/explorar.js)
+const IMPRESSAO_DIGITAL_DE_HOJE = '79386ed7d1d967c6ee9095119e2b0f8d597ab3bfb59664e03740f7bc66ba153f'; // muda só com o campo imagem de «poda», «mildio» e «lendaSaoMartinho» (js/explorar.js); a anterior (5e34b9b8…) só não tinha a da lenda
 // Os textos pedidos das 6 histórias dos níveis 5 e 6, palavra por palavra (escritos aqui, à parte; não lidos de dados/).
 const TEXTOS_5_6 = {
   cave_idade_rotulo: {"nivelMinimo":5,"titulo":{"pt":"Quantos anos tem o Moscatel?","en":"How old is the Moscatel?","es":"¿Cuántos años tiene el Moscatel?"},"texto":{"pt":"Num Moscatel de Setúbal, o rótulo pode dizer «5 anos», «10 anos», «20 anos», de 5 em 5 anos até «40 anos». Só se pode escrever esse número se os vinhos da garrafa tiverem, no mínimo, essa idade.","en":"On a Moscatel de Setúbal, the label may say \"5 years\", \"10 years\", \"20 years\", in steps of 5 up to \"40 years\". The number can only be written if the wines in the bottle are at least that old.","es":"En un Moscatel de Setúbal, la etiqueta puede decir «5 años», «10 años», «20 años», de 5 en 5 hasta «40 años». Solo se puede escribir ese número si los vinos de la botella tienen, como mínimo, esa edad."}},
@@ -127,7 +127,7 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     // Pacote «feira_santiago» (PR 10): uma entrada, de nível mínimo 7, a seguir à do souto; leva a imagem santiago_festa (a mesma do menu da festa «santiago»).
     { nome: "Feira de Sant'Iago", nivel: 7, ids: ['feira_santiago'], imagens: { feira_santiago: 'assets/ecras/santiago_festa.jpg' } },
     // Imagens que já existiam em assets/ecras: uma por entrada (campo «imagens»: id -> caminho), só onde mostram mesmo o tema.
-    { nome: 'Arrábida', nivel: 11, ids: ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'] },
+    { nome: 'Arrábida', nivel: 11, ids: ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'], imagens: { arrabida_biosfera: 'assets/ecras/arrabida_colina.jpg' } },
     { nome: 'Sado', nivel: 12, ids: ['sado_reserva', 'sado_golfinhos', 'sado_troia'], imagens: { sado_reserva: 'assets/ecras/sado_estuario.jpg', sado_golfinhos: 'assets/ecras/golfinhos_sado.jpg' } },
     { nome: 'Palmela', nivel: 13, ids: ['palmela_castelo', 'palmela_capelo', 'palmela_castelao'], imagens: { palmela_castelo: 'assets/ecras/palmela_castelo.jpg' } },
     { nome: 'Azeitão', nivel: 14, ids: ['azeitao_queijo', 'azeitao_adega', 'azeitao_palacio'], imagens: { azeitao_queijo: 'assets/ecras/azeitao_vila.jpg' } },
@@ -135,7 +135,7 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     { nome: 'Setúbal', nivel: 16, ids: ['setubal_forte', 'setubal_roxo', 'setubal_familias'], imagens: { setubal_roxo: 'assets/ecras/moscatel_roxo_com_uvas.jpg' } },
     { nome: 'Alcácer', nivel: 17, ids: ['sal_alcacer', 'sal_setubal', 'sal_redura'], imagens: { sal_alcacer: 'assets/ecras/sal_alcacer.jpg', sal_setubal: 'assets/ecras/sal_setubal.jpg', sal_redura: 'assets/ecras/sal_redura.jpg' } },
     { nome: 'Comporta', nivel: 18, ids: ['arroz_arrozais', 'arroz_carolino', 'arroz_consumo'], imagens: { arroz_arrozais: 'assets/ecras/arrozal_personagens.jpg', arroz_carolino: 'assets/ecras/arrozal_2.jpg' } },
-    { nome: 'Montado', nivel: 19, ids: ['sobreiro_cortica', 'sobreiro_assobiador', 'sobreiro_rolha'], imagens: { sobreiro_rolha: 'assets/ecras/cortica.jpg' } },
+    { nome: 'Montado', nivel: 19, ids: ['sobreiro_cortica', 'sobreiro_assobiador', 'sobreiro_rolha'], imagens: { sobreiro_assobiador: 'assets/ecras/sobreiro_assobiador.jpg', sobreiro_rolha: 'assets/ecras/cortica.jpg' } },
     { nome: 'Bocage', nivel: 20, ids: ['bocage_poeta', 'bocage_casa', 'bocage_dia'], imagens: { bocage_casa: 'assets/ecras/casa_bocage.jpg' } }
   ];
   const TODOS = GRUPOS.reduce(function (t, g) { return t.concat(g.ids); }, []);
