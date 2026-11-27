@@ -1,7 +1,7 @@
 {
   "id": "cultura_arroz",
   "nome": "Cultura do Arroz",
-  "estado": "em PR",
+  "estado": "feita",
   "clima": "Em 2022, os produtores de arroz do Vale do Sado estimavam que a seca deixaria cerca de 2500 hectares sem cultivo.",
   "fontes": [
     "Agroportal/Lusa, 11-02-2022, «Seca: Produtores de arroz do Vale do Sado estimam quebra de 7ME»",
@@ -35,7 +35,7 @@
     {
       "caminho": "assets/ecras/aves_arrozais_sado.jpg",
       "uso": "Entrada da Enciclopédia «arroz_aves» (campo imagem; só se acrescenta quando o ficheiro existir)",
-      "descricao": "Um bando de íbis-pretas e colhereiros num arrozal alagado do estuário do Sado, ao amanhecer, com a água a refletir o céu e as árvores ao fundo.",
+      "descricao": "Garças e outras aves num arrozal alagado do estuário do Sado, ao amanhecer, com a água a refletir o céu e as árvores ao fundo.",
       "estado": "feita"
     }
   ],
