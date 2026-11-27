@@ -302,7 +302,7 @@ const cap7 = "capituloEstaCumprido(CAPITULOS_CONFIG.filter(function (c) { return
     ok(!/saveState|updateStatsDisplays|despensaMesaVindima|despensaRegistar|despensaEstado/.test(corpoDe(f)), f + ' só lê (não grava, não gasta, não atualiza a barra)');
   });
   ok(!/assalto|Assalto|lagarAssalto/.test(src), 'estrada.js não tem assalto dos porcos (esse é só do Lagar)');
-  ok(/function estradaOfertaHtml\(\) \{\s*return estradaOfertaVisitaHtml\(\) \+ estradaMesaSadoHtml\(\);\s*\}/.test(src), 'a Mesa do Sado está no bloco da oferta (estradaOfertaHtml)');
+  ok(/function estradaOfertaHtml\(\) \{\s*return estradaOfertaVisitaHtml\(\) \+ estradaMoinhoHtml\(\) \+ estradaMesaSadoHtml\(\);\s*\}/.test(src), 'a Mesa do Sado está no bloco da oferta (estradaOfertaHtml, a seguir ao Moinho de Maré do nível 10)');
   ok(/definirFundo/.test(src) === false, 'a ação não troca o fundo do ecrã (a imagem vê-se no próprio bloco)');
   const vis = ler(path.join(RAIZ, 'js', 'visitas.js'));
   ok(/if \(!r\.visita\) \{ container\.innerHTML = ofertaBloco\(\) \+ encomendaBloco\(\); return; \}/.test(vis), 'js/visitas.js mostra o bloco também nos dias sem visita (a mesa não depende da visita)');

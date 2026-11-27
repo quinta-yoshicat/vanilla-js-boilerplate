@@ -58,8 +58,8 @@ const FALAS = [
 ];
 const IDS = ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'];
 const IMG = { arrabida_biosfera: 'assets/ecras/arrabida_colina.jpg' }; // só a arrabida_biosfera leva imagem (já existia); as outras duas, sem imagem
-// As 17 histórias dos níveis 5 a 10 (3 de nível 5, 3 de nível 6, 4 de nível 7, 3 de nível 8, 3 de nível 9 e 1 de nível 10, dos pacotes das culturas e da feira; a seguir às 34 de origem e antes destas 3): também têm nivelMinimo, por isso entram na prioridade do Explorar.
-const IDS_5_6 = ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa', 'colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos', 'azeite_do_olival_ao_lagar', 'tirada_da_cortica', 'salina_marnoto', 'mel_arrabida', 'pesca_choco_sado', 'arroz_agua', 'arroz_aves', 'azeitao_coalho', 'pinha_tres_anos', 'souto', 'feira_santiago'];
+// As 18 histórias dos níveis 5 a 10 (3 de nível 5, 3 de nível 6, 4 de nível 7, 3 de nível 8, 3 de nível 9 e 2 de nível 10, dos pacotes das culturas e da feira; a seguir às 34 de origem e antes destas 3): também têm nivelMinimo, por isso entram na prioridade do Explorar.
+const IDS_5_6 = ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa', 'colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos', 'azeite_do_olival_ao_lagar', 'tirada_da_cortica', 'salina_marnoto', 'mel_arrabida', 'pesca_choco_sado', 'arroz_agua', 'arroz_aves', 'azeitao_coalho', 'pinha_tres_anos', 'souto', 'feira_santiago', 'moinho_mare_mourisca'];
 const ATE_10 = 34 + IDS_5_6.length; // entradas visíveis no nível 10
 const ATE_11 = ATE_10 + IDS.length;
 const ENC = {
@@ -336,7 +336,7 @@ LINGUAS.forEach(function (l) {
       g.ev('state.acesso.jogadorAntigo = true;');
       ecras.forEach(function (e) { ok(g.ev("ecraDesbloqueado('" + e + "')") === true, '(g) jogador antigo: o ecrã ' + e + ' aberto com ' + onde); });
       // O jogador antigo não salta o nível mínimo das histórias novas.
-      if (n < 11) ok(g.ev('encyclopediaEntries().length') === 34 + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 7 ? 4 : 0) + (n >= 8 ? 3 : 0) + (n >= 9 ? 3 : 0) + (n >= 10 ? 1 : 0), '(g) jogador antigo abaixo do 11: continua sem as 3 da Arrábida (nem as dos níveis 5 e 6 antes do 5 e do 6) com ' + onde);
+      if (n < 11) ok(g.ev('encyclopediaEntries().length') === 34 + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 7 ? 4 : 0) + (n >= 8 ? 3 : 0) + (n >= 9 ? 3 : 0) + (n >= 10 ? 2 : 0), '(g) jogador antigo abaixo do 11: continua sem as 3 da Arrábida (nem as dos níveis 5 e 6 antes do 5 e do 6) com ' + onde);
       g.ev('state.acesso.jogadorAntigo = false;');
     });
     // Mensagem de ecrã trancado no nível 10: o nome do nível 11 não aparece (nenhum ecrã o pede).

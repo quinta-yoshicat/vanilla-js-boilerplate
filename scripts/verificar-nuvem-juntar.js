@@ -22,7 +22,10 @@ const vm = require('vm');
 const RAIZ = path.join(__dirname, '..');
 const STATE_JS = fs.readFileSync(path.join(RAIZ, 'js', 'state.js'), 'utf8');
 const NUVEM_JS = fs.readFileSync(path.join(RAIZ, 'js', 'nuvem.js'), 'utf8');
-const AREAS = ['despensa', 'visitas', 'lagar', 'camara', 'roxo', 'loja', 'reserva', 'colecao', 'encomendas', 'prova'];
+const AREAS = ['despensa', 'visitas', 'lagar', 'camara', 'roxo', 'loja', 'reserva', 'colecao', 'encomendas', 'prova', 'moinho'];
+// O fim do dia D para o moinho (js/nuvem.js, nuvemLevesMoinho): um carimbo anterior às 20:00 UTC do dia da recompensa já foi gasto nela.
+const HORA_MS = 3600000;
+function gastoAteDoDia(d) { return Date.parse(d + 'T00:00:00Z') + 20 * HORA_MS; }
 
 // Nuvem falsa (CloudStorage) em memória, como em verificar-nuvem.js.
 function nuvemFalsa(inicial) {
@@ -141,8 +144,17 @@ function estadoAleatorio(rnd) {
     reserva: { visitaDia: dia() },
     colecao: { arrumouDia: dia() },
     encomendas: { atual: atual, ultimoDia: dia(), cumpridas: n() },
-    prova: { ultimoDia: dia(), dias: n(), acertos: n() }
+    prova: { ultimoDia: dia(), dias: n(), acertos: n() },
+    moinho: moinhoAleatorio(rnd, dia, n)
   };
+}
+
+// O moinho de maré (js/estrada.js): o carimbo (ou null) e o dia da última recompensa. O carimbo de um estado bom ainda não foi gasto
+// (é posterior às 20:00 UTC do dia da recompensa), senão juntar um estado com ele próprio podia deitá-lo fora.
+function moinhoAleatorio(rnd, dia, n) {
+  const d = dia();
+  const carimbo = rnd() < 0.4 ? null : (d === null ? 1790000000000 : gastoAteDoDia(d)) + (n() + Math.floor(rnd() * 3)) * HORA_MS;
+  return { fechadoEm: carimbo, dia: d };
 }
 
 function correr(fonteNuvem) {
@@ -164,7 +176,7 @@ function correr(fonteNuvem) {
     // forma: as mesmas áreas e chaves que o defaultState()
     ok(AREAS.every(function (k) { return Object.keys(R[k]).join() === Object.keys(defeito[k]).join(); }), q + 'a forma devia ser a do defaultState()');
     // (a) datas simples: a mais recente, nunca recuam
-    [['lagar', 'ultimoDia'], ['lagar', 'mesaDia'], ['lagar', 'mesaSadoDia'], ['lagar', 'assaltoDia'], ['camara', 'provaDia'], ['roxo', 'brindeDia'], ['reserva', 'visitaDia'], ['colecao', 'arrumouDia']].forEach(function (p) {
+    [['lagar', 'ultimoDia'], ['lagar', 'mesaDia'], ['lagar', 'mesaSadoDia'], ['lagar', 'assaltoDia'], ['camara', 'provaDia'], ['roxo', 'brindeDia'], ['reserva', 'visitaDia'], ['colecao', 'arrumouDia'], ['moinho', 'dia']].forEach(function (p) {
       ok(mais(R[p[0]][p[1]], A[p[0]][p[1]]) && mais(R[p[0]][p[1]], B[p[0]][p[1]]), q + p.join('.') + ' recuou');
       ok(R[p[0]][p[1]] === [A[p[0]][p[1]], B[p[0]][p[1]]].filter(function (x) { return x !== null; }).sort().pop() || (A[p[0]][p[1]] === null && B[p[0]][p[1]] === null && R[p[0]][p[1]] === null), q + p.join('.') + ' devia ser a mais recente');
     });
@@ -172,6 +184,12 @@ function correr(fonteNuvem) {
     [['lagar', 'dias'], ['camara', 'dias'], ['roxo', 'dias']].forEach(function (p) {
       ok(R[p[0]][p[1]] === Math.max(A[p[0]][p[1]], B[p[0]][p[1]]), q + p.join('.') + ' devia ser o maior');
     });
+    // moinho: o carimbo é sempre de um dos lados, ainda por gastar na recompensa mais recente, e nenhum carimbo por gastar se perde (fica o mais antigo)
+    {
+      const fim = R.moinho.dia === null ? 0 : gastoAteDoDia(R.moinho.dia);
+      const vivos = [A.moinho.fechadoEm, B.moinho.fechadoEm].filter(function (c) { return c !== null && c >= fim; });
+      ok(R.moinho.fechadoEm === (vivos.length === 0 ? null : Math.min.apply(null, vivos)), q + 'moinho.fechadoEm devia ser o carimbo por gastar mais antigo (' + J(R.moinho) + ' de ' + J(A.moinho) + ' e ' + J(B.moinho) + ')');
+    }
     // loja: o dia não recua e, no mesmo dia, vendasHoje fica o maior
     ok(R.loja.dia === null ? (A.loja.dia === null && B.loja.dia === null) : mais(R.loja.dia, A.loja.dia) && mais(R.loja.dia, B.loja.dia), q + 'loja.dia recuou');
     if (A.loja.dia === B.loja.dia) ok(R.loja.vendasHoje === Math.max(A.loja.vendasHoje, B.loja.vendasHoje), q + 'no mesmo dia vendasHoje devia ser o maior');
@@ -228,6 +246,20 @@ function correr(fonteNuvem) {
   ok(J(VH([{ dia: '2026-10-11', id: 'valentim', feita: false }, { dia: '2026-10-11', id: 'marisa', feita: true }])) === '{"dia":"2026-10-11","id":"valentim","feita":false}', 'visitas.hoje: mesmo dia, ids diferentes: fica o do base (ao contrário)');
   ok(J(VH([{ dia: '2026-10-11', id: 'marisa', feita: true }, { dia: '2026-10-11', id: 'marisa', feita: true, bagaceiraDia: '2026-10-11' }])) === '{"dia":"2026-10-11","id":"marisa","feita":true,"bagaceiraDia":"2026-10-11"}', 'visitas.hoje: o copo de bagaceira já oferecido noutro aparelho não se perde');
   ok(J(VH([{ dia: '2026-10-11', id: 'marisa', feita: true, bagaceiraDia: '2026-10-11' }, { dia: '2026-10-11', id: 'marisa', feita: true }])) === '{"dia":"2026-10-11","id":"marisa","feita":true,"bagaceiraDia":"2026-10-11"}', 'visitas.hoje: o copo de bagaceira do base também fica');
+  // moinho {fechadoEm, dia}: o dia mais recente; o carimbo por gastar mais antigo; um carimbo já gasto numa recompensa não ressuscita
+  const MO = function (a, b) { return J(juntar(L({ moinho: a }), L({ moinho: b })).moinho); };
+  const U = function (d) { return Date.parse(d + 'T00:00:00Z'); };
+  ok(MO({ fechadoEm: null, dia: '2026-10-09' }, { fechadoEm: null, dia: '2026-10-10' }) === '{"fechadoEm":null,"dia":"2026-10-10"}', 'moinho: o dia mais recente ganha');
+  ok(MO({ fechadoEm: null, dia: null }, { fechadoEm: null, dia: '2026-10-10' }) === '{"fechadoEm":null,"dia":"2026-10-10"}' && MO({ fechadoEm: null, dia: '2026-10-10' }, { fechadoEm: null, dia: null }) === '{"fechadoEm":null,"dia":"2026-10-10"}', 'moinho: com um dia null fica o outro (nos dois sentidos)');
+  ok(MO({ fechadoEm: 1790000000000, dia: null }, { fechadoEm: 1790003600000, dia: null }) === '{"fechadoEm":1790000000000,"dia":null}' && MO({ fechadoEm: 1790003600000, dia: null }, { fechadoEm: 1790000000000, dia: null }) === '{"fechadoEm":1790000000000,"dia":null}', 'moinho: com duas comportas fechadas fica o carimbo mais antigo (nos dois sentidos)');
+  ok(MO({ fechadoEm: 1790000000000, dia: null }, { fechadoEm: null, dia: null }) === '{"fechadoEm":1790000000000,"dia":null}', 'moinho: o outro lado sem carimbo não apaga o carimbo');
+  ok(MO({ fechadoEm: U('2026-10-09') + 10 * HORA_MS, dia: null }, { fechadoEm: null, dia: '2026-10-09' }) === '{"fechadoEm":null,"dia":"2026-10-09"}', 'moinho: um carimbo já gasto na recompensa do outro aparelho não ressuscita');
+  ok(MO({ fechadoEm: U('2026-10-09') + 10 * HORA_MS, dia: '2026-10-08' }, { fechadoEm: null, dia: '2026-10-09' }) === '{"fechadoEm":null,"dia":"2026-10-09"}', 'moinho: o mesmo, com o dia da recompensa antiga no lado do carimbo');
+  ok(MO({ fechadoEm: U('2026-10-10') + 2 * HORA_MS, dia: null }, { fechadoEm: null, dia: '2026-10-09' }) === '{"fechadoEm":' + (U('2026-10-10') + 2 * HORA_MS) + ',"dia":"2026-10-09"}', 'moinho: uma comporta fechada no dia seguinte à recompensa não se perde');
+  ok(MO({ fechadoEm: gastoAteDoDia('2026-10-09'), dia: null }, { fechadoEm: null, dia: '2026-10-09' }) === '{"fechadoEm":' + gastoAteDoDia('2026-10-09') + ',"dia":"2026-10-09"}', 'moinho: o limite (20:00 UTC do dia da recompensa) ainda conta como por gastar');
+  ok(MO({ fechadoEm: gastoAteDoDia('2026-10-09') - 1, dia: null }, { fechadoEm: null, dia: '2026-10-09' }) === '{"fechadoEm":null,"dia":"2026-10-09"}', 'moinho: 1 ms antes do limite já está gasto');
+  ok(MO({ fechadoEm: 'x', dia: 5 }, { fechadoEm: -3, dia: '2026-1-9' }) === '{"fechadoEm":null,"dia":null}' && MO({ fechadoEm: 1.5, dia: [] }, { fechadoEm: 0, dia: {} }) === '{"fechadoEm":null,"dia":null}', 'moinho: carimbos e dias inválidos ignoram-se');
+  ok(MO(null, 5) === '{"fechadoEm":null,"dia":null}' && J(juntar(L({}), L({})).moinho) === '{"fechadoEm":null,"dia":null}', 'moinho: sem objetos dá o valor por omissão');
   // primeiraTroca: a mais antiga; visitas.feitas: a mais recente; recebidos/entregues: o maior, com união das chaves
   const D = juntar(L({ despensa: { recebidos: { a: 2, b: 1 }, entregues: { a: 1 }, primeiraTroca: { a: '2026-10-05' }, hoje: { dia: null, feitas: {} } }, visitas: { feitas: { v: '2026-10-05' }, hoje: null } }),
     L({ despensa: { recebidos: { a: 1, c: 4 }, entregues: { a: 1, c: 2 }, primeiraTroca: { a: '2026-10-03', c: '2026-10-09' }, hoje: { dia: null, feitas: {} } }, visitas: { feitas: { v: '2026-10-09', w: '2026-10-01' }, hoje: null } }));
@@ -263,7 +295,8 @@ function correr(fonteNuvem) {
 
   // ---------------------------------------------------------------- (c) dois aparelhos, nos dois ramos
   const base = function (rep, em, extra) { return Object.assign({ reputacao: rep, ultimaGravacaoEm: em }, extra); };
-  const feitoA = { // aparelho A: o Lagar e 2 trocas
+  const feitoA = { // aparelho A: o Lagar, 2 trocas e a comporta do moinho de maré fechada
+    moinho: { fechadoEm: 1790000000000, dia: null },
     lagar: { ultimoDia: '2026-10-10', dias: 3, mesaDia: '2026-10-10', mesaSadoDia: '2026-10-09', assaltoDia: '2026-10-09' },
     despensa: { recebidos: { queijo_azeitao: 1, choco_sado: 1 }, entregues: {}, primeiraTroca: { queijo_azeitao: '2026-10-08', choco_sado: '2026-10-10' }, hoje: { dia: '2026-10-10', feitas: { sr_armindo: true, dona_rosa: true } } }
   };
@@ -271,11 +304,11 @@ function correr(fonteNuvem) {
     loja: { dia: '2026-10-11', vendasHoje: 2 },
     visitas: { feitas: { valentim: '2026-10-11' }, hoje: { dia: '2026-10-11', id: 'valentim', feita: true } }
   };
-  const tudo = function (e) { return J({ lagar: e.lagar, despensa: e.despensa, loja: e.loja, visitas: e.visitas }); };
+  const tudo = function (e) { return J({ lagar: e.lagar, despensa: e.despensa, loja: e.loja, visitas: e.visitas, moinho: e.moinho }); };
   const esperado = (function () { const e = {}; AREAS.forEach(function (k) { e[k] = defeito[k]; }); return Object.assign(e, feitoA, feitoB); })();
   const verTudo = function (g, quem) {
     const e = JSON.parse(g.ev('JSON.stringify(state)'));
-    ok(tudo(e) === tudo(esperado), quem + ' devia ter tudo (Lagar, 2 trocas, Loja e 1 visita), tem: ' + tudo(e));
+    ok(tudo(e) === tudo(esperado), quem + ' devia ter tudo (Lagar, 2 trocas, comporta do moinho, Loja e 1 visita), tem: ' + tudo(e));
   };
   ['local', 'nuvem'].forEach(function (ramo) {
     const nuvem = nuvemFalsa({});
@@ -341,6 +374,13 @@ const MUTACOES = [
   ['o ramo "local ganha" grava sempre', 'if (localEm > nuvemEm || mudou || havia)', 'if (true)'],
   ['a junção usa só o estado de base', 'const leves = nuvemJuntarLeves(state, estadoNuvem);', 'const leves = nuvemJuntarLeves(state, state);'],
   ['as feitas da despensa ficam todas (também as false)', "if (k !== '__proto__' && m[k] === true) r[k] = true;", "if (k !== '__proto__') r[k] = m[k];"],
+  ['o moinho: o dia mais antigo', 'const dia = nuvemLevesMaisRecente(x.dia, y.dia);', 'const dia = nuvemLevesMaisAntiga(x.dia, y.dia);'],
+  ['o moinho: fica o carimbo mais recente', 'Math.min.apply(null, vivos)', 'Math.max.apply(null, vivos)'],
+  ['o moinho: um carimbo gasto ressuscita', 'return c !== null && c >= gastoAte;', 'return c !== null;'],
+  ['o moinho: perde o carimbo', 'fechadoEm: vivos.length > 0 ? Math.min.apply(null, vivos) : null', 'fechadoEm: null'],
+  ['o moinho: o limite do gasto vem cedo demais', '+ 20 * 3600000;', '+ 10 * 3600000;'],
+  ['o moinho: o limite do gasto vem tarde demais', '+ 20 * 3600000;', '+ 30 * 3600000;'],
+  ['o moinho: fora da lista das áreas leves', "'encomendas', 'prova', 'moinho'];", "'encomendas', 'prova'];"],
   ['a Loja ignora o dia mais recente', 'else if (lojaDb > lojaDa) loja = { dia: lojaDb, vendasHoje: nuvemLevesInteiro(ob.vendasHoje) };', 'else if (lojaDb > lojaDa) loja = { dia: lojaDa, vendasHoje: nuvemLevesInteiro(oa.vendasHoje) };']
 ];
 let apanhadas = 0;

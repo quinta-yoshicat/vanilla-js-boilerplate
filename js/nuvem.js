@@ -402,7 +402,12 @@ function nuvemJuntarCaderno(a, b) {
 //     Cada lado passa antes por encomendasNormalizar() (js/state.js): o mal formado conta como null/0.
 //   prova {ultimoDia, dias, acertos} (js/prova.js): ultimoDia = o mais recente (uma prova por dia nos dois aparelhos);
 //     dias e acertos = o MAIOR. Cada lado passa antes por provaNormalizar() (js/state.js).
-const NUVEM_LEVES_AREAS = ['despensa', 'visitas', 'lagar', 'camara', 'roxo', 'loja', 'reserva', 'colecao', 'encomendas', 'prova'];
+//   moinho {fechadoEm, dia} (o Moinho de Maré da Mourisca, js/estrada.js): dia = o mais recente (uma recompensa por dia nos dois aparelhos);
+//     fechadoEm = o carimbo MAIS ANTIGO que ainda não foi gasto (null se nenhum): um carimbo já gasto numa recompensa não ressuscita. Gasto
+//     = anterior às 20:00 UTC do dia da recompensa (a água só se solta 6 horas depois de fechar, por isso o carimbo de uma recompensa
+//     do dia D é sempre anterior às 18:00 de Lisboa desse dia; uma comporta fechada depois, num dia seguinte, tem sempre um carimbo
+//     posterior às 20:00 UTC do dia D). Cada lado passa antes por moinhoNormalizar() (js/state.js).
+const NUVEM_LEVES_AREAS = ['despensa', 'visitas', 'lagar', 'camara', 'roxo', 'loja', 'reserva', 'colecao', 'encomendas', 'prova', 'moinho'];
 
 function nuvemLevesData(x) {
   return (typeof x === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(x)) ? x : null;
@@ -530,6 +535,17 @@ function nuvemLevesProva(a, b) {
   return { ultimoDia: nuvemLevesMaisRecente(x.ultimoDia, y.ultimoDia), dias: Math.max(x.dias, y.dias), acertos: Math.max(x.acertos, y.acertos) };
 }
 
+// O moinho de maré de dois lados (ver as regras acima). Pura; devolve um objeto novo com a forma de defaultState().
+function nuvemLevesMoinho(a, b) {
+  const norm = typeof moinhoNormalizar === 'function' ? moinhoNormalizar : function () { return { fechadoEm: null, dia: null }; };
+  const x = norm(a), y = norm(b);
+  const dia = nuvemLevesMaisRecente(x.dia, y.dia);
+  let gastoAte = 0;
+  if (dia !== null) gastoAte = Date.UTC(Number(dia.slice(0, 4)), Number(dia.slice(5, 7)) - 1, Number(dia.slice(8, 10))) + 20 * 3600000;
+  const vivos = [x.fechadoEm, y.fechadoEm].filter(function (c) { return c !== null && c >= gastoAte; });
+  return { fechadoEm: vivos.length > 0 ? Math.min.apply(null, vivos) : null, dia: dia };
+}
+
 function nuvemJuntarLeves(base, outro) {
   const a = nuvemLevesObjeto(base), b = nuvemLevesObjeto(outro);
   const da = nuvemLevesObjeto(a.despensa), db = nuvemLevesObjeto(b.despensa);
@@ -581,7 +597,8 @@ function nuvemJuntarLeves(base, outro) {
     reserva: { visitaDia: nuvemLevesMaisRecente(sa.visitaDia, sb.visitaDia) },
     colecao: { arrumouDia: nuvemLevesMaisRecente(ka.arrumouDia, kb.arrumouDia) },
     encomendas: nuvemLevesEncomendas(a.encomendas, b.encomendas),
-    prova: nuvemLevesProva(a.prova, b.prova)
+    prova: nuvemLevesProva(a.prova, b.prova),
+    moinho: nuvemLevesMoinho(a.moinho, b.moinho)
   };
 }
 

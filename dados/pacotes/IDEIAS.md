@@ -17,3 +17,4 @@ Estados: `ideia` → `aprovada` → `em PR` → `feita`. Quando uma ideia passa 
 | ideia_09 | Castanhas | cultura | castanhas | feita | #245 |
 | ideia_10 | Feira de Sant'Iago | festa | feira_santiago | feita | #247, parte 2 de 2 (festa) |
 | ideia_11 | Festa das Vindimas de Palmela | festa | festa_vindimas_palmela | feita | #256 (datas por confirmar) |
+| ideia_12 | Moinho de Maré da Mourisca | cultura | moinho_mare_mourisca | feita | #260 |

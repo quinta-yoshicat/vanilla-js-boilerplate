@@ -15,6 +15,12 @@
 // (js/lagar.js) e com a mesma regra (despensaMesaVindima, js/despensa.js, com o campo state.lagar.mesaSadoDia). Também só lê ao desenhar;
 // só o clique (estradaMesaSadoClique) a põe e grava, UMA vez. Não tem assalto dos porcos (esse é só do Lagar).
 //
+// O "Moinho de Maré da Mourisca" (nível 10, ESTRADA_MOINHO_MARE em js/estrada-dados.js): mais uma ação do mesmo bloco, mas com uma espera de 6 horas
+// em vez de bens (o padrão de cooldown da Vinha, js/vinha.js: carimbo Date.now() em state.moinho.fechadoEm e carimboCorrigirFuturo, js/tempo.js)
+// e 1 recompensa por dia (state.moinho.dia, com a mesma proteção contra o relógio atrás da Mesa do Sado). Não gasta nada nem tem assalto dos
+// porcos. Só lê ao desenhar (a única escrita é a de carimboCorrigirFuturo, que repõe um carimbo no futuro, como na Vinha); só o clique
+// (estradaMoinhoClique) fecha a comporta ou solta a água e grava, UMA vez.
+//
 // Abre-se a partir do Explorar (cartão com foto, só com o ecrã desbloqueado: ver explorarCartoesHtml() em
 // js/explorar.js e ecraDesbloqueado('estrada') em js/niveis.js; um jogador antigo vê-o sempre).
 // ---------------------------------------------------------------------
@@ -228,6 +234,8 @@ let estradaOfertaResultado = null; // { dia, personagem, bem, reputacaoGanha }
 let estradaOfertaOcupado = false;
 let estradaMesaSadoResultado = null; // { dia, reputacaoGanha }
 let estradaMesaSadoOcupado = false;
+let estradaMoinhoResultado = null; // { dia, tipo: 'fechou' | 'soltou', reputacaoGanha }
+let estradaMoinhoOcupado = false;
 
 // A visita de hoje, SÓ SE já se tocou nela (state.visitas.hoje.feita) e não estamos em modo de teste; senão null.
 // Só lê (visitaResolverHoje não grava).
@@ -245,14 +253,14 @@ function estradaNomeBem(bemId) {
   return bem ? estradaTexto(bem.nome) : '';
 }
 
-// O que se vê no cartão da Quinta, por baixo da linha da visita (só lê; devolve '' se não houver nada a mostrar), a oferta à visita e,
-// a partir do nível 16, a Mesa do Sado (esta também nos dias sem visita):
+// O que se vê no cartão da Quinta, por baixo da linha da visita (só lê; devolve '' se não houver nada a mostrar), a oferta à visita,
+// a partir do nível 10 o Moinho de Maré da Mourisca e, a partir do nível 16, a Mesa do Sado (esta também nos dias sem visita):
 //   oferta feita agora: "Ofereceste {bem} {a quem}", "+1 de Reputação" e a fala dessa visita para esse bem;
 //   oferta de hoje já feita: "Já ofereceste hoje";
 //   senão, havendo bens: o botão "Oferecer {bem}".
 // Só com a visita de hoje já tocada e a Estrada desbloqueada; sem bens e sem oferta feita, não mostra nada.
 function estradaOfertaHtml() {
-  return estradaOfertaVisitaHtml() + estradaMesaSadoHtml();
+  return estradaOfertaVisitaHtml() + estradaMoinhoHtml() + estradaMesaSadoHtml();
 }
 
 // A oferta à visita de hoje (o que está descrito acima, sem a Mesa do Sado).
@@ -394,3 +402,143 @@ function estradaMesaSadoClique() {
   if (typeof atualizarResumoQuinta === 'function') atualizarResumoQuinta();
   if (typeof atualizarLinhaVisitaQuinta === 'function') atualizarLinhaVisitaQuinta();
 }
+
+// ---------------------------------------------------------------------
+// O MOINHO DE MARÉ DA MOURISCA (nível 10). Duas ações no mesmo botão: «Fechar a comporta» (guarda o carimbo) e, 6 horas depois, «Soltar a
+// água» (+10 de Reputação, 1 vez por dia de Lisboa). A espera segue o padrão da Vinha (tempoRestanteVinha, js/vinha.js).
+// ---------------------------------------------------------------------
+
+function estradaMoinhoNivelOk(estado) {
+  if (typeof despensaNivelDoEstado !== 'function') return false;
+  const nivel = despensaNivelDoEstado(estado);
+  return nivel !== null && nivel >= ESTRADA_MOINHO_MARE.nivelMinimo;
+}
+
+// Só lê (não altera o estado nem corrige o relógio). O estado do moinho no dia "dia" e no instante "agora" (Date.now()):
+//   { ok, fase, motivo, restanteMs }
+//   fase    'fechar' (a comporta está aberta: pode fechar-se), 'espera' (fechada, ainda faltam horas), 'soltar' (as 6 horas passaram) ou null
+//   motivo  null | 'nivel_insuficiente' | 'dia_invalido' | 'dia_anterior' (relógio atrás do último dia em que soltou a água) | 'ja_hoje' | 'espera'
+// ok é verdadeiro quando o botão da fase se pode usar (fechar ou soltar). Um carimbo no futuro (relógio mexido) conta como "agora": a espera
+// fica inteira (estradaMoinhoCorrigirRelogio repõe-no de vez).
+function estradaMoinhoEstado(estado, dia, agora) {
+  const recusa = function (motivo) { return { ok: false, fase: null, motivo: motivo, restanteMs: 0 }; };
+  if (!estradaMoinhoNivelOk(estado)) return recusa('nivel_insuficiente');
+  if (typeof dia !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(dia) || typeof agora !== 'number' || !Number.isFinite(agora)) return recusa('dia_invalido');
+  const m = moinhoNormalizar(estado && estado.moinho);
+  if (m.dia !== null && dia < m.dia) return recusa('dia_anterior');
+  if (m.dia !== null && dia === m.dia) return recusa('ja_hoje');
+  if (m.fechadoEm === null) return { ok: true, fase: 'fechar', motivo: null, restanteMs: 0 };
+  const decorrido = Math.max(0, agora - m.fechadoEm);
+  const restante = Math.max(0, ESTRADA_MOINHO_MARE.esperaMs - decorrido);
+  if (restante > 0) return { ok: false, fase: 'espera', motivo: 'espera', restanteMs: restante };
+  return { ok: true, fase: 'soltar', motivo: null, restanteMs: 0 };
+}
+
+// Fecha a comporta: guarda o carimbo "agora". Devolve { ok, motivo }. Recusar nunca altera nada. Não grava (quem chamar é que grava).
+function estradaMoinhoFechar(estado, dia, agora) {
+  const e = estradaMoinhoEstado(estado, dia, agora);
+  if (!e.ok || e.fase !== 'fechar') return { ok: false, motivo: e.motivo || 'ja_fechada' };
+  if (!Number.isSafeInteger(agora) || agora <= 0) return { ok: false, motivo: 'dia_invalido' };
+  moinhoEstado(estado).fechadoEm = agora;
+  return { ok: true, motivo: null };
+}
+
+// Solta a água: tira o carimbo, marca o dia e soma a Reputação. Devolve { ok, motivo, reputacaoGanha }. Recusar nunca altera nada. Não grava.
+function estradaMoinhoSoltar(estado, dia, agora) {
+  const e = estradaMoinhoEstado(estado, dia, agora);
+  if (!e.ok || e.fase !== 'soltar') return { ok: false, motivo: e.motivo || 'sem_comporta_fechada', reputacaoGanha: 0 };
+  const m = moinhoEstado(estado);
+  m.fechadoEm = null;
+  m.dia = dia;
+  const rep = ESTRADA_MOINHO_MARE.reputacao;
+  estado.reputacao = (typeof estado.reputacao === 'number' && Number.isFinite(estado.reputacao) ? estado.reputacao : 0) + rep;
+  return { ok: true, motivo: null, reputacaoGanha: rep };
+}
+
+// Um carimbo no futuro (relógio do aparelho mexido para trás) repõe-se em "agora", como na Vinha (carimboCorrigirFuturo, js/tempo.js).
+function estradaMoinhoCorrigirRelogio(agora) {
+  try {
+    if (typeof carimboCorrigirFuturo === 'function' && state && state.moinho && typeof state.moinho === 'object') carimboCorrigirFuturo(state.moinho, 'fechadoEm', agora);
+  } catch (e) { /* só em memória */ }
+}
+
+// O tempo que falta, no formato das outras esperas do jogo ("5h 59m", "42m"; formatarTempoVinha, js/vinha.js).
+function estradaMoinhoTempo(ms) {
+  if (typeof formatarTempoVinha === 'function') return formatarTempoVinha(ms);
+  const totalMin = Math.ceil(ms / 60000);
+  return totalMin >= 60 ? (Math.floor(totalMin / 60) + 'h ' + (totalMin % 60) + 'm') : (totalMin + 'm');
+}
+
+// O que se vê no cartão da Quinta (só lê; '' antes do nível 10): a foto (a B depois de soltar a água, a A nos outros casos), o que a ação
+// pede e dá, a mensagem (o que acabou de acontecer, o tempo que falta, "já soltaste hoje" ou o relógio atrás) e o botão da fase.
+function estradaMoinhoHtml() {
+  if (!estradaMoinhoNivelOk(state)) return '';
+  const agora = Date.now();
+  estradaMoinhoCorrigirRelogio(agora);
+  const dia = estradaDiaDeHoje();
+  const m = estradaMoinhoEstado(state, dia, agora);
+  const res = estradaMoinhoResultado;
+  const soltouHoje = m.motivo === 'ja_hoje';
+  const soltouAgora = !!res && res.dia === dia && res.tipo === 'soltou' && soltouHoje;
+  const fechouAgora = !!res && res.dia === dia && res.tipo === 'fechou' && m.fase === 'espera';
+  let texto = '';
+  if (m.motivo === 'ja_hoje') texto = soltouAgora ? '' : t('estrada.moinhoJaHoje');
+  else if (m.motivo === 'dia_anterior') texto = t('estrada.moinhoRelogio');
+  else if (m.fase === 'espera') texto = t('estrada.moinhoEspera').replace('{tempo}', estradaMoinhoTempo(m.restanteMs));
+  else if (m.fase === 'soltar') texto = t('estrada.moinhoPronto');
+  const imagem = soltouHoje ? ESTRADA_MOINHO_MARE.imagemSoltar : ESTRADA_MOINHO_MARE.imagemFechar;
+  const alt = soltouHoje ? t('estrada.moinhoAltSoltar') : t('estrada.moinhoAltFechar');
+  const rotulo = m.fase === 'espera' || m.fase === 'soltar' ? t('estrada.moinhoBtnSoltar') : t('estrada.moinhoBtnFechar');
+  return '<div class="mini-bloco moinho-mare">' +
+    '<img class="moinho-mare-img" src="' + imagem + '" alt="' + cadernoEscapar(alt) + '" loading="lazy">' +
+    '<p class="oferta-linha">' + cadernoEscapar(t('estrada.moinhoDesc').replace('{rep}', ESTRADA_MOINHO_MARE.reputacao)) + '</p>' +
+    (soltouAgora ? '<div class="oferta-resultado"><p>' + cadernoEscapar(t('estrada.moinhoOk').replace('{rep}', res.reputacaoGanha)) + '</p></div>' : '') +
+    (fechouAgora ? '<div class="oferta-resultado"><p>' + cadernoEscapar(t('estrada.moinhoFechada')) + '</p></div>' : '') +
+    (texto ? '<p class="oferta-linha">' + cadernoEscapar(texto) + '</p>' : '') +
+    '<button type="button" class="btn-pill pill-main oferta-botao moinho-mare-botao" onclick="estradaMoinhoClique()"' + (m.ok ? '' : ' disabled') + '>' +
+      cadernoEscapar(rotulo) + '</button>' +
+  '</div>';
+}
+
+// O ÚNICO sítio que fecha a comporta ou solta a água e grava. Toque no botão: desativa-o logo (clique duplo), vê a fase de agora (não a que
+// estava desenhada) e faz o que ela pede; se correu bem, grava UMA vez e atualiza a barra de cima. Se recusou, não grava.
+function estradaMoinhoClique() {
+  if (estradaMoinhoOcupado) return;
+  estradaMoinhoOcupado = true;
+  try {
+    const botao = document.querySelector('.moinho-mare-botao');
+    if (botao) botao.disabled = true;
+    const agora = Date.now();
+    estradaMoinhoCorrigirRelogio(agora);
+    const dia = estradaDiaDeHoje();
+    const soltar = estradaMoinhoEstado(state, dia, agora).fase === 'soltar';
+    const r = soltar ? estradaMoinhoSoltar(state, dia, agora) : estradaMoinhoFechar(state, dia, agora);
+    if (r.ok) {
+      saveState(state);
+      updateStatsDisplays();
+      estradaMoinhoResultado = { dia: dia, tipo: soltar ? 'soltou' : 'fechou', reputacaoGanha: soltar ? r.reputacaoGanha : 0 };
+      if (soltar) {
+        if (typeof vibrar === 'function') vibrar('sucesso');
+        if (typeof tocarSom === 'function') tocarSom('objetivoCumprido'); // não é objetivo do dia: não há outro "ding"
+      }
+    }
+  } finally {
+    estradaMoinhoOcupado = false;
+  }
+  // Redesenha o cartão da Quinta (a barra de cima já foi atualizada).
+  if (typeof atualizarCartaoNivelQuinta === 'function') atualizarCartaoNivelQuinta();
+  if (typeof atualizarResumoQuinta === 'function') atualizarResumoQuinta();
+  if (typeof atualizarLinhaVisitaQuinta === 'function') atualizarLinhaVisitaQuinta();
+}
+
+// Na Quinta, com a comporta fechada à espera, o tempo que falta desce sozinho (e o botão acende-se ao chegar a zero): redesenha o bloco a
+// cada minuto. Só lê o relógio; não grava nada e não faz nada fora da Quinta nem fora da espera.
+function estradaMoinhoRelogio() {
+  try {
+    const ativo = document.querySelector('.screen.active');
+    if (!ativo || ativo.id !== 'screen-quinta') return;
+    if (estradaMoinhoEstado(state, estradaDiaDeHoje(), Date.now()).fase !== 'espera') return;
+    if (typeof atualizarLinhaVisitaQuinta === 'function') atualizarLinhaVisitaQuinta();
+  } catch (e) { /* nada */ }
+}
+if (typeof setInterval === 'function') setInterval(estradaMoinhoRelogio, 60000);

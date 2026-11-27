@@ -66,8 +66,8 @@ const IDS = ['palmela_castelo', 'palmela_capelo', 'palmela_castelao'];
 const IDS_FESTA = ['festa_vindimas_palmela']; // a 4.ª entrada de nível 13 (festa das Vindimas de Palmela): no fim de dados/enciclopedia.js e fora do capítulo 13
 const IDS_11 = ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'];
 const IDS_12 = ['sado_reserva', 'sado_golfinhos', 'sado_troia'];
-// As 17 histórias dos níveis 5 a 10 (a seguir às 34 de origem e antes das da Arrábida): também têm nivelMinimo, por isso entram na prioridade do Explorar.
-const IDS_5_6 = ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa', 'colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos', 'azeite_do_olival_ao_lagar', 'tirada_da_cortica', 'salina_marnoto', 'mel_arrabida', 'pesca_choco_sado', 'arroz_agua', 'arroz_aves', 'azeitao_coalho', 'pinha_tres_anos', 'souto', 'feira_santiago'];
+// As 18 histórias dos níveis 5 a 10 (a seguir às 34 de origem e antes das da Arrábida): também têm nivelMinimo, por isso entram na prioridade do Explorar.
+const IDS_5_6 = ['cave_idade_rotulo', 'cave_varias_colheitas', 'cave_estufa', 'colecao_cores_do_tempo', 'colecao_colheitas_antigas', 'colecao_cem_anos', 'azeite_do_olival_ao_lagar', 'tirada_da_cortica', 'salina_marnoto', 'mel_arrabida', 'pesca_choco_sado', 'arroz_agua', 'arroz_aves', 'azeitao_coalho', 'pinha_tres_anos', 'souto', 'feira_santiago', 'moinho_mare_mourisca'];
 const ATE_10 = 34 + IDS_5_6.length; // entradas visíveis até ao nível 10
 const ATE_11 = ATE_10 + IDS_11.length;
 const ATE_12 = ATE_11 + IDS_12.length;
@@ -382,7 +382,7 @@ LINGUAS.forEach(function (l) {
       g.ev('state.acesso.jogadorAntigo = true;');
       ecras.forEach(function (e) { ok(g.ev("ecraDesbloqueado('" + e + "')") === true, '(g) jogador antigo: o ecrã ' + e + ' aberto com ' + onde); });
       // O jogador antigo não salta o nível mínimo das histórias novas.
-      if (n < 13) ok(g.ev('encyclopediaEntries().length') === (34 + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 7 ? 4 : 0) + (n >= 8 ? 3 : 0) + (n >= 9 ? 3 : 0) + (n >= 10 ? 1 : 0) + (n >= 11 ? 3 : 0) + (n >= 12 ? 3 : 0)), '(g) jogador antigo abaixo do 13: continua sem as 3 de Palmela com ' + onde);
+      if (n < 13) ok(g.ev('encyclopediaEntries().length') === (34 + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 7 ? 4 : 0) + (n >= 8 ? 3 : 0) + (n >= 9 ? 3 : 0) + (n >= 10 ? 2 : 0) + (n >= 11 ? 3 : 0) + (n >= 12 ? 3 : 0)), '(g) jogador antigo abaixo do 13: continua sem as 3 de Palmela com ' + onde);
       g.ev('state.acesso.jogadorAntigo = false;');
     });
     // O modo de teste ?capitulo=13 mostra a celebração do cap13 (e continua a aceitar 1 a 12).

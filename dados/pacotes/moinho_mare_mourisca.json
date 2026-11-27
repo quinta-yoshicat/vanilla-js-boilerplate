@@ -1,0 +1,42 @@
+{
+  "id": "moinho_mare_mourisca",
+  "nome": "Moinho de Maré da Mourisca",
+  "estado": "feita",
+  "terras": {
+    "Moinho de Maré da Mourisca": ["Setúbal"]
+  },
+  "fontes": [
+    "Câmara Municipal de Setúbal, apresentação (PNAP, DGT): https://pnap.dgterritorio.gov.pt/sites/default/files/18_CM_Setubal_Apresentacao.pdf",
+    "Visit Setúbal: https://visitsetubal.com/en/?p=346",
+    "Visit Setúbal, Moinho de Maré da Mourisca: https://visitsetubal.com/en/moinho-de-mare-da-mourisca-2/",
+    "Setúbal Bay: https://setubalbay.org/en/?p=6430",
+    "Visit Lisboa, Moinho de Maré da Mourisca: https://www.visitlisboa.com/pt-pt/locais/moinho-de-mare-mouriscas"
+  ],
+  "ids": {
+    "enciclopedia": [
+      "moinho_mare_mourisca"
+    ],
+    "palavras": [],
+    "visitas": [],
+    "niveis": [],
+    "historias": [],
+    "capitulos": [],
+    "provas": []
+  },
+  "imagens": [
+    {
+      "caminho": "assets/ecras/moinho_mare_a.jpg",
+      "uso": "Entrada da Enciclopédia «moinho_mare_mourisca» (campo imagem) e ação «Fechar a comporta» do Moinho de Maré da Mourisca, no bloco da oferta da Estrada (js/estrada.js; a imagem vê-se antes de soltar a água)",
+      "descricao": "O moinho de maré com a maré cheia e o Yoshi_Cat a fechar a comporta de madeira ao lado do tanque, com o Chizo e o Fygmo II.",
+      "estado": "feita"
+    },
+    {
+      "caminho": "assets/ecras/moinho_mare_b.jpg",
+      "uso": "Ação «Soltar a água» do Moinho de Maré da Mourisca, no bloco da oferta da Estrada (js/estrada.js; a imagem vê-se depois de soltar a água)",
+      "descricao": "O mesmo moinho com a comporta aberta, a água a correr para a roda e sacos de farinha.",
+      "estado": "feita"
+    }
+  ],
+  "sons": [],
+  "excecoes": []
+}
