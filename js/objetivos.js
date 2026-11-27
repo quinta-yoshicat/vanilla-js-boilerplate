@@ -339,12 +339,14 @@ function atualizarResumoQuinta() {
 //   'oferta'    visita de hoje já tocada e há o que oferecer que ainda não foi oferecido hoje: o copo de bagaceira
 //               (com bagaceira) ou um bem da Estrada (js/visitas.js, js/estrada.js)
 //   'festa'     há uma festa aberta (e aberta para este jogador) com tarefa por fazer hoje (js/festas.js)
+//   'moinho'    a água do Moinho de Maré da Mourisca já pode ser solta: estradaMoinhoPendente() (js/estrada.js; nível 10, passadas as 6 horas,
+//               ainda sem recompensa hoje, sem relógio atrás nem carimbo no futuro). Não conta «Fechar a comporta».
 //   'prova'     a Prova às cegas de hoje ainda pode ser jogada: provaPodeJogar() (nível 6+, ainda não provou hoje, dia
 //               de Lisboa; js/prova.js); nunca em modo de teste (?prova=1, provaModoTeste) nem com uma prova a decorrer
 //               (provaEmCurso, js/prova-jogo.js). Começar ou acabar a prova redesenha o sinal (atualizarResumoQuinta).
 // Em modo de teste (visitaEmModoTeste: parâmetros no endereço) devolve []. Cada leitura isolada: se falhar, não conta.
 // ---------------------------------------------------------------------
-const QUINTA_PENDENTES_ORDEM = ['visita', 'encomenda', 'oferta', 'festa', 'prova'];
+const QUINTA_PENDENTES_ORDEM = ['visita', 'encomenda', 'oferta', 'festa', 'moinho', 'prova'];
 
 function quintaPendentes() {
   const tem = {};
@@ -377,6 +379,9 @@ function quintaPendentes() {
     if (typeof ecraDesbloqueado === 'function' && !ecraDesbloqueado('festa')) return false;
     const festa = festaAtual();
     return !!festa && festaTemTarefaPorFazerHoje(festa) === true;
+  });
+  tentar('moinho', function () {
+    return typeof estradaMoinhoPendente === 'function' && estradaMoinhoPendente() === true;
   });
   tentar('prova', function () {
     if (typeof provaPodeJogar !== 'function' || typeof provaDiaDeHoje !== 'function') return false;
