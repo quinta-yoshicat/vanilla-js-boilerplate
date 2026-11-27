@@ -462,6 +462,13 @@ function estradaMoinhoCorrigirRelogio(agora) {
   } catch (e) { /* só em memória */ }
 }
 
+// A água já pode ser solta? É o que faz aparecer «Soltar a água» ativo em estradaMoinhoHtml(): a mesma regra (estradaMoinhoEstado), por isso as
+// 6 horas, o nível 10, o dia da última recompensa, o relógio atrás e o carimbo no futuro valem aqui como lá. Só lê (nem corrige o carimbo).
+// Usada pelo sinal do cartão da Quinta (quintaPendentes, js/objetivos.js). «Fechar a comporta» não conta.
+function estradaMoinhoPendente() {
+  try { return estradaMoinhoEstado(state, estradaDiaDeHoje(), Date.now()).fase === 'soltar'; } catch (e) { return false; }
+}
+
 // O tempo que falta, no formato das outras esperas do jogo ("5h 59m", "42m"; formatarTempoVinha, js/vinha.js).
 function estradaMoinhoTempo(ms) {
   if (typeof formatarTempoVinha === 'function') return formatarTempoVinha(ms);
@@ -532,13 +539,19 @@ function estradaMoinhoClique() {
 }
 
 // Na Quinta, com a comporta fechada à espera, o tempo que falta desce sozinho (e o botão acende-se ao chegar a zero): redesenha o bloco a
-// cada minuto. Só lê o relógio; não grava nada e não faz nada fora da Quinta nem fora da espera.
+// cada minuto. Quando a espera acaba (a fase passa de 'espera' a 'soltar') redesenha também o resumo, para o sinal do cartão aparecer sem
+// sair e voltar. Só lê o relógio; não grava nada e não faz nada fora da Quinta nem fora da espera.
+let estradaMoinhoUltimaFase;
 function estradaMoinhoRelogio() {
   try {
     const ativo = document.querySelector('.screen.active');
     if (!ativo || ativo.id !== 'screen-quinta') return;
-    if (estradaMoinhoEstado(state, estradaDiaDeHoje(), Date.now()).fase !== 'espera') return;
+    const fase = estradaMoinhoEstado(state, estradaDiaDeHoje(), Date.now()).fase;
+    const acabou = estradaMoinhoUltimaFase === 'espera' && fase === 'soltar';
+    estradaMoinhoUltimaFase = fase;
+    if (fase !== 'espera' && !acabou) return;
     if (typeof atualizarLinhaVisitaQuinta === 'function') atualizarLinhaVisitaQuinta();
+    if (acabou && typeof atualizarResumoQuinta === 'function') atualizarResumoQuinta();
   } catch (e) { /* nada */ }
 }
 if (typeof setInterval === 'function') setInterval(estradaMoinhoRelogio, 60000);

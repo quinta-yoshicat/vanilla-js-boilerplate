@@ -223,7 +223,7 @@ function suite(fontes) {
     const g = abrir();
     ['pt', 'en', 'es'].forEach(function (l) {
       const T = g.json('TRANSLATIONS.' + l);
-      ['visita', 'encomenda', 'oferta', 'festa'].forEach(function (k) {
+      ['visita', 'encomenda', 'oferta', 'festa', 'moinho'].forEach(function (k) {
         const v = T['quinta.sinal.' + k];
         ok(typeof v === 'string' && v.length >= 3 && v.length <= 10, '(e) ' + l + ': quinta.sinal.' + k + ' curto (deu ' + J(v) + ')');
       });
@@ -241,7 +241,7 @@ function suite(fontes) {
     [320, 360, 430].forEach(function (w) {
       const dentro = Math.min(w, 480) * 0.6 - 20 - 2 - 24;
       let maior = 0, qual = '';
-      ['pt', 'en', 'es'].forEach(function (l) { ['visita', 'encomenda', 'oferta', 'festa', 'prova'].forEach(function (k) {
+      ['pt', 'en', 'es'].forEach(function (l) { ['visita', 'encomenda', 'oferta', 'festa', 'moinho', 'prova'].forEach(function (k) {
         const s = g.ev('TRANSLATIONS.' + l + "['quinta.sinal." + k + "']") + ' +3';
         const larg = s.length * 11 * 0.62 + 8 + 5;
         if (larg > maior) { maior = larg; qual = s; }
@@ -252,7 +252,7 @@ function suite(fontes) {
 
   // ---------------------------------------------------------------- (f) a Prova às cegas (PR 3)
   {
-    ok(abrir().json('QUINTA_PENDENTES_ORDEM').join() === 'visita,encomenda,oferta,festa,prova', '(f) a ordem: visita, encomenda, oferta, festa, prova (a prova por último)');
+    ok(abrir().json('QUINTA_PENDENTES_ORDEM').join() === 'visita,encomenda,oferta,festa,moinho,prova', '(f) a ordem: visita, encomenda, oferta, festa, moinho, prova (a prova por último)');
     ok(abrir({ prova: true, tocada: true }).ev("TRANSLATIONS.pt['quinta.sinal.prova']") === 'Prova às cegas', '(f) PT: «Prova às cegas»');
     // só a prova por tratar: visita tocada, encomenda recusada, sem bagaceira nem festa
     const so = function (rep, o) { const g = abrir(Object.assign({ prova: true, tocada: true, reputacao: rep }, o || {})); g.ev('encomendaRecusar(state, encomendaDiaDeHoje(), false); var __res = 0, __resOrig = atualizarResumoQuinta; atualizarResumoQuinta = function () { __res++; __resOrig(); };'); return g; };
@@ -282,6 +282,61 @@ function suite(fontes) {
     const o = oTudo.slice(oTudo.indexOf("tentar('prova'"), oTudo.indexOf('});', oTudo.indexOf("tentar('prova'")) + 3);
     ok(/provaPodeJogar\(state, provaDiaDeHoje\(\), false\)/.test(o) && !/ultimoDia|nivelPelaReputacao\(state\.reputacao\) >= 6/.test(o), '(f) usa provaPodeJogar (não repete a conta do nível nem do dia)');
   }
+  // ---------------------------------------------------------------- (g) o Moinho de Maré da Mourisca
+  {
+    const H = 3600000;
+    // Um jogador sem mais nada por tratar (visita tocada, encomenda recusada, sem bagaceira nem festa); só se mexe no moinho.
+    const m = function (rep, moinho) {
+      const g = abrir({ tocada: true, reputacao: rep });
+      g.ev('encomendaRecusar(state, encomendaDiaDeHoje(), false); var __res = 0, __resOrig = atualizarResumoQuinta; atualizarResumoQuinta = function () { __res++; return __resOrig.apply(this, arguments); };');
+      if (moinho) g.ev('state.moinho = ' + J(moinho(g.relogio.t)));
+      return g;
+    };
+    const REP10 = 2800;
+    const tem = function (g) { return g.p().indexOf('moinho') !== -1; };
+    ok(!tem(m(REP10)) && J(m(REP10).p()) === '[]', '(g) comporta aberta (ainda por fechar): sem «moinho» (o sinal não é para «Fechar a comporta»)');
+    ok(!tem(m(REP10, function (t) { return { fechadoEm: t - 1000, dia: null }; })), '(g) comporta fechada agora: sem «moinho»');
+    ok(!tem(m(REP10, function (t) { return { fechadoEm: t - 6 * H + 1, dia: null }; })), '(g) a água ainda a encher (falta 1 ms): sem «moinho»');
+    const pronta = m(REP10, function (t) { return { fechadoEm: t - 6 * H, dia: null }; });
+    ok(J(pronta.p()) === J(['moinho']), '(g) passadas as 6 horas: «moinho» (deu ' + J(pronta.p()) + ')');
+    ok(tem(m(REP10, function (t) { return { fechadoEm: t - 30 * H, dia: '2026-07-14' }; })), '(g) pronta, com a última recompensa de ontem: «moinho»');
+    ok(!tem(m(REP10, function (t) { return { fechadoEm: t - 7 * H, dia: '2026-07-15' }; })), '(g) já soltou a água hoje (o dia da recompensa é o de hoje): sem «moinho»');
+    ok(!tem(m(REP10 - 1, function (t) { return { fechadoEm: t - 7 * H, dia: null }; })), '(g) sem o nível 10 (2799): sem «moinho»');
+    ok(!tem(m(0, function (t) { return { fechadoEm: t - 7 * H, dia: null }; })), '(g) nível 1: sem «moinho»');
+    ok(!tem(m(REP10, function (t) { return { fechadoEm: t + 100 * H, dia: null }; })), '(g) carimbo no futuro: sem «moinho»');
+    ok(!tem(m(REP10, function (t) { return { fechadoEm: t - 7 * H, dia: '2026-07-16' }; })), '(g) relógio atrás (a última recompensa é «amanhã»): sem «moinho»');
+    ['x', -5, 0, 1.5, {}].forEach(function (c) { ok(!tem(m(REP10, function () { return { fechadoEm: c, dia: null }; })), '(g) carimbo inválido ' + J(c) + ': sem «moinho»'); });
+    // A linha e o texto
+    const sinal = pronta.sinal();
+    ok(sinal.hidden === false && />Moinho<\/span>$/.test(sinal.innerHTML), '(g) a linha: «● Moinho»: ' + sinal.innerHTML);
+    ok(pronta.ev("TRANSLATIONS.en['quinta.sinal.moinho']") === 'Mill' && pronta.ev("TRANSLATIONS.es['quinta.sinal.moinho']") === 'Molino', '(g) EN «Mill» e ES «Molino»');
+    // Desaparece depois de soltar a água (pelo clique de sempre, que já redesenha o resumo)
+    const antes = pronta.ev('__res');
+    pronta.ev('estradaMoinhoClique()');
+    ok(pronta.ev('state.moinho.dia') === pronta.ev('__dia') && !tem(pronta) && pronta.els['quinta-sinal'].hidden === true && pronta.ev('__res') > antes, '(g) depois de soltar a água: o sinal desaparece logo (o clique redesenha o resumo)');
+    // «Fechar a comporta» pelo clique também não acende o sinal
+    const f = m(REP10);
+    f.ev('estradaMoinhoClique()');
+    ok(f.ev('state.moinho.fechadoEm') === f.relogio.t && !tem(f), '(g) depois de «Fechar a comporta»: sem «moinho»');
+    // O sinal usa a mesma função da ação (não repete as 6 horas) e só lê
+    const oTudo = fontes['objetivos.js'].replace(/\/\/.*$/gm, '');
+    const o = oTudo.slice(oTudo.indexOf("tentar('moinho'"), oTudo.indexOf('});', oTudo.indexOf("tentar('moinho'")) + 3);
+    ok(/estradaMoinhoPendente\(\)/.test(o) && !/moinho\.|fechadoEm|esperaMs|HORA|3600000/.test(o), '(g) o sinal só chama estradaMoinhoPendente (não repete as 6 horas)');
+    const ex = fontes['estrada.js'].replace(/\/\/.*$/gm, '');
+    const corpo = (/function estradaMoinhoPendente\(\) \{[\s\S]*?\n\}\n/.exec(ex) || [''])[0];
+    ok(/estradaMoinhoEstado\(/.test(corpo) && !/saveState|esperaMs|carimboCorrigirFuturo|3600000/.test(corpo), '(g) estradaMoinhoPendente usa estradaMoinhoEstado (a regra da ação) e só lê');
+    const s0 = pronta.ev('SAVES'); pronta.p(); pronta.sinal();
+    ok(pronta.ev('SAVES') === s0, '(g) calcular o sinal não grava');
+    // O relógio de 60 s: quando a espera acaba na Quinta, o sinal aparece sem sair do ecrã
+    const r = m(REP10, function (t) { return { fechadoEm: t - 2 * H, dia: null }; });
+    r.ev('estradaMoinhoRelogio()');
+    ok(!tem(r) && r.ev('__res') === 0, '(g) relógio: a meio da espera redesenha a linha mas não o resumo');
+    r.relogio.t += 4 * H;
+    r.ev('estradaMoinhoRelogio()');
+    ok(tem(r) && r.ev('__res') === 1 && r.els['quinta-sinal'].hidden === false, '(g) relógio: ao acabar a espera redesenha o resumo e o sinal aparece');
+    r.ev('estradaMoinhoRelogio()');
+    ok(r.ev('__res') === 1, '(g) relógio: depois disso não redesenha mais');
+  }
   return falhas;
 }
 
@@ -309,8 +364,8 @@ const MUTACOES = [
   ['oferta sem o bem da Estrada', 'objetivos.js', "bem = typeof estradaOfertaPendente === 'function' && estradaOfertaPendente() === true;", 'bem = false;'],
   ['festa com tudo feito', 'objetivos.js', 'return !!festa && festaTemTarefaPorFazerHoje(festa) === true;', 'return !!festa;'],
   ['festa fechada conta', 'objetivos.js', "    if (typeof ecraDesbloqueado === 'function' && !ecraDesbloqueado('festa')) return false;\n    const festa", '    const festa'],
-  ['ordem trocada', 'objetivos.js', "const QUINTA_PENDENTES_ORDEM = ['visita', 'encomenda', 'oferta', 'festa', 'prova'];", "const QUINTA_PENDENTES_ORDEM = ['festa', 'visita', 'encomenda', 'oferta', 'prova'];"],
-  ['a prova antes da festa', 'objetivos.js', "const QUINTA_PENDENTES_ORDEM = ['visita', 'encomenda', 'oferta', 'festa', 'prova'];", "const QUINTA_PENDENTES_ORDEM = ['visita', 'encomenda', 'oferta', 'prova', 'festa'];"],
+  ['ordem trocada', 'objetivos.js', "const QUINTA_PENDENTES_ORDEM = ['visita', 'encomenda', 'oferta', 'festa', 'moinho', 'prova'];", "const QUINTA_PENDENTES_ORDEM = ['festa', 'visita', 'encomenda', 'oferta', 'moinho', 'prova'];"],
+  ['a prova antes da festa', 'objetivos.js', "const QUINTA_PENDENTES_ORDEM = ['visita', 'encomenda', 'oferta', 'festa', 'moinho', 'prova'];", "const QUINTA_PENDENTES_ORDEM = ['visita', 'encomenda', 'oferta', 'moinho', 'prova', 'festa'];"],
   ['a prova sempre por tratar', 'objetivos.js', '    return provaPodeJogar(state, provaDiaDeHoje(), false).ok === true;', '    return true;'],
   ['a prova em modo de teste', 'objetivos.js', "    if (typeof provaModoTeste === 'function' && provaModoTeste()) return false;\n", ''],
   ['a prova a decorrer conta', 'objetivos.js', "    if (typeof provaEmCurso === 'function' && provaEmCurso()) return false;\n", ''],
@@ -331,6 +386,10 @@ const MUTACOES = [
   ['a linha alta', 'index.html', '      margin-top: 2px;\n      height: 14px;', '      margin-top: 2px;\n      height: 24px;'],
   ['pulsa com "reduzir movimento"', 'index.html', '      .quinta-sinal.pulsar .quinta-sinal-ponto { animation: none; }\n', ''],
   ['texto em falta (ES)', 'i18n.js', "    'quinta.sinal.oferta': 'Ofrenda',\n", ''],
+  ['o moinho sempre por soltar', 'objetivos.js', "return typeof estradaMoinhoPendente === 'function' && estradaMoinhoPendente() === true;", 'return true;'],
+  ['o moinho conta ao fechar a comporta', 'estrada.js', "Date.now()).fase === 'soltar'; } catch (e) { return false; }", "Date.now()).ok === true; } catch (e) { return false; }"],
+  ['a espera a acabar não redesenha o resumo', 'estrada.js', "    if (acabou && typeof atualizarResumoQuinta === 'function') atualizarResumoQuinta();\n", ''],
+  ['texto do moinho em falta (ES)', 'i18n.js', "    'quinta.sinal.moinho': 'Molino',\n", ''],
   ['texto comprido de mais (EN)', 'i18n.js', "'quinta.sinal.festa': 'Festival',", "'quinta.sinal.festa': 'Festival of the season',"]
 ];
 MUTACOES.forEach(function (m) {

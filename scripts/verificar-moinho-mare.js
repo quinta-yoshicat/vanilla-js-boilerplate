@@ -366,7 +366,18 @@ const sem = function (o, chaves) { const c = JSON.parse(JSON.stringify(o)); chav
   r.ecra('screen-quinta'); r.intervalos[0].f();
   ok(r.ev('__linhas') === 1, 'na Quinta, com a comporta fechada à espera, redesenha');
   r.ev('__agora = ' + (T0 + 6 * HORA)); r.intervalos[0].f();
-  ok(r.ev('__linhas') === 1, 'passadas as 6 horas já não redesenha (o botão aparece no último redesenho antes ou ao abrir)');
+  ok(r.ev('__linhas') === 2, 'ao acabar a espera redesenha uma última vez (o botão «Soltar a água» acende-se)');
+  r.intervalos[0].f();
+  ok(r.ev('__linhas') === 2, 'e depois disso já não redesenha');
+  // estradaMoinhoPendente (o sinal do cartão da Quinta; os casos do sinal estão em verificar-quinta-sinal.js): a mesma regra do botão «Soltar a água»
+  const pe = function (extra, agora) { const k = abrir(cheia(REP10, extra)); k.ev('__agora = ' + agora); return k.ev('estradaMoinhoPendente()'); };
+  ok(pe({}, T0) === false && pe({ moinho: { fechadoEm: T0, dia: null } }, T0 + 6 * HORA - 1) === false && pe({ moinho: { fechadoEm: T0, dia: null } }, T0 + 6 * HORA) === true, 'estradaMoinhoPendente: só com as 6 horas passadas (aberta e a encher: não)');
+  ok(pe({ moinho: { fechadoEm: T0, dia: '2026-10-09' } }, T0 + 7 * HORA) === false && pe({ moinho: { fechadoEm: T0, dia: '2026-10-10' } }, T0 + 7 * HORA) === false && pe({ moinho: { fechadoEm: T0, dia: '2026-10-08' } }, T0 + 7 * HORA) === true, 'estradaMoinhoPendente: não com a recompensa de hoje nem com o relógio atrás');
+  ok(pe({ moinho: { fechadoEm: T0 + 5 * HORA, dia: null } }, T0) === false, 'estradaMoinhoPendente: carimbo no futuro não conta');
+  ok(abrir(cheia(REP10 - 1, { moinho: { fechadoEm: T0 - 9 * HORA, dia: null } })).ev('estradaMoinhoPendente()') === false, 'estradaMoinhoPendente: sem o nível 10 não conta');
+  const pg = abrir(cheia(REP10, { moinho: { fechadoEm: T0 - 9 * HORA, dia: null } })); const sv = pg.ev('__saves');
+  pg.ev('estradaMoinhoPendente()');
+  ok(pg.ev('__saves') === sv && pg.ev('state.moinho.fechadoEm') === T0 - 9 * HORA, 'estradaMoinhoPendente só lê');
   const s = abrir(cheia()); s.ecra('screen-quinta'); s.intervalos[0].f();
   ok(s.ev('__linhas') === 0 && s.ev('__saves') === 0, 'sem comporta fechada o relógio não faz nada nem grava');
   // O bloco inteiro abaixo do nível 10.

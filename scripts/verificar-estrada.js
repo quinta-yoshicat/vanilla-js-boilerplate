@@ -311,7 +311,7 @@ if (!process.env.ESTRADA_JS) {
     ok(!ESCREVE.test(semMoinho), 'estrada.js não devia escrever em uvas, Reputação, garrafas, gotas, despensa nem adega (quem altera é despensaTrocar)');
     ok(corpoSoltar !== '' && !ESCREVE.test(soMoinho.replace(corpoSoltar, '')) && /estado\.reputacao = /.test(corpoSoltar) && !/estado\.(uvas|garrafas|gotas|despensa|adega)/.test(corpoSoltar), 'no bloco do Moinho de Maré só estradaMoinhoSoltar escreve, e só na Reputação');
     ok(!/Math\.random|Date\.now|new Date/.test(semMoinho), 'estrada.js (fora do Moinho de Maré) não devia usar Math.random, Date.now nem new Date');
-    ok(!/Math\.random|new Date/.test(soMoinho) && (soMoinho.match(/Date\.now\(\)/g) || []).length === 3 && /Date\.now\(\)/.test(corpoDe('estradaMoinhoHtml')) && /Date\.now\(\)/.test(corpoMoinho) && /Date\.now\(\)/.test(corpoDe('estradaMoinhoRelogio')), 'no Moinho de Maré só o desenho, o clique e o relógio de 60 s leem Date.now (as regras recebem o instante por argumento)');
+    ok(!/Math\.random|new Date/.test(soMoinho) && (soMoinho.match(/Date\.now\(\)/g) || []).length === 4 && /Date\.now\(\)/.test(corpoDe('estradaMoinhoPendente')) && /Date\.now\(\)/.test(corpoDe('estradaMoinhoHtml')) && /Date\.now\(\)/.test(corpoMoinho) && /Date\.now\(\)/.test(corpoDe('estradaMoinhoRelogio')), 'no Moinho de Maré só o desenho, o clique, o relógio de 60 s e o sinal da Quinta (estradaMoinhoPendente) leem Date.now (as regras recebem o instante por argumento)');
     ok(!/updateStatsDisplays/.test(fora), 'a barra de cima só se atualiza nos cliques');
 
   // Comportamento: desenha o ecrã com o estado REAL de um save, sem alterar nada nem gravar.
