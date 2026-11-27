@@ -122,6 +122,8 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     { nome: 'Queijo de Azeitão (coalho)', nivel: 7, ids: ['azeitao_coalho'], imagens: { azeitao_coalho: 'assets/ecras/estrada_amelia.jpg' } },
     // Pacote «Cultura das Pinhas e do Pinhão» (PR 8): uma entrada, de nível mínimo 7, a seguir à do queijo; leva a imagem estrada_sr_albano (já existia).
     { nome: 'Pinhão (três anos)', nivel: 7, ids: ['pinha_tres_anos'], imagens: { pinha_tres_anos: 'assets/ecras/estrada_sr_albano.jpg' } },
+    // Pacote «Castanhas» (PR 9): uma entrada, de nível mínimo 7, a seguir à das pinhas; sem imagem (souto_castanheiros.jpg está «por_criar»).
+    { nome: 'Souto', nivel: 7, ids: ['souto'] },
     // Imagens que já existiam em assets/ecras: uma por entrada (campo «imagens»: id -> caminho), só onde mostram mesmo o tema.
     { nome: 'Arrábida', nivel: 11, ids: ['arrabida_biosfera', 'arrabida_plantas', 'arrabida_mar'] },
     { nome: 'Sado', nivel: 12, ids: ['sado_reserva', 'sado_golfinhos', 'sado_troia'], imagens: { sado_reserva: 'assets/ecras/sado_estuario.jpg' } },

@@ -280,6 +280,16 @@ dadosAcrescentar('palavras', {
 });
 
 dadosAcrescentar('palavras', {
+  id: 'magusto',
+  palavra: 'magusto',
+  explicacao: {
+    pt: 'festa de outono, por volta do São Martinho, em que se assam castanhas na fogueira e se prova o vinho novo.',
+    en: "an autumn festival, around St. Martin's Day, where chestnuts are roasted on the bonfire and the new wine is tasted.",
+    es: 'fiesta de otoño, en torno a San Martín, en la que se asan castañas en la hoguera y se prueba el vino nuevo.'
+  }
+});
+
+dadosAcrescentar('palavras', {
   id: 'maquia',
   palavra: 'maquia',
   explicacao: {
@@ -370,6 +380,16 @@ dadosAcrescentar('palavras', {
 });
 
 dadosAcrescentar('palavras', {
+  id: 'ourico',
+  palavra: 'ouriço',
+  explicacao: {
+    pt: 'a cápsula espinhosa que protege as castanhas e se abre no outono (não é o animal).',
+    en: 'the spiny husk that protects the chestnuts and opens in autumn (not the animal).',
+    es: 'la cápsula espinosa que protege las castañas y se abre en otoño (no es el animal).'
+  }
+});
+
+dadosAcrescentar('palavras', {
   id: 'pinha',
   palavra: 'pinha',
   explicacao: {
@@ -456,6 +476,16 @@ dadosAcrescentar('palavras', {
     pt: 'Líquido que sai do queijo quando se espreme a massa.',
     en: 'Liquid that comes out of the cheese when the curd is pressed.',
     es: 'Líquido que sale del queso cuando se prensa la masa.'
+  }
+});
+
+dadosAcrescentar('palavras', {
+  id: 'souto',
+  palavra: 'souto',
+  explicacao: {
+    pt: 'pomar de castanheiros.',
+    en: 'an orchard of chestnut trees.',
+    es: 'huerto de castaños.'
   }
 });
 
