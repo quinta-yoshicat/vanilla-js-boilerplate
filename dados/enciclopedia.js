@@ -384,6 +384,19 @@ dadosAcrescentar('enciclopedia', {
   }
 });
 
+// Pacote «Torta de Azeitão» (nível 14): a 4.ª entrada do nível 14, com imagem (a mesma da ação «Mesa de Azeitão», na Estrada). Fora do capítulo 14, que continua a pedir as 3 de Azeitão.
+dadosAcrescentar('enciclopedia', {
+  id: 'torta_azeitao_doce',
+  imagem: 'assets/ecras/mesa_azeitao.jpg',
+  nivelMinimo: 14,
+  titulo: { pt: 'A Torta de Azeitão', en: 'The Azeitão Roll Cake', es: 'La Torta de Azeitão' },
+  texto: {
+    pt: 'A Torta de Azeitão é um bolo enrolado de massa fina de ovos, recheado com doce de ovos, e sabe a limão e a canela. A sua origem remonta ao fim do século XIX e deve-se a Manuel Rodrigues, o «Cego». A pastelaria O Cego, em Azeitão, vende as tortas originais desde 1901.',
+    en: 'The Torta de Azeitão is a rolled cake of thin egg batter, filled with doce de ovos (a sweet egg filling), and it tastes of lemon and cinnamon. Its origin goes back to the end of the 19th century and is owed to Manuel Rodrigues, known as "O Cego". The pastry shop O Cego, in Azeitão, has sold the original tortas since 1901.',
+    es: 'La Torta de Azeitão es un bizcocho enrollado de masa fina de huevos, relleno de dulce de huevos, y sabe a limón y a canela. Su origen se remonta a finales del siglo XIX y se debe a Manuel Rodrigues, el «Cego». La pastelería O Cego, en Azeitão, vende las tortas originales desde 1901.'
+  }
+});
+
 // Nível 15, «Moscatel de Sesimbra»: as 3 histórias que o capítulo 15 (dados/capitulos.js) pede. Sem imagem.
 dadosAcrescentar('enciclopedia', {
   id: 'sesimbra_castelo',

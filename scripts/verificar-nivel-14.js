@@ -41,6 +41,7 @@ correr({
     }
   ],
   ids: ['azeitao_queijo', 'azeitao_adega', 'azeitao_palacio'],
+  extra: ['torta_azeitao_doce'], // a 4.ª entrada do nível 14 (a Torta de Azeitão, com imagem; fora do capítulo 14): os seus textos exatos estão em verificar-enciclopedia-dados.js
   enc: {
     azeitao_queijo: {
       titulo: { pt: 'O Queijo de Azeitão', en: 'Azeitão Cheese', es: 'El Queso de Azeitão' },

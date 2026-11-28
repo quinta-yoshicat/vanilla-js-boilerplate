@@ -67,19 +67,20 @@ function correr(spec) {
   const IMGS = spec.imagens || {}; // entradas deste nível com imagem que já existia em assets/ecras (id -> caminho); as outras ficam sem imagem
   const FOTOS_EXTRA = spec.fotosExtra || {}; // fala (1 a 4) -> foto, além da fala 1
   const FOTOS_TODAS = [FOTO].concat(Object.keys(FOTOS_EXTRA).map(function (k) { return FOTOS_EXTRA[k]; }));
-  // grupos anteriores de nivelMinimo (5, 6, 11, 12, ..., N - 1); ao grupo de Palmela (nível 13) junta-se a 4.ª entrada, a da Festa das Vindimas de Palmela (fica a seguir às 3 de Palmela, fora do capítulo 13)
-  const GRUPOS = GRUPOS_NIVEIS_5_6.concat(spec.grupos.map(function (g) { return g.indexOf('palmela_castelo') !== -1 ? g.concat(['festa_vindimas_palmela']) : g; }));
+  const EXTRA = spec.extra || []; // entradas deste nível a mais do que as 3 do capítulo (a 4.ª do nível 14: torta_azeitao_doce), logo a seguir às 3
+  // grupos anteriores de nivelMinimo (5, 6, 11, 12, ..., N - 1); ao grupo de Palmela (nível 13) junta-se a 4.ª entrada, a da Festa das Vindimas de Palmela, e ao de Azeitão (nível 14) a 4.ª, a da Torta de Azeitão (ficam a seguir às 3, fora do capítulo)
+  const GRUPOS = GRUPOS_NIVEIS_5_6.concat(spec.grupos.map(function (g) { return g.indexOf('palmela_castelo') !== -1 ? g.concat(['festa_vindimas_palmela']) : g.indexOf('azeitao_queijo') !== -1 ? g.concat(['torta_azeitao_doce']) : g; }));
   const TODOS_ANT = GRUPOS.reduce(function (t, g) { return t.concat(g); }, []);
   const ATE_M = ENTRADAS_ORIGEM + TODOS_ANT.length; // entradas visíveis no nível M
-  const ATE_N = ATE_M + 3;
+  const ATE_N = ATE_M + 3 + EXTRA.length;
   const FALAS_ANT = 27 + 4 * (M - 10); // falas dos níveis 2 a M numa subida de 1 a M
   let falhas = 0;
   function ok(cond, msg) { if (!cond) { falhas++; console.log('FALHA: ' + msg); } }
   function js(o) { return JSON.stringify(o); }
   function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;'); }
   function nivelEsperado(rep) { let n = 1; LIMIARES.forEach(function (m, i) { if (rep >= m) n = i + 1; }); return n; }
-  // Quantas entradas da Enciclopédia vê um jogador do nível n (os níveis 5 e 6 juntam 3 cada, o 7 junta 4, o 8 e o 9 juntam 3 cada, o 10 junta 2 e cada pacote de nível 11, 12, ... junta 3; a partir do 13 conta mais 1, a da Festa das Vindimas de Palmela).
-  function entradasNoNivel(n) { return ENTRADAS_ORIGEM + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 7 ? 4 : 0) + (n >= 8 ? 3 : 0) + (n >= 9 ? 3 : 0) + (n >= 10 ? 2 : 0) + 3 * Math.max(0, Math.min(n, M) - 10) + (Math.min(n, M) >= 13 ? 1 : 0); }
+  // Quantas entradas da Enciclopédia vê um jogador do nível n (os níveis 5 e 6 juntam 3 cada, o 7 junta 4, o 8 e o 9 juntam 3 cada, o 10 junta 2 e cada pacote de nível 11, 12, ... junta 3; a partir do 13 conta mais 1, a da Festa das Vindimas de Palmela, e a partir do 14 mais 1, a da Torta de Azeitão).
+  function entradasNoNivel(n) { return ENTRADAS_ORIGEM + (n >= 5 ? 3 : 0) + (n >= 6 ? 3 : 0) + (n >= 7 ? 4 : 0) + (n >= 8 ? 3 : 0) + (n >= 9 ? 3 : 0) + (n >= 10 ? 2 : 0) + 3 * Math.max(0, Math.min(n, M) - 10) + (Math.min(n, M) >= 13 ? 1 : 0) + (Math.min(n, M) >= 14 ? 1 : 0); }
 
   // Abre o jogo REAL com a pasta dados/ (ou outra) e os ganchos de teste.
   function abrir(opcoes) {
@@ -161,7 +162,7 @@ function correr(spec) {
     ok(g.ev('Math.max.apply(null, Object.keys(NIVEL_NECESSARIO_POR_ECRA).map(function (k) { return NIVEL_NECESSARIO_POR_ECRA[k]; }))') === 10, '(i) nenhum ecrã novo: o mais alto continua a abrir no nível 10');
     ok(g.ev('NIVEIS_CONFIG[' + M + '].id') === 'nivel_' + N && g.ev('NIVEIS_CONFIG[' + M + '].min') === MINIMO && g.ev('CAPITULOS_CONFIG[' + M + '].id') === 'cap' + N && g.ev('CAPITULOS_CONFIG[' + M + '].nivel') === N, '(i) nivel_' + N + ' (' + MINIMO + ') e cap' + N + ' (nível ' + N + ')');
     const novas = g.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; })');
-    ok(JSON.stringify(novas.slice(TODOS_ANT.length, TODOS_ANT.length + 3)) === JSON.stringify(IDS) && JSON.stringify(g.ev('ENCYCLOPEDIA_ENTRIES.pt.slice(' + ATE_M + ', ' + ATE_N + ').map(function (e) { return e.id; })')) === JSON.stringify(IDS), '(i) as 3 entradas, por esta ordem, logo a seguir às anteriores: ' + IDS);
+    ok(JSON.stringify(novas.slice(TODOS_ANT.length, TODOS_ANT.length + 3)) === JSON.stringify(IDS) && JSON.stringify(g.ev('ENCYCLOPEDIA_ENTRIES.pt.slice(' + ATE_M + ', ' + ATE_N + ').map(function (e) { return e.id; })')) === JSON.stringify(IDS.concat(EXTRA)), '(i) as 3 entradas (mais as extra do nível, se as houver), por esta ordem, logo a seguir às anteriores: ' + IDS.concat(EXTRA));
     ok(g.ev('JSON.stringify(CAPITULOS_CONFIG[' + M + '].criterio)') === js([{ tipo: 'temIds', caminho: 'encyclopedia.unlocked', ids: IDS }]), '(i) o critério do cap' + N + ' é temIds nos 3 ids: ' + g.ev('JSON.stringify(CAPITULOS_CONFIG[' + M + '].criterio)'));
     ok(fs.existsSync(path.join(RAIZ, FOTO)), '(i) a foto da fala 1 existe em ' + FOTO);
     ok(!fs.existsSync(path.join(RAIZ, spec.fotoRaiz)), '(i) não devia haver cópia da foto na raiz do repositório');
@@ -253,7 +254,7 @@ function correr(spec) {
       // grupos anteriores abertos, só os que faltam.
       for (let aberto = 0; aberto <= GRUPOS.length; aberto++) {
         const jaAbertas = GRUPOS.slice(0, aberto).reduce(function (t, g) { return t.concat(g); }, []);
-        const faltam = TODOS_ANT.filter(function (id) { return jaAbertas.indexOf(id) === -1; }).concat(IDS);
+        const faltam = TODOS_ANT.filter(function (id) { return jaAbertas.indexOf(id) === -1; }).concat(IDS, EXTRA);
         const sementes = aberto === 0 ? 25 : 8;
         for (let s = 1; s <= sementes; s++) {
           const g = abrir(); lingua(g, l);
@@ -309,11 +310,11 @@ function correr(spec) {
       const seguinte = g.ev("CAPITULOS_CONFIG.filter(function (c) { return state.capitulos.concluidos[c.id] !== true; }).map(function (c) { return c.nivel; })[0]");
       const cartaoFim = html(g, 'capitulo-container');
       ok(seguinte === undefined ? cartaoFim.indexOf(ui.todos) !== -1 : cartaoFim.indexOf(ui.proximo.replace('{n}', seguinte)) !== -1, '(e) cumprido o cap' + N + ', o cartão diz ' + (seguinte === undefined ? 'que estão todos cumpridos' : 'o próximo capítulo no nível ' + seguinte) + L + ': ' + cartaoFim);
-      // Pelo Explorar de ponta a ponta, com todos os grupos anteriores abertos: 3 cliques cumprem o capítulo N
+      // Pelo Explorar de ponta a ponta, com todos os grupos anteriores abertos: 3 cliques cumprem o capítulo N (4, se o nível tiver uma entrada extra: o Explorar pode dar primeiro a extra)
       const g2 = abrir(); lingua(g2, l);
       preparar(g2, REP_N, N, TODOS_ANT); semente(g2, 99);
-      for (let i = 0; i < 3; i++) g2.ev('enterExplorar();');
-      ok(g2.ev('capitulosAvaliarCelebracao()') === true && g2.ev('FALAS[0].m[0]') === CAP.conclusao[l], '(e) 3 cliques no Explorar chegam para cumprir o capítulo ' + N + L);
+      for (let i = 0; i < 3 + EXTRA.length; i++) g2.ev('enterExplorar();');
+      ok(g2.ev('capitulosAvaliarCelebracao()') === true && g2.ev('FALAS[0].m[0]') === CAP.conclusao[l], '(e) ' + (3 + EXTRA.length) + ' cliques no Explorar chegam para cumprir o capítulo ' + N + L);
     }
 
     // ===================================================================
@@ -382,7 +383,7 @@ function correr(spec) {
     preparar(a, REP_N, M, TODOS_ANT);
     a.ev('verificarSubidaNivel();');
     semente(a, 5);
-    for (let i = 0; i < 3; i++) a.ev('enterExplorar();');
+    for (let i = 0; i < 3 + EXTRA.length; i++) a.ev('enterExplorar();');
     a.ev('capitulosAvaliarCelebracao(); TIMEOUTS.forEach(function (f) { f(); }); saveState(state);');
     const salvo = a.guardado.yoshicat_quinta_state_v2;
     ok(typeof salvo === 'string' && salvo.length > 100, '(h) o jogo A gravou o estado');

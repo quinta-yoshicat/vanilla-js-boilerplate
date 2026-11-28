@@ -12,6 +12,7 @@
 //   dias       quantos dias diferentes já pisou (só sobe)
 //   mesaDia    'AAAA-MM-DD' (Lisboa) da última "mesa da vindima"; null = nunca (cada tarefa tem o seu dia)
 //   mesaSadoDia o mesmo para a "Mesa do Sado" (nível 16): põe-se na Estrada (js/estrada.js), não aqui; o campo vive neste objeto
+//   mesaAzeitaoDia o mesmo para a "Mesa de Azeitão" (nível 14), também na Estrada
 //
 // "Pôr a mesa da vindima": uma vez por dia, gasta LAGAR_CONFIG.mesa.bens da Despensa (só sobe "entregues";
 // "recebidos", que o capítulo 7 lê, nunca muda) e dá LAGAR_CONFIG.mesa.reputacao. A regra está em
@@ -64,11 +65,12 @@ function lagarInteiro(n) {
 // Repara state.lagar em memória (uma nuvem ou um save estranho podem trazer null ou outro tipo).
 function lagarEstado(estado) {
   let l = estado.lagar;
-  if (!l || typeof l !== 'object' || Array.isArray(l)) l = estado.lagar = { ultimoDia: null, dias: 0, mesaDia: null, mesaSadoDia: null, assaltoDia: null };
+  if (!l || typeof l !== 'object' || Array.isArray(l)) l = estado.lagar = { ultimoDia: null, dias: 0, mesaDia: null, mesaSadoDia: null, mesaAzeitaoDia: null, assaltoDia: null };
   if (typeof l.ultimoDia !== 'string' || !LAGAR_DIA_REGEX.test(l.ultimoDia)) l.ultimoDia = null;
   l.dias = lagarInteiro(l.dias);
   if (typeof l.mesaDia !== 'string' || !LAGAR_DIA_REGEX.test(l.mesaDia)) l.mesaDia = null;
   if (typeof l.mesaSadoDia !== 'string' || !LAGAR_DIA_REGEX.test(l.mesaSadoDia)) l.mesaSadoDia = null;
+  if (typeof l.mesaAzeitaoDia !== 'string' || !LAGAR_DIA_REGEX.test(l.mesaAzeitaoDia)) l.mesaAzeitaoDia = null;
   if (typeof l.assaltoDia !== 'string' || !LAGAR_DIA_REGEX.test(l.assaltoDia)) l.assaltoDia = null;
   return l;
 }

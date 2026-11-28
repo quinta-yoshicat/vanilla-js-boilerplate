@@ -135,6 +135,8 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
     // Festa das Vindimas de Palmela: uma 4.ª entrada de nível 13, a seguir às 3 de Palmela (o capítulo 13 continua a pedir só essas 3); leva a imagem vindimas_palmela_festa (a mesma do menu da festa «vindimas»).
     { nome: 'Festa das Vindimas de Palmela', nivel: 13, ids: ['festa_vindimas_palmela'], imagens: { festa_vindimas_palmela: 'assets/ecras/vindimas_palmela_festa.jpg' } },
     { nome: 'Azeitão', nivel: 14, ids: ['azeitao_queijo', 'azeitao_adega', 'azeitao_palacio'], imagens: { azeitao_queijo: 'assets/ecras/azeitao_vila.jpg' } },
+    // A Torta de Azeitão: uma 4.ª entrada de nível 14 (o máximo por nível), a seguir às 3 de Azeitão (o capítulo 14 continua a pedir só essas 3); leva a imagem mesa_azeitao.jpg, a mesma da ação «Mesa de Azeitão» da Estrada.
+    { nome: 'Torta de Azeitão', nivel: 14, ids: ['torta_azeitao_doce'], imagens: { torta_azeitao_doce: 'assets/ecras/mesa_azeitao.jpg' } },
     { nome: 'Sesimbra', nivel: 15, ids: ['sesimbra_castelo', 'sesimbra_vila', 'sesimbra_espichel'], imagens: { sesimbra_vila: 'assets/ecras/sesimbra_vila.jpg' } },
     { nome: 'Setúbal', nivel: 16, ids: ['setubal_forte', 'setubal_roxo', 'setubal_familias'], imagens: { setubal_roxo: 'assets/ecras/moscatel_roxo_com_uvas.jpg' } },
     { nome: 'Alcácer', nivel: 17, ids: ['sal_alcacer', 'sal_setubal', 'sal_redura'], imagens: { sal_alcacer: 'assets/ecras/sal_alcacer.jpg', sal_setubal: 'assets/ecras/sal_setubal.jpg', sal_redura: 'assets/ecras/sal_redura.jpg' } },
@@ -144,7 +146,7 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
   ];
   const TODOS = GRUPOS.reduce(function (t, g) { return t.concat(g.ids); }, []);
   ok(real.avisos.length === 0, '(f) carregar o jogo com dados/ não devia avisar nada: ' + real.avisos);
-  ok(real.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; }).join()') === TODOS.join(), '(f) de dados/ só deviam vir as histórias da Cave de Reserva, da Coleção, da Arrábida, do Sado, de Palmela (com a da Festa das Vindimas), de Azeitão, de Sesimbra, de Setúbal, de Alcácer, da Comporta, do Montado e de Bocage, por ordem: ' + real.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; }).join()'));
+  ok(real.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; }).join()') === TODOS.join(), '(f) de dados/ só deviam vir as histórias da Cave de Reserva, da Coleção, da Arrábida, do Sado, de Palmela (com a da Festa das Vindimas), de Azeitão (com a da Torta de Azeitão), de Sesimbra, de Setúbal, de Alcácer, da Comporta, do Montado e de Bocage, por ordem: ' + real.ev('DADOS_ACRESCENTADOS.enciclopedia.map(function (e) { return e.id; }).join()'));
   const dasTresLinguas = real.ev('JSON.stringify({ pt: ENCYCLOPEDIA_ENTRIES.pt.slice(0, 32), en: ENCYCLOPEDIA_ENTRIES.en.slice(0, 32), es: ENCYCLOPEDIA_ENTRIES.es.slice(0, 32) })');
   ok(['pt', 'en', 'es'].every(function (l) { return real.ev('ENCYCLOPEDIA_ENTRIES.' + l + '[32].id') === 'janeiras' && real.ev('ENCYCLOPEDIA_ENTRIES.' + l + '[33].id') === 'santosPopulares'; }), '(f) a 33.ª e a 34.ª entradas de hoje, nas 3 línguas, são a «janeiras» (Reis) e a «santosPopulares», logo a seguir às 32 de antes');
   ok(crypto.createHash('sha256').update(dasTresLinguas).digest('hex') === IMPRESSAO_DIGITAL_DE_HOJE, '(f) com dados/ as 32 entradas de antes da festa dos Reis ficam idênticas às da master, nas 3 línguas');
@@ -168,6 +170,20 @@ function estadoDasListas(g) { return g.ev('JSON.stringify(ENCYCLOPEDIA_ENTRIES)'
       ok(!!e && !/[<>&]|https?:|bot\b|bots\b|\bIA\b|inteligência artificial|artificial intelligence|inteligencia artificial/i.test(e.titulo + ' ' + e.texto), '(f) ' + id + ' (' + l + '): sem < > &, links, bots nem IA');
     });
   });
+  // A Torta de Azeitão: título e texto exatos nas 3 línguas, um só parágrafo, só os factos pedidos, sem fontes nem links no jogo e com a grafia «YoshiCat».
+  {
+    const TORTA = {
+      pt: { titulo: 'A Torta de Azeitão', texto: 'A Torta de Azeitão é um bolo enrolado de massa fina de ovos, recheado com doce de ovos, e sabe a limão e a canela. A sua origem remonta ao fim do século XIX e deve-se a Manuel Rodrigues, o «Cego». A pastelaria O Cego, em Azeitão, vende as tortas originais desde 1901.' },
+      en: { titulo: 'The Azeitão Roll Cake', texto: 'The Torta de Azeitão is a rolled cake of thin egg batter, filled with doce de ovos (a sweet egg filling), and it tastes of lemon and cinnamon. Its origin goes back to the end of the 19th century and is owed to Manuel Rodrigues, known as "O Cego". The pastry shop O Cego, in Azeitão, has sold the original tortas since 1901.' },
+      es: { titulo: 'La Torta de Azeitão', texto: 'La Torta de Azeitão es un bizcocho enrollado de masa fina de huevos, relleno de dulce de huevos, y sabe a limón y a canela. Su origen se remonta a finales del siglo XIX y se debe a Manuel Rodrigues, el «Cego». La pastelería O Cego, en Azeitão, vende las tortas originales desde 1901.' }
+    };
+    LINGUAS.forEach(function (l) {
+      const e = real.ev('ENCYCLOPEDIA_ENTRIES.' + l + '.filter(function (e) { return e.id === "torta_azeitao_doce"; })[0]');
+      ok(!!e && e.titulo === TORTA[l].titulo && e.texto === TORTA[l].texto && e.nivelMinimo === 14 && e.imagem === 'assets/ecras/mesa_azeitao.jpg', '(f) torta_azeitao_doce (' + l + '): título, texto, nível mínimo 14 e imagem exatos');
+      ok(!!e && Object.keys(e).sort().join() === 'id,imagem,nivelMinimo,texto,titulo', '(f) torta_azeitao_doce (' + l + '): só id, imagem, nivelMinimo, titulo e texto: ' + (e && Object.keys(e)));
+      ok(!!e && e.texto.indexOf('\n') === -1 && !/[<>&]|https?:|www\.|e-konomista|wikipedia|visitlisboa|noponto|\bbot\b|bots\b|\bIA\b|Mestre|Yoshi_Cat|\bdocument\b/i.test(e.titulo + ' ' + e.texto), '(f) torta_azeitao_doce (' + l + '): um só parágrafo, sem < > &, links, fontes, «Mestre», bots nem IA');
+    });
+  }
   const codigo = fs.readFileSync(path.join(RAIZ, 'dados', 'enciclopedia.js'), 'utf8').replace(/\/\/.*$/gm, '').replace(/\/\*[\s\S]*?\*\//g, '').trim();
   ok((codigo.match(/dadosAcrescentar\(/g) || []).length === TODOS.length && TODOS.every(function (id) { return codigo.indexOf("id: '" + id + "'") !== -1; }), '(f) dados/enciclopedia.js devia ter só as ' + TODOS.length + ' chamadas combinadas');
 }

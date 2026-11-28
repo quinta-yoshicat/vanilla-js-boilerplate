@@ -15,6 +15,9 @@
 // (js/lagar.js) e com a mesma regra (despensaMesaVindima, js/despensa.js, com o campo state.lagar.mesaSadoDia). Também só lê ao desenhar;
 // só o clique (estradaMesaSadoClique) a põe e grava, UMA vez. Não tem assalto dos porcos (esse é só do Lagar).
 //
+// A "Mesa de Azeitão" (nível 14, ESTRADA_MESA_AZEITAO em js/estrada-dados.js): a mesma coisa, copiada da Mesa do Sado, com o campo
+// state.lagar.mesaAzeitaoDia. Só o clique (estradaMesaAzeitaoClique) a põe e grava, UMA vez. Não tem assalto dos porcos.
+//
 // O "Moinho de Maré da Mourisca" (nível 10, ESTRADA_MOINHO_MARE em js/estrada-dados.js): mais uma ação do mesmo bloco, mas com uma espera de 6 horas
 // em vez de bens (o padrão de cooldown da Vinha, js/vinha.js: carimbo Date.now() em state.moinho.fechadoEm e carimboCorrigirFuturo, js/tempo.js)
 // e 1 recompensa por dia (state.moinho.dia, com a mesma proteção contra o relógio atrás da Mesa do Sado). Não gasta nada nem tem assalto dos
@@ -234,6 +237,8 @@ let estradaOfertaResultado = null; // { dia, personagem, bem, reputacaoGanha }
 let estradaOfertaOcupado = false;
 let estradaMesaSadoResultado = null; // { dia, reputacaoGanha }
 let estradaMesaSadoOcupado = false;
+let estradaMesaAzeitaoResultado = null; // { dia, reputacaoGanha }
+let estradaMesaAzeitaoOcupado = false;
 let estradaMoinhoResultado = null; // { dia, tipo: 'fechou' | 'soltou', reputacaoGanha }
 let estradaMoinhoOcupado = false;
 
@@ -260,10 +265,10 @@ function estradaNomeBem(bemId) {
 //   senão, havendo bens: o botão "Oferecer {bem}".
 // Só com a visita de hoje já tocada e a Estrada desbloqueada; sem bens e sem oferta feita, não mostra nada.
 function estradaOfertaHtml() {
-  return estradaOfertaVisitaHtml() + estradaMoinhoHtml() + estradaMesaSadoHtml();
+  return estradaOfertaVisitaHtml() + estradaMoinhoHtml() + estradaMesaSadoHtml() + estradaMesaAzeitaoHtml();
 }
 
-// A oferta à visita de hoje (o que está descrito acima, sem a Mesa do Sado).
+// A oferta à visita de hoje (o que está descrito acima, sem as mesas nem o moinho).
 function estradaOfertaVisitaHtml() {
   if (typeof ecraDesbloqueado !== 'function' || !ecraDesbloqueado('estrada')) return '';
   const visita = estradaVisitaTocadaHoje();
@@ -396,6 +401,83 @@ function estradaMesaSadoClique() {
     }
   } finally {
     estradaMesaSadoOcupado = false;
+  }
+  // Redesenha o cartão da Quinta (a barra de cima já foi atualizada).
+  if (typeof atualizarCartaoNivelQuinta === 'function') atualizarCartaoNivelQuinta();
+  if (typeof atualizarResumoQuinta === 'function') atualizarResumoQuinta();
+  if (typeof atualizarLinhaVisitaQuinta === 'function') atualizarLinhaVisitaQuinta();
+}
+
+// ---------------------------------------------------------------------
+// A MESA DE AZEITÃO (nível 14). Copiada da Mesa do Sado (e, antes dela, da mesa da vindima: lagarMesaEstado, lagarTextoMesa e lagarMesaClique em js/lagar.js).
+// ---------------------------------------------------------------------
+
+function estradaMesaAzeitaoReceita() {
+  return { bens: ESTRADA_MESA_AZEITAO.bens, reputacao: ESTRADA_MESA_AZEITAO.reputacao, campo: ESTRADA_MESA_AZEITAO.campo, nivelMinimo: ESTRADA_MESA_AZEITAO.nivelMinimo };
+}
+
+// Só lê. O estado da Mesa de Azeitão neste dia: { ok, motivo, faltam } com
+//   motivo null | 'nivel_insuficiente' | 'dia_anterior' | 'ja_hoje' | 'faltam_bens'  e  faltam = ids dos bens que faltam na Despensa.
+// Não altera nada (a regra a sério, que gasta, é despensaMesaVindima em js/despensa.js).
+function estradaMesaAzeitaoEstado(estado, dia) {
+  const receita = estradaMesaAzeitaoReceita();
+  if (!despensaMesaNivelOk(estado, receita)) return { ok: false, motivo: 'nivel_insuficiente', faltam: [] };
+  const ultima = despensaMesaDia(estado, receita.campo);
+  if (ultima !== null && dia < ultima) return { ok: false, motivo: 'dia_anterior', faltam: [] };
+  if (ultima !== null && dia === ultima) return { ok: false, motivo: 'ja_hoje', faltam: [] };
+  const faltam = receita.bens.filter(function (b) { return despensaQuantos(estado, b.bem) < b.n; }).map(function (b) { return b.bem; });
+  if (faltam.length > 0) return { ok: false, motivo: 'faltam_bens', faltam: faltam };
+  return { ok: true, motivo: null, faltam: [] };
+}
+
+function estradaMesaAzeitaoTexto(m) {
+  if (m.motivo === 'ja_hoje') return t('estrada.mesaAzeitaoJaHoje');
+  if (m.motivo === 'dia_anterior') return t('estrada.mesaAzeitaoRelogio');
+  if (m.motivo === 'faltam_bens') {
+    const nomes = m.faltam.map(function (id) { return estradaNomeBem(id); }).join(', ');
+    return t('estrada.mesaAzeitaoFalta').replace('{bens}', nomes) + ' ' + t('estrada.mesaAzeitaoOnde');
+  }
+  return '';
+}
+
+// O que se vê no cartão da Quinta (só lê; '' antes do nível 14): a foto, o que a mesa pede e dá, o botão (apagado se não se pode) e,
+// por baixo, a mensagem: o agradecimento logo depois de a pôr, "já puseste hoje", o que falta na Despensa ou o relógio atrás.
+function estradaMesaAzeitaoHtml() {
+  if (typeof despensaMesaNivelOk !== 'function' || !despensaMesaNivelOk(state, estradaMesaAzeitaoReceita())) return '';
+  const dia = estradaDiaDeHoje();
+  const m = estradaMesaAzeitaoEstado(state, dia);
+  const res = estradaMesaAzeitaoResultado;
+  const feitaAgora = !!res && res.dia === dia && m.motivo === 'ja_hoje';
+  const texto = feitaAgora ? '' : estradaMesaAzeitaoTexto(m);
+  return '<div class="mini-bloco mesa-azeitao">' +
+    '<img class="mesa-azeitao-img" src="' + ESTRADA_MESA_AZEITAO.imagem + '" alt="' + cadernoEscapar(t('estrada.mesaAzeitaoAlt')) + '" loading="lazy">' +
+    '<p class="oferta-linha">' + cadernoEscapar(t('estrada.mesaAzeitaoDesc').replace('{pedido}', t('estrada.mesaAzeitaoPedido')).replace('{rep}', ESTRADA_MESA_AZEITAO.reputacao)) + '</p>' +
+    (feitaAgora ? '<div class="oferta-resultado"><p>' + cadernoEscapar(t('estrada.mesaAzeitaoOk').replace('{rep}', res.reputacaoGanha)) + '</p></div>' : '') +
+    (texto ? '<p class="oferta-linha">' + cadernoEscapar(texto) + '</p>' : '') +
+    '<button type="button" class="btn-pill pill-main oferta-botao mesa-azeitao-botao" onclick="estradaMesaAzeitaoClique()"' + (m.ok ? '' : ' disabled') + '>' +
+      cadernoEscapar(t('estrada.mesaAzeitaoBtn')) + '</button>' +
+  '</div>';
+}
+
+// O ÚNICO sítio que põe a Mesa de Azeitão e grava (a regra é despensaMesaVindima, em js/despensa.js). Toque no botão: desativa-o logo
+// (clique duplo), põe a mesa e, se correu bem, grava UMA vez e atualiza a barra de cima. Se recusou, não grava.
+function estradaMesaAzeitaoClique() {
+  if (estradaMesaAzeitaoOcupado) return;
+  estradaMesaAzeitaoOcupado = true;
+  try {
+    const botao = document.querySelector('.mesa-azeitao-botao');
+    if (botao) botao.disabled = true;
+    const dia = estradaDiaDeHoje();
+    const r = despensaMesaVindima(state, dia, estradaMesaAzeitaoReceita());
+    if (r.ok) {
+      saveState(state);
+      updateStatsDisplays();
+      estradaMesaAzeitaoResultado = { dia: dia, reputacaoGanha: r.reputacaoGanha };
+      if (typeof vibrar === 'function') vibrar('sucesso');
+      if (typeof tocarSom === 'function') tocarSom('objetivoCumprido'); // a mesa não é objetivo do dia: não há outro "ding"
+    }
+  } finally {
+    estradaMesaAzeitaoOcupado = false;
   }
   // Redesenha o cartão da Quinta (a barra de cima já foi atualizada).
   if (typeof atualizarCartaoNivelQuinta === 'function') atualizarCartaoNivelQuinta();

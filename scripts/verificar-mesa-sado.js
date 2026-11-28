@@ -120,7 +120,7 @@ const cap7 = "capituloEstaCumprido(CAPITULOS_CONFIG.filter(function (c) { return
   const depois = JSON.parse(g.estado());
   const esperado = JSON.parse(JSON.stringify(antes));
   esperado.despensa.entregues = { choco_sado: 1, ostras_sado: 1, peixe_livramento: 1 };
-  esperado.reputacao = REP16 + 15; esperado.lagar = { ultimoDia: null, dias: 0, mesaDia: null, mesaSadoDia: '2026-10-09', assaltoDia: null };
+  esperado.reputacao = REP16 + 15; esperado.lagar = { ultimoDia: null, dias: 0, mesaDia: null, mesaSadoDia: '2026-10-09', mesaAzeitaoDia: null, assaltoDia: null };
   ok(JSON.stringify(depois) === JSON.stringify(esperado), 'só mudam entregues, Reputação e lagar.mesaSadoDia (nem uvas, nem ultimoDia, nem dias, nem mesaDia, nem primeiraTroca, nem hoje)');
   // Uma vez por dia: a 2.ª no mesmo dia é recusada sem alterar nada, mesmo com stock.
   const a = g.estado();
@@ -246,15 +246,15 @@ const cap7 = "capituloEstaCumprido(CAPITULOS_CONFIG.filter(function (c) { return
 {
   const g = abrir(cheia(1));
   g.ev('state.lagar = null');
-  ok(mesa(g, '2026-10-09').ok === true && JSON.stringify(g.json('state.lagar')) === '{"ultimoDia":null,"dias":0,"mesaDia":null,"mesaSadoDia":"2026-10-09","assaltoDia":null}', 'state.lagar null: recria-se com mesaSadoDia');
+  ok(mesa(g, '2026-10-09').ok === true && JSON.stringify(g.json('state.lagar')) === '{"ultimoDia":null,"dias":0,"mesaDia":null,"mesaSadoDia":"2026-10-09","mesaAzeitaoDia":null,"assaltoDia":null}', 'state.lagar null: recria-se com mesaSadoDia');
   const h = abrir(cheia(1));
   h.ev("state.lagar = { ultimoDia: '2026-10-05', dias: 2, mesaDia: '2026-10-06' }"); // save da mesa da vindima, sem mesaSadoDia
   ok(mesa(h, '2026-10-09').ok === true && JSON.stringify(h.json('state.lagar')) === '{"ultimoDia":"2026-10-05","dias":2,"mesaDia":"2026-10-06","mesaSadoDia":"2026-10-09"}', 'lagar sem mesaSadoDia: mantém o resto e acrescenta-o');
   const velho = abrir({ reputacao: 1600, uvas: 5, lagar: { ultimoDia: '2026-10-05', dias: 2, mesaDia: '2026-10-06' } });
-  ok(JSON.stringify(velho.json('state.lagar')) === '{"ultimoDia":"2026-10-05","dias":2,"mesaDia":"2026-10-06","mesaSadoDia":null,"assaltoDia":null}' && velho.ev('state.reputacao') === 1600 && velho.ev('state.uvas') === 5, 'save da mesa da vindima ganha mesaSadoDia null e o resto fica');
-  ok(JSON.stringify(velho.json('mergeDeep(defaultState(), { reputacao: 5 }).lagar')) === '{"ultimoDia":null,"dias":0,"mesaDia":null,"mesaSadoDia":null,"assaltoDia":null}', 'estado da nuvem sem lagar ganha o valor por omissão');
-  ok(JSON.stringify(velho.json('mergeDeep(defaultState(), { lagar: { mesaSadoDia: "2026-10-01" } }).lagar')) === '{"ultimoDia":null,"dias":0,"mesaDia":null,"mesaSadoDia":"2026-10-01","assaltoDia":null}', 'estado da nuvem com mesaSadoDia mantém-no');
-  ok(JSON.stringify(abrir().json('state.lagar')) === '{"ultimoDia":null,"dias":0,"mesaDia":null,"mesaSadoDia":null,"assaltoDia":null}', 'jogo novo: mesaSadoDia null');
+  ok(JSON.stringify(velho.json('state.lagar')) === '{"ultimoDia":"2026-10-05","dias":2,"mesaDia":"2026-10-06","mesaSadoDia":null,"mesaAzeitaoDia":null,"assaltoDia":null}' && velho.ev('state.reputacao') === 1600 && velho.ev('state.uvas') === 5, 'save da mesa da vindima ganha mesaSadoDia null e o resto fica');
+  ok(JSON.stringify(velho.json('mergeDeep(defaultState(), { reputacao: 5 }).lagar')) === '{"ultimoDia":null,"dias":0,"mesaDia":null,"mesaSadoDia":null,"mesaAzeitaoDia":null,"assaltoDia":null}', 'estado da nuvem sem lagar ganha o valor por omissão');
+  ok(JSON.stringify(velho.json('mergeDeep(defaultState(), { lagar: { mesaSadoDia: "2026-10-01" } }).lagar')) === '{"ultimoDia":null,"dias":0,"mesaDia":null,"mesaSadoDia":"2026-10-01","mesaAzeitaoDia":null,"assaltoDia":null}', 'estado da nuvem com mesaSadoDia mantém-no');
+  ok(JSON.stringify(abrir().json('state.lagar')) === '{"ultimoDia":null,"dias":0,"mesaDia":null,"mesaSadoDia":null,"mesaAzeitaoDia":null,"assaltoDia":null}', 'jogo novo: mesaSadoDia null');
   // lagarEstado repara um valor estranho; um valor estranho em mesaSadoDia conta como nunca.
   const e = abrir(cheia(1)); e.ev("state.lagar.mesaSadoDia = 12345");
   ok(mesa(e, '2026-10-09').ok === true, 'mesaSadoDia inválido conta como nunca');
@@ -295,14 +295,14 @@ const cap7 = "capituloEstaCumprido(CAPITULOS_CONFIG.filter(function (c) { return
   const corpoDe = function (nome) { const m = new RegExp('function ' + nome + '\\([^)]*\\) \\{[\\s\\S]*?\\n\\}\\n').exec(src); return m ? m[0] : ''; };
   const clique = corpoDe('estradaMesaSadoClique');
   ok(clique !== '', 'existe estradaMesaSadoClique em js/estrada.js');
-  ok((src.match(/despensaMesaVindima\(/g) || []).length === 1 && clique.indexOf('despensaMesaVindima(') !== -1, 'só o clique (estradaMesaSadoClique) chama despensaMesaVindima');
+  ok((src.match(/despensaMesaVindima\(/g) || []).length === 2 && clique.indexOf('despensaMesaVindima(') !== -1 && corpoDe('estradaMesaAzeitaoClique').indexOf('despensaMesaVindima(') !== -1, 'só os dois cliques (estradaMesaSadoClique e estradaMesaAzeitaoClique) chamam despensaMesaVindima');
   ok((clique.match(/saveState\(state\)/g) || []).length === 1 && clique.indexOf('updateStatsDisplays()') !== -1, 'o clique grava UMA vez e atualiza a barra de cima');
   ok(/if \(botao\) botao\.disabled = true;/.test(clique) && /estradaMesaSadoOcupado/.test(clique), 'o clique apaga o botão e tem a guarda contra o clique duplo');
   ['estradaMesaSadoReceita', 'estradaMesaSadoEstado', 'estradaMesaSadoTexto', 'estradaMesaSadoHtml'].forEach(function (f) {
     ok(!/saveState|updateStatsDisplays|despensaMesaVindima|despensaRegistar|despensaEstado/.test(corpoDe(f)), f + ' só lê (não grava, não gasta, não atualiza a barra)');
   });
   ok(!/assalto|Assalto|lagarAssalto/.test(src), 'estrada.js não tem assalto dos porcos (esse é só do Lagar)');
-  ok(/function estradaOfertaHtml\(\) \{\s*return estradaOfertaVisitaHtml\(\) \+ estradaMoinhoHtml\(\) \+ estradaMesaSadoHtml\(\);\s*\}/.test(src), 'a Mesa do Sado está no bloco da oferta (estradaOfertaHtml, a seguir ao Moinho de Maré do nível 10)');
+  ok(/function estradaOfertaHtml\(\) \{\s*return estradaOfertaVisitaHtml\(\) \+ estradaMoinhoHtml\(\) \+ estradaMesaSadoHtml\(\) \+ estradaMesaAzeitaoHtml\(\);\s*\}/.test(src), 'a Mesa do Sado está no bloco da oferta (estradaOfertaHtml, a seguir ao Moinho de Maré do nível 10 e antes da Mesa de Azeitão)');
   ok(/definirFundo/.test(src) === false, 'a ação não troca o fundo do ecrã (a imagem vê-se no próprio bloco)');
   const vis = ler(path.join(RAIZ, 'js', 'visitas.js'));
   ok(/if \(!r\.visita\) \{ container\.innerHTML = ofertaBloco\(\) \+ encomendaBloco\(\); return; \}/.test(vis), 'js/visitas.js mostra o bloco também nos dias sem visita (a mesa não depende da visita)');

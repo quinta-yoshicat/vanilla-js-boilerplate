@@ -98,9 +98,9 @@ const saveNivel9 = function (extra) {
 // 3. state.camara: por omissão null/0 (jogo novo, save antigo, nuvem), reparado se vier estranho, e nada mais muda.
 {
   ok(JSON.stringify(abrir().json('state.camara')) === '{"provaDia":null,"dias":0}', 'jogo novo: camara { provaDia: null, dias: 0 }');
-  const g = abrir({ reputacao: 2200, uvas: 9, garrafas: 4, lagar: { ultimoDia: '2026-10-05', dias: 3, mesaDia: '2026-10-06', mesaSadoDia: null, assaltoDia: '2026-10-06' } });
+  const g = abrir({ reputacao: 2200, uvas: 9, garrafas: 4, lagar: { ultimoDia: '2026-10-05', dias: 3, mesaDia: '2026-10-06', mesaSadoDia: null, mesaAzeitaoDia: null, assaltoDia: '2026-10-06' } });
   ok(JSON.stringify(g.json('state.camara')) === '{"provaDia":null,"dias":0}', 'save do PR anterior (sem camara) ganha o valor por omissão');
-  ok(g.ev('state.reputacao') === 2200 && g.ev('state.uvas') === 9 && g.ev('state.garrafas') === 4 && JSON.stringify(g.json('state.lagar')) === '{"ultimoDia":"2026-10-05","dias":3,"mesaDia":"2026-10-06","mesaSadoDia":null,"assaltoDia":"2026-10-06"}', 'o resto do save (incluindo o Lagar) fica igual');
+  ok(g.ev('state.reputacao') === 2200 && g.ev('state.uvas') === 9 && g.ev('state.garrafas') === 4 && JSON.stringify(g.json('state.lagar')) === '{"ultimoDia":"2026-10-05","dias":3,"mesaDia":"2026-10-06","mesaSadoDia":null,"mesaAzeitaoDia":null,"assaltoDia":"2026-10-06"}', 'o resto do save (incluindo o Lagar) fica igual');
   ok(JSON.stringify(g.json('mergeDeep(defaultState(), { reputacao: 5 }).camara')) === '{"provaDia":null,"dias":0}', 'estado da nuvem sem camara ganha o valor por omissão');
   ok(JSON.stringify(g.json('mergeDeep(defaultState(), { camara: { dias: 2 } }).camara')) === '{"provaDia":null,"dias":2}', 'estado da nuvem com camara parcial mantém o que traz e ganha o resto');
   // Valores estranhos: contam como "nunca" e são reparados ao provar.
