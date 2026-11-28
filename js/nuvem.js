@@ -385,7 +385,7 @@ function nuvemJuntarCaderno(a, b) {
 // juntam-se aqui). Pura: sem relógio nem sorteio; devolve objetos novos, com a mesma forma que defaultState() (a ordem
 // das chaves também, para uma junção sem novidades dar o mesmo JSON: ver o teste "mudou" em nuvemTratarLeitura).
 // Tipos errados, chaves estranhas e '__proto__' ignoram-se; uma data só vale com o formato AAAA-MM-DD.
-//   datas simples (ultimoDia, mesaDia, mesaSadoDia, assaltoDia, provaDia, brindeDia, visitaDia, arrumouDia): a MAIS RECENTE (null se nenhuma válida)
+//   datas simples (ultimoDia, mesaDia, mesaSadoDia, mesaAzeitaoDia, assaltoDia, provaDia, brindeDia, visitaDia, arrumouDia): a MAIS RECENTE (null se nenhuma válida)
 //   contadores (dias): o MAIOR (inteiro finito >= 0)
 //   loja {dia, vendasHoje}: o par do dia mais recente; no mesmo dia, o MAIOR vendasHoje; com um dia null, fica o outro
 //   despensa.recebidos e .entregues: por bem, o MAIOR (recebidos menos entregues nunca fica negativo: se cada lado tem
@@ -583,6 +583,7 @@ function nuvemJuntarLeves(base, outro) {
       dias: Math.max(nuvemLevesInteiro(la.dias), nuvemLevesInteiro(lb.dias)),
       mesaDia: nuvemLevesMaisRecente(la.mesaDia, lb.mesaDia),
       mesaSadoDia: nuvemLevesMaisRecente(la.mesaSadoDia, lb.mesaSadoDia),
+      mesaAzeitaoDia: nuvemLevesMaisRecente(la.mesaAzeitaoDia, lb.mesaAzeitaoDia),
       assaltoDia: nuvemLevesMaisRecente(la.assaltoDia, lb.assaltoDia)
     },
     camara: {

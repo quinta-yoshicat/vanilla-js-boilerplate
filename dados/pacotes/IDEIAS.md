@@ -18,3 +18,4 @@ Estados: `ideia` → `aprovada` → `em PR` → `feita`. Quando uma ideia passa 
 | ideia_10 | Feira de Sant'Iago | festa | feira_santiago | feita | #247, parte 2 de 2 (festa) |
 | ideia_11 | Festa das Vindimas de Palmela | festa | festa_vindimas_palmela | feita | #256 (datas por confirmar) |
 | ideia_12 | Moinho de Maré da Mourisca | cultura | moinho_mare_mourisca | feita | #260 |
+| ideia_13 | Torta de Azeitão | cultura | torta_azeitao | em PR | |

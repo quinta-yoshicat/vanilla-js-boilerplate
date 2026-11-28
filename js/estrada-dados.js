@@ -1042,6 +1042,21 @@ const ESTRADA_MESA_SADO = {
   imagem: 'assets/ecras/mesa_sado.jpg'
 };
 
+// A MESA DE AZEITÃO (nível 14, a chegada da Dona Natália): outra ação do bloco da oferta às visitas (estradaOfertaHtml, js/estrada.js), com a
+// mesma regra da Mesa do Sado e da mesa da vindima (despensaMesaVindima, js/despensa.js).
+//   nivelMinimo  só existe a partir deste nível (também para um jogador antigo)
+//   bens         1 de cada, da Despensa (só sobe "entregues"; "recebidos" e o capítulo 7 não mudam)
+//   reputacao    +13 de Reputação, 1 vez por dia (dia de Lisboa; a marca é state.lagar.mesaAzeitaoDia, independente das outras mesas)
+//   imagem       a foto que se vê na ação (sem assalto dos porcos: esse é só do Lagar)
+// Se mudares os bens, muda também o texto "estrada.mesaAzeitaoPedido" (js/i18n.js).
+const ESTRADA_MESA_AZEITAO = {
+  nivelMinimo: 14,
+  bens: [{ bem: 'torta_azeitao', n: 1 }, { bem: 'queijo_azeitao', n: 1 }, { bem: 'ervas_arrabida', n: 1 }],
+  reputacao: 13,
+  campo: 'mesaAzeitaoDia',
+  imagem: 'assets/ecras/mesa_azeitao.jpg'
+};
+
 // O MOINHO DE MARÉ DA MOURISCA (nível 10): outra ação do bloco da oferta às visitas (estradaOfertaHtml, js/estrada.js), com uma espera em
 // vez de bens (o mesmo padrão de cooldown da Vinha, js/vinha.js: guarda-se o carimbo Date.now() e vê-se quanto falta). Não gasta nada
 // e não tem assalto dos porcos. O estado é state.moinho { fechadoEm, dia } (js/state.js).

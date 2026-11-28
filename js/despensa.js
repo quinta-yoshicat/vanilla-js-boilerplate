@@ -363,13 +363,13 @@ function despensaOferecer(estado, dia) {
 }
 
 // ---------------------------------------------------------------------
-// MESAS (a da vindima, Nível 8, ecrã "O Lagar", js/lagar.js; a do Sado, Nível 16, bloco da oferta da Estrada, js/estrada.js).
-// Só regras e contas; os botões estão nesses ficheiros. A mesma regra serve as duas: a receita diz que dia (campo de
+// MESAS (a da vindima, Nível 8, ecrã "O Lagar", js/lagar.js; a do Sado, Nível 16, e a de Azeitão, Nível 14, bloco da oferta da Estrada, js/estrada.js).
+// Só regras e contas; os botões estão nesses ficheiros. A mesma regra serve as três: a receita diz que dia (campo de
 // state.lagar) controla o "uma vez por dia" e, se quiser, a partir de que nível existe.
 // ---------------------------------------------------------------------
 
 // Os campos de state.lagar que guardam o dia de uma mesa (a receita só pode escolher um destes).
-const DESPENSA_MESA_CAMPOS = ['mesaDia', 'mesaSadoDia'];
+const DESPENSA_MESA_CAMPOS = ['mesaDia', 'mesaSadoDia', 'mesaAzeitaoDia'];
 
 // O dia (Lisboa) da última mesa posta, só lendo (state.lagar[campo]; sem campo, 'mesaDia', a da vindima); null se nunca houve
 // (ou se o campo for inválido, ou se não for um dos de DESPENSA_MESA_CAMPOS).
@@ -381,7 +381,7 @@ function despensaMesaDia(estado, campo) {
   return typeof dia === 'string' && DESPENSA_DIA_REGEX.test(dia) ? dia : null;
 }
 
-// A receita é { bens: [{ bem: idDoBem, n: inteiro > 0 }, ...], reputacao: inteiro >= 0, campo?: 'mesaDia' | 'mesaSadoDia',
+// A receita é { bens: [{ bem: idDoBem, n: inteiro > 0 }, ...], reputacao: inteiro >= 0, campo?: 'mesaDia' | 'mesaSadoDia' | 'mesaAzeitaoDia',
 // nivelMinimo?: inteiro >= 1 }: lista não vazia, cada bem existe em ESTRADA_BENS e não se repete. Sem "campo" vale 'mesaDia' (a da
 // vindima); sem "nivelMinimo" não há porta de nível. Só lê.
 function despensaReceitaValida(receita) {
@@ -440,7 +440,7 @@ function despensaMesaVindima(estado, dia, receita) {
     if (!r.ok) return recusa('faltam_bens', [b.bem]);
     gastos.push({ bem: b.bem, n: b.n });
   }
-  if (!estado.lagar || typeof estado.lagar !== 'object' || Array.isArray(estado.lagar)) estado.lagar = { ultimoDia: null, dias: 0, mesaDia: null, mesaSadoDia: null, assaltoDia: null };
+  if (!estado.lagar || typeof estado.lagar !== 'object' || Array.isArray(estado.lagar)) estado.lagar = { ultimoDia: null, dias: 0, mesaDia: null, mesaSadoDia: null, mesaAzeitaoDia: null, assaltoDia: null };
   estado.lagar[campo] = dia;
   estado.reputacao = (typeof estado.reputacao === 'number' && Number.isFinite(estado.reputacao) ? estado.reputacao : 0) + receita.reputacao;
   return { ok: true, motivo: null, faltam: [], reputacaoGanha: receita.reputacao, gastos: gastos };

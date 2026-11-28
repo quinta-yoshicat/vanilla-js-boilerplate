@@ -144,7 +144,7 @@ function correr(fonte) {
   const falhas = [];
   function ok(cond, msg) { if (!cond) falhas.push(msg); }
 
-  const lagarA = { ultimoDia: '2026-10-10', dias: 3, mesaDia: '2026-10-10', mesaSadoDia: '2026-10-09', assaltoDia: '2026-10-09' };
+  const lagarA = { ultimoDia: '2026-10-10', dias: 3, mesaDia: '2026-10-10', mesaSadoDia: '2026-10-09', mesaAzeitaoDia: '2026-10-08', assaltoDia: '2026-10-09' };
   const lojaB = { dia: '2026-10-11', vendasHoje: 2 };
   const em = 500000; // carimbos (ms) anteriores ao relógio do jogo
 

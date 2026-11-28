@@ -205,13 +205,14 @@ function defaultState() {
     // pisou as uvas (null = nunca). dias: em quantos dias diferentes já pisou (só sobe; o capítulo 8
     // lê-o). mesaDia: último dia (Lisboa) em que pôs a "mesa da vindima" (null = nunca; ver despensaMesaVindima
     // em js/despensa.js), independente do ultimoDia. mesaSadoDia: último dia (Lisboa) em que pôs a "Mesa do Sado" (nível 16, bloco da
-    // oferta da Estrada, js/estrada.js; null = nunca; é a mesma regra, com outro campo), independente da mesa da vindima. assaltoDia: último dia (Lisboa) em que defendeu a mesa do assalto dos
+    // oferta da Estrada, js/estrada.js; null = nunca; é a mesma regra, com outro campo), independente da mesa da vindima. mesaAzeitaoDia: o mesmo para a "Mesa de Azeitão" (nível 14, também na Estrada). assaltoDia: último dia (Lisboa) em que defendeu a mesa do assalto dos
     // porcos (null = nunca; ver lagarAssaltoResolver em js/lagar.js). NÃO se junta na nuvem: segue o estado inteiro que ganhar, como state.despensa.
     lagar: {
       ultimoDia: null,
       dias: 0,
       mesaDia: null,
       mesaSadoDia: null,
+      mesaAzeitaoDia: null,
       assaltoDia: null
     },
     // A Câmara (Nível 9, ver js/camara.js). provaDia: último dia (Lisboa, 'AAAA-MM-DD') em que provou

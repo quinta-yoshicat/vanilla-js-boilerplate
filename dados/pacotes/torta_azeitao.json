@@ -1,0 +1,32 @@
+{
+  "id": "torta_azeitao",
+  "nome": "Torta de Azeitão",
+  "estado": "feita",
+  "fontes": [
+    "https://www.e-konomista.pt/torta-de-azeitao/",
+    "https://en.wikipedia.org/wiki/Torta_de_Azeit%C3%A3o",
+    "https://visitlisboa.com/it/p/lisbon-flavours/specialita/torta-de-azeitao",
+    "https://noponto.pt/?p=14207"
+  ],
+  "ids": {
+    "enciclopedia": [
+      "torta_azeitao_doce"
+    ],
+    "palavras": [],
+    "visitas": [],
+    "niveis": [],
+    "historias": [],
+    "capitulos": [],
+    "provas": []
+  },
+  "imagens": [
+    {
+      "caminho": "assets/ecras/mesa_azeitao.jpg",
+      "uso": "Entrada da Enciclopédia «torta_azeitao_doce» (campo imagem) e ação «Mesa de Azeitão», no bloco da oferta da Estrada (js/estrada.js)",
+      "descricao": "A mesa posta ao ar livre, entre oliveiras e ervas da Arrábida, com torta de Azeitão, queijo e ervas, e o YoshiCat, o Chizo e o Fygmo II.",
+      "estado": "feita"
+    }
+  ],
+  "sons": [],
+  "excecoes": []
+}

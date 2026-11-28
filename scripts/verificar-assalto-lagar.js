@@ -90,11 +90,11 @@ const base = function (extra) {
 
 // 2. state.lagar.assaltoDia: por omissão null (jogo novo, save do PR anterior, nuvem); nada se perde.
 {
-  ok(JSON.stringify(abrir().json('state.lagar')) === '{"ultimoDia":null,"dias":0,"mesaDia":null,"mesaSadoDia":null,"assaltoDia":null}', 'jogo novo: assaltoDia null');
+  ok(JSON.stringify(abrir().json('state.lagar')) === '{"ultimoDia":null,"dias":0,"mesaDia":null,"mesaSadoDia":null,"mesaAzeitaoDia":null,"assaltoDia":null}', 'jogo novo: assaltoDia null');
   const g = abrir({ reputacao: 1700, uvas: 9, lagar: { ultimoDia: '2026-10-05', dias: 2, mesaDia: '2026-10-06' } });
-  ok(JSON.stringify(g.json('state.lagar')) === '{"ultimoDia":"2026-10-05","dias":2,"mesaDia":"2026-10-06","mesaSadoDia":null,"assaltoDia":null}', 'save do PR anterior ganha assaltoDia null (e mesaSadoDia null) e mantém o resto');
+  ok(JSON.stringify(g.json('state.lagar')) === '{"ultimoDia":"2026-10-05","dias":2,"mesaDia":"2026-10-06","mesaSadoDia":null,"mesaAzeitaoDia":null,"assaltoDia":null}', 'save do PR anterior ganha assaltoDia null (e mesaSadoDia null) e mantém o resto');
   ok(g.ev('state.reputacao') === 1700 && g.ev('state.uvas') === 9, 'o resto do save fica igual');
-  ok(JSON.stringify(g.json('mergeDeep(defaultState(), { reputacao: 5 }).lagar')) === '{"ultimoDia":null,"dias":0,"mesaDia":null,"mesaSadoDia":null,"assaltoDia":null}', 'estado da nuvem sem lagar ganha o valor por omissão');
+  ok(JSON.stringify(g.json('mergeDeep(defaultState(), { reputacao: 5 }).lagar')) === '{"ultimoDia":null,"dias":0,"mesaDia":null,"mesaSadoDia":null,"mesaAzeitaoDia":null,"assaltoDia":null}', 'estado da nuvem sem lagar ganha o valor por omissão');
   ok(g.json('mergeDeep(defaultState(), { lagar: { assaltoDia: "2026-10-01" } }).lagar').assaltoDia === '2026-10-01', 'estado da nuvem com assaltoDia mantém-no');
   // Valores estranhos contam como "nunca" e são reparados ao registar.
   const e = abrir(base()); e.ev("state.lagar.assaltoDia = 12345");

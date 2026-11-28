@@ -304,7 +304,7 @@ const sem = function (o, chaves) { const c = JSON.parse(JSON.stringify(o)); chav
   });
   ok(!/saveState|updateStatsDisplays/.test(corpoDe('estradaMoinhoFechar') + corpoDe('estradaMoinhoSoltar')), 'as regras (fechar e soltar) não gravam: quem as chama é que grava');
   ok((src.match(/estradaMoinhoFechar\(/g) || []).length === 2 && (src.match(/estradaMoinhoSoltar\(/g) || []).length === 2, 'só o clique (estradaMoinhoClique) chama as duas regras');
-  ok(/function estradaOfertaHtml\(\) \{\s*return estradaOfertaVisitaHtml\(\) \+ estradaMoinhoHtml\(\) \+ estradaMesaSadoHtml\(\);\s*\}/.test(src), 'o moinho está no bloco da oferta (estradaOfertaHtml)');
+  ok(/function estradaOfertaHtml\(\) \{\s*return estradaOfertaVisitaHtml\(\) \+ estradaMoinhoHtml\(\) \+ estradaMesaSadoHtml\(\) \+ estradaMesaAzeitaoHtml\(\);\s*\}/.test(src), 'o moinho está no bloco da oferta (estradaOfertaHtml)');
   const html = ler(path.join(RAIZ, 'index.html'));
   const css = (/\.moinho-mare-img \{([^}]*)\}/.exec(html) || [0, ''])[1];
   ok(/width:\s*100%/.test(css) && /height:\s*auto/.test(css) && !/object-fit|object-position|\b(max-)?height:\s*\d+px/.test(css), 'a foto mostra-se a 100% da largura e com altura automática (sem object-fit que corte)');
